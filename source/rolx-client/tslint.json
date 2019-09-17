@@ -67,7 +67,13 @@
       "as-needed"
     ],
     "object-literal-sort-keys": false,
-    "ordered-imports": false,
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "case-insensitive",
+        "named-imports-order": "case-insensitive"
+      }
+    ],
     "quotemark": [
       true,
       "single"
@@ -77,6 +83,7 @@
     "no-host-metadata-property": true,
     "no-input-rename": true,
     "no-inputs-metadata-property": true,
+    "no-namespace": false,
     "no-output-native": true,
     "no-output-on-prefix": true,
     "no-output-rename": true,
