@@ -41,7 +41,6 @@ namespace RolXServer
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
