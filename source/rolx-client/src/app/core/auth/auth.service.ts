@@ -1,20 +1,23 @@
 import { Injectable, NgZone } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 import { environment } from '@env/environment';
+import { tap } from 'rxjs/operators';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private currentUserSubject = new BehaviorSubject<User>(new User());
+
+  currentUser$ = this.currentUserSubject.pipe(
+    tap(u => console.log('Current user:', u))
+  );
+
   constructor(private zone: NgZone) {
-    gapi.load('auth2', () => {
-      // Retrieve the singleton for the GoogleAuth library and set up the client.
-      gapi.auth2.init({
-        client_id: environment.googleClientId,
-        cookie_policy: 'single_host_origin',
-      });
-    });
+    gapi.load('auth2', () => this.initializeGApi());
   }
 
   renderSignInButton(targetElementId: string) {
@@ -31,6 +34,21 @@ export class AuthService {
 
   signOut() {
     gapi.auth2.getAuthInstance().signOut().then(() => console.log('User signed out.'));
+  }
+
+  disconnectFromGoogle() {
+    gapi.auth2.getAuthInstance()
+      .disconnect()
+      .then(() => this.zone.run(() => this.currentUserSubject.next(new User())));
+  }
+
+  private initializeGApi() {
+    gapi.auth2.init({
+      client_id: environment.googleClientId,
+    });
+
+    const auth2 = gapi.auth2.getAuthInstance();
+    auth2.currentUser.listen(u => this.zone.run(() => this.currentUserSubject.next(User.fromGoogleUser(u))));
   }
 
   private onSuccess(googleUser: gapi.auth2.GoogleUser) {

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 
-import { AuthService } from '@app/core/auth/auth.service';
+import { AuthService, SignInState } from '@app/core/auth';
 
 @Component({
   selector: 'rolx-sign-in',
@@ -9,14 +9,12 @@ import { AuthService } from '@app/core/auth/auth.service';
 })
 export class SignInPageComponent implements AfterViewInit {
 
-  constructor(private authService: AuthService) { }
+  SignInState = SignInState;
+
+  constructor(public authService: AuthService) { }
 
   ngAfterViewInit() {
     this.authService.renderSignInButton('sign-in-button');
-  }
-
-  signOut() {
-    this.authService.signOut();
   }
 
 }

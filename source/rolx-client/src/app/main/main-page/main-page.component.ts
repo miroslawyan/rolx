@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
+import { AuthService } from '@app/core/auth';
+
 @Component({
   selector: 'rolx-main',
   templateUrl: './main-page.component.html',
@@ -16,6 +18,6 @@ export class MainPageComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(public authService: AuthService, private breakpointObserver: BreakpointObserver) {}
 
 }

@@ -1,13 +1,30 @@
 <mat-card>
   <mat-card-title>
-    Welcome to RolX
+    Sign in to RolX
   </mat-card-title>
 
   <mat-card-content>
     <div id="sign-in-button"></div>
+
+    <ng-container *ngIf="authService.currentUser$ | async as user">
+      <div *ngIf="user.state != SignInState.Unknown">
+        <ul>
+          <li>
+            {{user.firstName}} {{user.lastName}}
+            <img mat-card-avatar
+                 [src]="user.avatarUrl"
+                 alt="{{user.firstName}} {{user.lastName}}">
+          </li>
+          <li>{{user.email}}</li>
+          <li>{{SignInState[user.state]}}</li>
+        </ul>
+      </div>
+    </ng-container>
+
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button mat-raised-button (click)="signOut()">Bye</button>
+    <button mat-raised-button (click)="authService.signOut()">Sign out</button>
+    <button mat-raised-button (click)="authService.disconnectFromGoogle()">Disconnect</button>
   </mat-card-actions>
 </mat-card>
