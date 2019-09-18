@@ -1,8 +1,13 @@
 <mat-card>
   <mat-card-title>
-    RolX
+    Welcome to RolX
   </mat-card-title>
 
-  <div id="sign-in-button"></div>
+  <mat-card-content>
+    <div id="sign-in-button"></div>
+  </mat-card-content>
 
+  <mat-card-actions align="end">
+    <button mat-raised-button (click)="signOut()">Bye</button>
+  </mat-card-actions>
 </mat-card>

@@ -1,0 +1,16 @@
+
+mat-card {
+  max-width: 360px;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+mat-card-content {
+  text-align: center;
+
+  #sign-in-button {
+    margin-top: 16px;
+    display: inline-block;
+  }
+}
