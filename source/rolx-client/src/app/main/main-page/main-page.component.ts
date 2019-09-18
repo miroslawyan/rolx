@@ -5,10 +5,10 @@ import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  templateUrl: './main-page.component.html',
+  styleUrls: ['./main-page.component.scss']
 })
-export class MainComponent {
+export class MainPageComponent {
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(

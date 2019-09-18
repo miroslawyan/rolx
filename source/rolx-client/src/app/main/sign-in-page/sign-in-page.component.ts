@@ -1,12 +1,11 @@
 import { AfterViewInit, Component, NgZone } from '@angular/core';
 
-
 @Component({
   selector: 'rolx-sign-in',
-  templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  templateUrl: './sign-in-page.component.html',
+  styleUrls: ['./sign-in-page.component.scss']
 })
-export class SignInComponent implements AfterViewInit {
+export class SignInPageComponent implements AfterViewInit {
 
   constructor(private zone: NgZone) { }
 
