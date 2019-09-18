@@ -1,4 +1,6 @@
-import { AfterViewInit, Component, NgZone } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
+
+import { AuthService } from '@app/core/auth/auth.service';
 
 @Component({
   selector: 'rolx-sign-in',
@@ -7,26 +9,14 @@ import { AfterViewInit, Component, NgZone } from '@angular/core';
 })
 export class SignInPageComponent implements AfterViewInit {
 
-  constructor(private zone: NgZone) { }
+  constructor(private authService: AuthService) { }
 
   ngAfterViewInit() {
-    gapi.signin2.render('sign-in-button', {
-      scope: 'profile email',
-      width: 240,
-      height: 50,
-      longtitle: true,
-      theme: 'dark',
-      onsuccess: param => this.zone.run(() => this.onSuccess(param))
-    });
+    this.authService.renderSignInButton('sign-in-button');
   }
 
   signOut() {
-    const auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(() => console.log('User signed out.'));
-  }
-
-  private onSuccess(googleUser) {
-    console.log(googleUser.getBasicProfile());
+    this.authService.signOut();
   }
 
 }
