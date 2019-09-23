@@ -6,8 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace RolXServer
 {
@@ -22,7 +22,7 @@ namespace RolXServer
         /// <param name="args">The arguments.</param>
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         /// <summary>
@@ -30,8 +30,11 @@ namespace RolXServer
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>The created builder.</returns>
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
