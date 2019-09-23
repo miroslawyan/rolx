@@ -11,7 +11,8 @@
             "headerDecoration": "-----------------------------------------------------------------------"
         },
         "orderingRules": {
-            "usingDirectivesPlacement": "outsideNamespace"
+            "usingDirectivesPlacement": "outsideNamespace",
+            "blankLinesBetweenUsingGroups": "require"
         }
     }
 }

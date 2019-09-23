@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using System.Threading.Tasks;
+
 using RolXServer.Auth.Domain.Model;
 
 namespace RolXServer.Auth.Domain

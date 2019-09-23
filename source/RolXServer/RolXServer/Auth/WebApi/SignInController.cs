@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using System.Threading.Tasks;
+
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
