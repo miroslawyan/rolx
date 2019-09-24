@@ -8,9 +8,9 @@
 
 using System.Threading.Tasks;
 
-using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using RolXServer.Auth.Domain;
+using RolXServer.Auth.Domain.Model;
 
 namespace RolXServer.Auth.WebApi
 {
@@ -21,15 +21,15 @@ namespace RolXServer.Auth.WebApi
     [Route("api/v1/[controller]")]
     public class SignInController : ControllerBase
     {
-        private readonly ILogger logger;
+        private readonly ISignInService signInService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SignInController"/> class.
+        /// Initializes a new instance of the <see cref="SignInController" /> class.
         /// </summary>
-        /// <param name="logger">The logger.</param>
-        public SignInController(ILogger<SignInController> logger)
+        /// <param name="signInService">The sign-in service.</param>
+        public SignInController(ISignInService signInService)
         {
-            this.logger = logger;
+            this.signInService = signInService;
         }
 
         /// <summary>
@@ -37,26 +37,15 @@ namespace RolXServer.Auth.WebApi
         /// </summary>
         /// <param name="googleIdToken">The google identifier token.</param>
         /// <returns>The JWT bearer token for further authentication.</returns>
-        public async Task<ActionResult<string>> Post([FromBody] string googleIdToken)
+        public async Task<ActionResult<AuthenticatedUser>> Post([FromBody] string googleIdToken)
         {
-            try
+            var user = await this.signInService.Authenticate(googleIdToken);
+            if (user is null)
             {
-                var payload = await GoogleJsonWebSignature.ValidateAsync(googleIdToken);
-                if (payload is null)
-                {
-                    return "failed";
-                }
-
-                this.logger.LogInformation("Successfully validated request from {0}", payload.Name);
-
-                await Task.CompletedTask;
-                return "success";
+                return this.Unauthorized();
             }
-            catch (InvalidJwtException e)
-            {
-                this.logger.LogWarning(e, "While validating googleIdToken");
-                return this.BadRequest(e.Message);
-            }
+
+            return user;
         }
     }
 }

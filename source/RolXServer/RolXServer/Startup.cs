@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RolXServer.Auth;
+using RolXServer.Database;
 
 namespace RolXServer
 {
@@ -43,6 +45,9 @@ namespace RolXServer
             services.AddControllers();
 
             services.AddDbContext<Database.RolXContext>(options => options.UseSqlite("Data Source=rolx.sqlite"));
+
+            services.AddAuth();
+            services.AddRepositories();
         }
 
         /// <summary>

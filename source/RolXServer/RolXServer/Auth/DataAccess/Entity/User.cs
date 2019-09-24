@@ -25,27 +25,27 @@ namespace RolXServer.Auth.DataAccess.Entity
         /// <summary>
         /// Gets or sets the google identifier.
         /// </summary>
-        public string GoogleId { get; set; }
+        public string GoogleId { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the first name.
         /// </summary>
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the last name.
         /// </summary>
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the email.
         /// </summary>
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the avatar URL.
         /// </summary>
-        public string AvatarUrl { get; set; }
+        public string AvatarUrl { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the role.

@@ -15,7 +15,6 @@ namespace RolXServer.Database.Migrations
     /// <summary>
     /// Create the database initially.
     /// </summary>
-    /// <seealso cref="Microsoft.EntityFrameworkCore.Migrations.Migration" />
     public partial class InitialCreate : Migration
     {
         /// <inheritdoc/>

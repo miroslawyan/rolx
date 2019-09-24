@@ -18,6 +18,6 @@ namespace RolXServer.Auth.Domain.Model
         /// <summary>
         /// Gets or sets the bearer token.
         /// </summary>
-        public string BearerToken { get; set; }
+        public string BearerToken { get; set; } = string.Empty;
     }
 }

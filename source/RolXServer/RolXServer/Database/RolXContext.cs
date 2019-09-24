@@ -29,7 +29,7 @@ namespace RolXServer.Database
         /// <summary>
         /// Gets or sets the users.
         /// </summary>
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; } = null!;
 
         /// <summary>
         /// Override this method to further configure the model that was discovered by convention from the entity types
