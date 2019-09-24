@@ -31,6 +31,10 @@ namespace RolXServer.Database.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("GoogleId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("LastName")
                         .HasColumnType("TEXT");
 
@@ -38,6 +42,8 @@ namespace RolXServer.Database.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("GoogleId");
 
                     b.ToTable("Users");
                 });

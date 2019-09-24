@@ -9,7 +9,7 @@ using RolXServer.Database;
 namespace RolXServer.Database.Migrations
 {
     [DbContext(typeof(RolXContext))]
-    [Migration("20190923204751_InitialCreate")]
+    [Migration("20190924191219_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,10 @@ namespace RolXServer.Database.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("GoogleId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("LastName")
                         .HasColumnType("TEXT");
 
@@ -40,6 +44,8 @@ namespace RolXServer.Database.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("GoogleId");
 
                     b.ToTable("Users");
                 });

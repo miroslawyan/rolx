@@ -23,6 +23,11 @@ namespace RolXServer.Auth.DataAccess.Entity
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the google identifier.
+        /// </summary>
+        public string GoogleId { get; set; }
+
+        /// <summary>
         /// Gets or sets the first name.
         /// </summary>
         public string FirstName { get; set; }
