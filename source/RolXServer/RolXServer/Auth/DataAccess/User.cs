@@ -10,7 +10,7 @@ using System;
 
 using RolXServer.Common.DataAccess;
 
-namespace RolXServer.Auth.DataAccess.Entity
+namespace RolXServer.Auth.DataAccess
 {
     /// <summary>
     /// Represents a user of RolX.

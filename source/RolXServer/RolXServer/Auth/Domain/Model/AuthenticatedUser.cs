@@ -6,7 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using RolXServer.Auth.DataAccess.Entity;
+using RolXServer.Auth.DataAccess;
 
 namespace RolXServer.Auth.Domain.Model
 {

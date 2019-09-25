@@ -20,7 +20,7 @@ namespace RolXServer.Auth
         /// </summary>
         public AuthMapperProfile()
         {
-            this.CreateMap<DataAccess.Entity.User, Domain.Model.AuthenticatedUser>();
+            this.CreateMap<DataAccess.User, Domain.Model.AuthenticatedUser>();
         }
     }
 }

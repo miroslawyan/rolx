@@ -9,7 +9,7 @@
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
-using RolXServer.Auth.DataAccess.Entity;
+using RolXServer.Auth.DataAccess;
 using RolXServer.Common.DataAccess;
 
 namespace RolXServer.Database

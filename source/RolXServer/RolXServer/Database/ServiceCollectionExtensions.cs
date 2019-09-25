@@ -22,7 +22,7 @@ namespace RolXServer.Database
         /// <param name="services">The services.</param>
         public static void AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IRepository<Auth.DataAccess.Entity.User>, RolXRepository>();
+            services.AddScoped<IRepository<Auth.DataAccess.User>, RolXRepository>();
         }
     }
 }

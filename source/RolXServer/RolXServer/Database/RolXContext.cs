@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------
 
 using Microsoft.EntityFrameworkCore;
-using RolXServer.Auth.DataAccess.Entity;
+using RolXServer.Auth.DataAccess;
 
 namespace RolXServer.Database
 {

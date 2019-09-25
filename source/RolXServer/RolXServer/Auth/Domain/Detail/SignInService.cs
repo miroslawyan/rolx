@@ -12,7 +12,7 @@ using AutoMapper;
 using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RolXServer.Auth.DataAccess.Entity;
+using RolXServer.Auth.DataAccess;
 using RolXServer.Auth.Domain.Model;
 using RolXServer.Common.DataAccess;
 
