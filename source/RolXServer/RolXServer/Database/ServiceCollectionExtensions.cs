@@ -20,9 +20,12 @@ namespace RolXServer.Database
         /// Adds the authentication services.
         /// </summary>
         /// <param name="services">The services.</param>
-        public static void AddRepositories(this IServiceCollection services)
+        /// <returns>The service collection.</returns>
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IRepository<Auth.DataAccess.User>, RolXRepository>();
+
+            return services;
         }
     }
 }

@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RolXServer.Auth
@@ -19,9 +20,19 @@ namespace RolXServer.Auth
         /// Adds the authentication services.
         /// </summary>
         /// <param name="services">The services.</param>
-        public static void AddAuth(this IServiceCollection services)
+        /// <returns>The service collection.</returns>
+        public static IServiceCollection AddAuth(this IServiceCollection services)
         {
             services.AddScoped<Domain.ISignInService, Domain.Detail.SignInService>();
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(Domain.Detail.BearerTokenFactory.Configure);
+
+            return services;
         }
     }
 }

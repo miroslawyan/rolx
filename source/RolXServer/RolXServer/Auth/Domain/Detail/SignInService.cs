@@ -63,8 +63,11 @@ namespace RolXServer.Auth.Domain.Detail
                 }
 
                 var user = await this.EnsureUser(payload);
+                var authenticatedUser = this.mapper.Map<AuthenticatedUser>(user);
 
-                return this.mapper.Map<AuthenticatedUser>(user);
+                authenticatedUser.BearerToken = BearerTokenFactory.ProduceFor(user);
+
+                return authenticatedUser;
             }
             catch (InvalidJwtException e)
             {
