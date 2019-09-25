@@ -8,6 +8,7 @@
 
 using System.Threading.Tasks;
 
+using AutoMapper;
 using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -24,16 +25,19 @@ namespace RolXServer.Auth.Domain.Detail
     {
         private readonly ILogger logger;
         private readonly IRepository<User> userRepository;
+        private readonly IMapper mapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SignInService" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="userRepository">The user repository.</param>
-        public SignInService(ILogger<SignInService> logger, IRepository<User> userRepository)
+        /// <param name="mapper">The mapper.</param>
+        public SignInService(ILogger<SignInService> logger, IRepository<User> userRepository, IMapper mapper)
         {
             this.logger = logger;
             this.userRepository = userRepository;
+            this.mapper = mapper;
         }
 
         /// <summary>
@@ -60,16 +64,7 @@ namespace RolXServer.Auth.Domain.Detail
 
                 var user = await this.EnsureUser(payload);
 
-                // TODO: use mapping
-                return new AuthenticatedUser
-                {
-                    Id = user.Id,
-                    GoogleId = user.GoogleId,
-                    FirstName = payload.GivenName,
-                    LastName = payload.FamilyName,
-                    Email = payload.Email,
-                    AvatarUrl = payload.Picture,
-                };
+                return this.mapper.Map<AuthenticatedUser>(user);
             }
             catch (InvalidJwtException e)
             {
