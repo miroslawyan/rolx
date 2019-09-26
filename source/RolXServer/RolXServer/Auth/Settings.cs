@@ -23,7 +23,7 @@ namespace RolXServer.Auth
         /// <summary>
         /// Gets or sets the token expiration duration.
         /// </summary>
-        public TimeSpan TokenExpiration { get; set; }
+        public TimeSpan TokenExpiration { get; set; } = TimeSpan.FromDays(1);
 
         /// <summary>
         /// Gets or sets the white-list of allowed google hosted domains.
