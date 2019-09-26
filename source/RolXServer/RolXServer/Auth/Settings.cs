@@ -17,5 +17,10 @@ namespace RolXServer.Auth
         /// Gets or sets the secret.
         /// </summary>
         public string Secret { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the white-list of allowed google hosted domains.
+        /// </summary>
+        public string[] GoogleHostedDomainWhitelist { get; set; } = new string[0];
     }
 }

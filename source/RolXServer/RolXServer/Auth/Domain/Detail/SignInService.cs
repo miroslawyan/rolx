@@ -7,12 +7,14 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
 using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RolXServer.Auth.DataAccess;
 using RolXServer.Auth.Domain.Model;
 using RolXServer.Common.DataAccess;
@@ -26,6 +28,7 @@ namespace RolXServer.Auth.Domain.Detail
     {
         private readonly IRepository<User> userRepository;
         private readonly BearerTokenFactory bearerTokenFactory;
+        private readonly Settings settings;
         private readonly IMapper mapper;
         private readonly ILogger logger;
 
@@ -34,16 +37,19 @@ namespace RolXServer.Auth.Domain.Detail
         /// </summary>
         /// <param name="userRepository">The user repository.</param>
         /// <param name="bearerTokenFactory">The bearer token factory.</param>
+        /// <param name="settingsAccessor">The settings accessor.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="logger">The logger.</param>
         public SignInService(
             IRepository<User> userRepository,
             BearerTokenFactory bearerTokenFactory,
+            IOptions<Settings> settingsAccessor,
             IMapper mapper,
             ILogger<SignInService> logger)
         {
             this.userRepository = userRepository;
             this.bearerTokenFactory = bearerTokenFactory;
+            this.settings = settingsAccessor.Value;
             this.mapper = mapper;
             this.logger = logger;
         }
@@ -65,9 +71,10 @@ namespace RolXServer.Auth.Domain.Detail
                     return null;
                 }
 
-                if (payload.HostedDomain != "m-f.ch")
+                if (!this.IsAllowedDomain(payload.HostedDomain))
                 {
                     this.logger.LogWarning("Sign-in from foreign domain refused: {0}", payload.HostedDomain);
+                    return null;
                 }
 
                 return this.Authenticate(await this.EnsureUser(payload));
@@ -96,6 +103,12 @@ namespace RolXServer.Auth.Domain.Detail
             }
 
             return this.Authenticate(user);
+        }
+
+        private bool IsAllowedDomain(string domain)
+        {
+            return this.settings.GoogleHostedDomainWhitelist.Length == 0
+                || this.settings.GoogleHostedDomainWhitelist.Any(d => d == domain);
         }
 
         private async Task<User> EnsureUser(GoogleJsonWebSignature.Payload payload)
