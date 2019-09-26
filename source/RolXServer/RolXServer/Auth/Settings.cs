@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+
 namespace RolXServer.Auth
 {
     /// <summary>
@@ -17,6 +19,11 @@ namespace RolXServer.Auth
         /// Gets or sets the secret.
         /// </summary>
         public string Secret { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the token expiration duration.
+        /// </summary>
+        public TimeSpan TokenExpiration { get; set; }
 
         /// <summary>
         /// Gets or sets the white-list of allowed google hosted domains.

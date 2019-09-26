@@ -71,7 +71,7 @@ namespace RolXServer.Auth.Domain.Detail
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(ProduceClaimsFor(user)),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.UtcNow + this.settings.TokenExpiration,
                 SigningCredentials = new SigningCredentials(this.key, SecurityAlgorithms.HmacSha256Signature),
             };
 
