@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 
 using RolXServer.Auth.Domain.Model;
@@ -23,5 +24,12 @@ namespace RolXServer.Auth.Domain
         /// <param name="googleIdToken">The google identifier token.</param>
         /// <returns>The authenticated user.</returns>
         Task<AuthenticatedUser?> Authenticate(string googleIdToken);
+
+        /// <summary>
+        /// Extends the authentication for user with the specified identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>The authenticated user.</returns>
+        Task<AuthenticatedUser?> Extend(Guid userId);
     }
 }

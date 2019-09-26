@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 
 using AutoMapper;
@@ -69,18 +70,32 @@ namespace RolXServer.Auth.Domain.Detail
                     this.logger.LogWarning("Sign-in from foreign domain refused: {0}", payload.HostedDomain);
                 }
 
-                var user = await this.EnsureUser(payload);
-                var authenticatedUser = this.mapper.Map<AuthenticatedUser>(user);
-
-                authenticatedUser.BearerToken = this.bearerTokenFactory.ProduceFor(user);
-
-                return authenticatedUser;
+                return this.Authenticate(await this.EnsureUser(payload));
             }
             catch (InvalidJwtException e)
             {
                 this.logger.LogWarning(e, "While validating googleIdToken");
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Extends the authentication for user with the specified identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>
+        /// The authenticated user.
+        /// </returns>
+        public async Task<AuthenticatedUser?> Extend(Guid userId)
+        {
+            var user = await this.userRepository.Entities.FindAsync(userId);
+            if (user is null)
+            {
+                this.logger.LogWarning("Unknown user tries to extend authentication: {0}", userId);
+                return null;
+            }
+
+            return this.Authenticate(user);
         }
 
         private async Task<User> EnsureUser(GoogleJsonWebSignature.Payload payload)
@@ -102,6 +117,13 @@ namespace RolXServer.Auth.Domain.Detail
             await this.userRepository.SaveChanges();
 
             return user;
+        }
+
+        private AuthenticatedUser Authenticate(User user)
+        {
+            var authenticatedUser = this.mapper.Map<AuthenticatedUser>(user);
+            authenticatedUser.BearerToken = this.bearerTokenFactory.ProduceFor(user);
+            return authenticatedUser;
         }
     }
 }

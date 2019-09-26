@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
@@ -37,11 +39,29 @@ namespace RolXServer.Auth.WebApi
         /// Signs in using the specified google identifier token.
         /// </summary>
         /// <param name="googleIdToken">The google identifier token.</param>
-        /// <returns>The JWT bearer token for further authentication.</returns>
+        /// <returns>The authenticated user.</returns>
         [HttpPost]
-        public async Task<ActionResult<AuthenticatedUser>> Post([FromBody] string googleIdToken)
+        public async Task<ActionResult<AuthenticatedUser>> SignIn([FromBody] string googleIdToken)
         {
             var user = await this.signInService.Authenticate(googleIdToken);
+            if (user is null)
+            {
+                return this.Unauthorized();
+            }
+
+            return user;
+        }
+
+        /// <summary>
+        /// Extends the authentication of the calling user.
+        /// </summary>
+        /// <returns>The extended, authenticated user.</returns>
+        [HttpGet("extend")]
+        [Authorize]
+        public async Task<ActionResult<AuthenticatedUser>> Extend()
+        {
+            var userId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await this.signInService.Extend(Guid.Parse(userId));
             if (user is null)
             {
                 return this.Unauthorized();
