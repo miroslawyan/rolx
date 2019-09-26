@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Text;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RolXServer.Auth.DataAccess;
 
@@ -21,25 +22,57 @@ namespace RolXServer.Auth.Domain.Detail
     /// <summary>
     /// Produces JWT bearer tokens.
     /// </summary>
-    public static class BearerTokenFactory
+    public sealed class BearerTokenFactory
     {
-        // TODO: get this from Configuration.GetSection("AppSettings:Secret")
-        private static readonly string Secret = "This is quite non-secret.";
+        private readonly Settings settings;
+        private readonly SymmetricSecurityKey key;
 
-        private static byte[] Key => Encoding.ASCII.GetBytes(Secret);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BearerTokenFactory"/> class.
+        /// </summary>
+        /// <param name="settingsAccessor">The settings accessor.</param>
+        public BearerTokenFactory(IOptions<Settings> settingsAccessor)
+            : this(settingsAccessor.Value)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BearerTokenFactory" /> class.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        public BearerTokenFactory(Settings settings)
+        {
+            this.settings = settings;
+            this.key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.settings.Secret));
+        }
+
+        /// <summary>
+        /// Configures the specified JWT bearer options.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        public void Configure(JwtBearerOptions options)
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = this.key,
+                ValidateIssuer = false,
+                ValidateAudience = false,
+            };
+        }
 
         /// <summary>
         /// Produces a bearer token for the specified user.
         /// </summary>
         /// <param name="user">The user.</param>
         /// <returns>The bearer token.</returns>
-        public static string ProduceFor(User user)
+        public string ProduceFor(User user)
         {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(ProduceClaimsFor(user)),
                 Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = ProduceSigningCredentials(),
+                SigningCredentials = new SigningCredentials(this.key, SecurityAlgorithms.HmacSha256Signature),
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -47,30 +80,10 @@ namespace RolXServer.Auth.Domain.Detail
             return tokenHandler.WriteToken(token);
         }
 
-        /// <summary>
-        /// Configures the specified JWT bearer options.
-        /// </summary>
-        /// <param name="options">The options.</param>
-        public static void Configure(JwtBearerOptions options)
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-            };
-        }
-
         private static IEnumerable<Claim> ProduceClaimsFor(User user)
         {
             yield return new Claim(ClaimTypes.NameIdentifier, user.Id.ToString());
             yield return new Claim(ClaimTypes.Role, user.Role.ToString());
-        }
-
-        private static SigningCredentials ProduceSigningCredentials()
-        {
-            return new SigningCredentials(new SymmetricSecurityKey(Key), SecurityAlgorithms.HmacSha256Signature);
         }
     }
 }

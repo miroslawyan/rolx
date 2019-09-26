@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RolXServer.Auth
@@ -17,20 +18,28 @@ namespace RolXServer.Auth
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds the authentication services.
+        /// Adds the services of the Auth package.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <returns>The service collection.</returns>
-        public static IServiceCollection AddAuth(this IServiceCollection services)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The service collection.
+        /// </returns>
+        public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<Domain.ISignInService, Domain.Detail.SignInService>();
+            var settingsSection = configuration.GetSection("Auth");
+            services.Configure<Settings>(configuration.GetSection("Auth"));
 
-            services.AddAuthentication(x =>
+            services.AddScoped<Domain.ISignInService, Domain.Detail.SignInService>();
+            services.AddSingleton<Domain.Detail.BearerTokenFactory>();
+
+            var settings = settingsSection.Get<Settings>();
+
+            services.AddAuthentication(options =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(Domain.Detail.BearerTokenFactory.Configure);
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // TODO: check if required
+            }).AddJwtBearer(options => new Domain.Detail.BearerTokenFactory(settingsSection.Get<Settings>()).Configure(options));
 
             return services;
         }

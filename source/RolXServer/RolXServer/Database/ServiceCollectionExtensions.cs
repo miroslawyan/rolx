@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RolXServer.Common.DataAccess;
 
@@ -17,12 +18,13 @@ namespace RolXServer.Database
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds the authentication services.
+        /// Adds the database services.
         /// </summary>
         /// <param name="services">The services.</param>
         /// <returns>The service collection.</returns>
-        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        public static IServiceCollection AddDatabase(this IServiceCollection services)
         {
+            services.AddDbContext<RolXContext>(options => options.UseSqlite("Data Source=rolx.sqlite"));
             services.AddScoped<IRepository<Auth.DataAccess.User>, RolXRepository>();
 
             return services;

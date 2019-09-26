@@ -23,21 +23,28 @@ namespace RolXServer.Auth.Domain.Detail
     /// </summary>
     public sealed class SignInService : ISignInService
     {
-        private readonly ILogger logger;
         private readonly IRepository<User> userRepository;
+        private readonly BearerTokenFactory bearerTokenFactory;
         private readonly IMapper mapper;
+        private readonly ILogger logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SignInService" /> class.
         /// </summary>
-        /// <param name="logger">The logger.</param>
         /// <param name="userRepository">The user repository.</param>
+        /// <param name="bearerTokenFactory">The bearer token factory.</param>
         /// <param name="mapper">The mapper.</param>
-        public SignInService(ILogger<SignInService> logger, IRepository<User> userRepository, IMapper mapper)
+        /// <param name="logger">The logger.</param>
+        public SignInService(
+            IRepository<User> userRepository,
+            BearerTokenFactory bearerTokenFactory,
+            IMapper mapper,
+            ILogger<SignInService> logger)
         {
-            this.logger = logger;
             this.userRepository = userRepository;
+            this.bearerTokenFactory = bearerTokenFactory;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -65,7 +72,7 @@ namespace RolXServer.Auth.Domain.Detail
                 var user = await this.EnsureUser(payload);
                 var authenticatedUser = this.mapper.Map<AuthenticatedUser>(user);
 
-                authenticatedUser.BearerToken = BearerTokenFactory.ProduceFor(user);
+                authenticatedUser.BearerToken = this.bearerTokenFactory.ProduceFor(user);
 
                 return authenticatedUser;
             }

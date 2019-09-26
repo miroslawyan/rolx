@@ -9,7 +9,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,11 +43,10 @@ namespace RolXServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<Database.RolXContext>(options => options.UseSqlite("Data Source=rolx.sqlite"));
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddAuth();
-            services.AddRepositories();
+            services.AddAuth(this.Configuration);
+            services.AddDatabase();
         }
 
         /// <summary>
