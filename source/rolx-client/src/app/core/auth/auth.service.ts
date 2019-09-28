@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject, bindCallback, forkJoin, from, Observable, of, Subject } from 'rxjs';
-import { catchError, filter, map, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, bindCallback, forkJoin, from, Observable, Subject } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { enterZone } from '@app/core/util';
 import { CurrentUser } from './current-user';
@@ -31,7 +31,9 @@ export class AuthService {
 
     this.googleUserSubject.subscribe(u => this.currentUserSubject.next(CurrentUser.fromGoogleUser(u)));
 
-    this.currentUser$.subscribe(u => console.log('Current user changed:', u));
+    this.currentUser$.pipe(
+      distinctUntilChanged()
+    ).subscribe(u => console.log('Current user changed:', u));
   }
 
   static Initializer(authService: AuthService) {
@@ -53,11 +55,12 @@ export class AuthService {
     });
   }
 
-  signOut(): Observable<void> {
+  signOut(): Observable<CurrentUser> {
     return from(gapi.auth2.getAuthInstance().disconnect())
       .pipe(
         enterZone(this.zone),
-        map(() => this.currentUserSubject.next(new CurrentUser()))
+        map(() => new CurrentUser()),
+        tap(u => this.currentUserSubject.next(u))
       );
   }
 
@@ -91,6 +94,6 @@ export class AuthService {
 
   private handleSignInError(error: any) {
     console.warn('Failed to sign in', error);
-    return of(new CurrentUser());
+    return this.signOut();
   }
 }
