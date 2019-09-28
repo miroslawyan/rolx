@@ -48,12 +48,14 @@ namespace RolXServer.Auth.WebApi
         /// <summary>
         /// Signs in using the specified google identifier token.
         /// </summary>
-        /// <param name="googleIdToken">The google identifier token.</param>
-        /// <returns>The authenticated user.</returns>
+        /// <param name="signInData">The sign in data.</param>
+        /// <returns>
+        /// The authenticated user.
+        /// </returns>
         [HttpPost]
-        public async Task<ActionResult<AuthenticatedUser>> SignIn([FromBody] string googleIdToken)
+        public async Task<ActionResult<AuthenticatedUser>> SignIn(SignInData signInData)
         {
-            var user = await this.signInService.Authenticate(googleIdToken);
+            var user = await this.signInService.Authenticate(signInData);
             if (user is null)
             {
                 return this.Unauthorized();

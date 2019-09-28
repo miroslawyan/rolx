@@ -73,15 +73,15 @@ namespace RolXServer.Auth.Domain.Detail
         /// <summary>
         /// Authenticates with the specified google identifier token.
         /// </summary>
-        /// <param name="googleIdToken">The google identifier token.</param>
+        /// <param name="signInData">The sign in data.</param>
         /// <returns>
         /// The authenticated user or <c>null</c> if authentication failed.
         /// </returns>
-        public async Task<AuthenticatedUser?> Authenticate(string googleIdToken)
+        public async Task<AuthenticatedUser?> Authenticate(SignInData signInData)
         {
             try
             {
-                var payload = await GoogleJsonWebSignature.ValidateAsync(googleIdToken);
+                var payload = await GoogleJsonWebSignature.ValidateAsync(signInData.GoogleIdToken);
                 if (payload is null)
                 {
                     return null;

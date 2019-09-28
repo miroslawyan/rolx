@@ -1,28 +1,37 @@
 import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, bindCallback } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 
+import { CurrentUser } from './current-user';
 import { Info } from './info';
+import { SignInState } from './sign-in-state';
 import { SignInService } from './sign-in.service';
-import { User } from './user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private currentUserSubject = new BehaviorSubject<User>(new User());
-
-  currentUser$ = this.currentUserSubject.pipe(
-    tap(u => console.log('Current user:', u))
-  );
+  private currentUserSubject = new BehaviorSubject<CurrentUser>(new CurrentUser());
+  currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private signInService: SignInService,
               private zone: NgZone) {
+    this.currentUser$.pipe(
+      filter(u => u.state === SignInState.Authenticated),
+      switchMap(u => this.signInService.signIn(u)),
+      map(u => CurrentUser.fromAuthenticatedUser(u))
+    ).subscribe(u => this.currentUserSubject.next(u));
+
+    this.currentUser$.subscribe(u => console.log('Current user changed:', u));
   }
 
   static Initializer(authService: AuthService) {
     return () => authService.initialize();
+  }
+
+  get currentUser() {
+    return this.currentUserSubject.value;
   }
 
   renderSignInButton(targetElementId: string) {
@@ -38,13 +47,13 @@ export class AuthService {
   }
 
   signOut() {
-    gapi.auth2.getAuthInstance().signOut().then(() => console.log('User signed out.'));
+    gapi.auth2.getAuthInstance().signOut().then(() => console.log('CurrentUser signed out.'));
   }
 
   disconnectFromGoogle() {
     gapi.auth2.getAuthInstance()
       .disconnect()
-      .then(() => this.zone.run(() => this.currentUserSubject.next(new User())));
+      .then(() => this.zone.run(() => this.currentUserSubject.next(new CurrentUser())));
   }
 
   private initialize(): Promise<void> {
@@ -62,12 +71,12 @@ export class AuthService {
     });
 
     const auth2 = gapi.auth2.getAuthInstance();
-    auth2.currentUser.listen(u => this.zone.run(() => this.currentUserSubject.next(User.fromGoogleUser(u))));
+    auth2.currentUser.listen(u => this.zone.run(() => this.currentUserSubject.next(CurrentUser.fromGoogleUser(u))));
   }
 
   private onSuccess(googleUser: gapi.auth2.GoogleUser) {
     console.log('Success');
-    console.log(googleUser.getBasicProfile());
+
   }
 
   private onFailure(error: string) {

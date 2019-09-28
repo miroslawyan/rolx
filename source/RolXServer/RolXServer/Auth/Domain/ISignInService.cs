@@ -27,9 +27,11 @@ namespace RolXServer.Auth.Domain
         /// <summary>
         /// Authenticates with the specified google identifier token.
         /// </summary>
-        /// <param name="googleIdToken">The google identifier token.</param>
-        /// <returns>The authenticated user.</returns>
-        Task<AuthenticatedUser?> Authenticate(string googleIdToken);
+        /// <param name="signInData">The sign in data.</param>
+        /// <returns>
+        /// The authenticated user.
+        /// </returns>
+        Task<AuthenticatedUser?> Authenticate(SignInData signInData);
 
         /// <summary>
         /// Extends the authentication for user with the specified identifier.

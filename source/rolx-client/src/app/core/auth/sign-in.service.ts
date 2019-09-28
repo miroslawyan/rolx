@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthenticatedUserData } from '@app/core/auth/authenticated-user.data';
+import { SignInData } from '@app/core/auth/sign-in.data';
 import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
@@ -15,5 +17,9 @@ export class SignInService {
 
   getInfo(): Observable<Info> {
     return this.httpClient.get<Info>(SignInUrl + '/info');
+  }
+
+  signIn(signInData: SignInData): Observable<AuthenticatedUserData> {
+    return this.httpClient.post<AuthenticatedUserData>(SignInUrl, signInData);
   }
 }
