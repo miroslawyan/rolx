@@ -1,7 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject, bindCallback } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, bindCallback, forkJoin, from, Observable, Subject } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 
+import { enterZone } from '@app/core/util';
 import { CurrentUser } from './current-user';
 import { Info } from './info';
 import { SignInState } from './sign-in-state';
@@ -12,16 +13,21 @@ import { SignInService } from './sign-in.service';
 })
 export class AuthService {
 
+  private googleUserSubject = new Subject<gapi.auth2.GoogleUser>();
   private currentUserSubject = new BehaviorSubject<CurrentUser>(new CurrentUser());
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private signInService: SignInService,
               private zone: NgZone) {
+    console.log('--- AuthService.ctor()');
+
     this.currentUser$.pipe(
       filter(u => u.state === SignInState.Authenticated),
       switchMap(u => this.signInService.signIn(u)),
       map(u => CurrentUser.fromAuthenticatedUser(u))
     ).subscribe(u => this.currentUserSubject.next(u));
+
+    this.googleUserSubject.subscribe(u => this.currentUserSubject.next(CurrentUser.fromGoogleUser(u)));
 
     this.currentUser$.subscribe(u => console.log('Current user changed:', u));
   }
@@ -41,28 +47,34 @@ export class AuthService {
       height: 50,
       longtitle: true,
       theme: 'dark',
-      onsuccess: googleUser => this.zone.run(() => this.onSuccess(googleUser)),
-      onfailure: reason => this.zone.run(() => this.onFailure(reason.error)),
+      onfailure: reason => console.warn('Failed to authenticate with google. Reason:', reason),
     });
   }
 
-  signOut() {
-    gapi.auth2.getAuthInstance().signOut().then(() => console.log('CurrentUser signed out.'));
-  }
-
-  disconnectFromGoogle() {
-    gapi.auth2.getAuthInstance()
-      .disconnect()
-      .then(() => this.zone.run(() => this.currentUserSubject.next(new CurrentUser())));
+  signOut(): Observable<void> {
+    return from(gapi.auth2.getAuthInstance().disconnect())
+      .pipe(
+        enterZone(this.zone),
+        map(() => this.currentUserSubject.next(new CurrentUser()))
+      );
   }
 
   private initialize(): Promise<void> {
+    console.log('--- AuthService.initialize()');
+
+    const firstGoogleUser = this.googleUserSubject.pipe(
+      take(1)
+    );
+
     const gapiLoader = bindCallback(gapi.load);
-    return this.signInService.getInfo().pipe(
+    const initialization = this.signInService.getInfo().pipe(
       switchMap(info => gapiLoader('auth2').pipe(
         map(() => this.initializeGApi(info))
       ))
-    ).toPromise();
+    );
+
+    return forkJoin(firstGoogleUser, initialization)
+      .toPromise().then(() => console.log('--- AuthService.initialize() done'));
   }
 
   private initializeGApi(info: Info) {
@@ -71,15 +83,7 @@ export class AuthService {
     });
 
     const auth2 = gapi.auth2.getAuthInstance();
-    auth2.currentUser.listen(u => this.zone.run(() => this.currentUserSubject.next(CurrentUser.fromGoogleUser(u))));
-  }
-
-  private onSuccess(googleUser: gapi.auth2.GoogleUser) {
-    console.log('Success');
-
-  }
-
-  private onFailure(error: string) {
-    console.warn('Failed to authenticate with google. Error:', error);
+    auth2.currentUser.listen(u => this.zone.run(() => this.googleUserSubject.next(u)));
+    console.log(auth2.currentUser.get());
   }
 }

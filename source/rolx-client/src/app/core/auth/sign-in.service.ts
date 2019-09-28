@@ -13,7 +13,9 @@ const SignInUrl = environment.apiBaseUrl + '/v1/signin';
   providedIn: 'root'
 })
 export class SignInService {
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    console.log('--- SignInService.ctor()');
+  }
 
   getInfo(): Observable<Info> {
     return this.httpClient.get<Info>(SignInUrl + '/info');

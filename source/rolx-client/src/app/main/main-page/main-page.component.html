@@ -8,6 +8,7 @@
       <a mat-list-item href="#">Link 1</a>
       <a mat-list-item href="#">Link 2</a>
       <a mat-list-item href="#">Link 3</a>
+      <a mat-list-item (click)="signOut()">Sign out</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -20,8 +21,8 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span *ngIf="authService.currentUser$ | async as user">
-        Welcome {{user.firstName}}
+      <span>
+        Welcome {{authService.currentUser.firstName}} {{authService.currentUser.lastName}}
       </span>
     </mat-toolbar>
     <!-- Add Content Here -->

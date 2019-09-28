@@ -39,9 +39,7 @@ export class SignInPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private navigateForward() {
     this.router.navigateByUrl(this.forwardRoute)
-      .catch( (e: Error) => {
-        console.log(e.name + ': ' + e.message);
-      });
+      .catch(e => console.log(e.name + ': ' + e.message));
   }
 
 }

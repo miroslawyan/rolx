@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -18,6 +19,14 @@ export class MainPageComponent {
       shareReplay()
     );
 
-  constructor(public authService: AuthService, private breakpointObserver: BreakpointObserver) {}
+  constructor(public authService: AuthService,
+              private breakpointObserver: BreakpointObserver,
+              private router: Router) {}
+
+  signOut() {
+    this.authService.signOut()
+      .subscribe(() => this.router.navigateByUrl('/sign-in')
+        .catch(e => console.log(e.name + ': ' + e.message)));
+  }
 
 }
