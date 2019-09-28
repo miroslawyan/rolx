@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject, bindCallback, forkJoin, from, Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, bindCallback, forkJoin, from, Observable, of, Subject } from 'rxjs';
+import { catchError, filter, map, switchMap, take } from 'rxjs/operators';
 
 import { enterZone } from '@app/core/util';
 import { CurrentUser } from './current-user';
@@ -23,8 +23,10 @@ export class AuthService {
 
     this.currentUser$.pipe(
       filter(u => u.state === SignInState.Authenticated),
-      switchMap(u => this.signInService.signIn(u)),
-      map(u => CurrentUser.fromAuthenticatedUser(u))
+      switchMap(u => this.signInService.signIn(u).pipe(
+        map(au => CurrentUser.fromAuthenticatedUser(au)),
+        catchError(e => this.handleSignInError(e))
+      ))
     ).subscribe(u => this.currentUserSubject.next(u));
 
     this.googleUserSubject.subscribe(u => this.currentUserSubject.next(CurrentUser.fromGoogleUser(u)));
@@ -85,5 +87,10 @@ export class AuthService {
     const auth2 = gapi.auth2.getAuthInstance();
     auth2.currentUser.listen(u => this.zone.run(() => this.googleUserSubject.next(u)));
     console.log(auth2.currentUser.get());
+  }
+
+  private handleSignInError(error: any) {
+    console.warn('Failed to sign in', error);
+    return of(new CurrentUser());
   }
 }

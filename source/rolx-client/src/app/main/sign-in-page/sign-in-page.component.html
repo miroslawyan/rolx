@@ -3,13 +3,14 @@
     Sign in to RolX
   </mat-card-title>
 
-  <mat-card-content *ngIf="currentUser.state <= SignInState.Known else signingIn">
-    <div id="sign-in-button"></div>
+  <mat-card-content>
+
+    <div id="sign-in-button" [class.hidden]="currentUser.state >= SignInState.Authenticated"></div>
+
+    <mat-spinner *ngIf="currentUser.state >= SignInState.Authenticated"
+                 [diameter]="60"
+                 [color]="'accent'"></mat-spinner>
+
   </mat-card-content>
 
-  <ng-template #signingIn>
-    <mat-card-content>
-      <mat-spinner [diameter]="60" [color]="'accent'"></mat-spinner>
-    </mat-card-content>
-  </ng-template>
 </mat-card>
