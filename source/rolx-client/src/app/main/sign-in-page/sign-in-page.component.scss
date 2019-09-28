@@ -7,8 +7,12 @@ mat-card {
 }
 
 mat-card-content {
-
   #sign-in-button {
     margin-top: 16px;
   }
+}
+
+mat-spinner {
+  margin-left: auto;
+  margin-right: auto;
 }

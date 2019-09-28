@@ -17,9 +17,13 @@ export class SignInPageComponent implements OnInit, AfterViewInit, OnDestroy {
   private forwardRoute = '';
   private subscriptions: Subscription[] = [];
 
-  constructor(public authService: AuthService,
+  constructor(private authService: AuthService,
               private route: ActivatedRoute,
               private router: Router) { }
+
+  get currentUser() {
+    return this.authService.currentUser;
+  }
 
   ngOnInit(): void {
     this.forwardRoute = this.route.snapshot.queryParams.forwardRoute || '/';
