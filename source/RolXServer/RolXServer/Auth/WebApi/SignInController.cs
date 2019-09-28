@@ -36,6 +36,16 @@ namespace RolXServer.Auth.WebApi
         }
 
         /// <summary>
+        /// Provides information on the sign-in capabilities of this server.
+        /// </summary>
+        /// <returns>The sign-in information.</returns>
+        [HttpGet("info")]
+        public async Task<ActionResult<Info>> GetInfo()
+        {
+            return await this.signInService.GetInfo();
+        }
+
+        /// <summary>
         /// Signs in using the specified google identifier token.
         /// </summary>
         /// <param name="googleIdToken">The google identifier token.</param>

@@ -26,6 +26,11 @@ namespace RolXServer.Auth
         public TimeSpan TokenExpiration { get; set; } = TimeSpan.FromDays(1);
 
         /// <summary>
+        /// Gets or sets the google client identifier.
+        /// </summary>
+        public string GoogleClientId { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets the white-list of allowed google hosted domains.
         /// </summary>
         public string[] GoogleHostedDomainWhitelist { get; set; } = new string[0];

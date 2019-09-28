@@ -19,6 +19,12 @@ namespace RolXServer.Auth.Domain
     public interface ISignInService
     {
         /// <summary>
+        /// Gets the sign-in information.
+        /// </summary>
+        /// <returns>The sign-in information.</returns>
+        Task<Info> GetInfo();
+
+        /// <summary>
         /// Authenticates with the specified google identifier token.
         /// </summary>
         /// <param name="googleIdToken">The google identifier token.</param>

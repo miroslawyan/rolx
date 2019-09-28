@@ -55,6 +55,22 @@ namespace RolXServer.Auth.Domain.Detail
         }
 
         /// <summary>
+        /// Gets the sign-in information.
+        /// </summary>
+        /// <returns>
+        /// The sign-in information.
+        /// </returns>
+        public Task<Info> GetInfo()
+        {
+            var info = new Info
+            {
+                GoogleClientId = this.settings.GoogleClientId,
+            };
+
+            return Task.FromResult(info);
+        }
+
+        /// <summary>
         /// Authenticates with the specified google identifier token.
         /// </summary>
         /// <param name="googleIdToken">The google identifier token.</param>
