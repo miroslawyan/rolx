@@ -38,7 +38,7 @@ export class CurrentUser implements AuthenticatedUserData, SignInData {
 
   static fromAuthenticatedUser(authenticatedUser: AuthenticatedUserData): CurrentUser {
     const currentUser = Object.assign(new CurrentUser(), authenticatedUser);
-    currentUser.state = SignInState.Authorized;
+    currentUser.state = SignInState.SignedIn;
     return currentUser;
   }
 }
