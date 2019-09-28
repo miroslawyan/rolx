@@ -63,6 +63,9 @@ namespace RolXServer
 
             app.UseRouting();
 
+            // Add CORS policy for development
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
+
             app.UseAuthentication();
             app.UseAuthorization();
 

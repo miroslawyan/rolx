@@ -1,8 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, bindCallback } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 
-import { environment } from '@env/environment';
-import { tap } from 'rxjs/operators';
+import { Info } from './info';
+import { SignInService } from './sign-in.service';
 import { User } from './user';
 
 @Injectable({
@@ -16,8 +17,12 @@ export class AuthService {
     tap(u => console.log('Current user:', u))
   );
 
-  constructor(private zone: NgZone) {
-    gapi.load('auth2', () => this.initializeGApi());
+  constructor(private signInService: SignInService,
+              private zone: NgZone) {
+  }
+
+  static Initializer(authService: AuthService) {
+    return () => authService.initialize();
   }
 
   renderSignInButton(targetElementId: string) {
@@ -42,9 +47,18 @@ export class AuthService {
       .then(() => this.zone.run(() => this.currentUserSubject.next(new User())));
   }
 
-  private initializeGApi() {
+  private initialize(): Promise<void> {
+    const gapiLoader = bindCallback(gapi.load);
+    return this.signInService.getInfo().pipe(
+      switchMap(info => gapiLoader('auth2').pipe(
+        map(() => this.initializeGApi(info))
+      ))
+    ).toPromise();
+  }
+
+  private initializeGApi(info: Info) {
     gapi.auth2.init({
-      client_id: environment.googleClientId,
+      client_id: info.googleClientId,
     });
 
     const auth2 = gapi.auth2.getAuthInstance();
