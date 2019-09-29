@@ -13,6 +13,7 @@ import { SignInService } from './sign-in.service';
 })
 export class AuthService {
 
+  private isInitialized = false;
   private googleUserSubject = new Subject<gapi.auth2.GoogleUser>();
   private currentUserSubject = new BehaviorSubject<CurrentUser>(new CurrentUser());
   currentUser$ = this.currentUserSubject.asObservable();
@@ -36,8 +37,28 @@ export class AuthService {
     ).subscribe(u => console.log('Current user changed:', u));
   }
 
-  static Initializer(authService: AuthService) {
-    return () => authService.initialize();
+  initialize(): Promise<void> {
+    if (this.isInitialized) {
+      return Promise.resolve();
+    }
+
+    console.log('--- AuthService.initialize()');
+
+    const firstGoogleUser = this.googleUserSubject.pipe(
+      take(1)
+    );
+
+    const gapiLoader = bindCallback(gapi.load);
+    const initialization = this.signInService.getInfo().pipe(
+      switchMap(info => gapiLoader('auth2').pipe(
+        map(() => this.initializeGApi(info))
+      ))
+    );
+
+    return forkJoin(firstGoogleUser, initialization)
+      .toPromise()
+      .then(() => this.isInitialized = true)
+      .then(() => console.log('--- AuthService.initialize() done'));
   }
 
   get currentUser() {
@@ -62,24 +83,6 @@ export class AuthService {
         map(() => new CurrentUser()),
         tap(u => this.currentUserSubject.next(u))
       );
-  }
-
-  private initialize(): Promise<void> {
-    console.log('--- AuthService.initialize()');
-
-    const firstGoogleUser = this.googleUserSubject.pipe(
-      take(1)
-    );
-
-    const gapiLoader = bindCallback(gapi.load);
-    const initialization = this.signInService.getInfo().pipe(
-      switchMap(info => gapiLoader('auth2').pipe(
-        map(() => this.initializeGApi(info))
-      ))
-    );
-
-    return forkJoin(firstGoogleUser, initialization)
-      .toPromise().then(() => console.log('--- AuthService.initialize() done'));
   }
 
   private initializeGApi(info: Info) {
