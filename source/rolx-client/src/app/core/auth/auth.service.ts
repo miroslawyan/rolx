@@ -31,10 +31,6 @@ export class AuthService {
     ).subscribe(u => this.currentUserSubject.next(u));
 
     this.googleUserSubject.subscribe(u => this.currentUserSubject.next(CurrentUser.fromGoogleUser(u)));
-
-    this.currentUser$.pipe(
-      distinctUntilChanged()
-    ).subscribe(u => console.log('Current user changed:', u));
   }
 
   initialize(): Promise<void> {
@@ -92,7 +88,6 @@ export class AuthService {
 
     const auth2 = gapi.auth2.getAuthInstance();
     auth2.currentUser.listen(u => this.zone.run(() => this.googleUserSubject.next(u)));
-    console.log(auth2.currentUser.get());
   }
 
   private handleSignInError(error: any) {
