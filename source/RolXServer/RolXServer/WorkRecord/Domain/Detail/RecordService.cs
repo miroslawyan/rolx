@@ -30,9 +30,21 @@ namespace RolXServer.WorkRecord.Domain.Detail
         public Task<IEnumerable<Record>> GetAllOfMonth(DateTime month)
         {
             var result = AllDaysOfSameMonth(month)
-                .Select(d => new Record { Date = d });
+                .Select(d => new Record { Date = d })
+                .Select(r => FillHoliday(r));
 
             return Task.FromResult(result);
+        }
+
+        private static Record FillHoliday(Record record)
+        {
+            var rule = Holiday.Rules.All.FirstOrDefault(r => r.IsMatching(record.Date));
+            if (rule != null)
+            {
+                record.Name = rule.Name;
+            }
+
+            return record;
         }
 
         private static IEnumerable<DateTime> AllDaysOfSameMonth(DateTime month)
