@@ -22,7 +22,7 @@ namespace RolXServer.Auth.WebApi
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class SignInController : ControllerBase
+    public sealed class SignInController : ControllerBase
     {
         private readonly ISignInService signInService;
 

@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, bindCallback, forkJoin, from, Observable, Subject } from 'rxjs';
-import { catchError, distinctUntilChanged, filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, filter, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { enterZone } from '@app/core/util';
 import { CurrentUser } from './current-user';

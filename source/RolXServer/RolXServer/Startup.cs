@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RolXServer.Auth;
 using RolXServer.Database;
+using RolXServer.WorkRecord;
 
 namespace RolXServer
 {
@@ -46,6 +47,7 @@ namespace RolXServer
             services.AddAutoMapper(typeof(Startup));
 
             services.AddAuth(this.Configuration);
+            services.AddWorkRecord();
             services.AddDatabase();
         }
 
