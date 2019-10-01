@@ -20,6 +20,17 @@ namespace RolXServer.WorkRecord.Domain.Detail
     /// </summary>
     public sealed class RecordService : IRecordService
     {
+        private readonly IHolidayRules holidayRules;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RecordService"/> class.
+        /// </summary>
+        /// <param name="holidayRules">The holiday rules.</param>
+        public RecordService(IHolidayRules holidayRules)
+        {
+            this.holidayRules = holidayRules;
+        }
+
         /// <summary>
         /// Gets all records of the specified month.
         /// </summary>
@@ -31,20 +42,9 @@ namespace RolXServer.WorkRecord.Domain.Detail
         {
             var result = AllDaysOfSameMonth(month)
                 .Select(d => new Record { Date = d })
-                .Select(r => FillHoliday(r));
+                .Select(r => this.holidayRules.Apply(r));
 
             return Task.FromResult(result);
-        }
-
-        private static Record FillHoliday(Record record)
-        {
-            var rule = Holiday.Rules.All.FirstOrDefault(r => r.IsMatching(record.Date));
-            if (rule != null)
-            {
-                record.Name = rule.Name;
-            }
-
-            return record;
         }
 
         private static IEnumerable<DateTime> AllDaysOfSameMonth(DateTime month)

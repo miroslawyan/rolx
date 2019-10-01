@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="HolidayRuleAtFixedDate.cs" company="Christian Ewald">
+// <copyright file="RuleAtFixedDate.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -8,23 +8,23 @@
 
 using System;
 
-namespace RolXServer.WorkRecord.Domain.Holiday
+namespace RolXServer.WorkRecord.Domain.Detail.Holiday
 {
     /// <summary>
     /// A holiday rule matching fixed dates.
     /// </summary>
-    public class HolidayRuleAtFixedDate : HolidayRuleBase
+    public class RuleAtFixedDate : RuleBase
     {
         private readonly int month;
         private readonly int day;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HolidayRuleAtFixedDate" /> class.
+        /// Initializes a new instance of the <see cref="RuleAtFixedDate" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="month">The month.</param>
         /// <param name="day">The day.</param>
-        public HolidayRuleAtFixedDate(string name, int month, int day)
+        public RuleAtFixedDate(string name, int month, int day)
             : base(name)
         {
             this.month = month;

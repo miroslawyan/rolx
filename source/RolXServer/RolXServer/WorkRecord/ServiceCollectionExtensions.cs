@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RolXServer.WorkRecord
@@ -26,6 +24,7 @@ namespace RolXServer.WorkRecord
         /// </returns>
         public static IServiceCollection AddWorkRecord(this IServiceCollection services)
         {
+            services.AddSingleton<Domain.IHolidayRules, Domain.Detail.StaticHolidayRules>();
             services.AddScoped<Domain.IRecordService, Domain.Detail.RecordService>();
 
             return services;

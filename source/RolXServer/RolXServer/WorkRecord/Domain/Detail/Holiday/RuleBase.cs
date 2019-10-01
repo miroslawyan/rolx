@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="HolidayRuleBase.cs" company="Christian Ewald">
+// <copyright file="RuleBase.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -8,18 +8,18 @@
 
 using System;
 
-namespace RolXServer.WorkRecord.Domain.Holiday
+namespace RolXServer.WorkRecord.Domain.Detail.Holiday
 {
     /// <summary>
     /// Base class for holiday rules.
     /// </summary>
-    public abstract class HolidayRuleBase
+    public abstract class RuleBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HolidayRuleBase"/> class.
+        /// Initializes a new instance of the <see cref="RuleBase"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        protected HolidayRuleBase(string name)
+        protected RuleBase(string name)
         {
             this.Name = name;
         }

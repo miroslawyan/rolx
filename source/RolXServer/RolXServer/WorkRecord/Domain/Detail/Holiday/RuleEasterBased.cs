@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="HolidayRuleEasterBased.cs" company="Christian Ewald">
+// <copyright file="RuleEasterBased.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -8,21 +8,21 @@
 
 using System;
 
-namespace RolXServer.WorkRecord.Domain.Holiday
+namespace RolXServer.WorkRecord.Domain.Detail.Holiday
 {
     /// <summary>
     /// Rule for holidays in relation to the easter Sunday of the requested year.
     /// </summary>
-    public sealed class HolidayRuleEasterBased : HolidayRuleBase
+    public sealed class RuleEasterBased : RuleBase
     {
         private readonly int offset;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HolidayRuleEasterBased"/> class.
+        /// Initializes a new instance of the <see cref="RuleEasterBased"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="offset">The offset.</param>
-        public HolidayRuleEasterBased(string name, int offset)
+        public RuleEasterBased(string name, int offset)
             : base(name)
         {
             this.offset = offset;
