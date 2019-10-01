@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-title>
+    <button mat-icon-button (click)="previous()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    {{month$.value | date : 'MMMM yyyy'}}
+
+    <button mat-icon-button (click)="next()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </mat-card-title>
+
+  <mat-card-content>
+    <rolx-month-table [records]="records$ | async"></rolx-month-table>
+  </mat-card-content>
+</mat-card>
+
