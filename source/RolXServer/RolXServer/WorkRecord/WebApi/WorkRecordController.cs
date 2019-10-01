@@ -60,39 +60,11 @@ namespace RolXServer.WorkRecord.WebApi
                 .ToList();
         }
 
-        /// <summary>
-        /// Gets the record for the day at the specified date.
-        /// </summary>
-        /// <param name="date">The date in ISO format, YYYY-MM-DD.</param>
-        /// <returns>The work record.</returns>
-        [HttpGet("day/{date}")]
-        public async Task<ActionResult<string>> GetDay(string date)
-        {
-            if (!TryParseDate(date, out var dayDate))
-            {
-                return this.NotFound();
-            }
-
-            this.logger.LogInformation(date);
-            this.logger.LogInformation(dayDate.ToString());
-            return await Task.FromResult(dayDate.ToString());
-        }
-
         private static bool TryParseMonth(string candidate, out DateTime result)
         {
             return DateTime.TryParseExact(
                 candidate,
                 "yyyy-MM",
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.AssumeLocal,
-                out result);
-        }
-
-        private static bool TryParseDate(string candidate, out DateTime result)
-        {
-            return DateTime.TryParseExact(
-                candidate,
-                "yyyy-MM-dd",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.AssumeLocal,
                 out result);
