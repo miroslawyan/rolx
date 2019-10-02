@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import dayjs from 'dayjs';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Record} from './record';
+import { Record, RecordData } from './record';
 
 const WorkRecordUrl = environment.apiBaseUrl + '/v1/workrecord';
 
@@ -19,6 +20,8 @@ export class WorkRecordService {
 
   getMonth(month: dayjs.Dayjs): Observable<Record[]> {
     const url = WorkRecordUrl + '/month/' + month.format('YYYY-MM');
-    return this.httpClient.get<Record[]>(url);
+    return this.httpClient.get<RecordData[]>(url).pipe(
+      map(ds => ds.map(d => new Record(d)))
+    );
   }
 }
