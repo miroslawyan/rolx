@@ -1,6 +1,7 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
+// see https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
 $rolx-primary: mat-palette($mat-purple);
 $rolx-accent: mat-palette($mat-green, A200, A100, A400);
 
