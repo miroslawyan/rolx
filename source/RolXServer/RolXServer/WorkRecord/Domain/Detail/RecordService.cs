@@ -42,6 +42,7 @@ namespace RolXServer.WorkRecord.Domain.Detail
         {
             var result = AllDaysOfSameMonth(month)
                 .Select(d => new Record { Date = d })
+                .Select(r => ApplyWeekends(r))
                 .Select(r => this.holidayRules.Apply(r));
 
             return Task.FromResult(result);
@@ -51,6 +52,16 @@ namespace RolXServer.WorkRecord.Domain.Detail
         {
             return Enumerable.Range(1, DateTime.DaysInMonth(month.Year, month.Month))
                 .Select(d => new DateTime(month.Year, month.Month, d));
+        }
+
+        private static Record ApplyWeekends(Record record)
+        {
+            if (record.Date.DayOfWeek == DayOfWeek.Saturday || record.Date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                record.DayType = DayType.Weekend;
+            }
+
+            return record;
         }
     }
 }

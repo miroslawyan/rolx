@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Record } from '@app/core/work-record';
+import { DayType, Record } from '@app/core/work-record';
 
 @Component({
   selector: 'rolx-month-table',
@@ -8,6 +8,8 @@ import { Record } from '@app/core/work-record';
   styleUrls: ['./month-table.component.scss']
 })
 export class MonthTableComponent implements OnInit {
+
+  readonly DayType = DayType;
 
   @Input()
   records: Record[];

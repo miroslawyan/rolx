@@ -33,7 +33,8 @@ namespace RolXServer.WorkRecord.Domain.Detail
             var rule = this.all.FirstOrDefault(r => r.IsMatching(record.Date));
             if (rule != null)
             {
-                record.Name = rule.Name;
+                record.DayType = DayType.Holiday;
+                record.DayName = rule.Name;
             }
 
             return record;
@@ -46,7 +47,7 @@ namespace RolXServer.WorkRecord.Domain.Detail
             yield return new RuleAtFixedDate("Tag der Arbeit", 5, 1);
             yield return new RuleAtFixedDate("Nationalfeiertag", 8, 1);
             yield return new RuleAtFixedDate("Weihnachten", 12, 25);
-            yield return new RuleAtFixedDate("Stephanstag", 12, 25);
+            yield return new RuleAtFixedDate("Stephanstag", 12, 26);
 
             yield return new RuleEasterBased("Karfreitag", -2);
             yield return new RuleEasterBased("Ostern", 0);

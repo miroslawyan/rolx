@@ -1,33 +1,31 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Record.cs" company="Christian Ewald">
+// <copyright file="DayType.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-
-namespace RolXServer.WorkRecord.Domain.Model
+namespace RolXServer.WorkRecord
 {
     /// <summary>
-    /// A record for a day.
+    /// The types of a day.
     /// </summary>
-    public sealed class Record
+    public enum DayType
     {
         /// <summary>
-        /// Gets or sets the date.
+        /// A plain old, boring workday.
         /// </summary>
-        public DateTime Date { get; set; }
+        Workday,
 
         /// <summary>
-        /// Gets or sets the type of the day.
+        /// Hurray, its weekend!
         /// </summary>
-        public DayType DayType { get; set; }
+        Weekend,
 
         /// <summary>
-        /// Gets or sets the name of the day.
+        /// A public holiday.
         /// </summary>
-        public string DayName { get; set; } = string.Empty;
+        Holiday,
     }
 }
