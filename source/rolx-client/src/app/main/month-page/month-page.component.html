@@ -4,11 +4,12 @@
       <mat-icon>chevron_left</mat-icon>
     </button>
 
-    {{month$.value | date : 'MMMM yyyy'}}
-
     <button mat-icon-button (click)="next()">
       <mat-icon>chevron_right</mat-icon>
     </button>
+
+    {{month$.value | date : 'MMMM yyyy'}}
+
   </mat-card-title>
 
   <mat-card-content>

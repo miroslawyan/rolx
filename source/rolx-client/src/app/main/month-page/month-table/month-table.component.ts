@@ -12,6 +12,8 @@ export class MonthTableComponent implements OnInit {
   @Input()
   records: Record[];
 
+  displayedColumns: string[] = ['date', 'name'];
+
   constructor() { }
 
   ngOnInit() {

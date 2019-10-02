@@ -1,5 +1,17 @@
-<ul>
-  <li *ngFor="let record of records">
-    {{record.date | date : 'd'}} {{record.name}}
-  </li>
-</ul>
+<table mat-table [dataSource]="records" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef class="date">Tag</th>
+    <td mat-cell *matCellDef="let record" class="date">
+      {{record.date | date : 'd'}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let record">{{record.name}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let record; columns: displayedColumns;"></tr>
+</table>
