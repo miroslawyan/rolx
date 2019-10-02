@@ -1,14 +1,10 @@
 @import '~@angular/material/theming';
 
 table {
-  width: 60%;
+  width: 100%;
 }
 
 .date {
   text-align: center;
   width: 3em;
-}
-
-.non-workday {
-  background-color: rgba(255, 255, 255, 0.1);
 }

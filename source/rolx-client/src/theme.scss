@@ -1,0 +1,8 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$rolx-primary: mat-palette($mat-purple);
+$rolx-accent: mat-palette($mat-green, A200, A100, A400);
+
+$rolx-dark-theme: mat-dark-theme($rolx-primary, $rolx-accent);
+$rolx-light-theme: mat-light-theme($rolx-primary, $rolx-accent);

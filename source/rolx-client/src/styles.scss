@@ -2,3 +2,18 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+@import 'theme';
+@import 'app/main/month-page/month-table/month-table.component.scss-theme';
+
+@mixin apply-theme($theme) {
+  @include month-table-component-theme($theme);
+  @include angular-material-theme($theme);
+}
+
+@include apply-theme($rolx-dark-theme);
+//@include apply-theme($rolx-light-theme);
