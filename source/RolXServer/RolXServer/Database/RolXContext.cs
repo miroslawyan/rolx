@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using Microsoft.EntityFrameworkCore;
+using RolXServer.Account.DataAccess;
 using RolXServer.Auth.DataAccess;
 using RolXServer.WorkRecord.DataAccess;
 
@@ -26,6 +27,16 @@ namespace RolXServer.Database
             : base(options)
         {
         }
+
+        /// <summary>
+        /// Gets or sets the customers.
+        /// </summary>
+        public DbSet<Customer> Customers { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the projects.
+        /// </summary>
+        public DbSet<Project> Projects { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the users.
@@ -51,8 +62,14 @@ namespace RolXServer.Database
         /// </remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => c.Number).IsUnique();
+
+            modelBuilder.Entity<Project>()
+                .HasIndex(c => c.Number).IsUnique();
+
             modelBuilder.Entity<User>()
-                .HasAlternateKey(u => u.GoogleId);
+                .HasIndex(u => u.GoogleId).IsUnique();
 
             modelBuilder.Entity<UserSetting>()
                 .HasKey(s => new { s.UserId, s.StartDate });

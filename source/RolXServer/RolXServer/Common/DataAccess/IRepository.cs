@@ -17,7 +17,7 @@ namespace RolXServer.Common.DataAccess
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public interface IRepository<TEntity>
-        where TEntity : class, IAggregateRoot
+        where TEntity : class
     {
         /// <summary>
         /// Gets the entities.

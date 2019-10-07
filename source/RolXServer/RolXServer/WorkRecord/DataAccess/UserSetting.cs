@@ -9,14 +9,13 @@
 using System;
 
 using RolXServer.Auth.DataAccess;
-using RolXServer.Common.DataAccess;
 
 namespace RolXServer.WorkRecord.DataAccess
 {
     /// <summary>
     /// The settings of a user.
     /// </summary>
-    public class UserSetting : IAggregateRoot
+    public class UserSetting
     {
         /// <summary>
         /// Gets or sets the user identifier.

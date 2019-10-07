@@ -9,6 +9,7 @@
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
+using RolXServer.Account.DataAccess;
 using RolXServer.Auth.DataAccess;
 using RolXServer.Common.DataAccess;
 using RolXServer.WorkRecord.DataAccess;
@@ -18,7 +19,11 @@ namespace RolXServer.Database
     /// <summary>
     /// The repository in use.
     /// </summary>
-    internal sealed class RolXRepository : IRepository<User>, IRepository<UserSetting>
+    internal sealed class RolXRepository :
+        IRepository<Customer>,
+        IRepository<Project>,
+        IRepository<User>,
+        IRepository<UserSetting>
     {
         private RolXContext context;
 
@@ -30,6 +35,16 @@ namespace RolXServer.Database
         {
             this.context = context;
         }
+
+        /// <summary>
+        /// Gets the customer entities.
+        /// </summary>
+        DbSet<Customer> IRepository<Customer>.Entities => this.context.Customers;
+
+        /// <summary>
+        /// Gets the project entities.
+        /// </summary>
+        DbSet<Project> IRepository<Project>.Entities => this.context.Projects;
 
         /// <summary>
         /// Gets the user entities.

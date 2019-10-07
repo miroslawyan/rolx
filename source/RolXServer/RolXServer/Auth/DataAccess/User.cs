@@ -8,14 +8,12 @@
 
 using System;
 
-using RolXServer.Common.DataAccess;
-
 namespace RolXServer.Auth.DataAccess
 {
     /// <summary>
     /// Represents a user of RolX.
     /// </summary>
-    public class User : IAggregateRoot
+    public class User
     {
         /// <summary>
         /// Gets or sets the identifier.
