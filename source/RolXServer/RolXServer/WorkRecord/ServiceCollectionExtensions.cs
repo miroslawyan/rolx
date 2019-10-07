@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RolXServer.WorkRecord
@@ -19,11 +20,14 @@ namespace RolXServer.WorkRecord
         /// Adds the services of the WorkRecord package.
         /// </summary>
         /// <param name="services">The services.</param>
+        /// <param name="configuration">The configuration.</param>
         /// <returns>
         /// The service collection.
         /// </returns>
-        public static IServiceCollection AddWorkRecord(this IServiceCollection services)
+        public static IServiceCollection AddWorkRecord(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<Settings>(configuration.GetSection("WorkRecord"));
+
             services.AddSingleton<Domain.IHolidayRules, Domain.Detail.StaticHolidayRules>();
             services.AddScoped<Domain.IRecordService, Domain.Detail.RecordService>();
 

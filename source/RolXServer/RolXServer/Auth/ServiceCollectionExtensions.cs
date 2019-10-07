@@ -28,7 +28,7 @@ namespace RolXServer.Auth
         public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
             var settingsSection = configuration.GetSection("Auth");
-            services.Configure<Settings>(configuration.GetSection("Auth"));
+            services.Configure<Settings>(settingsSection);
 
             services.AddScoped<Domain.ISignInService, Domain.Detail.SignInService>();
             services.AddSingleton<Domain.Detail.BearerTokenFactory>();

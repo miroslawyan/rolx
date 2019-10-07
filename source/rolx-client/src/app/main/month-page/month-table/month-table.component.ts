@@ -14,7 +14,7 @@ export class MonthTableComponent implements OnInit {
   @Input()
   records: Record[];
 
-  displayedColumns: string[] = ['date', 'name'];
+  displayedColumns: string[] = ['date', 'name', 'nominal'];
 
   constructor() { }
 

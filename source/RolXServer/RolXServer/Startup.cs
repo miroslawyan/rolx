@@ -47,7 +47,7 @@ namespace RolXServer
             services.AddAutoMapper(typeof(Startup));
 
             services.AddAuth(this.Configuration);
-            services.AddWorkRecord();
+            services.AddWorkRecord(this.Configuration);
             services.AddDatabase();
         }
 

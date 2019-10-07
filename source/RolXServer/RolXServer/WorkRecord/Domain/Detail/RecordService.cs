@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Options;
 using RolXServer.WorkRecord.Domain.Model;
 
 namespace RolXServer.WorkRecord.Domain.Detail
@@ -21,14 +22,17 @@ namespace RolXServer.WorkRecord.Domain.Detail
     public sealed class RecordService : IRecordService
     {
         private readonly IHolidayRules holidayRules;
+        private readonly Settings settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecordService"/> class.
+        /// Initializes a new instance of the <see cref="RecordService" /> class.
         /// </summary>
         /// <param name="holidayRules">The holiday rules.</param>
-        public RecordService(IHolidayRules holidayRules)
+        /// <param name="settingsAccessor">The settings accessor.</param>
+        public RecordService(IHolidayRules holidayRules, IOptions<Settings> settingsAccessor)
         {
             this.holidayRules = holidayRules;
+            this.settings = settingsAccessor.Value;
         }
 
         /// <summary>
@@ -43,7 +47,8 @@ namespace RolXServer.WorkRecord.Domain.Detail
             var result = AllDaysOfSameMonth(month)
                 .Select(d => new Record { Date = d })
                 .Select(r => ApplyWeekends(r))
-                .Select(r => this.holidayRules.Apply(r));
+                .Select(r => this.holidayRules.Apply(r))
+                .Select(r => this.ApplyNominalWorkTime(r));
 
             return Task.FromResult(result);
         }
@@ -59,6 +64,16 @@ namespace RolXServer.WorkRecord.Domain.Detail
             if (record.Date.DayOfWeek == DayOfWeek.Saturday || record.Date.DayOfWeek == DayOfWeek.Sunday)
             {
                 record.DayType = DayType.Weekend;
+            }
+
+            return record;
+        }
+
+        private Record ApplyNominalWorkTime(Record record)
+        {
+            if (record.DayType == DayType.Workday)
+            {
+                record.NominalWorkTime = this.settings.NominalWorkTimePerDay;
             }
 
             return record;

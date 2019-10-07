@@ -8,7 +8,7 @@
 
 using System;
 
-namespace RolXServer.WorkRecord.Domain.Model
+namespace RolXServer.WorkRecord.WebApi.Resource
 {
     /// <summary>
     /// A record for a day.
@@ -31,8 +31,8 @@ namespace RolXServer.WorkRecord.Domain.Model
         public string DayName { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the nominal work-time.
+        /// Gets or sets the nominal work-time in hours.
         /// </summary>
-        public TimeSpan NominalWorkTime { get; set; }
+        public double NominalWorkTimeHours { get; set; }
     }
 }

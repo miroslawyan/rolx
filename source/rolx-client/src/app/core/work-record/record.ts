@@ -7,6 +7,7 @@ export interface RecordData {
   date: Date;
   dayType: DayType;
   dayName: string;
+  nominalWorkTimeHours: number;
 }
 
 export class Record extends DataWrapper<RecordData> {
@@ -19,6 +20,10 @@ export class Record extends DataWrapper<RecordData> {
 
   get dayName() {
     return this.raw.dayName;
+  }
+
+  get nominalWorkTimeHours() {
+    return this.raw.nominalWorkTimeHours;
   }
 
 }

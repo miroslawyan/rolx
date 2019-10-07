@@ -12,10 +12,11 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RolXServer.WorkRecord.Domain;
-using RolXServer.WorkRecord.Domain.Model;
+using RolXServer.WorkRecord.WebApi.Resource;
 
 namespace RolXServer.WorkRecord.WebApi
 {
@@ -28,18 +29,22 @@ namespace RolXServer.WorkRecord.WebApi
     public sealed class WorkRecordController : ControllerBase
     {
         private readonly IRecordService recordService;
+        private readonly IMapper mapper;
         private readonly ILogger logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkRecordController" /> class.
         /// </summary>
         /// <param name="recordService">The record service.</param>
+        /// <param name="mapper">The mapper.</param>
         /// <param name="logger">The logger.</param>
         public WorkRecordController(
             IRecordService recordService,
+            IMapper mapper,
             ILogger<WorkRecordController> logger)
         {
             this.recordService = recordService;
+            this.mapper = mapper;
             this.logger = logger;
         }
 
@@ -57,6 +62,7 @@ namespace RolXServer.WorkRecord.WebApi
             }
 
             return (await this.recordService.GetAllOfMonth(monthDate))
+                .Select(r => this.mapper.Map<Record>(r))
                 .ToList();
         }
 

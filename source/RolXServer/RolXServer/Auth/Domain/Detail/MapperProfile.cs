@@ -8,10 +8,10 @@
 
 using AutoMapper;
 
-namespace RolXServer.Auth
+namespace RolXServer.Auth.Domain.Detail
 {
     /// <summary>
-    /// AutoMapper profile for the Auth package.
+    /// AutoMapper profile for the Auth.Domain package.
     /// </summary>
     public sealed class MapperProfile : Profile
     {
@@ -20,7 +20,7 @@ namespace RolXServer.Auth
         /// </summary>
         public MapperProfile()
         {
-            this.CreateMap<DataAccess.User, Domain.Model.AuthenticatedUser>();
+            this.CreateMap<DataAccess.User, Model.AuthenticatedUser>();
         }
     }
 }
