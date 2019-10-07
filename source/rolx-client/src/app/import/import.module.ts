@@ -9,6 +9,7 @@ import {
   MatListModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
+  MatSortModule,
   MatTableModule,
   MatToolbarModule
 } from '@angular/material';
@@ -25,6 +26,7 @@ import {
     MatListModule,
     MatProgressSpinnerModule,
     MatSidenavModule,
+    MatSortModule,
     MatTableModule,
     MatToolbarModule,
   ],
@@ -38,6 +40,7 @@ import {
     MatListModule,
     MatProgressSpinnerModule,
     MatSidenavModule,
+    MatSortModule,
     MatTableModule,
     MatToolbarModule,
   ]

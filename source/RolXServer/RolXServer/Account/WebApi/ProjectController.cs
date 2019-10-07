@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -113,20 +112,6 @@ namespace RolXServer.Account.WebApi
 
             var entity = this.mapper.Map<DataAccess.Project>(project);
             this.projectRepository.Entities.Attach(entity).State = EntityState.Modified;
-            await this.projectRepository.SaveChanges();
-
-            return this.NoContent();
-        }
-
-        /// <summary>
-        /// Deletes the project with the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>No content.</returns>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            this.projectRepository.Entities.Attach(new DataAccess.Project { Id = id }).State = EntityState.Deleted;
             await this.projectRepository.SaveChanges();
 
             return this.NoContent();

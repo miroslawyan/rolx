@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { DayType, Record } from '@app/core/work-record';
 
@@ -7,18 +7,13 @@ import { DayType, Record } from '@app/core/work-record';
   templateUrl: './month-table.component.html',
   styleUrls: ['./month-table.component.scss']
 })
-export class MonthTableComponent implements OnInit {
+export class MonthTableComponent {
 
   readonly DayType = DayType;
 
   @Input()
   records: Record[];
-
   displayedColumns: string[] = ['date', 'name', 'nominal'];
 
   constructor() { }
-
-  ngOnInit() {
-  }
-
 }

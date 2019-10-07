@@ -105,19 +105,5 @@ namespace RolXServer.Account.WebApi
 
             return this.NoContent();
         }
-
-        /// <summary>
-        /// Deletes the customer with the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>No content.</returns>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            this.customerRepository.Entities.Attach(new Customer { Id = id }).State = EntityState.Deleted;
-            await this.customerRepository.SaveChanges();
-
-            return this.NoContent();
-        }
     }
 }
