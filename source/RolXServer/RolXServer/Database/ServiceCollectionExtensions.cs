@@ -26,6 +26,7 @@ namespace RolXServer.Database
         {
             services.AddDbContext<RolXContext>(options => options.UseSqlite("Data Source=rolx.sqlite"));
             services.AddScoped<IRepository<Auth.DataAccess.User>, RolXRepository>();
+            services.AddScoped<IRepository<WorkRecord.DataAccess.UserSetting>, RolXRepository>();
 
             return services;
         }

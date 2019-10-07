@@ -11,13 +11,14 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RolXServer.Auth.DataAccess;
 using RolXServer.Common.DataAccess;
+using RolXServer.WorkRecord.DataAccess;
 
 namespace RolXServer.Database
 {
     /// <summary>
     /// The repository in use.
     /// </summary>
-    internal sealed class RolXRepository : IRepository<User>
+    internal sealed class RolXRepository : IRepository<User>, IRepository<UserSetting>
     {
         private RolXContext context;
 
@@ -31,9 +32,14 @@ namespace RolXServer.Database
         }
 
         /// <summary>
-        /// Gets the target entities.
+        /// Gets the user entities.
         /// </summary>
         DbSet<User> IRepository<User>.Entities => this.context.Users;
+
+        /// <summary>
+        /// Gets the user setting entities.
+        /// </summary>
+        DbSet<UserSetting> IRepository<UserSetting>.Entities => this.context.UserSettings;
 
         /// <summary>
         /// Saves the changes.

@@ -8,6 +8,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using RolXServer.Auth.DataAccess;
+using RolXServer.WorkRecord.DataAccess;
 
 namespace RolXServer.Database
 {
@@ -32,6 +33,11 @@ namespace RolXServer.Database
         public DbSet<User> Users { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets the user settings.
+        /// </summary>
+        public DbSet<UserSetting> UserSettings { get; set; } = null!;
+
+        /// <summary>
         /// Override this method to further configure the model that was discovered by convention from the entity types
         /// exposed in <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1" /> properties on your derived context. The resulting model may be cached
         /// and re-used for subsequent instances of your derived context.
@@ -46,7 +52,10 @@ namespace RolXServer.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .HasAlternateKey(c => c.GoogleId);
+                .HasAlternateKey(u => u.GoogleId);
+
+            modelBuilder.Entity<UserSetting>()
+                .HasKey(s => new { s.UserId, s.StartDate });
         }
     }
 }

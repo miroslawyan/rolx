@@ -16,19 +16,22 @@ namespace RolXServer.Database.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
 
-            modelBuilder.Entity("RolXServer.Auth.DataAccess.Entity.User", b =>
+            modelBuilder.Entity("RolXServer.Auth.DataAccess.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AvatarUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("GoogleId")
@@ -36,6 +39,7 @@ namespace RolXServer.Database.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Role")
@@ -46,6 +50,31 @@ namespace RolXServer.Database.Migrations
                     b.HasAlternateKey("GoogleId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("RolXServer.WorkRecord.DataAccess.UserSetting", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("PartTimeFactor")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("UserId", "StartDate");
+
+                    b.ToTable("UserSettings");
+                });
+
+            modelBuilder.Entity("RolXServer.WorkRecord.DataAccess.UserSetting", b =>
+                {
+                    b.HasOne("RolXServer.Auth.DataAccess.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
