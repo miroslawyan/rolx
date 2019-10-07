@@ -13,8 +13,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RolXServer.Auth.Domain;
 using RolXServer.WorkRecord.Domain;
 using RolXServer.WorkRecord.WebApi.Resource;
 
@@ -26,6 +28,7 @@ namespace RolXServer.WorkRecord.WebApi
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public sealed class WorkRecordController : ControllerBase
     {
         private readonly IRecordService recordService;
@@ -61,7 +64,7 @@ namespace RolXServer.WorkRecord.WebApi
                 return this.NotFound();
             }
 
-            return (await this.recordService.GetAllOfMonth(monthDate))
+            return (await this.recordService.GetAllOfMonth(monthDate, this.User.GetUserId()))
                 .Select(r => this.mapper.Map<Record>(r))
                 .ToList();
         }

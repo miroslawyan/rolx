@@ -20,10 +20,13 @@ namespace RolXServer.WorkRecord.Domain
     public interface IRecordService
     {
         /// <summary>
-        /// Gets all records of the specified month.
+        /// Gets all records of the specified month, of the user with the specified identifier.
         /// </summary>
         /// <param name="month">The month.</param>
-        /// <returns>The records.</returns>
-        Task<IEnumerable<Record>> GetAllOfMonth(DateTime month);
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>
+        /// The records.
+        /// </returns>
+        Task<IEnumerable<Record>> GetAllOfMonth(DateTime month, Guid userId);
     }
 }
