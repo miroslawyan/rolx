@@ -1,3 +1,9 @@
+mat-card-title {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
 table {
   width: 100%;
 }
