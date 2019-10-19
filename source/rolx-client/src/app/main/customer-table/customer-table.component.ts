@@ -4,11 +4,11 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 import { Customer, CustomerService } from '@app/core/account';
 
 @Component({
-  selector: 'rolx-customer-page',
-  templateUrl: './customer-page.component.html',
-  styleUrls: ['./customer-page.component.scss']
+  selector: 'rolx-customer-table',
+  templateUrl: './customer-table.component.html',
+  styleUrls: ['./customer-table.component.scss']
 })
-export class CustomerPageComponent implements OnInit {
+export class CustomerTableComponent implements OnInit {
 
   displayedColumns: string[] = ['number', 'name'];
   customers: MatTableDataSource<Customer>;
