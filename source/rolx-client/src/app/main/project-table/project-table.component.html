@@ -4,7 +4,7 @@
 
     <button mat-mini-fab
             aria-label="Projekt hinzufügen"
-            [routerLink]="['/customer', 'add']"
+            [routerLink]="['/project', 'add']"
             color="primary">
       <mat-icon>add</mat-icon>
     </button>
@@ -36,7 +36,7 @@
       <ng-container matColumnDef="tools">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell class="tools" *matCellDef="let project">
-          <button mat-icon-button [routerLink]="['/project', project.id]">
+          <button mat-icon-button [routerLink]="['/project', project.raw.id]">
             <mat-icon>edit</mat-icon>
           </button>
         </td>

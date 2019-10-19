@@ -14,6 +14,18 @@ export interface ProjectData {
 
 export class Project extends DataWrapper<ProjectData> {
 
+  constructor(data?: ProjectData) {
+    super(data ? data : {
+      id: undefined,
+      number: '',
+      name: '',
+      customerId: undefined,
+      customerName: '',
+      customerNumber: '',
+      openUntil: null,
+    });
+  }
+
   get number() { return this.raw.number; }
   set number(value: string) { this.raw.number = value; }
 

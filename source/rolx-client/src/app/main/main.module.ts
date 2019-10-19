@@ -9,6 +9,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
 import { MonthPageComponent } from './month-page/month-page.component';
 import { MonthTableComponent } from './month-page/month-table/month-table.component';
+import { ProjectFormComponent } from './project-form/project-form.component';
 import { ProjectTableComponent } from './project-table/project-table.component';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { ProjectTableComponent } from './project-table/project-table.component';
     CustomerTableComponent,
     CustomerFormComponent,
     ProjectTableComponent,
+    ProjectFormComponent,
   ],
   imports: [
     CommonModule,

@@ -1,3 +1,4 @@
+import { ProjectData } from '@app/core/account';
 import dayjs from 'dayjs';
 
 import { DataWrapper } from '@app/core/util';
@@ -12,7 +13,7 @@ export interface RecordData {
 
 export class Record extends DataWrapper<RecordData> {
 
-  date = dayjs(this.raw.date);
+  readonly date = dayjs(this.raw.date);
 
   get dayType() {
     return this.raw.dayType;

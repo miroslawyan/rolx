@@ -111,6 +111,8 @@ namespace RolXServer.Account.WebApi
             }
 
             var entity = this.mapper.Map<DataAccess.Project>(project);
+            entity.Customer = null; // TODO: check if we may prevent this during mapping
+
             this.projectRepository.Entities.Attach(entity).State = EntityState.Modified;
             await this.projectRepository.SaveChanges();
 
