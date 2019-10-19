@@ -6,6 +6,7 @@ import { CustomerFormComponent } from './customer-form/customer-form.component';
 import { CustomerTableComponent } from './customer-table/customer-table.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MonthPageComponent } from './month-page/month-page.component';
+import { ProjectTableComponent } from './project-table/project-table.component';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 
 const routes: Routes = [
@@ -25,6 +26,10 @@ const routes: Routes = [
         {
           path: 'customer',
           component: CustomerTableComponent,
+        },
+        {
+          path: 'project',
+          component: ProjectTableComponent,
         },
       ],
     },

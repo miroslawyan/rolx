@@ -19,8 +19,8 @@ export class CustomerTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.customerService.getAll()
-      .subscribe(cs => {
-        this.customers = new MatTableDataSource<Customer>(cs);
+      .subscribe(customers => {
+        this.customers = new MatTableDataSource<Customer>(customers);
         this.customers.sort = this.sort;
       });
   }

@@ -36,6 +36,16 @@ namespace RolXServer.Account.WebApi.Resource
         public int CustomerId { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the customer.
+        /// </summary>
+        public string CustomerName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the number of the customer.
+        /// </summary>
+        public string CustomerNumber { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets the date until this project is open.
         /// </summary>
         public DateTime? OpenUntil { get; set; }
