@@ -10,7 +10,7 @@ import { Customer, CustomerService } from '@app/core/account';
 })
 export class CustomerTableComponent implements OnInit {
 
-  displayedColumns: string[] = ['number', 'name'];
+  displayedColumns: string[] = ['number', 'name', 'tools'];
   customers: MatTableDataSource<Customer>;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;

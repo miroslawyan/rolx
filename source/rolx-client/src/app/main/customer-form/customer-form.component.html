@@ -1,0 +1,33 @@
+<mat-card *ngIf="customer$ | async as customer">
+
+  <mat-card-content>
+    <form id="customer-edit" (ngSubmit)="submit(customer)" #customerEditForm="ngForm">
+
+      <mat-form-field>
+        <input matInput
+               name="name"
+               placeholder="Kunden Nr."
+               [(ngModel)]="customer.number"
+               required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               name="number"
+               placeholder="Name"
+               [(ngModel)]="customer.name"
+               required>
+      </mat-form-field>
+
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-button (click)="back()">Zurück</button>
+    <button mat-button
+            type="submit" form="customer-edit"
+            [disabled]="!customerEditForm.form.valid">
+      Speichern
+    </button>
+  </mat-card-actions>
+</mat-card>

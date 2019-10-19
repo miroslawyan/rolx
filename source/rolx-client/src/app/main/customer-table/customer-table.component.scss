@@ -1,3 +1,18 @@
 table {
   width: 100%;
 }
+
+.tools {
+  text-align: right;
+  width: 5em;
+}
+
+tr {
+  .tools button {
+    display: none;
+  }
+
+  &:hover .tools button {
+    display: inline-block;
+  }
+}

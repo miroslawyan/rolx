@@ -2,10 +2,13 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
+  MatFormFieldModule,
   MatIconModule,
+  MatInputModule,
   MatListModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
@@ -18,11 +21,14 @@ import {
   declarations: [],
   imports: [
     CommonModule,
-    LayoutModule,
+    FormsModule,
     HttpClientModule,
+    LayoutModule,
     MatButtonModule,
     MatCardModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatListModule,
     MatProgressSpinnerModule,
     MatSidenavModule,
@@ -32,11 +38,14 @@ import {
   ],
   exports: [
     CommonModule,
-    LayoutModule,
+    FormsModule,
     HttpClientModule,
+    LayoutModule,
     MatButtonModule,
     MatCardModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatListModule,
     MatProgressSpinnerModule,
     MatSidenavModule,
