@@ -30,7 +30,7 @@
 
       <ng-container matColumnDef="openUntil">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Offen bis</th>
-        <td mat-cell *matCellDef="let project">{{project.openUntil | date : 'yyyy-MM-dd'}}</td>
+        <td mat-cell *matCellDef="let project">{{project.openUntil | date : 'mediumDate'}}</td>
       </ng-container>
 
       <ng-container matColumnDef="tools">

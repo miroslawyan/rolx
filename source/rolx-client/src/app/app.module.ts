@@ -1,4 +1,6 @@
-import { NgModule } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeDeCh from '@angular/common/locales/de-CH';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -6,6 +8,8 @@ import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
 import { CoreModule } from '@app/core';
 import { MainModule } from '@app/main';
+
+registerLocaleData(localeDeCh);
 
 @NgModule({
   declarations: [
@@ -18,7 +22,7 @@ import { MainModule } from '@app/main';
     CoreModule,
     MainModule,
   ],
-  providers: [],
+  providers: [{ provide: LOCALE_ID, useValue: 'de-CH' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
