@@ -11,13 +11,13 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatNativeDateModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatSortModule,
   MatTableModule,
   MatToolbarModule
 } from '@angular/material';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [],
@@ -33,7 +33,7 @@ import {
     MatIconModule,
     MatInputModule,
     MatListModule,
-    MatNativeDateModule,
+    MatMomentDateModule,
     MatProgressSpinnerModule,
     MatSidenavModule,
     MatSortModule,
@@ -52,7 +52,7 @@ import {
     MatIconModule,
     MatInputModule,
     MatListModule,
-    MatNativeDateModule,
+    MatMomentDateModule,
     MatProgressSpinnerModule,
     MatSidenavModule,
     MatSortModule,

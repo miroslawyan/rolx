@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 import { DataWrapper } from '@app/core/util';
 
@@ -9,10 +9,12 @@ export interface ProjectData {
   customerId: number;
   customerName: string;
   customerNumber: string;
-  openUntil: Date | null;
+  openUntil: string | null;
 }
 
 export class Project extends DataWrapper<ProjectData> {
+
+  private openUntilShadow: moment.Moment = null;
 
   constructor(data?: ProjectData) {
     super(data ? data : {
@@ -24,6 +26,10 @@ export class Project extends DataWrapper<ProjectData> {
       customerNumber: '',
       openUntil: null,
     });
+
+    if (this.raw.openUntil != null) {
+      this.openUntilShadow = moment(this.raw.openUntil);
+    }
   }
 
   get number() { return this.raw.number; }
@@ -35,16 +41,18 @@ export class Project extends DataWrapper<ProjectData> {
   get customerName() { return this.raw.customerName; }
   set customerName(value) { this.raw.customerName = value; }
 
-  get openUntil(): dayjs.Dayjs | null {
-    return this.raw.openUntil != null ? dayjs(this.raw.openUntil) : null;
+  get openUntil(): moment.Moment | null {
+    return this.openUntilShadow;
   }
 
-  set openUntil(value: dayjs.Dayjs | null) {
-    this.raw.openUntil = value != null ? value.toDate() : null;
+  set openUntil(value: moment.Moment | null) {
+    this.openUntilShadow = value;
+    this.raw.openUntil = value != null ? value.toISOString(true) : null;
+    console.log(this.raw.openUntil);
   }
 
   get isOpen(): boolean {
-    return this.raw.openUntil == null || dayjs().isBefore(this.openUntil, 'day');
+    return this.openUntil == null || moment().isBefore(this.openUntil, 'day');
   }
 
 }

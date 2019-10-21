@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import dayjs, { Dayjs } from 'dayjs';
+import moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -12,7 +12,7 @@ import { WorkRecordService } from '@app/core/work-record';
 })
 export class MonthPageComponent implements OnInit {
 
-  month$ = new BehaviorSubject<Dayjs>(dayjs());
+  month$ = new BehaviorSubject<moment.Moment>(moment());
   records$ = this.month$.pipe(
     switchMap(m => this.workRecordService.getMonth(m))
   );

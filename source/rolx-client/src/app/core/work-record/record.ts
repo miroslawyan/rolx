@@ -1,11 +1,10 @@
-import { ProjectData } from '@app/core/account';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 import { DataWrapper } from '@app/core/util';
 import { DayType } from './day-type';
 
 export interface RecordData {
-  date: Date;
+  date: string;
   dayType: DayType;
   dayName: string;
   nominalWorkTimeHours: number;
@@ -13,7 +12,7 @@ export interface RecordData {
 
 export class Record extends DataWrapper<RecordData> {
 
-  readonly date = dayjs(this.raw.date);
+  readonly date = moment(this.raw.date);
 
   get dayType() {
     return this.raw.dayType;
