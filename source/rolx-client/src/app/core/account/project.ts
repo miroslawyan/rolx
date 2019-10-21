@@ -48,7 +48,6 @@ export class Project extends DataWrapper<ProjectData> {
   set openUntil(value: moment.Moment | null) {
     this.openUntilShadow = value;
     this.raw.openUntil = value != null ? value.toISOString(true) : null;
-    console.log(this.raw.openUntil);
   }
 
   get isOpen(): boolean {
