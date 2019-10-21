@@ -23,11 +23,11 @@ export class MonthPageComponent implements OnInit {
   }
 
   previous() {
-    this.month$.next(this.month$.value.subtract(1, 'month'));
+    this.month$.next(moment(this.month$.value).subtract(1, 'month'));
   }
 
   next() {
-    this.month$.next(this.month$.value.add(1, 'month'));
+    this.month$.next(moment(this.month$.value).add(1, 'month'));
   }
 
 }
