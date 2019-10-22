@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { ImportModule } from '@app/import';
+import { AppImportModule } from '@app/app-import.module';
 import { SignInPageComponent } from '@app/main/sign-in-page/sign-in-page.component';
 import { CustomerFormComponent } from './customer-form/customer-form.component';
 import { CustomerTableComponent } from './customer-table/customer-table.component';
@@ -25,7 +25,7 @@ import { ProjectTableComponent } from './project-table/project-table.component';
   ],
   imports: [
     CommonModule,
-    ImportModule,
+    AppImportModule,
     MainRoutingModule,
   ]
 })

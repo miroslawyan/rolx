@@ -63,4 +63,4 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     MatToolbarModule,
   ]
 })
-export class ImportModule { }
+export class AppImportModule { }
