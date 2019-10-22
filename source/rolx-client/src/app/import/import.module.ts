@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
   MatDatepickerModule,
@@ -26,6 +27,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     FormsModule,
     HttpClientModule,
     LayoutModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
@@ -45,6 +47,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     FormsModule,
     HttpClientModule,
     LayoutModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,

@@ -13,6 +13,25 @@
 
       <mat-form-field>
         <input matInput
+               #customerInput
+               name="customer"
+               placeholder="Kunde"
+               [(ngModel)]="project.customer"
+               (focus)="updateFilterText(customerInput.value)"
+               (ngModelChange)="updateFilterText(customerInput.value)"
+               (blur)="validateCustomer(project)"
+               [matAutocomplete]="customerChoices"
+               required>
+      </mat-form-field>
+
+      <mat-autocomplete #customerChoices="matAutocomplete" [displayWith]="customerDisplay">
+        <mat-option *ngFor="let customer of customersFiltered$ | async" [value]="customer">
+          {{customerDisplay(customer)}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-form-field>
+        <input matInput
                name="number"
                placeholder="Name"
                [(ngModel)]="project.name"

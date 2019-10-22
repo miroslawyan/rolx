@@ -1,6 +1,7 @@
 import moment from 'moment';
 
 import { DataWrapper } from '@app/core/util';
+import { Customer } from './customer';
 
 export interface ProjectData {
   id: number;
@@ -14,7 +15,8 @@ export interface ProjectData {
 
 export class Project extends DataWrapper<ProjectData> {
 
-  private openUntilShadow: moment.Moment = null;
+  private customerShadow: Customer;
+  private openUntilShadow: moment.Moment;
 
   constructor(data?: ProjectData) {
     super(data ? data : {
@@ -27,9 +29,13 @@ export class Project extends DataWrapper<ProjectData> {
       openUntil: null,
     });
 
-    if (this.raw.openUntil != null) {
-      this.openUntilShadow = moment(this.raw.openUntil);
-    }
+    this.customerShadow = this.raw.customerId ? {
+      id: this.raw.customerId,
+      number: this.raw.customerNumber,
+      name: this.raw.customerName,
+    } : undefined;
+
+    this.openUntilShadow = this.raw.openUntil ? moment(this.raw.openUntil) : null;
   }
 
   get number() { return this.raw.number; }
@@ -37,6 +43,17 @@ export class Project extends DataWrapper<ProjectData> {
 
   get name() { return this.raw.name; }
   set name(value) { this.raw.name = value; }
+
+  get customer() {
+    return this.customerShadow;
+  }
+
+  set customer(value: Customer) {
+    this.customerShadow = value;
+    this.raw.customerId = value ? value.id : undefined;
+    this.raw.customerNumber = value ? value.number : '';
+    this.raw.customerName = value ? value.name : '';
+  }
 
   get customerName() { return this.raw.customerName; }
   set customerName(value) { this.raw.customerName = value; }

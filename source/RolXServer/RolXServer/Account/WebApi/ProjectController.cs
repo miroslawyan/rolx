@@ -88,6 +88,8 @@ namespace RolXServer.Account.WebApi
             }
 
             var entity = this.mapper.Map<DataAccess.Project>(project);
+            entity.Customer = null; // TODO: check if we may prevent this during mapping
+
             this.projectRepository.Entities.Add(entity);
             await this.projectRepository.SaveChanges();
 
