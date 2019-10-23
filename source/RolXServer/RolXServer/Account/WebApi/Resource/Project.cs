@@ -31,19 +31,9 @@ namespace RolXServer.Account.WebApi.Resource
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the customer identifier.
+        /// Gets or sets the customer.
         /// </summary>
-        public int CustomerId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the customer.
-        /// </summary>
-        public string CustomerName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the number of the customer.
-        /// </summary>
-        public string CustomerNumber { get; set; } = string.Empty;
+        public DataAccess.Customer? Customer { get; set; }
 
         /// <summary>
         /// Gets or sets the date until this project is open.

@@ -44,8 +44,8 @@ export class ProjectFormComponent implements OnInit {
   }
 
   validateCustomer(project: Project) {
-    if (project.raw.customerId == null) {
-      project.customer = undefined;
+    if (typeof project.customer === 'string' || project.customer instanceof String) {
+      project.customer = null;
     }
   }
 

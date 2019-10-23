@@ -7,15 +7,12 @@ export interface ProjectData {
   id: number;
   number: string;
   name: string;
-  customerId: number;
-  customerName: string;
-  customerNumber: string;
+  customer: Customer | null;
   openUntil: string | null;
 }
 
 export class Project extends DataWrapper<ProjectData> {
 
-  private customerShadow: Customer;
   private openUntilShadow: moment.Moment;
 
   constructor(data?: ProjectData) {
@@ -23,17 +20,9 @@ export class Project extends DataWrapper<ProjectData> {
       id: undefined,
       number: '',
       name: '',
-      customerId: undefined,
-      customerName: '',
-      customerNumber: '',
+      customer: null,
       openUntil: null,
     });
-
-    this.customerShadow = this.raw.customerId ? {
-      id: this.raw.customerId,
-      number: this.raw.customerNumber,
-      name: this.raw.customerName,
-    } : undefined;
 
     this.openUntilShadow = this.raw.openUntil ? moment(this.raw.openUntil) : null;
   }
@@ -44,19 +33,10 @@ export class Project extends DataWrapper<ProjectData> {
   get name() { return this.raw.name; }
   set name(value) { this.raw.name = value; }
 
-  get customer() {
-    return this.customerShadow;
-  }
+  get customer() { return this.raw.customer; }
+  set customer(value: Customer) { this.raw.customer = value; }
 
-  set customer(value: Customer) {
-    this.customerShadow = value;
-    this.raw.customerId = value ? value.id : undefined;
-    this.raw.customerNumber = value ? value.number : '';
-    this.raw.customerName = value ? value.name : '';
-  }
-
-  get customerName() { return this.raw.customerName; }
-  set customerName(value) { this.raw.customerName = value; }
+  get customerName() { return this.raw.customer.name; }
 
   get openUntil(): moment.Moment | null {
     return this.openUntilShadow;
