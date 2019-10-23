@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using AutoMapper;
+using RolXServer.Common.Util;
 
 namespace RolXServer.Account.WebApi.Detail
 {
@@ -20,7 +21,14 @@ namespace RolXServer.Account.WebApi.Detail
         /// </summary>
         public MapperProfile()
         {
-            this.CreateMap<DataAccess.Project, Resource.Project>().ReverseMap();
+            this.CreateMap<DataAccess.Project, Resource.Project>()
+                .ForMember(
+                    dest => dest.OpenUntilDate,
+                    opt => opt.MapFrom(src => src.OpenUntil.ToIsoDate()))
+                .ReverseMap()
+                .ForMember(
+                    dest => dest.OpenUntil,
+                    opt => opt.MapFrom(src => IsoDate.ParseNullable(src.OpenUntilDate)));
         }
     }
 }

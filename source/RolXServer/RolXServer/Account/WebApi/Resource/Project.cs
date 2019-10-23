@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-
 namespace RolXServer.Account.WebApi.Resource
 {
     /// <summary>
@@ -38,6 +36,6 @@ namespace RolXServer.Account.WebApi.Resource
         /// <summary>
         /// Gets or sets the date until this project is open.
         /// </summary>
-        public DateTime? OpenUntil { get; set; }
+        public string? OpenUntilDate { get; set; }
     }
 }

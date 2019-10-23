@@ -8,7 +8,7 @@ export interface ProjectData {
   number: string;
   name: string;
   customer: Customer | null;
-  openUntil: string | null;
+  openUntilDate: string | null;
 }
 
 export class Project extends DataWrapper<ProjectData> {
@@ -21,10 +21,10 @@ export class Project extends DataWrapper<ProjectData> {
       number: '',
       name: '',
       customer: null,
-      openUntil: null,
+      openUntilDate: null,
     });
 
-    this.openUntilShadow = this.raw.openUntil ? moment(this.raw.openUntil) : null;
+    this.openUntilShadow = this.raw.openUntilDate ? moment(this.raw.openUntilDate) : null;
   }
 
   get number() { return this.raw.number; }
@@ -44,7 +44,7 @@ export class Project extends DataWrapper<ProjectData> {
 
   set openUntil(value: moment.Moment | null) {
     this.openUntilShadow = value;
-    this.raw.openUntil = value != null ? value.toISOString(true) : null;
+    this.raw.openUntilDate = value != null ? value.format('YYYY-MM-DD') : null;
   }
 
   get isOpen(): boolean {

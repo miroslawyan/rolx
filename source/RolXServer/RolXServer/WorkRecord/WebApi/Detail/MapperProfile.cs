@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using AutoMapper;
+using RolXServer.Common.Util;
 
 namespace RolXServer.WorkRecord.WebApi.Detail
 {
@@ -23,7 +24,10 @@ namespace RolXServer.WorkRecord.WebApi.Detail
             this.CreateMap<Domain.Model.Record, Resource.Record>()
                 .ForMember(
                     dest => dest.NominalWorkTimeHours,
-                    opt => opt.MapFrom(src => src.NominalWorkTime.TotalHours));
+                    opt => opt.MapFrom(src => src.NominalWorkTime.TotalHours))
+                .ForMember(
+                    dest => dest.Date,
+                    opt => opt.MapFrom(src => src.Date.ToIsoDate()));
         }
     }
 }
