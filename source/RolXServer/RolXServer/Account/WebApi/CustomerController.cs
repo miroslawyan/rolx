@@ -73,11 +73,6 @@ namespace RolXServer.Account.WebApi
         [HttpPost]
         public async Task<ActionResult<Customer>> Create(Customer customer)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest();
-            }
-
             this.customerRepository.Entities.Add(customer);
             await this.customerRepository.SaveChanges();
 
@@ -95,7 +90,7 @@ namespace RolXServer.Account.WebApi
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Customer customer)
         {
-            if (!this.ModelState.IsValid || id != customer.Id)
+            if (id != customer.Id)
             {
                 return this.BadRequest();
             }

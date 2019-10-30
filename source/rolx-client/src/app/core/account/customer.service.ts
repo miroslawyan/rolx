@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, mapTo } from 'rxjs/operators';
 
+import { ErrorResponse } from '@app/core/error';
 import { environment } from '@env/environment';
 import { Customer } from './customer';
 
@@ -28,12 +29,16 @@ export class CustomerService {
   }
 
   create(customer: Customer): Observable<Customer> {
-    return this.httpClient.post<Customer>(CustomerUrl, customer);
+    customer.id = undefined;
+    return this.httpClient.post<Customer>(CustomerUrl, customer).pipe(
+      catchError(e => throwError(new ErrorResponse(e))),
+    );
   }
 
   update(customer: Customer): Observable<Customer> {
     return this.httpClient.put(CustomerService.UrlWithId(customer.id), customer).pipe(
-      mapTo(customer)
+      mapTo(customer),
+      catchError(e => throwError(new ErrorResponse(e))),
     );
   }
 }

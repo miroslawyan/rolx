@@ -7,11 +7,13 @@
 // -----------------------------------------------------------------------
 
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RolXServer.Account;
 using RolXServer.Auth;
 using RolXServer.Database;
 using RolXServer.WorkRecord;
@@ -43,9 +45,13 @@ namespace RolXServer
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services
+                .AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddAccount(this.Configuration);
             services.AddAuth(this.Configuration);
             services.AddWorkRecord(this.Configuration);
             services.AddDatabase();
