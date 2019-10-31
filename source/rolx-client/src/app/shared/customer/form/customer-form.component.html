@@ -1,5 +1,13 @@
 <mat-card>
 
+  <mat-card-title *ngIf="isNew">
+    Neuer Kunde
+  </mat-card-title>
+
+  <mat-card-title *ngIf="!isNew">
+    Kunde bearbeiten
+  </mat-card-title>
+
   <mat-card-content>
     <form id="customer-edit" [formGroup]="customerForm" (ngSubmit)="submit()">
 

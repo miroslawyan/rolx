@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
+import { map, } from 'rxjs/operators';
 
 import { Customer, CustomerService, Project, ProjectService } from '@app/core/account';
 
@@ -12,27 +12,24 @@ import { Customer, CustomerService, Project, ProjectService } from '@app/core/ac
 })
 export class ProjectFormComponent implements OnInit {
 
-  project$: Observable<Project>;
-  isNew = false;
+  @Input() project: Project;
+  @Input() isNew: boolean;
+
   customers: Customer[] = [];
   customersFiltered$: Observable<Customer[]>;
 
   private filterText$ = new Subject<string>();
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private projectService: ProjectService,
     private customerService: CustomerService,
   ) { }
 
   ngOnInit() {
-    this.project$ = this.route.paramMap.pipe(
-      switchMap(params => this.initializeProject(params.get('id')))
-    );
-
     this.customerService.getAll()
-      .subscribe(cs => this.customers = cs.sort((a, b) => a.name.localeCompare(b.name)));
+      .subscribe(cs => this.customers = cs.sort(
+        (a, b) => a.number.localeCompare(b.number) || a.name.localeCompare(b.name)));
 
     this.customersFiltered$ = this.filterText$.pipe(
       map(t => this.filterCustomers(t))
@@ -61,11 +58,6 @@ export class ProjectFormComponent implements OnInit {
   back() {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/project']);
-  }
-
-  private initializeProject(idText: string): Observable<Project> {
-    this.isNew = idText === 'add';
-    return this.isNew ? of(new Project()) : this.projectService.getById(Number(idText));
   }
 
   private filterCustomers(filterText: string): Customer[] {

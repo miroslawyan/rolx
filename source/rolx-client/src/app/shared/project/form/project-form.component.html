@@ -1,4 +1,12 @@
-<mat-card *ngIf="project$ | async as project">
+<mat-card>
+
+  <mat-card-title *ngIf="isNew">
+    Neues Projekt
+  </mat-card-title>
+
+  <mat-card-title *ngIf="!isNew">
+    Projekt bearbeiten
+  </mat-card-title>
 
   <mat-card-content>
     <form id="customer-edit" (ngSubmit)="submit(project)" #customerEditForm="ngForm">

@@ -3,12 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard, AuthResolve } from '@app/core/auth';
 import { SetupResolve } from '@app/core/setup';
-import { CustomerFormComponent } from './customer-form/customer-form.component';
-import { CustomerTableComponent } from './customer-table/customer-table.component';
+import { ProjectEditPageComponent } from '@app/main/project-edit-page/project-edit-page.component';
+import { CustomerEditPageComponent } from './customer-edit-page/customer-edit-page.component';
+import { CustomerListPageComponent } from './customer-list-page/customer-list-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MonthPageComponent } from './month-page/month-page.component';
-import { ProjectFormComponent } from './project-form/project-form.component';
-import { ProjectTableComponent } from './project-table/project-table.component';
+import { ProjectListPageComponent } from './project-list-page/project-list-page.component';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 
 const routes: Routes = [
@@ -24,19 +24,19 @@ const routes: Routes = [
         },
         {
           path: 'customer/:id',
-          component: CustomerFormComponent,
+          component: CustomerEditPageComponent,
         },
         {
           path: 'customer',
-          component: CustomerTableComponent,
+          component: CustomerListPageComponent,
         },
         {
           path: 'project/:id',
-          component: ProjectFormComponent,
+          component: ProjectEditPageComponent,
         },
         {
           path: 'project',
-          component: ProjectTableComponent,
+          component: ProjectListPageComponent,
         },
       ],
     },

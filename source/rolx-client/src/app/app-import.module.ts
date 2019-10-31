@@ -20,6 +20,7 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [],
@@ -44,6 +45,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     MatTableModule,
     MatToolbarModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
   exports: [
     CommonModule,
@@ -66,6 +68,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     MatTableModule,
     MatToolbarModule,
     ReactiveFormsModule,
+    RouterModule,
   ]
 })
 export class AppImportModule { }

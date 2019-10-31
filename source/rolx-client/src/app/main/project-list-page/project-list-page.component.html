@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-title>
+    <span>Projekte</span>
+
+    <button mat-mini-fab
+            aria-label="Projekt hinzufügen"
+            [routerLink]="['/project', 'add']"
+            color="primary">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-card-title>
+
+  <mat-card-content>
+    <rolx-project-table></rolx-project-table>
+  </mat-card-content>
+
+</mat-card>

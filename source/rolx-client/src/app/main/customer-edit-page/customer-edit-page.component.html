@@ -1,0 +1,4 @@
+
+<div *ngIf="customer$ | async as customer">
+  <rolx-customer-form [customer]="customer" [isNew]="customer.id == null"></rolx-customer-form>
+</div>
