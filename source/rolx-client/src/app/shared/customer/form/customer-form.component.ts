@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { Customer, CustomerService } from '@app/core/account';
 import { ErrorResponse, ErrorService } from '@app/core/error';
 import { SetupService } from '@app/core/setup';
@@ -9,7 +8,7 @@ import { SetupService } from '@app/core/setup';
 @Component({
   selector: 'rolx-customer-form',
   templateUrl: './customer-form.component.html',
-  styleUrls: ['./customer-form.component.scss']
+  styleUrls: ['./customer-form.component.scss'],
 })
 export class CustomerFormComponent implements OnInit {
 
@@ -19,7 +18,7 @@ export class CustomerFormComponent implements OnInit {
   customerForm = this.fb.group({
     number: ['', [
       Validators.required,
-      Validators.pattern(this.setupService.info.customerNumberPattern)
+      Validators.pattern(this.setupService.info.customerNumberPattern),
     ]],
     name: ['', Validators.required],
   });
@@ -29,7 +28,7 @@ export class CustomerFormComponent implements OnInit {
     private fb: FormBuilder,
     private customerService: CustomerService,
     private setupService: SetupService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
   ) { }
 
   ngOnInit() {

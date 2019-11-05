@@ -7,7 +7,7 @@ import { switchMap } from 'rxjs/operators';
 @Component({
   selector: 'rolx-project-edit-page',
   templateUrl: './project-edit-page.component.html',
-  styleUrls: ['./project-edit-page.component.scss']
+  styleUrls: ['./project-edit-page.component.scss'],
 })
 export class ProjectEditPageComponent implements OnInit {
 
@@ -17,7 +17,7 @@ export class ProjectEditPageComponent implements OnInit {
 
   ngOnInit() {
     this.project$ = this.route.paramMap.pipe(
-      switchMap(params => this.initializeProject(params.get('id')))
+      switchMap(params => this.initializeProject(params.get('id'))),
     );
   }
 

@@ -9,7 +9,7 @@
   </mat-card-title>
 
   <mat-card-content>
-    <form id="customer-edit" [formGroup]="customerForm" (ngSubmit)="submit()">
+    <form id="customer-edit" [formGroup]="customerForm" (ngSubmit)="submit()" autocomplete="off">
 
       <mat-form-field>
         <input matInput formControlName="number" placeholder="Kunden Nr." required>

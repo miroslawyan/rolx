@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-
-import { environment } from '@env/environment';
 import { Info } from './info';
 
 const SetupUrl = environment.apiBaseUrl + '/v1/setup';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SetupService {
 
@@ -20,7 +19,7 @@ export class SetupService {
   initialize(): Observable<void> {
     return this.httpClient.get<Info>(SetupUrl).pipe(
       tap(i => this.info = i),
-      map(() => void 0)
+      map(() => void 0),
     );
   }
 

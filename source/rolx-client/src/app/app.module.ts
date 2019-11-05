@@ -3,7 +3,6 @@ import localeDeCh from '@angular/common/locales/de-CH';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
 import { CoreModule } from '@app/core';
@@ -23,6 +22,6 @@ registerLocaleData(localeDeCh);
     MainModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de-CH' }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

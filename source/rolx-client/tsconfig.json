@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "noUnusedLocals": true,
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

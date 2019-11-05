@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, ValidationErrors } from '@angular/forms';
-
 import { PropertyErrors } from './property-errors';
 
 export class ErrorResponse {

@@ -45,7 +45,7 @@ namespace RolXServer.Account.WebApi.Validation
 
             this.RuleFor(c => c.Name)
                 .NotNull()
-                .NotEmpty();
+                .NotEmpty().WithMessage("required");
         }
 
         private async Task<bool> BeUnique(Customer candidate, string newNumber, PropertyValidatorContext context, CancellationToken token)

@@ -1,16 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, mapTo } from 'rxjs/operators';
-
 import { ErrorResponse } from '@app/core/error';
 import { environment } from '@env/environment';
+import { Observable, throwError } from 'rxjs';
+import { catchError, mapTo } from 'rxjs/operators';
 import { Customer } from './customer';
 
 const CustomerUrl = environment.apiBaseUrl + '/v1/customer';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CustomerService {
 

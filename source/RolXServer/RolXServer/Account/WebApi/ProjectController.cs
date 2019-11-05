@@ -82,11 +82,6 @@ namespace RolXServer.Account.WebApi
         [HttpPost]
         public async Task<ActionResult<Project>> Create(Project project)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest();
-            }
-
             var entity = this.mapper.Map<DataAccess.Project>(project);
             entity.Customer = null; // TODO: check if we may prevent this during mapping
 
@@ -107,7 +102,7 @@ namespace RolXServer.Account.WebApi
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Project project)
         {
-            if (!this.ModelState.IsValid || id != project.Id)
+            if (id != project.Id)
             {
                 return this.BadRequest();
             }

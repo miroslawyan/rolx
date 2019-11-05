@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { WorkRecordService } from '@app/core/work-record';
 import moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { WorkRecordService } from '@app/core/work-record';
-
 @Component({
   selector: 'rolx-month-page',
   templateUrl: './month-page.component.html',
-  styleUrls: ['./month-page.component.scss']
+  styleUrls: ['./month-page.component.scss'],
 })
 export class MonthPageComponent implements OnInit {
 
   month$ = new BehaviorSubject<moment.Moment>(moment());
   records$ = this.month$.pipe(
-    switchMap(m => this.workRecordService.getMonth(m))
+    switchMap(m => this.workRecordService.getMonth(m)),
   );
 
   constructor(private workRecordService: WorkRecordService) {}

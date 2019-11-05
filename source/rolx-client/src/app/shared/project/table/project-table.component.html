@@ -29,7 +29,7 @@
   <ng-container matColumnDef="tools">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell class="tools" *matCellDef="let project">
-      <button mat-icon-button [routerLink]="['/project', project.raw.id]">
+      <button mat-icon-button [routerLink]="['/project', project.id]">
         <mat-icon>edit</mat-icon>
       </button>
     </td>

@@ -9,51 +9,55 @@
   </mat-card-title>
 
   <mat-card-content>
-    <form id="customer-edit" (ngSubmit)="submit(project)" #customerEditForm="ngForm">
+    <form id="project-edit" [formGroup]="projectForm" (ngSubmit)="submit()" autocomplete="off">
 
       <mat-form-field>
-        <input matInput
-               name="name"
-               placeholder="Projekt Nr."
-               [(ngModel)]="project.number"
-               required>
+        <input matInput formControlName="number" placeholder="Projekt Nr." required>
+        <mat-error *ngIf="hasError('number', 'required')">
+          Pflichtfeld
+        </mat-error>
+        <mat-error *ngIf="hasError('number', 'notUnique')">
+          Diese Nummer ist bereits vergeben
+        </mat-error>
+        <mat-error *ngIf="hasError('number', 'pattern')">
+          Ungültiges Format
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <input matInput
-               #customerInput
-               name="customer"
+               formControlName="customer"
                placeholder="Kunde"
-               [(ngModel)]="project.customer"
-               (focus)="updateFilterText(customerInput.value)"
-               (ngModelChange)="updateFilterText(customerInput.value)"
-               (blur)="validateCustomer(project)"
                [matAutocomplete]="customerChoices"
                required>
+        <mat-error *ngIf="hasError('customer', 'noCustomer')">
+          Kein Kunde ausgewählt
+        </mat-error>
       </mat-form-field>
 
-      <mat-autocomplete #customerChoices="matAutocomplete" [displayWith]="customerDisplay">
+      <mat-autocomplete
+          #customerChoices="matAutocomplete"
+          autoActiveFirstOption
+          [displayWith]="customerDisplay">
         <mat-option *ngFor="let customer of customersFiltered$ | async" [value]="customer">
           {{customerDisplay(customer)}}
         </mat-option>
       </mat-autocomplete>
 
       <mat-form-field>
-        <input matInput
-               name="number"
-               placeholder="Name"
-               [(ngModel)]="project.name"
-               required>
+        <input matInput formControlName="name" placeholder="Name" required>
+        <mat-error *ngIf="hasError('number', 'required')">
+          Pflichtfeld
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <input matInput
-               [matDatepicker]="picker"
-               name="openUntil"
-               placeholder="Offen bis"
-               [(ngModel)]="project.openUntil">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+               formControlName="openUntil"
+               [matDatepicker]="openUntilPicker"
+               placeholder="Offen bis">
+        <mat-datepicker-toggle matSuffix [for]="openUntilPicker"></mat-datepicker-toggle>
+        <mat-datepicker #openUntilPicker></mat-datepicker>
       </mat-form-field>
 
     </form>
@@ -62,8 +66,9 @@
   <mat-card-actions align="end">
     <button mat-button (click)="back()">Zurück</button>
     <button mat-button
-            type="submit" form="customer-edit"
-            [disabled]="!customerEditForm.form.valid">
+            type="submit"
+            form="project-edit"
+            [disabled]="!projectForm.valid">
       Speichern
     </button>
   </mat-card-actions>

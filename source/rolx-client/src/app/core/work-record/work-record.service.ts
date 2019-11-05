@@ -4,13 +4,12 @@ import { environment } from '@env/environment';
 import moment from 'moment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { Record, RecordData } from './record';
 
 const WorkRecordUrl = environment.apiBaseUrl + '/v1/workrecord';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WorkRecordService {
 
@@ -21,7 +20,7 @@ export class WorkRecordService {
   getMonth(month: moment.Moment): Observable<Record[]> {
     const url = WorkRecordUrl + '/month/' + month.format('YYYY-MM');
     return this.httpClient.get<RecordData[]>(url).pipe(
-      map(ds => ds.map(d => new Record(d)))
+      map(ds => ds.map(d => new Record(d))),
     );
   }
 }

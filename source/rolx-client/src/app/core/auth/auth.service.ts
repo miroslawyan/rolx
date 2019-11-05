@@ -9,7 +9,7 @@ import { SignInState } from './sign-in-state';
 import { SignInService } from './sign-in.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
 
@@ -26,8 +26,8 @@ export class AuthService {
       filter(u => u.state === SignInState.Authenticated),
       switchMap(u => this.signInService.signIn(u).pipe(
         map(au => CurrentUser.fromAuthenticatedUser(au)),
-        catchError(e => this.handleSignInError(e))
-      ))
+        catchError(e => this.handleSignInError(e)),
+      )),
     ).subscribe(u => this.currentUserSubject.next(u));
 
     this.googleUserSubject.subscribe(u => this.currentUserSubject.next(CurrentUser.fromGoogleUser(u)));
@@ -41,14 +41,14 @@ export class AuthService {
     console.log('--- AuthService.initialize()');
 
     const firstGoogleUser = this.googleUserSubject.pipe(
-      take(1)
+      take(1),
     );
 
     const gapiLoader = bindCallback(gapi.load);
     const initialization = this.signInService.getInfo().pipe(
       switchMap(info => gapiLoader('auth2').pipe(
-        map(() => this.initializeGApi(info))
-      ))
+        map(() => this.initializeGApi(info)),
+      )),
     );
 
     return forkJoin(firstGoogleUser, initialization)
@@ -77,7 +77,7 @@ export class AuthService {
       .pipe(
         enterZone(this.zone),
         map(() => new CurrentUser()),
-        tap(u => this.currentUserSubject.next(u))
+        tap(u => this.currentUserSubject.next(u)),
       );
   }
 

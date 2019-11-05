@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
-
 import { Project, ProjectService } from '@app/core/account';
 
 @Component({
   selector: 'rolx-project-table',
   templateUrl: './project-table.component.html',
-  styleUrls: ['./project-table.component.scss']
+  styleUrls: ['./project-table.component.scss'],
 })
 export class ProjectTableComponent implements OnInit {
 

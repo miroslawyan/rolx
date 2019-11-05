@@ -1,6 +1,4 @@
 import moment from 'moment';
-
-import { DataWrapper } from '@app/core/util';
 import { Customer } from './customer';
 
 export interface ProjectData {
@@ -11,44 +9,34 @@ export interface ProjectData {
   openUntilDate: string | null;
 }
 
-export class Project extends DataWrapper<ProjectData> {
+export class Project {
+  id: number;
+  number: string;
+  name: string;
+  customer: Customer | null;
+  openUntil: moment.Moment;
 
-  private openUntilShadow: moment.Moment;
+  static fromData(data: ProjectData): Project {
+    const instance = new Project();
 
-  constructor(data?: ProjectData) {
-    super(data ? data : {
-      id: undefined,
-      number: '',
-      name: '',
-      customer: null,
-      openUntilDate: null,
-    });
+    Object.assign(instance, data);
+    instance.openUntil = data.openUntilDate ? moment(data.openUntilDate) : null;
 
-    this.openUntilShadow = this.raw.openUntilDate ? moment(this.raw.openUntilDate) : null;
+    return instance;
   }
 
-  get number() { return this.raw.number; }
-  set number(value: string) { this.raw.number = value; }
+  toData(): ProjectData {
+    const data = {} as ProjectData;
 
-  get name() { return this.raw.name; }
-  set name(value) { this.raw.name = value; }
+    Object.assign(data, this);
+    data.openUntilDate = moment.isMoment(this.openUntil) ? this.openUntil.format('YYYY-MM-DD') : null;
 
-  get customer() { return this.raw.customer; }
-  set customer(value: Customer) { this.raw.customer = value; }
-
-  get customerName() { return this.raw.customer.name; }
-
-  get openUntil(): moment.Moment | null {
-    return this.openUntilShadow;
+    return data;
   }
 
-  set openUntil(value: moment.Moment | null) {
-    this.openUntilShadow = value;
-    this.raw.openUntilDate = value != null ? value.format('YYYY-MM-DD') : null;
-  }
+  get customerName() { return this.customer.name; }
 
   get isOpen(): boolean {
     return this.openUntil == null || moment().isBefore(this.openUntil, 'day');
   }
-
 }

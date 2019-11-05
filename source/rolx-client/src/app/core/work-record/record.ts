@@ -1,6 +1,5 @@
-import moment from 'moment';
-
 import { DataWrapper } from '@app/core/util';
+import moment from 'moment';
 import { DayType } from './day-type';
 
 export interface RecordData {

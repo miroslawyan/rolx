@@ -5,7 +5,7 @@ import { Customer, CustomerService } from '@app/core/account';
 @Component({
   selector: 'rolx-customer-table',
   templateUrl: './customer-table.component.html',
-  styleUrls: ['./customer-table.component.scss']
+  styleUrls: ['./customer-table.component.scss'],
 })
 export class CustomerTableComponent implements OnInit {
 

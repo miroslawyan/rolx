@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
 import { AppImportModule } from '@app/app-import.module';
 import { SharedModule } from '@app/shared';
 import { CustomerEditPageComponent } from './customer-edit-page/customer-edit-page.component';
@@ -29,6 +28,6 @@ import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
     CommonModule,
     MainRoutingModule,
     SharedModule,
-  ]
+  ],
 })
 export class MainModule { }

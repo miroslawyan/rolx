@@ -18,12 +18,12 @@ export class AuthInterceptor implements HttpInterceptor {
     if (currentUser.state === SignInState.SignedIn && currentUser.bearerToken) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${currentUser.bearerToken}`
-        }
+          Authorization: `Bearer ${currentUser.bearerToken}`,
+        },
       });
 
       return next.handle(request).pipe(
-        catchError( e => { this.handleError(e); throw e; })
+        catchError( e => { this.handleError(e); throw e; }),
       );
     }
 

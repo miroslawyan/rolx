@@ -1,8 +1,7 @@
 import { NgZone } from '@angular/core';
+import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
-
-import { environment } from '@env/environment';
 
 export function enterZone(zone: NgZone) {
   return <T>(source: Observable<T>) =>
@@ -10,8 +9,8 @@ export function enterZone(zone: NgZone) {
       source.subscribe({
         next: (x) => zone.run(() => observer.next(x)),
         error: (err) => observer.error(err),
-        complete: () => observer.complete()
-      })
+        complete: () => observer.complete(),
+      }),
     );
 }
 

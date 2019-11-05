@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { AuthGuard, AuthResolve } from '@app/core/auth';
 import { SetupResolve } from '@app/core/setup';
 import { ProjectEditPageComponent } from '@app/main/project-edit-page/project-edit-page.component';
@@ -49,6 +48,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class MainRoutingModule { }

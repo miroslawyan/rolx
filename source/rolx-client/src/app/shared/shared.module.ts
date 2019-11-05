@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
 import { AppImportModule } from '@app/app-import.module';
 import { CustomerFormComponent, CustomerTableComponent } from './customer';
 import { ProjectFormComponent, ProjectTableComponent } from './project';
