@@ -14,7 +14,7 @@ namespace RolXServer
     /// <summary>
     /// The RolX server program.
     /// </summary>
-    public class Program
+    public static class Program
     {
         /// <summary>
         /// Defines the entry point of the application.

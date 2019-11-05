@@ -19,6 +19,7 @@ namespace RolXServer.Database
     /// <summary>
     /// The repository in use.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "DI")]
     internal sealed class RolXRepository :
         IRepository<Customer>,
         IRepository<Project>,

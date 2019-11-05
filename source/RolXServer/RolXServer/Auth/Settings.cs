@@ -33,6 +33,7 @@ namespace RolXServer.Auth
         /// <summary>
         /// Gets or sets the white-list of allowed google hosted domains.
         /// </summary>
-        public string[] GoogleHostedDomainWhitelist { get; set; } = new string[0];
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Its just settings.")]
+        public string[] GoogleHostedDomainWhitelist { get; set; } = Array.Empty<string>();
     }
 }

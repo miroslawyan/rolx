@@ -3,16 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <UserSecretsId>fa0bc824-1775-4f78-97dc-6efb2fc627fc</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
+    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
+    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,9 +28,13 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.41.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.1" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.42.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -37,7 +44,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
 
 </Project>

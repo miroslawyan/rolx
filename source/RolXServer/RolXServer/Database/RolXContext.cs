@@ -17,6 +17,7 @@ namespace RolXServer.Database
     /// The database context in use.
     /// </summary>
     /// <seealso cref="DbContext" />
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "DI")]
     internal sealed class RolXContext : DbContext
     {
         /// <summary>

@@ -79,6 +79,19 @@ namespace RolXServer.WorkRecord.Domain.Detail
             return record;
         }
 
+        private static Record ApplyPartTimeFactor(Record record, IEnumerable<UserSetting> settings)
+        {
+            var factor = settings
+                .Where(s => s.StartDate <= record.Date)
+                .Select(s => s.PartTimeFactor)
+                .DefaultIfEmpty(1.0)
+                .First();
+
+            record.NominalWorkTime *= factor;
+
+            return record;
+        }
+
         private Record ApplyNominalWorkTime(Record record)
         {
             if (record.DayType == DayType.Workday)
@@ -98,20 +111,7 @@ namespace RolXServer.WorkRecord.Domain.Detail
                 .Take(31)
                 .ToListAsync();
 
-            return records.Select(r => this.ApplyPartTimeFactor(r, settings));
-        }
-
-        private Record ApplyPartTimeFactor(Record record, IEnumerable<UserSetting> settings)
-        {
-            var factor = settings
-                .Where(s => s.StartDate <= record.Date)
-                .Select(s => s.PartTimeFactor)
-                .DefaultIfEmpty(1.0)
-                .First();
-
-            record.NominalWorkTime *= factor;
-
-            return record;
+            return records.Select(r => ApplyPartTimeFactor(r, settings));
         }
     }
 }

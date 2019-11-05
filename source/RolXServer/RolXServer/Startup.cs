@@ -62,6 +62,7 @@ namespace RolXServer
         /// </summary>
         /// <param name="app">The application.</param>
         /// <param name="env">The environment.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Asp.Net requires it this way.")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

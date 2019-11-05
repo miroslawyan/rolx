@@ -16,7 +16,7 @@ namespace RolXServer.Common.Util
     /// </summary>
     public static class IsoDate
     {
-        private static readonly string Format = "yyyy-MM-dd";
+        private const string Format = "yyyy-MM-dd";
 
         /// <summary>
         /// Converts the specified date into a corresponding ISO-date representation.

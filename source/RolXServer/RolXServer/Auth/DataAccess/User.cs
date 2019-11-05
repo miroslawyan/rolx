@@ -43,6 +43,7 @@ namespace RolXServer.Auth.DataAccess
         /// <summary>
         /// Gets or sets the avatar URL.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1056:Uri properties should not be strings", Justification = "EF cannot map System.Uri")]
         public string AvatarUrl { get; set; } = string.Empty;
 
         /// <summary>
