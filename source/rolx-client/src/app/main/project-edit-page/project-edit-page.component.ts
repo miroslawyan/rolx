@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Project, ProjectService } from '@app/core/account';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-project-edit-page',
@@ -13,11 +13,22 @@ export class ProjectEditPageComponent implements OnInit {
 
   project$: Observable<Project>;
 
-  constructor(private route: ActivatedRoute, private projectService: ProjectService) { }
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private projectService: ProjectService,
+  ) { }
 
   ngOnInit() {
     this.project$ = this.route.paramMap.pipe(
       switchMap(params => this.initializeProject(params.get('id'))),
+      catchError(e => {
+        if (e.status === 404) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/four-oh-four']);
+        }
+
+        return throwError(e);
+      }),
     );
   }
 

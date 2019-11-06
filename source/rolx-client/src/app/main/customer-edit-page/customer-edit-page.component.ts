@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Customer, CustomerService } from '@app/core/account';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-customer-edit-page',
@@ -13,11 +13,22 @@ export class CustomerEditPageComponent implements OnInit {
 
   customer$: Observable<Customer>;
 
-  constructor(private route: ActivatedRoute, private customerService: CustomerService) { }
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private customerService: CustomerService,
+  ) { }
 
   ngOnInit() {
     this.customer$ = this.route.paramMap.pipe(
       switchMap(params => this.initializeCustomer(params.get('id'))),
+      catchError(e => {
+        if (e.status === 404) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/four-oh-four']);
+        }
+
+        return throwError(e);
+      }),
     );
   }
 
