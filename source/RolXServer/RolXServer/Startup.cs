@@ -54,7 +54,7 @@ namespace RolXServer
             services.AddAccount(this.Configuration);
             services.AddAuth(this.Configuration);
             services.AddWorkRecord(this.Configuration);
-            services.AddDatabase();
+            services.AddDatabase(this.Configuration);
         }
 
         /// <summary>

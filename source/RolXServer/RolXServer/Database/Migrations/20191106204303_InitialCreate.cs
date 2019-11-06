@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="20191007140238_InitialCreate.cs" company="Christian Ewald">
+// <copyright file="20191106204303_InitialCreate.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -9,6 +9,7 @@
 using System;
 
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace RolXServer.Database.Migrations
 {
@@ -25,7 +26,7 @@ namespace RolXServer.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Number = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                 },
@@ -56,11 +57,11 @@ namespace RolXServer.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Number = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     CustomerId = table.Column<int>(nullable: false),
-                    OpenUntil = table.Column<DateTime>(nullable: true),
+                    OpenUntil = table.Column<DateTime>(type: "date", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -78,7 +79,7 @@ namespace RolXServer.Database.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: false),
+                    StartDate = table.Column<DateTime>(type: "date", nullable: false),
                     PartTimeFactor = table.Column<double>(nullable: false),
                 },
                 constraints: table =>

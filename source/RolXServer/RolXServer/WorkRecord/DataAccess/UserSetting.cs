@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using RolXServer.Auth.DataAccess;
 
@@ -30,6 +31,7 @@ namespace RolXServer.WorkRecord.DataAccess
         /// <summary>
         /// Gets or sets the start date this setting is applicable.
         /// </summary>
+        [Column(TypeName = "date")]
         public DateTime StartDate { get; set; }
 
         /// <summary>

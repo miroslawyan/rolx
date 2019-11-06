@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RolXServer.Common.DataAccess;
 
@@ -21,10 +22,13 @@ namespace RolXServer.Database
         /// Adds the database services.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <returns>The service collection.</returns>
-        public static IServiceCollection AddDatabase(this IServiceCollection services)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The service collection.
+        /// </returns>
+        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<RolXContext>(options => options.UseSqlite("Data Source=rolx.sqlite"));
+            services.AddDbContext<RolXContext>(options => options.UseNpgsql(configuration.GetConnectionString("RolXContext")));
 
             services.AddScoped<IRepository<Account.DataAccess.Customer>, RolXRepository>();
             services.AddScoped<IRepository<Account.DataAccess.Project>, RolXRepository>();

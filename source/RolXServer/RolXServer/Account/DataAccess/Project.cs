@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RolXServer.Account.DataAccess
 {
@@ -43,6 +44,7 @@ namespace RolXServer.Account.DataAccess
         /// <summary>
         /// Gets or sets the date until this project is open.
         /// </summary>
+        [Column(TypeName = "date")]
         public DateTime? OpenUntil { get; set; }
     }
 }
