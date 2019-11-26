@@ -10,12 +10,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-using AutoMapper;
 using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RolXServer.Auth.DataAccess;
+using RolXServer.Auth.Domain.Mapping;
 using RolXServer.Auth.Domain.Model;
 
 namespace RolXServer.Auth.Domain.Detail
@@ -28,7 +28,6 @@ namespace RolXServer.Auth.Domain.Detail
         private readonly RolXContext dbContext;
         private readonly BearerTokenFactory bearerTokenFactory;
         private readonly Settings settings;
-        private readonly IMapper mapper;
         private readonly ILogger logger;
 
         /// <summary>
@@ -37,19 +36,16 @@ namespace RolXServer.Auth.Domain.Detail
         /// <param name="dbContext">The database context.</param>
         /// <param name="bearerTokenFactory">The bearer token factory.</param>
         /// <param name="settingsAccessor">The settings accessor.</param>
-        /// <param name="mapper">The mapper.</param>
         /// <param name="logger">The logger.</param>
         public SignInService(
             RolXContext dbContext,
             BearerTokenFactory bearerTokenFactory,
             IOptions<Settings> settingsAccessor,
-            IMapper mapper,
             ILogger<SignInService> logger)
         {
             this.dbContext = dbContext;
             this.bearerTokenFactory = bearerTokenFactory;
             this.settings = settingsAccessor.Value;
-            this.mapper = mapper;
             this.logger = logger;
         }
 
@@ -149,9 +145,7 @@ namespace RolXServer.Auth.Domain.Detail
 
         private AuthenticatedUser Authenticate(User user)
         {
-            var authenticatedUser = this.mapper.Map<AuthenticatedUser>(user);
-            authenticatedUser.BearerToken = this.bearerTokenFactory.ProduceFor(user);
-            return authenticatedUser;
+            return user.ToDomain(this.bearerTokenFactory.ProduceFor(user));
         }
     }
 }

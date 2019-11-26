@@ -6,7 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,8 +47,6 @@ namespace RolXServer
             services
                 .AddControllers()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
-
-            services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<RolXContext>(options => options.UseNpgsql(this.Configuration.GetConnectionString("RolXContext")));
 

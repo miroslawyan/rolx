@@ -12,11 +12,11 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RolXServer.Auth.Domain;
 using RolXServer.WorkRecord.Domain;
+using RolXServer.WorkRecord.WebApi.Mapping;
 using RolXServer.WorkRecord.WebApi.Resource;
 
 namespace RolXServer.WorkRecord.WebApi
@@ -31,19 +31,14 @@ namespace RolXServer.WorkRecord.WebApi
     public sealed class WorkRecordController : ControllerBase
     {
         private readonly IRecordService recordService;
-        private readonly IMapper mapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkRecordController" /> class.
         /// </summary>
         /// <param name="recordService">The record service.</param>
-        /// <param name="mapper">The mapper.</param>
-        public WorkRecordController(
-            IRecordService recordService,
-            IMapper mapper)
+        public WorkRecordController(IRecordService recordService)
         {
             this.recordService = recordService;
-            this.mapper = mapper;
         }
 
         /// <summary>
@@ -60,7 +55,7 @@ namespace RolXServer.WorkRecord.WebApi
             }
 
             return (await this.recordService.GetAllOfMonth(monthDate, this.User.GetUserId()))
-                .Select(r => this.mapper.Map<Record>(r))
+                .Select(r => r.ToResource())
                 .ToList();
         }
 
