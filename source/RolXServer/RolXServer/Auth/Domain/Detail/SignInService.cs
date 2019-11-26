@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RolXServer.Auth.DataAccess;
 using RolXServer.Auth.Domain.Model;
-using RolXServer.Common.DataAccess;
 
 namespace RolXServer.Auth.Domain.Detail
 {
@@ -26,7 +25,7 @@ namespace RolXServer.Auth.Domain.Detail
     /// </summary>
     public sealed class SignInService : ISignInService
     {
-        private readonly IRepository<User> userRepository;
+        private readonly RolXContext dbContext;
         private readonly BearerTokenFactory bearerTokenFactory;
         private readonly Settings settings;
         private readonly IMapper mapper;
@@ -35,19 +34,19 @@ namespace RolXServer.Auth.Domain.Detail
         /// <summary>
         /// Initializes a new instance of the <see cref="SignInService" /> class.
         /// </summary>
-        /// <param name="userRepository">The user repository.</param>
+        /// <param name="dbContext">The database context.</param>
         /// <param name="bearerTokenFactory">The bearer token factory.</param>
         /// <param name="settingsAccessor">The settings accessor.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="logger">The logger.</param>
         public SignInService(
-            IRepository<User> userRepository,
+            RolXContext dbContext,
             BearerTokenFactory bearerTokenFactory,
             IOptions<Settings> settingsAccessor,
             IMapper mapper,
             ILogger<SignInService> logger)
         {
-            this.userRepository = userRepository;
+            this.dbContext = dbContext;
             this.bearerTokenFactory = bearerTokenFactory;
             this.settings = settingsAccessor.Value;
             this.mapper = mapper;
@@ -111,7 +110,7 @@ namespace RolXServer.Auth.Domain.Detail
         /// </returns>
         public async Task<AuthenticatedUser?> Extend(Guid userId)
         {
-            var user = await this.userRepository.Entities.FindAsync(userId);
+            var user = await this.dbContext.Users.FindAsync(userId);
             if (user is null)
             {
                 this.logger.LogWarning("Unknown user tries to extend authentication: {0}", userId);
@@ -129,13 +128,13 @@ namespace RolXServer.Auth.Domain.Detail
 
         private async Task<User> EnsureUser(GoogleJsonWebSignature.Payload payload)
         {
-            var user = await this.userRepository.Entities.SingleOrDefaultAsync(u => u.GoogleId == payload.Subject);
+            var user = await this.dbContext.Users.SingleOrDefaultAsync(u => u.GoogleId == payload.Subject);
             if (user is null)
             {
                 this.logger.LogInformation("Adding yet unknown user {0}", payload.Name);
 
                 user = new User { GoogleId = payload.Subject };
-                this.userRepository.Entities.Add(user);
+                this.dbContext.Users.Add(user);
             }
 
             user.FirstName = payload.GivenName;
@@ -143,7 +142,7 @@ namespace RolXServer.Auth.Domain.Detail
             user.Email = payload.Email;
             user.AvatarUrl = payload.Picture;
 
-            await this.userRepository.SaveChanges();
+            await this.dbContext.SaveChangesAsync();
 
             return user;
         }

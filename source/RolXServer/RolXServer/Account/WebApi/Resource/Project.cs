@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 namespace RolXServer.Account.WebApi.Resource
 {
     /// <summary>
@@ -29,13 +31,8 @@ namespace RolXServer.Account.WebApi.Resource
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the customer.
+        /// Gets or sets the phases.
         /// </summary>
-        public DataAccess.Customer? Customer { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date until this project is open.
-        /// </summary>
-        public string? OpenUntilDate { get; set; }
+        public List<Phase> Phases { get; set; } = new List<Phase>();
     }
 }

@@ -1,0 +1,28 @@
+
+<mat-card *ngIf="project$ | async as project">
+
+  <mat-card-title>
+    <span>
+      {{project.number}} - {{project.name}}
+      <a mat-icon-button
+         class="edit"
+         aria-label="Projekt editieren"
+         [routerLink]="['edit']">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </span>
+
+    <a mat-mini-fab
+       aria-label="Phase hinzufügen"
+       [routerLink]="['phase', 'new']"
+       color="primary">
+      <mat-icon>add</mat-icon>
+    </a>
+  </mat-card-title>
+
+  <rolx-phase-table *ngIf="project.phases.length > 0" [phases]="project.phases"></rolx-phase-table>
+  <rolx-phase-form *ngIf="editedPhase != null"
+                   [project]="project"
+                   [phase]="editedPhase"></rolx-phase-form>
+
+</mat-card>

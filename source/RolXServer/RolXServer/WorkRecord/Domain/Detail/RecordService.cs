@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using RolXServer.Common.DataAccess;
 using RolXServer.WorkRecord.DataAccess;
 using RolXServer.WorkRecord.Domain.Model;
 
@@ -25,22 +24,22 @@ namespace RolXServer.WorkRecord.Domain.Detail
     public sealed class RecordService : IRecordService
     {
         private readonly IHolidayRules holidayRules;
-        private readonly IRepository<UserSetting> userSettingRepository;
+        private readonly RolXContext dbContext;
         private readonly Settings settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RecordService" /> class.
         /// </summary>
         /// <param name="holidayRules">The holiday rules.</param>
-        /// <param name="userSettingRepository">The user setting repository.</param>
+        /// <param name="dbContext">The database context.</param>
         /// <param name="settingsAccessor">The settings accessor.</param>
         public RecordService(
             IHolidayRules holidayRules,
-            IRepository<UserSetting> userSettingRepository,
+            RolXContext dbContext,
             IOptions<Settings> settingsAccessor)
         {
             this.holidayRules = holidayRules;
-            this.userSettingRepository = userSettingRepository;
+            this.dbContext = dbContext;
             this.settings = settingsAccessor.Value;
         }
 
@@ -105,7 +104,7 @@ namespace RolXServer.WorkRecord.Domain.Detail
         private async Task<IEnumerable<Record>> ApplyPartTimeFactor(IList<Record> records, Guid userId)
         {
             var lastDate = records.Max(r => r.Date);
-            var settings = await this.userSettingRepository.Entities
+            var settings = await this.dbContext.UserSettings
                 .Where(s => s.UserId == userId && s.StartDate <= lastDate)
                 .OrderByDescending(s => s.StartDate)
                 .Take(31)

@@ -41,7 +41,6 @@ namespace RolXServer.Setup.WebApi
         {
             return new Info
             {
-                CustomerNumberPattern = this.accountSettings.CustomerNumberPattern,
                 ProjectNumberPattern = this.accountSettings.ProjectNumberPattern,
             };
         }

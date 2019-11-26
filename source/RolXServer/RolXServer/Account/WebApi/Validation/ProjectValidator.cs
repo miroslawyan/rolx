@@ -6,7 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +16,6 @@ using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RolXServer.Account.WebApi.Resource;
-using RolXServer.Common.DataAccess;
 
 namespace RolXServer.Account.WebApi.Validation
 {
@@ -24,22 +24,19 @@ namespace RolXServer.Account.WebApi.Validation
     /// </summary>
     public sealed class ProjectValidator : AbstractValidator<Project>
     {
-        private readonly IRepository<DataAccess.Project> projectRepository;
-        private readonly IRepository<DataAccess.Customer> customerRepository;
+        private readonly RolXContext dbContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectValidator" /> class.
         /// </summary>
-        /// <param name="projectRepository">The project repository.</param>
-        /// <param name="customerRepository">The customer repository.</param>
+        /// <param name="dbContext">The database context.</param>
         /// <param name="settingsAccessor">The settings accessor.</param>
         public ProjectValidator(
-            IRepository<DataAccess.Project> projectRepository,
-            IRepository<DataAccess.Customer> customerRepository,
+            RolXContext dbContext,
             IOptions<Settings> settingsAccessor)
         {
-            this.projectRepository = projectRepository;
-            this.customerRepository = customerRepository;
+            this.dbContext = dbContext;
+            this.dbContext = dbContext;
             var settings = settingsAccessor.Value;
 
             this.RuleFor(p => p.Number)
@@ -48,18 +45,18 @@ namespace RolXServer.Account.WebApi.Validation
                 .Matches(settings.ProjectNumberPattern).WithMessage("pattern")
                 .MustAsync(this.BeUnique);
 
-            this.RuleFor(p => p.Customer)
-                .NotNull().WithMessage("required")
-                .MustAsync(this.Exist);
-
             this.RuleFor(p => p.Name)
                 .NotNull()
                 .NotEmpty().WithMessage("required");
+
+            this.RuleFor(p => p.Phases)
+                .Must(this.HaveUniqueNumbers)
+                .MustAsync(this.BeOfCurrentProject);
         }
 
         private async Task<bool> BeUnique(Project candidate, string newNumber, PropertyValidatorContext context, CancellationToken token)
         {
-            if (await this.projectRepository.Entities
+            if (await this.dbContext.Projects
                 .AnyAsync(p => p.Id != candidate.Id && p.Number == newNumber, token))
             {
                 context.Rule.MessageBuilder = c => "notUnique";
@@ -69,17 +66,34 @@ namespace RolXServer.Account.WebApi.Validation
             return true;
         }
 
-        private async Task<bool> Exist(Project candidate, DataAccess.Customer? newCustomer, PropertyValidatorContext context, CancellationToken token)
+        private bool HaveUniqueNumbers(Project candidate, IEnumerable<Phase> phases, PropertyValidatorContext context)
         {
-            Debug.Assert(newCustomer != null, "We have a rule for this.");
-
-            if (await this.customerRepository.Entities.AnyAsync(c => c.Id == newCustomer.Id, token))
+            if (phases.Select(ph => ph.Number)
+                .GroupBy(n => n)
+                .Any(g => g.Count() > 1))
             {
-                return true;
+                context.Rule.MessageBuilder = c => "phase numbers must be unique";
+                return false;
             }
 
-            context.Rule.MessageBuilder = c => "notExisting";
-            return false;
+            return true;
+        }
+
+        private async Task<bool> BeOfCurrentProject(Project candidate, IEnumerable<Phase> phases, PropertyValidatorContext context, CancellationToken token)
+        {
+            var phaseIds = phases.Select(ph => ph.Id)
+                .Where(id => id != 0)
+                .ToArray();
+
+            if (await this.dbContext.Phases
+                .Where(ph => phaseIds.Contains(ph.Id))
+                .AnyAsync(ph => ph.ProjectId != candidate.Id))
+            {
+                context.Rule.MessageBuilder = c => "phases must be of current project";
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -6,15 +6,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace RolXServer.Account.DataAccess
 {
     /// <summary>
     /// A project we are working on.
     /// </summary>
-    public class Project
+    public sealed class Project
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -32,19 +31,8 @@ namespace RolXServer.Account.DataAccess
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the customer identifier.
+        /// Gets or sets the phases.
         /// </summary>
-        public int CustomerId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the customer.
-        /// </summary>
-        public Customer? Customer { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date until this project is open.
-        /// </summary>
-        [Column(TypeName = "date")]
-        public DateTime? OpenUntil { get; set; }
+        public List<Phase> Phases { get; set; } = new List<Phase>();
     }
 }

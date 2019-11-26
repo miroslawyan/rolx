@@ -7,14 +7,15 @@
 // -----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using RolXServer.Account.Domain;
+using RolXServer.Account.WebApi.Mapping;
 using RolXServer.Account.WebApi.Resource;
-using RolXServer.Common.DataAccess;
 
 namespace RolXServer.Account.WebApi
 {
@@ -26,18 +27,15 @@ namespace RolXServer.Account.WebApi
     [Authorize]
     public sealed class ProjectController : ControllerBase
     {
-        private readonly IRepository<DataAccess.Project> projectRepository;
-        private readonly IMapper mapper;
+        private readonly IProjectService projectService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController" /> class.
         /// </summary>
-        /// <param name="projectRepository">The project repository.</param>
-        /// <param name="mapper">The mapper.</param>
-        public ProjectController(IRepository<DataAccess.Project> projectRepository, IMapper mapper)
+        /// <param name="projectService">The project service.</param>
+        public ProjectController(IProjectService projectService)
         {
-            this.projectRepository = projectRepository;
-            this.mapper = mapper;
+            this.projectService = projectService;
         }
 
         /// <summary>
@@ -45,10 +43,9 @@ namespace RolXServer.Account.WebApi
         /// </summary>
         /// <returns>All projects.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetAll()
+        public async Task<IEnumerable<Project>> GetAll()
         {
-            return await this.mapper.ProjectTo<Project>(this.projectRepository.Entities)
-                .ToListAsync();
+            return (await this.projectService.GetAll()).Select(p => p.ToResource());
         }
 
         /// <summary>
@@ -61,15 +58,13 @@ namespace RolXServer.Account.WebApi
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetById(int id)
         {
-            var project = await this.mapper.ProjectTo<Project>(this.projectRepository.Entities)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (project is null)
+            var domain = await this.projectService.GetById(id);
+            if (domain is null)
             {
                 return this.NotFound();
             }
 
-            return project;
+            return domain.ToResource();
         }
 
         /// <summary>
@@ -82,13 +77,10 @@ namespace RolXServer.Account.WebApi
         [HttpPost]
         public async Task<ActionResult<Project>> Create(Project project)
         {
-            var entity = this.mapper.Map<DataAccess.Project>(project);
-            entity.Customer = null; // TODO: check if we may prevent this during mapping
+            var domain = project.ToDomain();
+            await this.projectService.Add(domain);
 
-            this.projectRepository.Entities.Add(entity);
-            await this.projectRepository.SaveChanges();
-
-            return this.mapper.Map<Project>(entity);
+            return domain.ToResource();
         }
 
         /// <summary>
@@ -107,11 +99,7 @@ namespace RolXServer.Account.WebApi
                 return this.BadRequest();
             }
 
-            var entity = this.mapper.Map<DataAccess.Project>(project);
-            entity.Customer = null; // TODO: check if we may prevent this during mapping
-
-            this.projectRepository.Entities.Attach(entity).State = EntityState.Modified;
-            await this.projectRepository.SaveChanges();
+            await this.projectService.Update(project.ToDomain());
 
             return this.NoContent();
         }

@@ -39,6 +39,22 @@ namespace RolXServer.Common.Util
         }
 
         /// <summary>
+        /// Tries to parse the specified ISO-date.
+        /// </summary>
+        /// <param name="isoDate">The ISO-date.</param>
+        /// <param name="result">The result.</param>
+        /// <returns><c>true</c> if the parsing succeeded; otherwise <c>false</c>.</returns>
+        public static bool TryParse(string isoDate, out DateTime result)
+        {
+            return DateTime.TryParseExact(
+                isoDate,
+                Format,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeLocal,
+                out result);
+        }
+
+        /// <summary>
         /// Parses the specified ISO-date.
         /// </summary>
         /// <param name="isoDate">The ISO-date.</param>
@@ -46,12 +62,7 @@ namespace RolXServer.Common.Util
         /// <exception cref="FormatException">value is not an ISO-formatted date.</exception>
         public static DateTime Parse(string isoDate)
         {
-            if (!DateTime.TryParseExact(
-                isoDate,
-                Format,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.AssumeLocal,
-                out var result))
+            if (!TryParse(isoDate, out var result))
             {
                 throw new FormatException("value is not an ISO-formatted date");
             }

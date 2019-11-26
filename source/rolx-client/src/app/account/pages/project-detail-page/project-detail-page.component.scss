@@ -1,0 +1,16 @@
+mat-card-title {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: baseline;
+
+  a.edit {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  &:hover a.edit {
+    opacity: 1;
+    transition: opacity 0.3s ease-in;
+  }
+}

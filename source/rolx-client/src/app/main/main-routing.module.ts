@@ -1,14 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import {
+  PhaseEditPageComponent,
+  ProjectDetailPageComponent,
+  ProjectEditPageComponent,
+  ProjectListPageComponent,
+} from '@app/account/pages';
 import { AuthGuard, AuthResolve } from '@app/core/auth';
 import { SetupResolve } from '@app/core/setup';
-import { NotFoundPageComponent } from '@app/main/not-found-page/not-found-page.component';
-import { ProjectEditPageComponent } from '@app/main/project-edit-page/project-edit-page.component';
-import { CustomerEditPageComponent } from './customer-edit-page/customer-edit-page.component';
-import { CustomerListPageComponent } from './customer-list-page/customer-list-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MonthPageComponent } from './month-page/month-page.component';
-import { ProjectListPageComponent } from './project-list-page/project-list-page.component';
+import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 
 const routes: Routes = [
@@ -23,20 +25,20 @@ const routes: Routes = [
           component: MonthPageComponent,
         },
         {
-          path: 'customer/:id',
-          component: CustomerEditPageComponent,
-        },
-        {
-          path: 'customer',
-          component: CustomerListPageComponent,
+          path: 'project',
+          component: ProjectListPageComponent,
         },
         {
           path: 'project/:id',
+          component: ProjectDetailPageComponent,
+        },
+        {
+          path: 'project/:id/edit',
           component: ProjectEditPageComponent,
         },
         {
-          path: 'project',
-          component: ProjectListPageComponent,
+          path: 'project/:id/phase/:phaseId',
+          component: PhaseEditPageComponent,
         },
         {
           path: 'four-oh-four',

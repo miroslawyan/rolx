@@ -6,8 +6,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Runtime.CompilerServices;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+
+[assembly: InternalsVisibleTo("RolXServer.Tests")]
 
 namespace RolXServer
 {

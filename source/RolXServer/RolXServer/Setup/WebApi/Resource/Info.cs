@@ -14,11 +14,6 @@ namespace RolXServer.Setup.WebApi.Resource
     public sealed class Info
     {
         /// <summary>
-        /// Gets or sets the pattern for customer numbers.
-        /// </summary>
-        public string CustomerNumberPattern { get; set; } = string.Empty;
-
-        /// <summary>
         /// Gets or sets the pattern for project numbers.
         /// </summary>
         public string ProjectNumberPattern { get; set; } = string.Empty;

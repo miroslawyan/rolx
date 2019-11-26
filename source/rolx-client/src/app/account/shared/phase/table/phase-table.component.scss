@@ -1,0 +1,29 @@
+table {
+  width: 100%;
+}
+
+.number {
+  width: 4em;
+}
+
+.isBillable {
+  text-align: center;
+  width: 5em;
+}
+
+.tools {
+  text-align: right;
+  width: 5em;
+}
+
+tr {
+  .tools a {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  &:hover .tools a {
+    opacity: 1;
+    transition: opacity 0.3s ease-in;
+  }
+}

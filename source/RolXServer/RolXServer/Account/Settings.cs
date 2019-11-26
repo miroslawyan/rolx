@@ -14,11 +14,6 @@ namespace RolXServer.Account
     public sealed class Settings
     {
         /// <summary>
-        /// Gets or sets the pattern for customer numbers.
-        /// </summary>
-        public string CustomerNumberPattern { get; set; } = @"C\d{3}";
-
-        /// <summary>
         /// Gets or sets the pattern for project numbers.
         /// </summary>
         public string ProjectNumberPattern { get; set; } = @"C\d{3}";

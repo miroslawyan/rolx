@@ -1,0 +1,53 @@
+<table mat-table
+       [dataSource]="phases"
+       class="mat-elevation-z8">
+
+  <ng-container matColumnDef="number">
+    <th mat-header-cell *matHeaderCellDef>Phase</th>
+    <td mat-cell class="number" *matCellDef="let phase">{{phase.number | number:'3.0'}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let phase">{{phase.name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="startDate">
+    <th mat-header-cell *matHeaderCellDef>Start</th>
+    <td mat-cell *matCellDef="let phase">{{phase.startDate | date : 'mediumDate'}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="endDate">
+    <th mat-header-cell *matHeaderCellDef>Ende</th>
+    <td mat-cell *matCellDef="let phase">{{phase.endDate | date : 'mediumDate'}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="budgetHours">
+    <th mat-header-cell *matHeaderCellDef>Budget</th>
+    <td mat-cell *matCellDef="let phase">
+      <span *ngIf="phase.budgetHours > 0">
+        {{phase.budgetHours| number:'0.0'}} h
+      </span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="isBillable">
+    <th mat-header-cell *matHeaderCellDef>Verrechenbar</th>
+    <td mat-cell class="isBillable" *matCellDef="let phase">
+      <mat-icon *ngIf="phase.isBillable">check</mat-icon>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="tools">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell class="tools" *matCellDef="let phase">
+      <a mat-icon-button [routerLink]="['phase', phase.id]">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let phase; columns: displayedColumns;"></tr>
+
+</table>

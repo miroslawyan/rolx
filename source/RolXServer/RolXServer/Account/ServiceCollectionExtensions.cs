@@ -28,7 +28,12 @@ namespace RolXServer.Account
         {
             services.Configure<Settings>(configuration.GetSection("Account"));
 
-            return services;
+            return services.AddDomain();
+        }
+
+        private static IServiceCollection AddDomain(this IServiceCollection services)
+        {
+            return services.AddScoped<Domain.IProjectService, Domain.Detail.ProjectService>();
         }
     }
 }
