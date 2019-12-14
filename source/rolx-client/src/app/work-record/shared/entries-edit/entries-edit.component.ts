@@ -19,7 +19,7 @@ export class EntriesEditComponent implements OnInit {
   phase: Phase;
 
   entries: RecordEntry[] = [];
-  errorStateMatcher = new ShowOnDirtyErrorStateMatcher()
+  errorStateMatcher = new ShowOnDirtyErrorStateMatcher();
 
   form = this.fb.group({
     duration: ['', [
@@ -30,7 +30,7 @@ export class EntriesEditComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private workRecordService: WorkRecordService) { }
 
-  private get durationControl() {
+  get durationControl() {
     return this.form.controls.duration;
   }
 
