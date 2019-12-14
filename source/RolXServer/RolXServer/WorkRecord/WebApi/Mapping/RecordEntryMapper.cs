@@ -8,9 +8,6 @@
 
 using System;
 
-using RolXServer.Account.WebApi.Mapping;
-using RolXServer.Account.WebApi.Resource;
-
 namespace RolXServer.WorkRecord.WebApi.Mapping
 {
     /// <summary>
@@ -28,8 +25,8 @@ namespace RolXServer.WorkRecord.WebApi.Mapping
             return new Resource.RecordEntry
             {
                 Id = domain.Id,
+                PhaseId = domain.PhaseId,
                 Duration = (long)domain.Duration.TotalSeconds,
-                Phase = domain.Phase?.ToResource() ?? new Phase(),
             };
         }
 
@@ -46,7 +43,7 @@ namespace RolXServer.WorkRecord.WebApi.Mapping
             {
                 Id = resource.Id,
                 Duration = TimeSpan.FromSeconds(resource.Duration),
-                PhaseId = resource.Phase.Id,
+                PhaseId = resource.PhaseId,
             };
         }
     }

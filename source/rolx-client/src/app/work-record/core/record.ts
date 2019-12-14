@@ -29,7 +29,7 @@ export class Record {
   }
 
   entriesOf(phase: Phase): RecordEntry[] {
-    return this.entries.filter(e => e.phase.id === phase.id);
+    return this.entries.filter(e => e.phaseId === phase.id);
   }
 
 }

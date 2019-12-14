@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using RolXServer.Account.WebApi.Resource;
-
 namespace RolXServer.WorkRecord.WebApi.Resource
 {
     /// <summary>
@@ -21,13 +19,13 @@ namespace RolXServer.WorkRecord.WebApi.Resource
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the phase identifier.
+        /// </summary>
+        public int PhaseId { get; set; }
+
+        /// <summary>
         /// Gets or sets the duration in seconds.
         /// </summary>
         public long Duration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the phase.
-        /// </summary>
-        public Phase Phase { get; set; } = new Phase();
     }
 }

@@ -38,7 +38,7 @@ export class EntriesEditComponent implements OnInit {
     this.entries = this.record.entriesOf(this.phase);
     if (!this.entries.length) {
       const entry = new RecordEntry();
-      entry.phase = this.phase;
+      entry.phaseId = this.phase.id;
 
       this.entries.push(entry);
       this.record.entries.push(entry);

@@ -24,23 +24,21 @@ export class WeekTableComponent {
     ...this.weekdays,
   ];
 
-  phases: Phase[];
-  rows: Phase[];
+  @Input()
+  records: Record[] = [];
 
-  private recordsShadow: Record[];
+  rows: Phase[] = [];
+
+  private phasesShadow: Phase[] = [];
 
   constructor() { }
 
-  get records(): Record[] {
-    return this.recordsShadow;
-  }
-
   @Input()
-  set records(value: Record[]) {
-    this.recordsShadow = value;
-
-    const allPhases = this.records.flatMap(r => r.entries.map(e => e.phase));
-    this.phases = [...new Map(allPhases.map(ph => [ph.id, ph])).values()]
+  get phases(): Phase[] {
+    return this.phasesShadow;
+  }
+  set phases(value: Phase[]) {
+    this.phasesShadow = value
       .sort((a, b) => a.fullName.localeCompare(b.fullName));
 
     this.resetRows();
@@ -55,12 +53,12 @@ export class WeekTableComponent {
   }
 
   addPhase(phase: Phase) {
-    this.phases.push(phase);
+    this.phasesShadow.push(phase);
     this.resetRows();
   }
 
   private resetRows() {
-    this.rows = [...this.phases];
+    this.rows = [...this.phasesShadow];
   }
 
 }

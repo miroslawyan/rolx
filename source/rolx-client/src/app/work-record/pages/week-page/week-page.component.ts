@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Phase, PhaseService } from '@app/account/core';
 import { IsoDate } from '@app/core/util';
 import { Record, WorkRecordService } from '@app/work-record/core';
 import moment from 'moment';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -14,11 +15,12 @@ import { map, switchMap } from 'rxjs/operators';
 export class WeekPageComponent implements OnInit {
 
   monday$: Observable<moment.Moment>;
-  records$: Observable<Record[]>;
+  recordsAndPhases$: Observable<[Record[], Phase[]]>;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private workRecordService: WorkRecordService) { }
+              private workRecordService: WorkRecordService,
+              private phaseService: PhaseService) { }
 
   ngOnInit() {
     this.monday$ = this.route.paramMap.pipe(
@@ -27,8 +29,11 @@ export class WeekPageComponent implements OnInit {
       map(date => date.clone().isoWeekday(1)),
     );
 
-    this.records$ = this.monday$.pipe(
-      switchMap(monday => this.workRecordService.getRange(monday, monday.clone().add(7, 'days'))),
+    this.recordsAndPhases$ = this.monday$.pipe(
+      switchMap(monday => forkJoin([
+        this.workRecordService.getRange(monday, monday.clone().add(7, 'days')),
+        this.phaseService.getSuitable(monday),
+      ])),
     );
   }
 
