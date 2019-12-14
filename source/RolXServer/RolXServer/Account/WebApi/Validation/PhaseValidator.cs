@@ -40,9 +40,8 @@ namespace RolXServer.Account.WebApi.Validation
                 .GreaterThanOrEqualTo(ph => ph.StartDate)
                 .Unless(ph => ph.EndDate == null);
 
-            this.RuleFor(ph => ph.BudgetHours)
-                .GreaterThanOrEqualTo(0)
-                .Unless(ph => !ph.BudgetHours.HasValue);
+            this.RuleFor(ph => ph.Budget)
+                .GreaterThanOrEqualTo(0);
         }
     }
 }

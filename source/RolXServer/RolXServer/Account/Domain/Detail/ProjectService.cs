@@ -65,7 +65,7 @@ namespace RolXServer.Account.Domain.Detail
         /// <returns>The async task.</returns>
         public async Task Add(Project project)
         {
-            project.Phases.ResetFullName();
+            project.Phases.Sanitize();
 
             this.dbContext.Projects.Add(project);
             await this.dbContext.SaveChangesAsync();
@@ -78,7 +78,7 @@ namespace RolXServer.Account.Domain.Detail
         /// <returns>The async task.</returns>
         public async Task Update(Project project)
         {
-            project.Phases.ResetFullName();
+            project.Phases.Sanitize();
 
             this.dbContext.Projects.Update(project);
 

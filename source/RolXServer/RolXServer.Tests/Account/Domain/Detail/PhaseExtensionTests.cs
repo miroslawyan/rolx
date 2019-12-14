@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 
 using FluentAssertions;
@@ -42,12 +43,22 @@ namespace RolXServer.Account.Domain.Detail
         }
 
         [Test]
-        public void ResetFullName()
+        public void Sanitize_FullName()
         {
             var phase = this.project.Phases[0];
-            phase.ResetFullName();
+            phase.Sanitize();
 
             phase.FullName.Should().Be("P1234.042 - Foo - Bar");
+        }
+
+        [Test]
+        public void Sanitize_Budget()
+        {
+            var phase = this.project.Phases[0];
+            phase.Budget = TimeSpan.FromMinutes(0.5);
+            phase.Sanitize();
+
+            phase.Budget.Should().BeNull();
         }
     }
 }

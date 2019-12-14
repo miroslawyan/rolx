@@ -17,8 +17,7 @@ export class ProjectDetailPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private projectService: ProjectService,
-  ) { }
+              private projectService: ProjectService) { }
 
   ngOnInit() {
     this.project$ = this.route.paramMap.pipe(

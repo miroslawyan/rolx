@@ -24,6 +24,7 @@
     "@angular/router": "~8.2.5",
     "@types/gapi": "0.0.39",
     "@types/gapi.auth2": "0.0.50",
+    "class-transformer": "^0.2.3",
     "moment": "^2.24.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",

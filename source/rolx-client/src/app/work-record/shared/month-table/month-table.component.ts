@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DayType, Record } from '@app/core/work-record';
+import { DayType, Record } from '@app/work-record/core';
 
 @Component({
   selector: 'rolx-month-table',
@@ -12,6 +12,7 @@ export class MonthTableComponent {
 
   @Input()
   records: Record[];
+
   displayedColumns: string[] = ['date', 'name', 'nominal'];
 
   constructor() { }

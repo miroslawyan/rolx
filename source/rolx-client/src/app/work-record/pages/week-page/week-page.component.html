@@ -1,0 +1,28 @@
+
+<mat-card *ngIf="monday$ | async as monday">
+
+  <mat-card-title>
+
+    <button mat-icon-button (click)="previous(monday)">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button mat-icon-button (click)="next(monday)">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+
+    Woche
+    {{monday | date: 'mediumDate'}}
+    -
+    {{monday.clone().add(6, 'day') | date: 'mediumDate'}}
+
+    <small>(KW{{monday.week() | number: '2.0'}})</small>
+
+  </mat-card-title>
+
+  <mat-card-content *ngIf="records$ | async as records">
+
+    <rolx-week-table [records]="records"></rolx-week-table>
+
+  </mat-card-content>
+
+</mat-card>

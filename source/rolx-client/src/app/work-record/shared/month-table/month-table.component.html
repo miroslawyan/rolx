@@ -14,7 +14,7 @@
 
   <ng-container matColumnDef="nominal">
     <th mat-header-cell *matHeaderCellDef>Nominal</th>
-    <td mat-cell *matCellDef="let record">{{record.nominalWorkTimeHours | number:'1.1-2'}}</td>
+    <td mat-cell *matCellDef="let record">{{record.nominalWorkTime}}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

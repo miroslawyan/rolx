@@ -6,6 +6,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+
 namespace RolXServer.WorkRecord.WebApi.Resource
 {
     /// <summary>
@@ -14,9 +17,19 @@ namespace RolXServer.WorkRecord.WebApi.Resource
     public sealed class Record
     {
         /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the date.
         /// </summary>
         public string Date { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the user identifier.
+        /// </summary>
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the day.
@@ -29,8 +42,13 @@ namespace RolXServer.WorkRecord.WebApi.Resource
         public string DayName { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the nominal work-time in hours.
+        /// Gets or sets the nominal work-time in seconds.
         /// </summary>
-        public double NominalWorkTimeHours { get; set; }
+        public long NominalWorkTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entries.
+        /// </summary>
+        public List<RecordEntry> Entries { get; set; } = new List<RecordEntry>();
     }
 }

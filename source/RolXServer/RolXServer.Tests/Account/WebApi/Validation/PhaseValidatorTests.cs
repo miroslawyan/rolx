@@ -141,27 +141,21 @@ namespace RolXServer.Account.WebApi.Validation
         }
 
         [Test]
-        public void BudgetHours_MayBeNull()
+        public void Budget_IfNotNull_MustNotBeNegative()
         {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.BudgetHours, null as double?);
+            this.sut.ShouldHaveValidationErrorFor(phase => phase.Budget, -42);
         }
 
         [Test]
-        public void BudgetHours_IfNotNull_MustNotBeNegative()
+        public void Budget_IfNotNull_ShouldBePositive()
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.BudgetHours, -42);
+            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.Budget, 42);
         }
 
         [Test]
-        public void BudgetHours_IfNotNull_ShouldBePositive()
+        public void Budget_IfNotNull_MayBeZero()
         {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.BudgetHours, 42);
-        }
-
-        [Test]
-        public void BudgetHours_IfNotNull_MayBeZero()
-        {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.BudgetHours, 0);
+            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.Budget, 0);
         }
     }
 }

@@ -9,14 +9,12 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using RolXServer.Auth.DataAccess;
-
-namespace RolXServer.WorkRecord.DataAccess
+namespace RolXServer.Auth.DataAccess
 {
     /// <summary>
     /// The settings of a user.
     /// </summary>
-    public class UserSetting
+    public sealed class UserSetting
     {
         /// <summary>
         /// Gets or sets the user identifier.

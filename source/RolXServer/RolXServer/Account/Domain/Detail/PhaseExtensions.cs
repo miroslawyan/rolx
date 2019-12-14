@@ -18,11 +18,31 @@ namespace RolXServer.Account.Domain.Detail
     /// </summary>
     internal static class PhaseExtensions
     {
+        private static readonly TimeSpan BudgetMin = TimeSpan.FromMinutes(1);
+
         /// <summary>
-        /// Resets the full name.
+        /// Sanitizes the specified phase.
         /// </summary>
         /// <param name="phase">The phase.</param>
-        public static void ResetFullName(this Phase phase)
+        public static void Sanitize(this Phase phase)
+        {
+            phase.ResetFullName();
+            phase.ClearEmptyBudget();
+        }
+
+        /// <summary>
+        /// Sanitizes the specified phases.
+        /// </summary>
+        /// <param name="phases">The phases.</param>
+        public static void Sanitize(this IEnumerable<Phase> phases)
+        {
+            foreach (var phase in phases)
+            {
+                phase.Sanitize();
+            }
+        }
+
+        private static void ResetFullName(this Phase phase)
         {
             if (phase.Project is null)
             {
@@ -33,15 +53,11 @@ namespace RolXServer.Account.Domain.Detail
             phase.FullName = $"{project.Number}.{phase.Number:D3} - {project.Name} - {phase.Name}";
         }
 
-        /// <summary>
-        /// Resets the full name on all specified phases.
-        /// </summary>
-        /// <param name="phases">The phases.</param>
-        public static void ResetFullName(this IEnumerable<Phase> phases)
+        private static void ClearEmptyBudget(this Phase phase)
         {
-            foreach (var phase in phases)
+            if ((phase.Budget ?? default) < BudgetMin)
             {
-                phase.ResetFullName();
+                phase.Budget = null;
             }
         }
     }

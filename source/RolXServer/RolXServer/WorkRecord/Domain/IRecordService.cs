@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using RolXServer.Common.Util;
 using RolXServer.WorkRecord.Domain.Model;
 
 namespace RolXServer.WorkRecord.Domain
@@ -20,13 +21,27 @@ namespace RolXServer.WorkRecord.Domain
     public interface IRecordService
     {
         /// <summary>
-        /// Gets all records of the specified month, of the user with the specified identifier.
+        /// Gets all records of the specified range, of the user with the specified identifier.
         /// </summary>
-        /// <param name="month">The month.</param>
+        /// <param name="range">The range.</param>
         /// <param name="userId">The user identifier.</param>
         /// <returns>
-        /// The records.
+        /// The requested records.
         /// </returns>
-        Task<IEnumerable<Record>> GetAllOfMonth(DateTime month, Guid userId);
+        Task<IEnumerable<Record>> GetRange(DateRange range, Guid userId);
+
+        /// <summary>
+        /// Creates the specified record.
+        /// </summary>
+        /// <param name="record">The record.</param>
+        /// <returns>The created record.</returns>
+        Task<Record> Create(Record record);
+
+        /// <summary>
+        /// Updates the specified record.
+        /// </summary>
+        /// <param name="record">The record.</param>
+        /// <returns>The async task.</returns>
+        Task Update(Record record);
     }
 }

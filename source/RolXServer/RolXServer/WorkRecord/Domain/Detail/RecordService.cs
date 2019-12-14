@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using RolXServer.WorkRecord.DataAccess;
+using RolXServer.Auth.DataAccess;
+using RolXServer.Common.Util;
+using RolXServer.WorkRecord.Domain.Mapping;
 using RolXServer.WorkRecord.Domain.Model;
 
 namespace RolXServer.WorkRecord.Domain.Detail
@@ -44,17 +46,22 @@ namespace RolXServer.WorkRecord.Domain.Detail
         }
 
         /// <summary>
-        /// Gets all records of the specified month, of the user with the specified identifier.
+        /// Gets all records of the specified range (begin..end], of the user with the specified identifier.
         /// </summary>
-        /// <param name="month">The month.</param>
+        /// <param name="range">The range.</param>
         /// <param name="userId">The user identifier.</param>
         /// <returns>
-        /// The records.
+        /// The requested records.
         /// </returns>
-        public async Task<IEnumerable<Record>> GetAllOfMonth(DateTime month, Guid userId)
+        public async Task<IEnumerable<Record>> GetRange(DateRange range, Guid userId)
         {
-            var result = AllDaysOfSameMonth(month)
-                .Select(d => new Record { Date = d })
+            var entities = await this.dbContext.Records
+                .Include(r => r.Entries).ThenInclude(e => e.Phase)
+                .Where(r => r.Date >= range.Begin && r.Date < range.End && r.UserId == userId)
+                .OrderBy(r => r.Date)
+                .ToListAsync();
+
+            var result = entities.ToDomainsIn(range, userId)
                 .Select(r => ApplyWeekends(r))
                 .Select(r => this.holidayRules.Apply(r))
                 .Select(r => this.ApplyNominalWorkTime(r));
@@ -62,10 +69,55 @@ namespace RolXServer.WorkRecord.Domain.Detail
             return await this.ApplyPartTimeFactor(result.ToList(), userId);
         }
 
-        private static IEnumerable<DateTime> AllDaysOfSameMonth(DateTime month)
+        /// <summary>
+        /// Creates the specified record.
+        /// </summary>
+        /// <param name="record">The record.</param>
+        /// <returns>The created record.</returns>
+        public async Task<Record> Create(Record record)
         {
-            return Enumerable.Range(1, DateTime.DaysInMonth(month.Year, month.Month))
-                .Select(d => new DateTime(month.Year, month.Month, d));
+            if (record.Id != 0)
+            {
+                throw new ArgumentException("Record must not have an id while creating", nameof(record));
+            }
+
+            record.Sanitize();
+
+            var entity = record.ToEntity();
+
+            this.dbContext.Add(entity);
+            await this.dbContext.SaveChangesAsync();
+
+            record.Id = entity.Id;
+            return record;
+        }
+
+        /// <summary>
+        /// Updates the specified record.
+        /// </summary>
+        /// <param name="record">The record.</param>
+        /// <returns>The async task.</returns>
+        public async Task Update(Record record)
+        {
+            if (record.Id == 0)
+            {
+                throw new ArgumentException("Record must have a valid id while updating", nameof(record));
+            }
+
+            record.Sanitize();
+
+            this.dbContext.Records.Update(record.ToEntity());
+
+            var entryIds = record.Entries
+                .Select(e => e.Id);
+
+            this.dbContext.RemoveRange(
+                this.dbContext.Records
+                .Where(r => r.Id == record.Id)
+                .SelectMany(p => p.Entries)
+                .Where(e => !entryIds.Contains(e.Id)));
+
+            await this.dbContext.SaveChangesAsync();
         }
 
         private static Record ApplyWeekends(Record record)
@@ -101,16 +153,20 @@ namespace RolXServer.WorkRecord.Domain.Detail
             return record;
         }
 
-        private async Task<IEnumerable<Record>> ApplyPartTimeFactor(IList<Record> records, Guid userId)
+        private async Task<IEnumerable<Record>> ApplyPartTimeFactor(IEnumerable<Record> records, Guid userId)
         {
-            var lastDate = records.Max(r => r.Date);
-            var settings = await this.dbContext.UserSettings
-                .Where(s => s.UserId == userId && s.StartDate <= lastDate)
-                .OrderByDescending(s => s.StartDate)
-                .Take(31)
-                .ToListAsync();
-
+            var settings = (await this.GetUserSettings(userId)).ToList();
             return records.Select(r => ApplyPartTimeFactor(r, settings));
+        }
+
+        private async Task<IEnumerable<UserSetting>> GetUserSettings(Guid userId)
+        {
+            // There usually are not too many setting entries.
+            // So it shouldn't be a problem to just load them all.
+            return await this.dbContext.UserSettings
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.StartDate)
+                .ToListAsync();
         }
     }
 }

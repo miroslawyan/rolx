@@ -19,7 +19,7 @@ using RolXServer.Account.WebApi.Resource;
 namespace RolXServer.Account.WebApi
 {
     /// <summary>
-    /// Controller for project..
+    /// Controller for project resources.
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]

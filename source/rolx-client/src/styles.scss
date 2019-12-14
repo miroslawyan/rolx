@@ -6,7 +6,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @include mat-core();
 
 @import 'theme';
-@import 'app/main/month-page/month-table/month-table.component.scss-theme';
+@import 'app/work-record/shared/month-table/month-table.component.scss-theme';
 
 @mixin apply-theme($theme) {
   @include month-table-component-theme($theme);
@@ -15,3 +15,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @include apply-theme($rolx-dark-theme);
 //@include apply-theme($rolx-light-theme);
+
+// disable all spin buttons on number inputs
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

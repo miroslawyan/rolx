@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WorkRecordService } from '@app/core/work-record';
+import { WorkRecordService } from '@app/work-record/core';
 import moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';

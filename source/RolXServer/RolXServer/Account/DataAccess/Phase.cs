@@ -59,9 +59,9 @@ namespace RolXServer.Account.DataAccess
         public bool IsBillable { get; set; }
 
         /// <summary>
-        /// Gets or sets the budget hours.
+        /// Gets or sets the time budget in seconds.
         /// </summary>
-        public double? BudgetHours { get; set; }
+        public TimeSpan? Budget { get; set; }
 
         /// <summary>
         /// Gets or sets the project.

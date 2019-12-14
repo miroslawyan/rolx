@@ -49,8 +49,8 @@ namespace RolXServer.Account.WebApi.Resource
         public bool IsBillable { get; set; }
 
         /// <summary>
-        /// Gets or sets the budget hours.
+        /// Gets or sets the budget in seconds.
         /// </summary>
-        public double? BudgetHours { get; set; }
+        public long Budget { get; set; }
     }
 }

@@ -1,0 +1,21 @@
+<form *ngIf="entries.length === 1; else total"
+      [formGroup]="form"
+      autocomplete="off">
+
+  <mat-form-field>
+    <input formControlName="duration"
+           matInput
+           [errorStateMatcher]="errorStateMatcher"
+           (blur)="commit()"
+           (keydown.escape)="cancel()"
+           (keydown.Tab)="checkIfLeavingIsAllowed()"
+           min="0">
+    <span matPrefix *ngIf="durationControl.dirty">*</span>
+  </mat-form-field>
+
+</form>
+
+<ng-template #total>
+  {{totalDuration}}
+</ng-template>
+

@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+
 using RolXServer.Common.Util;
 
 namespace RolXServer.Account.WebApi.Mapping
@@ -31,7 +33,7 @@ namespace RolXServer.Account.WebApi.Mapping
                 StartDate = domain.StartDate.ToIsoDate(),
                 EndDate = domain.EndDate.ToIsoDate(),
                 IsBillable = domain.IsBillable,
-                BudgetHours = domain.BudgetHours,
+                Budget = (long)(domain.Budget?.TotalSeconds ?? 0),
             };
         }
 
@@ -56,7 +58,7 @@ namespace RolXServer.Account.WebApi.Mapping
                 StartDate = IsoDate.Parse(resource.StartDate),
                 EndDate = IsoDate.ParseNullable(resource.EndDate),
                 IsBillable = resource.IsBillable,
-                BudgetHours = resource.BudgetHours,
+                Budget = TimeSpan.FromSeconds(resource.Budget),
             };
         }
     }

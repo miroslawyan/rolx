@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RolXServer.Auth.Domain;
+using RolXServer.Common.Util;
 using RolXServer.WorkRecord.Domain;
 using RolXServer.WorkRecord.WebApi.Mapping;
 using RolXServer.WorkRecord.WebApi.Resource;
@@ -54,9 +55,62 @@ namespace RolXServer.WorkRecord.WebApi
                 return this.NotFound();
             }
 
-            return (await this.recordService.GetAllOfMonth(monthDate, this.User.GetUserId()))
+            return (await this.recordService.GetRange(DateRange.ForMonth(monthDate), this.User.GetUserId()))
                 .Select(r => r.ToResource())
                 .ToList();
+        }
+
+        /// <summary>
+        /// Gets all records of the specified range (begin..end].
+        /// </summary>
+        /// <param name="beginDate">The begin date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <returns>
+        /// The requested records.
+        /// </returns>
+        [HttpGet("range/{beginDate}..{endDate}")]
+        public async Task<ActionResult<IEnumerable<Record>>> GetRange(string beginDate, string endDate)
+        {
+            if (!IsoDate.TryParse(beginDate, out var begin) || !IsoDate.TryParse(endDate, out var end))
+            {
+                return this.NotFound();
+            }
+
+            return (await this.recordService.GetRange(new DateRange(begin, end), this.User.GetUserId()))
+                .Select(r => r.ToResource())
+                .ToList();
+        }
+
+        /// <summary>
+        /// Creates the specified record.
+        /// </summary>
+        /// <param name="record">The record.</param>
+        /// <returns>The created record.</returns>
+        [HttpPost]
+        public async Task<ActionResult<Record>> Create(Record record)
+        {
+            return (await this.recordService.Create(record.ToDomain())).ToResource();
+        }
+
+        /// <summary>
+        /// Updates the record with the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="record">The record.</param>
+        /// <returns>
+        /// No content.
+        /// </returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Record record)
+        {
+            if (id == 0 || record.Id != id)
+            {
+                return this.BadRequest();
+            }
+
+            await this.recordService.Update(record.ToDomain());
+
+            return this.NoContent();
         }
 
         private static bool TryParseMonth(string candidate, out DateTime result)

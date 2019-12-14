@@ -30,14 +30,24 @@ namespace RolXServer
         }
 
         /// <summary>
+        /// Gets or sets the phases.
+        /// </summary>
+        public DbSet<Phase> Phases { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the projects.
         /// </summary>
         public DbSet<Project> Projects { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets the phases.
+        /// Gets or sets the records.
         /// </summary>
-        public DbSet<Phase> Phases { get; set; } = null!;
+        public DbSet<Record> Records { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the record entries.
+        /// </summary>
+        public DbSet<RecordEntry> RecordEntries { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the users.
@@ -63,12 +73,16 @@ namespace RolXServer
         /// </remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Project>()
-                .HasIndex(c => c.Number).IsUnique();
+            modelBuilder.Entity<Record>()
+                .HasIndex(r => new { r.Date, r.UserId })
+                .IsUnique();
 
             modelBuilder.Entity<Phase>()
                 .HasIndex(ph => new { ph.ProjectId, ph.Number })
                 .IsUnique();
+
+            modelBuilder.Entity<Project>()
+                .HasIndex(c => c.Number).IsUnique();
 
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.GoogleId).IsUnique();

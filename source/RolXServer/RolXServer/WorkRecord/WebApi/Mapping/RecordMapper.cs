@@ -6,6 +6,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Linq;
+
 using RolXServer.Common.Util;
 
 namespace RolXServer.WorkRecord.WebApi.Mapping
@@ -24,10 +27,34 @@ namespace RolXServer.WorkRecord.WebApi.Mapping
         {
             return new Resource.Record
             {
+                Id = domain.Id,
                 Date = domain.Date.ToIsoDate(),
+                UserId = domain.UserId,
                 DayType = domain.DayType,
                 DayName = domain.DayName,
-                NominalWorkTimeHours = domain.NominalWorkTime.TotalHours,
+                NominalWorkTime = (long)domain.NominalWorkTime.TotalSeconds,
+                Entries = domain.Entries.Select(e => e.ToResource()).ToList(),
+            };
+        }
+
+        /// <summary>
+        /// Converts to domain.
+        /// </summary>
+        /// <param name="resource">The resource.</param>
+        /// <returns>
+        /// The domain.
+        /// </returns>
+        public static Domain.Model.Record ToDomain(this Resource.Record resource)
+        {
+            return new Domain.Model.Record
+            {
+                Id = resource.Id,
+                Date = IsoDate.Parse(resource.Date),
+                UserId = resource.UserId,
+                DayType = resource.DayType,
+                DayName = resource.DayName,
+                NominalWorkTime = TimeSpan.FromSeconds(resource.NominalWorkTime),
+                Entries = resource.Entries.Select(e => e.ToDomain()).ToList(),
             };
         }
     }

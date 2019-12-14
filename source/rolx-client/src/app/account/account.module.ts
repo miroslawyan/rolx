@@ -9,6 +9,7 @@ import {
 } from './pages';
 import {
   PhaseFormComponent,
+  PhaseSelectorComponent,
   PhaseTableComponent,
   ProjectFormComponent,
   ProjectTableComponent,
@@ -25,6 +26,7 @@ import {
     ProjectEditPageComponent,
     ProjectListPageComponent,
     PhaseFormComponent,
+    PhaseSelectorComponent,
     PhaseTableComponent,
     ProjectFormComponent,
     ProjectTableComponent,
@@ -34,6 +36,7 @@ import {
     ProjectDetailPageComponent,
     ProjectEditPageComponent,
     ProjectListPageComponent,
+    PhaseSelectorComponent,
   ],
 })
 export class AccountModule { }
