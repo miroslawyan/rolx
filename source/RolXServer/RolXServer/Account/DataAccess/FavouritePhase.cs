@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Record.cs" company="Christian Ewald">
+// <copyright file="FavouritePhase.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -7,29 +7,16 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 using RolXServer.Auth.DataAccess;
 
-namespace RolXServer.WorkRecord.DataAccess
+namespace RolXServer.Account.DataAccess
 {
     /// <summary>
-    /// A record for a day.
+    /// A favourite phase of a user.
     /// </summary>
-    public sealed class Record
+    public sealed class FavouritePhase
     {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date.
-        /// </summary>
-        [Column(TypeName = "date")]
-        public DateTime Date { get; set; }
-
         /// <summary>
         /// Gets or sets the user identifier.
         /// </summary>
@@ -41,8 +28,13 @@ namespace RolXServer.WorkRecord.DataAccess
         public User? User { get; set; }
 
         /// <summary>
-        /// Gets or sets the entries.
+        /// Gets or sets the phase identifier.
         /// </summary>
-        public List<RecordEntry> Entries { get; set; } = new List<RecordEntry>();
+        public int PhaseId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the phase.
+        /// </summary>
+        public Phase? Phase { get; set; }
     }
 }

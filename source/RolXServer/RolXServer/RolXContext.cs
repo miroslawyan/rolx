@@ -30,6 +30,11 @@ namespace RolXServer
         }
 
         /// <summary>
+        /// Gets or sets the favourite phases.
+        /// </summary>
+        public DbSet<FavouritePhase> FavouritePhases { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the phases.
         /// </summary>
         public DbSet<Phase> Phases { get; set; } = null!;
@@ -73,6 +78,9 @@ namespace RolXServer
         /// </remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<FavouritePhase>()
+                .HasKey(s => new { s.UserId, s.PhaseId });
+
             modelBuilder.Entity<Record>()
                 .HasIndex(r => new { r.Date, r.UserId })
                 .IsUnique();

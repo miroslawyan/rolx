@@ -1,24 +1,25 @@
-<table mat-table #table [dataSource]="rows" class="mat-elevation-z8">
+<table mat-table #table [dataSource]="allPhases" class="mat-elevation-z8">
 
   <ng-container matColumnDef="phase">
     <th mat-header-cell *matHeaderCellDef>Projekt - Phase</th>
 
     <td mat-cell *matCellDef="let phase">
       <span *ngIf="phase else phaseSelector">
+        <rolx-starred-phase-indicator [phase]="phase"></rolx-starred-phase-indicator>
         {{phase.fullName}}
       </span>
 
       <ng-template #phaseSelector>
         <rolx-phase-selector [excluded]="phases"
-                             (selected)="addPhase($event);table.renderRows()"></rolx-phase-selector>
+                             (selected)="addHomegrown($event);table.renderRows()"></rolx-phase-selector>
       </ng-template>
     </td>
 
     <td mat-footer-cell *matFooterCellDef>
       <button mat-icon-button
               aria-label="Phase hinzufügen"
-              (click)="addRow();table.renderRows()"
-              [disabled]="!isAddRowEnabled">
+              (click)="startAdding();table.renderRows()"
+              [disabled]="isAddingPhase">
         <mat-icon>add</mat-icon>
       </button>
     </td>

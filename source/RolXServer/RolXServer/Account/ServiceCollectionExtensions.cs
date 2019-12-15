@@ -34,6 +34,7 @@ namespace RolXServer.Account
         private static IServiceCollection AddDomain(this IServiceCollection services)
         {
             return services
+                .AddScoped<Domain.IFavouriteService, Domain.Detail.FavouriteService>()
                 .AddScoped<Domain.IPhaseService, Domain.Detail.PhaseService>()
                 .AddScoped<Domain.IProjectService, Domain.Detail.ProjectService>();
         }

@@ -13,6 +13,7 @@ import {
   PhaseTableComponent,
   ProjectFormComponent,
   ProjectTableComponent,
+  StarredPhaseIndicatorComponent,
 } from './shared';
 
 @NgModule({
@@ -30,6 +31,7 @@ import {
     PhaseTableComponent,
     ProjectFormComponent,
     ProjectTableComponent,
+    StarredPhaseIndicatorComponent,
   ],
   exports: [
     PhaseEditPageComponent,
@@ -37,6 +39,7 @@ import {
     ProjectEditPageComponent,
     ProjectListPageComponent,
     PhaseSelectorComponent,
+    StarredPhaseIndicatorComponent,
   ],
 })
 export class AccountModule { }

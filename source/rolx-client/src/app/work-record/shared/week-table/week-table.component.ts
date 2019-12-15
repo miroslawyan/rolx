@@ -1,13 +1,14 @@
-import { Component, Input } from '@angular/core';
-import { Phase } from '@app/account/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FavouritePhaseService, Phase } from '@app/account/core';
 import { Record } from '@app/work-record/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'rolx-week-table',
   templateUrl: './week-table.component.html',
   styleUrls: ['./week-table.component.scss'],
 })
-export class WeekTableComponent {
+export class WeekTableComponent implements OnInit, OnDestroy {
 
   readonly weekdays = [
     'monday',
@@ -27,38 +28,69 @@ export class WeekTableComponent {
   @Input()
   records: Record[] = [];
 
-  rows: Phase[] = [];
+  allPhases: Phase[] = [];
 
-  private phasesShadow: Phase[] = [];
+  isAddingPhase = false;
 
-  constructor() { }
+  private inputPhases: Phase[] = [];
+  private favouritePhases: Phase[] = [];
+  private homegrownPhases: Phase[] = [];
+  private subscriptions = new Subscription();
+
+  constructor(private favouritePhaseService: FavouritePhaseService) { }
 
   @Input()
   get phases(): Phase[] {
-    return this.phasesShadow;
+    return this.inputPhases;
   }
   set phases(value: Phase[]) {
-    this.phasesShadow = value
+    this.inputPhases = value;
+    this.homegrownPhases = [];
+
+    this.update();
+  }
+
+  ngOnInit() {
+    this.subscriptions.add(
+      this.favouritePhaseService.favourites$.subscribe(phs => this.favourites = phs),
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  startAdding() {
+    this.isAddingPhase = true;
+    this.update();
+  }
+
+  addHomegrown(phase: Phase) {
+    this.isAddingPhase = false;
+    this.homegrownPhases.push(phase);
+    this.update();
+  }
+
+  private set favourites(value: Phase[]) {
+    this.favouritePhases = value;
+    this.update();
+  }
+
+  private update() {
+    const localPhasesIds = new Set<number>([
+      ...this.inputPhases,
+      ...this.homegrownPhases,
+    ].map(ph => ph.id));
+
+    const nonLocalFavourites = this.favouritePhases.filter(ph => !localPhasesIds.has(ph.id));
+
+    const sortedPhases = [...this.inputPhases, ...nonLocalFavourites]
       .sort((a, b) => a.fullName.localeCompare(b.fullName));
 
-    this.resetRows();
-  }
-
-  get isAddRowEnabled() {
-    return this.rows.length ? this.rows[this.rows.length - 1] != null : true;
-  }
-
-  addRow() {
-    this.rows.push(null);
-  }
-
-  addPhase(phase: Phase) {
-    this.phasesShadow.push(phase);
-    this.resetRows();
-  }
-
-  private resetRows() {
-    this.rows = [...this.phasesShadow];
+    this.allPhases = [...sortedPhases, ...this.homegrownPhases];
+    if (this.isAddingPhase) {
+      this.allPhases.push(null);
+    }
   }
 
 }
