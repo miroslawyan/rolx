@@ -6,10 +6,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @include mat-core();
 
 @import 'theme';
-@import 'app/work-record/shared/month-table/month-table.component.scss-theme';
+@import 'app/work-record/shared/theme';
 
 @mixin apply-theme($theme) {
-  @include month-table-component-theme($theme);
+  @include work-record-shared-theme($theme);
   @include angular-material-theme($theme);
 }
 

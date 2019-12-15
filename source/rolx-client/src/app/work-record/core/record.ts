@@ -32,4 +32,8 @@ export class Record {
     return this.entries.filter(e => e.phaseId === phase.id);
   }
 
+  get isWorkday(): boolean {
+    return this.dayType === DayType.Workday;
+  }
+
 }

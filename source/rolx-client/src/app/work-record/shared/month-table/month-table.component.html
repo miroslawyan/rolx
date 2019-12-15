@@ -20,6 +20,6 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row
       *matRowDef="let record; columns: displayedColumns;"
-      [class.non-workday]="record.dayType !== DayType.Workday"></tr>
+      [class.non-workday]="!record.isWorkday"></tr>
 
 </table>

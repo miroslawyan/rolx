@@ -52,7 +52,7 @@ namespace RolXServer.WorkRecord.Domain.Detail
             yield return new RuleEasterBased("Karfreitag", -2);
             yield return new RuleEasterBased("Ostern", 0);
             yield return new RuleEasterBased("Ostermontag", 1);
-            yield return new RuleEasterBased("Christi Himmelfahrt", 39);
+            yield return new RuleEasterBased("Auffahrt", 39);
             yield return new RuleEasterBased("Pfingsten", 49);
             yield return new RuleEasterBased("Pfingstmontag", 50);
         }

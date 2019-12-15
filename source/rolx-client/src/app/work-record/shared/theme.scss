@@ -1,13 +1,14 @@
 @import '~@angular/material/theming';
 
 // see https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
-@mixin month-table-component-theme($theme) {
+@mixin work-record-shared-theme($theme) {
 
   $background: map-get($theme, background);
+  $nonWorkdayBackground: mat-color($background, disabled-button);
 
-  rolx-month-table {
+  table {
     .non-workday {
-      background-color: mat-color($background, disabled-button);
+      background-color: $nonWorkdayBackground;
     }
   }
 

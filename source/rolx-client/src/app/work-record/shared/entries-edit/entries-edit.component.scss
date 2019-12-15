@@ -1,6 +1,11 @@
-mat-form-field {
-  margin-left: 1em;
-  width: 5em;
+:host {
+  display: inline-block;
+}
+
+// https://stackoverflow.com/questions/56302795/how-to-use-angular-material-form-field-and-flex-layout
+:host ::ng-deep .mat-form-field-infix {
+  // width: auto !important;
+  width: unset !important;
 }
 
 input {

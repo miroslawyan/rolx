@@ -2,14 +2,28 @@ table {
   width: 100%;
 }
 
-th.day {
+th.day-header, td.day {
   width: 1%;
+}
 
-  span {
-    margin-left: 1.5em;
+td.day {
+  span, rolx-entries-edit {
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    width: 5em;
+  }
+
+  &:last-child {
+    span, rolx-entries-edit {
+      padding-right: 0;
+    }
   }
 }
 
 .day {
   text-align: right;
+}
+
+.day-header {
+  text-align: center;
 }
