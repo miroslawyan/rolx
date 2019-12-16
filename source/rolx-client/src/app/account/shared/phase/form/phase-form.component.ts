@@ -32,7 +32,6 @@ export class PhaseFormComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    console.log(this.phase);
     this.form.patchValue(this.phase);
     this.formBudget = this.phase.budget;
   }
@@ -46,7 +45,6 @@ export class PhaseFormComponent implements OnInit {
     const formValue = value && !value.isZero
       ? value.hours.toLocaleString(this.locale, { maximumFractionDigits: 1, useGrouping: false })
       : null;
-    console.log('formValue', formValue);
     this.form.controls.budget.setValue(formValue);
   }
 
