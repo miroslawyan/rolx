@@ -43,7 +43,7 @@ export class PhaseFormComponent implements OnInit {
   }
 
   set formBudget(value: Duration) {
-    const formValue = !value.isZero
+    const formValue = value && !value.isZero
       ? value.hours.toLocaleString(this.locale, { maximumFractionDigits: 1, useGrouping: false })
       : null;
     console.log('formValue', formValue);
