@@ -1,4 +1,4 @@
-import { UserData } from '@app/core/auth/user.data';
+import { UserData } from '@app/auth/core/user.data';
 
 export interface AuthenticatedUserData extends UserData {
   bearerToken: string;

@@ -7,6 +7,7 @@ import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
 import { CoreModule } from '@app/core';
 import { MainModule } from '@app/main';
+import { AuthModule } from './auth/auth.module';
 
 registerLocaleData(localeDeCh);
 
@@ -16,6 +17,7 @@ registerLocaleData(localeDeCh);
   ],
   imports: [
     AppRoutingModule,
+    AuthModule,
     BrowserAnimationsModule,
     BrowserModule,
     CoreModule,

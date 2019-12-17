@@ -19,6 +19,7 @@ import {
   MatSortModule,
   MatTableModule,
   MatToolbarModule,
+  MatTooltipModule,
 } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { RouterModule } from '@angular/router';
@@ -46,6 +47,7 @@ import { RouterModule } from '@angular/router';
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     RouterModule,
   ],
@@ -70,6 +72,7 @@ import { RouterModule } from '@angular/router';
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     RouterModule,
   ],

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, SignInState } from '@app/core/auth';
+import { AuthService, SignInState } from '@app/auth/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

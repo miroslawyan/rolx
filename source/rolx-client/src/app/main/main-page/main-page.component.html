@@ -21,9 +21,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>
-        Willkommen {{authService.currentUser.firstName}} {{authService.currentUser.lastName}}
-      </span>
+      <rolx-user-avatar></rolx-user-avatar>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

@@ -1,4 +1,4 @@
-import { Role } from '@app/core/auth/role';
+import { Role } from '@app/auth/core/role';
 
 export interface UserData {
   id: string;

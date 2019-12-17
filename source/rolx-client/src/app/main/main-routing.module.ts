@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountRoutes } from '@app/account';
-import { AuthGuard, AuthResolve } from '@app/core/auth';
+import { AuthGuard, AuthResolve } from '@app/auth/core';
 import { SetupResolve } from '@app/core/setup';
 import { WorkRecordRoutes } from '@app/work-record';
 import { MainPageComponent } from './main-page/main-page.component';
