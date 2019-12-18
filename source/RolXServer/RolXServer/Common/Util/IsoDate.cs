@@ -55,6 +55,26 @@ namespace RolXServer.Common.Util
         }
 
         /// <summary>
+        /// Tries to parse the specified ISO-date.
+        /// </summary>
+        /// <param name="isoDate">The ISO-date.</param>
+        /// <param name="result">The result.</param>
+        /// <returns><c>true</c> if the parsing succeeded; otherwise <c>false</c>.</returns>
+        public static bool TryParseNullable(string? isoDate, out DateTime? result)
+        {
+            if (isoDate == null)
+            {
+                result = null;
+                return true;
+            }
+
+            var returnValue = TryParse(isoDate, out var parsed);
+
+            result = parsed;
+            return returnValue;
+        }
+
+        /// <summary>
         /// Parses the specified ISO-date.
         /// </summary>
         /// <param name="isoDate">The ISO-date.</param>

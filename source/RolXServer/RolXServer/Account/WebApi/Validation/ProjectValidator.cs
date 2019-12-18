@@ -52,6 +52,9 @@ namespace RolXServer.Account.WebApi.Validation
             this.RuleFor(p => p.Phases)
                 .Must(this.HaveUniqueNumbers)
                 .MustAsync(this.BeOfCurrentProject);
+
+            this.RuleForEach(p => p.Phases)
+                .SetValidator(_ => new PhaseValidator());
         }
 
         private async Task<bool> BeUnique(Project candidate, string newNumber, PropertyValidatorContext context, CancellationToken token)

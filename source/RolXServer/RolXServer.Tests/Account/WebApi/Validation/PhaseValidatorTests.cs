@@ -6,7 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using FluentAssertions;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
 using RolXServer.Account.WebApi.Resource;

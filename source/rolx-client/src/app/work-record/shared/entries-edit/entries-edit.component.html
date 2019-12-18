@@ -1,4 +1,4 @@
-<form *ngIf="entries.length === 1; else total"
+<form *ngIf="isEditable; else total"
       [formGroup]="form"
       autocomplete="off">
 
@@ -16,6 +16,7 @@
 </form>
 
 <ng-template #total>
-  {{totalDuration}}
+  <span *ngIf="isOpen">
+    {{totalDuration}}
+  </span>
 </ng-template>
-

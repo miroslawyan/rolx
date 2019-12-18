@@ -44,8 +44,9 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     return this.inputPhases;
   }
   set phases(value: Phase[]) {
-    this.inputPhases = value;
+    this.inputPhases = value.filter(ph => this.records.some(r => ph.isOpenAt(r.date)));
     this.homegrownPhases = [];
+    this.isAddingPhase = false;
 
     this.update();
   }

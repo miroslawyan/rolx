@@ -19,7 +19,7 @@ namespace RolXServer.Account.Domain.Detail
 {
     public sealed class ProjectServiceTests
     {
-        private static Project DummyProject => new Project
+        private static Project SeedProject => new Project
         {
             Id = 1,
             Number = "1",
@@ -42,7 +42,7 @@ namespace RolXServer.Account.Domain.Detail
         [Test]
         public async Task Update_ExistingPhaseChanged()
         {
-            var project = DummyProject;
+            var project = SeedProject;
             var contextFactory = InMemory.ContextFactory(project);
 
             using (var context = contextFactory())
@@ -66,7 +66,7 @@ namespace RolXServer.Account.Domain.Detail
         [Test]
         public async Task Update_ExistingPhaseRemoved()
         {
-            var project = DummyProject;
+            var project = SeedProject;
             var contextFactory = InMemory.ContextFactory(project);
 
             using (var context = contextFactory())
@@ -89,7 +89,7 @@ namespace RolXServer.Account.Domain.Detail
         [Test]
         public async Task Update_NewPhaseAdded()
         {
-            var project = DummyProject;
+            var project = SeedProject;
             var contextFactory = InMemory.ContextFactory(project);
 
             using (var context = contextFactory())

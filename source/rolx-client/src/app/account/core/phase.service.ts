@@ -15,8 +15,12 @@ export class PhaseService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAll(): Observable<Phase[]> {
-    return this.httpClient.get<object[]>(PhaseUrl).pipe(
+  getAll(unlessEndedBefore: moment.Moment = null): Observable<Phase[]> {
+    const params = unlessEndedBefore ? {
+        unlessEndedBeforeDate: IsoDate.fromMoment(unlessEndedBefore),
+    } : null;
+
+    return this.httpClient.get<object[]>(PhaseUrl, { params }).pipe(
       mapPlainToClassArray(Phase),
     );
   }

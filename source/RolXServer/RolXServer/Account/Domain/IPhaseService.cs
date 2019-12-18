@@ -20,10 +20,13 @@ namespace RolXServer.Account.Domain
     public interface IPhaseService
     {
         /// <summary>
-        /// Gets all phases.
+        /// Gets all phases open in the specified range (begin..end].
         /// </summary>
-        /// <returns>The phases.</returns>
-        Task<IEnumerable<Phase>> GetAll();
+        /// <param name="unlessEndedBefore">The unless ended before date.</param>
+        /// <returns>
+        /// The phases.
+        /// </returns>
+        Task<IEnumerable<Phase>> GetAll(DateTime? unlessEndedBefore);
 
         /// <summary>
         /// Gets the suitable phases for the specified user at the specified date.

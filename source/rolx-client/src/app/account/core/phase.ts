@@ -17,4 +17,9 @@ export class Phase {
 
   @TransformAsDuration()
   budget: Duration;
+
+  isOpenAt(date: moment.Moment): boolean {
+    return date >= this.startDate &&
+      (this.endDate == null || date <= this.endDate);
+  }
 }

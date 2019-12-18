@@ -11,6 +11,8 @@
 
       <ng-template #phaseSelector>
         <rolx-phase-selector [excluded]="phases"
+                             [begin]="records[0]?.date"
+                             [end]="records[records.length-1]?.date"
                              (selected)="addHomegrown($event);table.renderRows()"></rolx-phase-selector>
       </ng-template>
     </td>

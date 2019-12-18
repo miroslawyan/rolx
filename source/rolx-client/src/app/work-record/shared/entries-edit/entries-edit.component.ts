@@ -30,10 +30,6 @@ export class EntriesEditComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private workRecordService: WorkRecordService) { }
 
-  get durationControl() {
-    return this.form.controls.duration;
-  }
-
   ngOnInit() {
     this.entries = this.record.entriesOf(this.phase);
     if (!this.entries.length) {
@@ -45,6 +41,18 @@ export class EntriesEditComponent implements OnInit {
     }
 
     this.cancel();
+  }
+
+  get durationControl() {
+    return this.form.controls.duration;
+  }
+
+  get isEditable(): boolean {
+    return this.entries.length === 1 && this.isOpen;
+  }
+
+  get isOpen(): boolean {
+    return this.phase.isOpenAt(this.record.date);
   }
 
   get totalDuration(): Duration {

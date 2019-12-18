@@ -42,11 +42,19 @@ namespace RolXServer.Account.WebApi
         /// <summary>
         /// Gets all phases.
         /// </summary>
-        /// <returns>All phases.</returns>
+        /// <param name="unlessEndedBeforeDate">The unless ended before date.</param>
+        /// <returns>
+        /// All phases.
+        /// </returns>
         [HttpGet]
-        public async Task<IEnumerable<Phase>> GetAll()
+        public async Task<ActionResult<IEnumerable<Phase>>> GetAll([FromQuery] string? unlessEndedBeforeDate)
         {
-            return (await this.phaseService.GetAll()).Select(p => p.ToResource());
+            if (!IsoDate.TryParseNullable(unlessEndedBeforeDate, out var unlessEndedBefore))
+            {
+                return this.BadRequest("unlessEndedBeforeDate must be an ISO-date");
+            }
+
+            return (await this.phaseService.GetAll(unlessEndedBefore)).Select(p => p.ToResource()).ToList();
         }
 
         /// <summary>

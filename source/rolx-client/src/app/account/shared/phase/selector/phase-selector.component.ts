@@ -1,38 +1,42 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Phase } from '@app/account/core';
 import { PhaseService } from '@app/account/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import moment from 'moment';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-phase-selector',
   templateUrl: './phase-selector.component.html',
   styleUrls: ['./phase-selector.component.scss'],
 })
-export class PhaseSelectorComponent implements OnInit {
+export class PhaseSelectorComponent implements OnInit, OnDestroy {
 
+  private subscription = new Subscription();
   private phaseShadow: Phase;
+  private begin$ = new BehaviorSubject<moment.Moment>(moment('1900-01-01'));
   private allPhases$ = new BehaviorSubject<Phase[]>([]);
   private filterText$ = new BehaviorSubject<string>('');
 
   @Output()
   selected = new EventEmitter<Phase>();
-  candidates$: Observable<Phase[]>;
 
   @Input()
   excluded: Phase[] = [];
 
+  @Input()
+  end = moment('2999-12-31');
+
+  candidates$: Observable<Phase[]>;
+
   constructor(private phaseService: PhaseService) {}
 
-  ngOnInit() {
-    const excludedIds = new Set(this.excluded.map(ph => ph.id));
-    this.phaseService.getAll().pipe(
-      map(phs => phs.filter(ph => !excludedIds.has(ph.id))),
-    ).subscribe(phs => this.allPhases$.next(phs));
-
-    this.candidates$ = combineLatest(this.allPhases$, this.filterText$).pipe(
-      map(([phases, filterText]) => this.filterByFullName(phases, filterText).slice(0, 5)),
-    );
+  @Input()
+  get begin(): moment.Moment {
+    return this.begin$.value;
+  }
+  set begin(value: moment.Moment) {
+    this.begin$.next(value);
   }
 
   get phase() {
@@ -51,13 +55,31 @@ export class PhaseSelectorComponent implements OnInit {
     }
   }
 
+  ngOnInit() {
+    const excludedIds = new Set(this.excluded.map(ph => ph.id));
+    this.subscription.add(this.begin$.pipe(
+      switchMap(b => this.phaseService.getAll(b)),
+      map(phs => phs.filter(ph => !excludedIds.has(ph.id))),
+      map(phs => phs.sort((a, b) => a.fullName.localeCompare(b.fullName))),
+    ).subscribe(this.allPhases$));
+
+    this.candidates$ = combineLatest(this.allPhases$, this.filterText$).pipe(
+      map(([phases, filterText]) => this.filterByEndAndFullName(phases, filterText).slice(0, 5)),
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   fullNameOf(phase: Phase): string {
     return phase ? phase.fullName : '';
   }
 
-  private filterByFullName(phases: Phase[], filterText: string): Phase[] {
+  private filterByEndAndFullName(phases: Phase[], filterText: string): Phase[] {
     filterText = filterText.toLocaleLowerCase();
-    return phases.filter(ph => ph.fullName.toLocaleLowerCase().includes(filterText));
+    return phases
+      .filter(ph => ph.startDate <= this.end && ph.fullName.toLocaleLowerCase().includes(filterText));
   }
 
 }

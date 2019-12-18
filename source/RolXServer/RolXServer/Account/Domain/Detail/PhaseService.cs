@@ -33,14 +33,22 @@ namespace RolXServer.Account.Domain.Detail
         }
 
         /// <summary>
-        /// Gets all phases.
+        /// Gets all phases open in the specified range (begin..end].
         /// </summary>
+        /// <param name="unlessEndedBefore">The unless ended before date.</param>
         /// <returns>
         /// The phases.
         /// </returns>
-        public async Task<IEnumerable<Phase>> GetAll()
+        public async Task<IEnumerable<Phase>> GetAll(DateTime? unlessEndedBefore)
         {
-            return await this.context.Phases.ToListAsync();
+            var query = this.context.Phases.AsQueryable();
+
+            if (unlessEndedBefore.HasValue)
+            {
+                query = query.Where(ph => !ph.EndDate.HasValue || ph.EndDate.Value >= unlessEndedBefore.Value);
+            }
+
+            return await query.ToListAsync();
         }
 
         /// <summary>
