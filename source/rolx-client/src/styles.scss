@@ -13,8 +13,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   @include angular-material-theme($theme);
 }
 
-@include apply-theme($rolx-dark-theme);
-//@include apply-theme($rolx-light-theme);
+.bright-theme {
+  @include apply-theme($rolx-light-theme);
+}
+
+.dark-theme {
+  @include apply-theme($rolx-dark-theme);
+}
 
 // disable all spin buttons on number inputs
 input[type=number]::-webkit-inner-spin-button,

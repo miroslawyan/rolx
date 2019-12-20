@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { Theme, ThemeService } from './core/theme';
 
 @Component({
   selector: 'rolx-root',
@@ -6,5 +8,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'rolx';
+
+  themeClass$ = this.themeService.currentTheme$.pipe(map(this.themeClassMapper));
+
+  constructor(public themeService: ThemeService) { }
+
+  themeClassMapper(theme: Theme): string {
+    switch (theme) {
+      case Theme.bright:
+        return 'bright-theme';
+      case Theme.dark:
+        return 'dark-theme';
+      default:
+        console.error('Unknown theme.');
+    }
+  }
+
 }
