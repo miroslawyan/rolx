@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject, bindCallback, forkJoin, from, Observable, Subject } from 'rxjs';
-import { catchError, filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, bindCallback, forkJoin, from, Observable, of, Subject } from 'rxjs';
+import { catchError, filter, map, switchMap, take, tap, timeout } from 'rxjs/operators';
 
 import { enterZone } from '@app/core/util';
 import { CurrentUser } from './current-user';
@@ -41,6 +41,8 @@ export class AuthService {
     console.log('--- AuthService.initialize()');
 
     const firstGoogleUser = this.googleUserSubject.pipe(
+      timeout(500),
+      catchError(() => of(null)),
       take(1),
     );
 

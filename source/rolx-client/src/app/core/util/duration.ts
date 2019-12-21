@@ -5,7 +5,13 @@ export class Duration {
   private static readonly SecondsPerMinute = 60;
 
   static readonly Zero = new Duration();
-  static readonly Pattern = /^(?<sign>-?)((?<hours>\d+):(?<minutes>[0-5]\d)|(?<decimalHours>\d*\.?\d*))$/;
+  static readonly Pattern = /^(-?)(?:(\d+):([0-5]\d|\d)|(\d*\.?\d*))$/;
+  static readonly PatternGroups = {
+    Sign: 1,
+    Hours: 2,
+    Minutes: 3,
+    DecimalHours: 4,
+  };
 
   constructor(public readonly seconds: number = 0) {
   }
@@ -29,15 +35,15 @@ export class Duration {
       return new Duration(NaN);
     }
 
-    if (match.groups.decimalHours) {
+    if (match[Duration.PatternGroups.DecimalHours]) {
       return Duration.fromHours(Number.parseFloat(time));
     }
 
-    const hours = Number.parseInt(match.groups.hours, 10);
-    const minutes = Number.parseInt(match.groups.minutes, 10);
+    const hours = Number.parseInt(match[Duration.PatternGroups.Hours], 10);
+    const minutes = Number.parseInt(match[Duration.PatternGroups.Minutes], 10);
 
     const seconds = Math.round(hours * Duration.SecondsPerHour + minutes * Duration.SecondsPerMinute);
-    return new Duration(match.groups.sign ? -seconds : seconds);
+    return new Duration(match[Duration.PatternGroups.Sign] ? -seconds : seconds);
   }
 
   get hours(): number {
