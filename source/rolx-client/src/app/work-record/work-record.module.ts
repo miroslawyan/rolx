@@ -11,6 +11,7 @@ import {
   MonthTableComponent,
   WeekTableComponent,
 } from './shared';
+import { WeekTableCellComponent } from './shared/week-table-cell/week-table-cell.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import {
     MonthTableComponent,
     WeekPageComponent,
     WeekTableComponent,
+    WeekTableCellComponent,
   ],
   exports: [
     MonthPageComponent,

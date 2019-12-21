@@ -1,0 +1,17 @@
+<!--suppress BadExpressionStatementJS -->
+<div (keydown.enter)="down()"
+     (keydown.arrowUp)="up(); false"
+     (keydown.arrowDown)="down(); false">
+
+  <rolx-entries-edit *ngIf="isEditable; else total"
+                     [record]="record"
+                     [entry]="entries[0]">
+  </rolx-entries-edit>
+
+  <ng-template #total>
+    <span *ngIf="isPhaseOpen">
+      {{totalDuration}}
+    </span>
+  </ng-template>
+
+</div>

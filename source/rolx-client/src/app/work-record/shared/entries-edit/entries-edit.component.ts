@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material';
-import { Phase } from '@app/account/core';
 import { Duration, DurationValidators } from '@app/core/util';
 import { Record, RecordEntry, WorkRecordService } from '@app/work-record/core';
 
@@ -12,13 +11,15 @@ import { Record, RecordEntry, WorkRecordService } from '@app/work-record/core';
 })
 export class EntriesEditComponent implements OnInit {
 
+  @ViewChild('input', {static: false})
+  private inputElement: ElementRef;
+
   @Input()
   record: Record;
 
   @Input()
-  phase: Phase;
+  entry: RecordEntry;
 
-  entries: RecordEntry[] = [];
   errorStateMatcher = new ShowOnDirtyErrorStateMatcher();
 
   form = this.fb.group({
@@ -31,15 +32,6 @@ export class EntriesEditComponent implements OnInit {
   constructor(private fb: FormBuilder, private workRecordService: WorkRecordService) { }
 
   ngOnInit() {
-    this.entries = this.record.entriesOf(this.phase);
-    if (!this.entries.length) {
-      const entry = new RecordEntry();
-      entry.phaseId = this.phase.id;
-
-      this.entries.push(entry);
-      this.record.entries.push(entry);
-    }
-
     this.cancel();
   }
 
@@ -47,18 +39,8 @@ export class EntriesEditComponent implements OnInit {
     return this.form.controls.duration;
   }
 
-  get isEditable(): boolean {
-    return this.entries.length === 1 && this.isOpen;
-  }
-
-  get isOpen(): boolean {
-    return this.phase.isOpenAt(this.record.date);
-  }
-
-  get totalDuration(): Duration {
-    return new Duration(
-      this.entries.reduce(
-        (sum, e) => sum + e.duration.hours, 0));
+  enter() {
+    this.inputElement.nativeElement.focus();
   }
 
   checkIfLeavingIsAllowed() {
@@ -66,7 +48,7 @@ export class EntriesEditComponent implements OnInit {
   }
 
   commit() {
-    if (this.entries.length !== 1 || !this.durationControl.dirty) {
+    if (!this.durationControl.dirty) {
       return;
     }
 
@@ -83,23 +65,18 @@ export class EntriesEditComponent implements OnInit {
       return;
     }
 
-    const targetEntry = this.entries[0];
-    if (duration.isSame(targetEntry.duration)) {
+    if (duration.isSame(this.entry.duration)) {
       this.cancel();
       return;
     }
 
-    targetEntry.duration = duration;
+    this.entry.duration = duration;
     this.workRecordService.update(this.record)
       .subscribe(() => this.cancel());
   }
 
   cancel() {
-    if (this.entries.length !== 1) {
-      return;
-    }
-
-    const duration = this.entries[0].duration;
+    const duration = this.entry.duration;
     this.durationControl.reset(!duration.isZero ? duration : '');
   }
 
