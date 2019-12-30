@@ -1,8 +1,8 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material';
 import { Duration, DurationValidators } from '@app/core/util';
-import { Record, RecordEntry, WorkRecordService } from '@app/work-record/core';
+import { RecordEntry } from '@app/work-record/core';
 
 @Component({
   selector: 'rolx-entries-edit',
@@ -11,14 +11,25 @@ import { Record, RecordEntry, WorkRecordService } from '@app/work-record/core';
 })
 export class EntriesEditComponent implements OnInit {
 
+  private entryShadow: RecordEntry | null = null;
+
   @ViewChild('input', {static: false})
   private inputElement: ElementRef;
 
   @Input()
-  record: Record;
+  get entry() {
+    return this.entryShadow;
+  }
+  set entry(value: RecordEntry | null) {
+    this.entryShadow = value;
+    this.cancel();
+  }
 
-  @Input()
-  entry: RecordEntry;
+  @Output()
+  more = new EventEmitter();
+
+  @Output()
+  changed = new EventEmitter<RecordEntry>();
 
   errorStateMatcher = new ShowOnDirtyErrorStateMatcher();
 
@@ -29,7 +40,7 @@ export class EntriesEditComponent implements OnInit {
     ]],
   });
 
-  constructor(private fb: FormBuilder, private workRecordService: WorkRecordService) { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.cancel();
@@ -70,13 +81,13 @@ export class EntriesEditComponent implements OnInit {
       return;
     }
 
-    this.entry.duration = duration;
-    this.workRecordService.update(this.record)
-      .subscribe(() => this.cancel());
+    const editedEntry = new RecordEntry();
+    editedEntry.duration = duration;
+    this.changed.emit(editedEntry);
   }
 
   cancel() {
-    const duration = this.entry.duration;
+    const duration = this.entry ? this.entry.duration : Duration.Zero;
     this.durationControl.reset(!duration.isZero ? duration : '');
   }
 

@@ -17,11 +17,6 @@ namespace RolXServer.WorkRecord.Domain.Model
     public sealed class Record
     {
         /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// Gets or sets the date.
         /// </summary>
         public DateTime Date { get; set; }

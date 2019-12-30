@@ -7,8 +7,6 @@ import { RecordEntry } from './record-entry';
 
 export class Record {
 
-  id: number;
-
   @TransformAsIsoDate()
   date: moment.Moment;
 
@@ -28,12 +26,25 @@ export class Record {
         (sum, e) => sum + e.duration.seconds, 0));
   }
 
+  get isWorkday(): boolean {
+    return this.dayType === DayType.Workday;
+  }
+
   entriesOf(phase: Phase): RecordEntry[] {
     return this.entries.filter(e => e.phaseId === phase.id);
   }
 
-  get isWorkday(): boolean {
-    return this.dayType === DayType.Workday;
+  replaceEntriesOfPhase(phase: Phase, entries: RecordEntry[]): Record {
+    const clone = new Record();
+    Object.assign(clone, this);
+
+    entries.forEach(e => e.phaseId = phase.id);
+
+    clone.entries = this.entries
+      .filter(e => e.phaseId !== phase.id)
+      .concat(...entries);
+
+    return clone;
   }
 
 }

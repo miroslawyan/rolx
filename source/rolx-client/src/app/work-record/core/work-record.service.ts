@@ -23,10 +23,6 @@ export class WorkRecordService {
     this.updateSequence.next(1);
   }
 
-  private static UrlWithId(id: number) {
-    return WorkRecordUrl + '/' + id;
-  }
-
   getMonth(month: moment.Moment): Observable<Record[]> {
     const url = WorkRecordUrl + '/month/' + month.format('YYYY-MM');
     return this.httpClient.get(url).pipe(
@@ -52,7 +48,7 @@ export class WorkRecordService {
     this.updateSequence = nextSequence;
 
     return currentSequence.pipe(
-      switchMap(() => record.id === 0 ? this.internalCreate(record) : this.internalUpdate(record)),
+      switchMap(() => this.internalUpdate(record)),
       tap(() => nextSequence.next(0)),
       catchError(e => {
         nextSequence.next(0);
@@ -62,15 +58,8 @@ export class WorkRecordService {
   }
 
   private internalUpdate(record: Record): Observable<Record> {
-    return this.httpClient.put(WorkRecordService.UrlWithId(record.id), classToPlain(record)).pipe(
-      mapTo(record),
-      catchError(e => throwError(new ErrorResponse(e))),
-    );
-  }
-
-  private internalCreate(record: Record): Observable<Record> {
-    return this.httpClient.post<any>(WorkRecordUrl, classToPlain(record)).pipe(
-      tap(result => record.id = result.id),
+    const url = WorkRecordUrl + '/' + IsoDate.fromMoment(record.date);
+    return this.httpClient.put(url, classToPlain(record)).pipe(
       mapTo(record),
       catchError(e => throwError(new ErrorResponse(e))),
     );

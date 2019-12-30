@@ -27,7 +27,6 @@ namespace RolXServer.WorkRecord.WebApi.Mapping
         {
             return new Resource.Record
             {
-                Id = domain.Id,
                 Date = domain.Date.ToIsoDate(),
                 UserId = domain.UserId,
                 DayType = domain.DayType,
@@ -48,7 +47,6 @@ namespace RolXServer.WorkRecord.WebApi.Mapping
         {
             return new Domain.Model.Record
             {
-                Id = resource.Id,
                 Date = IsoDate.Parse(resource.Date),
                 UserId = resource.UserId,
                 DayType = resource.DayType,

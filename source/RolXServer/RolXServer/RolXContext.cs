@@ -50,11 +50,6 @@ namespace RolXServer
         public DbSet<Record> Records { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets the record entries.
-        /// </summary>
-        public DbSet<RecordEntry> RecordEntries { get; set; } = null!;
-
-        /// <summary>
         /// Gets or sets the users.
         /// </summary>
         public DbSet<User> Users { get; set; } = null!;
@@ -84,6 +79,9 @@ namespace RolXServer
             modelBuilder.Entity<Record>()
                 .HasIndex(r => new { r.Date, r.UserId })
                 .IsUnique();
+
+            modelBuilder.Entity<RecordEntry>()
+                .ToTable("RecordEntries");
 
             modelBuilder.Entity<Phase>()
                 .HasIndex(ph => new { ph.ProjectId, ph.Number })

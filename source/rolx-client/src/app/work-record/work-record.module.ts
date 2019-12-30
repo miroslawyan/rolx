@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AccountModule } from '@app/account';
 import { AppImportModule } from '@app/app-import.module';
+import { WeekTableCellComponent } from '@app/work-record/shared/week-table/cell/week-table-cell.component';
 import {
   MonthPageComponent,
   WeekPageComponent,
@@ -9,9 +10,9 @@ import {
 import {
   EntriesEditComponent,
   MonthTableComponent,
+  MultiEntriesDialogComponent,
   WeekTableComponent,
 } from './shared';
-import { WeekTableCellComponent } from './shared/week-table-cell/week-table-cell.component';
 
 @NgModule({
   imports: [
@@ -23,9 +24,13 @@ import { WeekTableCellComponent } from './shared/week-table-cell/week-table-cell
     EntriesEditComponent,
     MonthPageComponent,
     MonthTableComponent,
+    MultiEntriesDialogComponent,
     WeekPageComponent,
-    WeekTableComponent,
     WeekTableCellComponent,
+    WeekTableComponent,
+  ],
+  entryComponents: [
+    MultiEntriesDialogComponent,
   ],
   exports: [
     MonthPageComponent,

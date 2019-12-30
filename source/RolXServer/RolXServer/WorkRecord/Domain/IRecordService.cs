@@ -31,13 +31,6 @@ namespace RolXServer.WorkRecord.Domain
         Task<IEnumerable<Record>> GetRange(DateRange range, Guid userId);
 
         /// <summary>
-        /// Creates the specified record.
-        /// </summary>
-        /// <param name="record">The record.</param>
-        /// <returns>The created record.</returns>
-        Task<Record> Create(Record record);
-
-        /// <summary>
         /// Updates the specified record.
         /// </summary>
         /// <param name="record">The record.</param>

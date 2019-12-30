@@ -70,52 +70,39 @@ namespace RolXServer.WorkRecord.Domain.Detail
         }
 
         /// <summary>
-        /// Creates the specified record.
-        /// </summary>
-        /// <param name="record">The record.</param>
-        /// <returns>The created record.</returns>
-        public async Task<Record> Create(Record record)
-        {
-            if (record.Id != 0)
-            {
-                throw new ArgumentException("Record must not have an id while creating", nameof(record));
-            }
-
-            record.Sanitize();
-
-            var entity = record.ToEntity();
-
-            this.dbContext.Add(entity);
-            await this.dbContext.SaveChangesAsync();
-
-            record.Id = entity.Id;
-            return record;
-        }
-
-        /// <summary>
         /// Updates the specified record.
         /// </summary>
         /// <param name="record">The record.</param>
         /// <returns>The async task.</returns>
         public async Task Update(Record record)
         {
-            if (record.Id == 0)
-            {
-                throw new ArgumentException("Record must have a valid id while updating", nameof(record));
-            }
-
             record.Sanitize();
 
-            this.dbContext.Records.Update(record.ToEntity());
+            var entity = await this.dbContext.Records
+                .Include(r => r.Entries)
+                .SingleOrDefaultAsync(r => r.Date == record.Date && r.UserId == record.UserId);
 
-            var entryIds = record.Entries
-                .Select(e => e.Id);
+            if (record.Entries.Count == 0)
+            {
+                if (entity != null)
+                {
+                    this.dbContext.Records.Remove(entity);
+                    await this.dbContext.SaveChangesAsync();
+                }
 
-            this.dbContext.RemoveRange(
-                this.dbContext.Records
-                .Where(r => r.Id == record.Id)
-                .SelectMany(p => p.Entries)
-                .Where(e => !entryIds.Contains(e.Id)));
+                return;
+            }
+
+            if (entity != null)
+            {
+                entity.Entries.Clear();
+                entity.Entries = record.Entries;
+            }
+            else
+            {
+                entity = record.ToEntity();
+                this.dbContext.Records.Add(entity);
+            }
 
             await this.dbContext.SaveChangesAsync();
         }

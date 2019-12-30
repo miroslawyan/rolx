@@ -24,9 +24,11 @@ namespace RolXServer.WorkRecord.WebApi.Mapping
         {
             return new Resource.RecordEntry
             {
-                Id = domain.Id,
                 PhaseId = domain.PhaseId,
                 Duration = (long)domain.Duration.TotalSeconds,
+                Begin = (int?)domain.Begin?.TotalSeconds,
+                Pause = (int?)domain.Pause?.TotalSeconds,
+                Comment = domain.Comment,
             };
         }
 
@@ -41,9 +43,11 @@ namespace RolXServer.WorkRecord.WebApi.Mapping
         {
             return new DataAccess.RecordEntry
             {
-                Id = resource.Id,
-                Duration = TimeSpan.FromSeconds(resource.Duration),
                 PhaseId = resource.PhaseId,
+                Duration = TimeSpan.FromSeconds(resource.Duration),
+                Begin = resource.Begin.HasValue ? TimeSpan.FromSeconds(resource.Begin.Value) : (TimeSpan?)null,
+                Pause = resource.Pause.HasValue && resource.Pause > 0 ? TimeSpan.FromSeconds(resource.Pause.Value) : (TimeSpan?)null,
+                Comment = resource.Comment ?? string.Empty,
             };
         }
     }

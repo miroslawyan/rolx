@@ -12,6 +12,9 @@
            (keydown.escape)="cancel()"
            (keydown.Tab)="checkIfLeavingIsAllowed()"
            min="0">
+    <button mat-icon-button matPrefix (click)="more.emit()" tabindex="-1">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
     <span matPrefix *ngIf="durationControl.dirty">*</span>
   </mat-form-field>
 

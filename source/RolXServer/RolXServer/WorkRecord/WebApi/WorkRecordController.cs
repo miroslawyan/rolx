@@ -82,30 +82,24 @@ namespace RolXServer.WorkRecord.WebApi
         }
 
         /// <summary>
-        /// Creates the specified record.
-        /// </summary>
-        /// <param name="record">The record.</param>
-        /// <returns>The created record.</returns>
-        [HttpPost]
-        public async Task<ActionResult<Record>> Create(Record record)
-        {
-            return (await this.recordService.Create(record.ToDomain())).ToResource();
-        }
-
-        /// <summary>
         /// Updates the record with the specified identifier.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="date">The date.</param>
         /// <param name="record">The record.</param>
         /// <returns>
         /// No content.
         /// </returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Record record)
+        [HttpPut("{date}")]
+        public async Task<IActionResult> Update(string date, Record record)
         {
-            if (id == 0 || record.Id != id)
+            if (!IsoDate.TryParse(date, out var theDate))
             {
-                return this.BadRequest();
+                return this.NotFound();
+            }
+
+            if (record.Date != date)
+            {
+                return this.BadRequest("non-matching date");
             }
 
             await this.recordService.Update(record.ToDomain());

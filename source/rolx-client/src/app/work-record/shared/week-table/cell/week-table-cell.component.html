@@ -1,0 +1,25 @@
+<!--suppress BadExpressionStatementJS -->
+<div (keydown.enter)="down(); false"
+     (keydown.arrowUp)="up(); false"
+     (keydown.arrowDown)="down(); false"
+     (keydown.f2)="editEntries()">
+
+  <rolx-entries-edit *ngIf="isSimpleEditable; else total"
+                     [entry]="entries[0]"
+                     (changed)="submitSingleEntry($event)"
+                     (more)="editEntries()">
+  </rolx-entries-edit>
+
+  <ng-template #total>
+    <span *ngIf="isPhaseOpen" class="total">
+      <button #moreButton
+              mat-icon-button
+              class="small-icon-button"
+              (click)="editEntries()">
+        <mat-icon>more_horiz</mat-icon>
+      </button>
+      {{totalDuration}}
+    </span>
+  </ng-template>
+
+</div>

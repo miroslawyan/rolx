@@ -17,11 +17,6 @@ namespace RolXServer.WorkRecord.WebApi.Resource
     public sealed class Record
     {
         /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// Gets or sets the date.
         /// </summary>
         public string Date { get; set; } = string.Empty;

@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using RolXServer.Account.DataAccess;
 
@@ -31,6 +32,22 @@ namespace RolXServer.WorkRecord.DataAccess
         /// Gets or sets the duration.
         /// </summary>
         public TimeSpan Duration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the begin as time since midnight.
+        /// </summary>
+        [Column(TypeName = "time")]
+        public TimeSpan? Begin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pause duration.
+        /// </summary>
+        public TimeSpan? Pause { get; set; }
+
+        /// <summary>
+        /// Gets or sets the comment.
+        /// </summary>
+        public string Comment { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the phase identifier.

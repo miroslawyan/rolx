@@ -1,0 +1,38 @@
+form {
+  height: 348px;
+  overflow: auto;
+}
+
+td {
+  padding-right: 1em;
+
+  &:first-child {
+    text-align: center;
+  }
+
+  &:last-child {
+    padding-right: 0;
+
+    mat-form-field {
+      width: 24em;
+    }
+  }
+
+  &.time {
+    width: 6em;
+
+    &, input {
+      text-align: right;
+    }
+  }
+}
+
+// https://stackoverflow.com/questions/56302795/how-to-use-angular-material-form-field-and-flex-layout
+:host ::ng-deep .mat-form-field-infix {
+  // width: auto !important;
+  width: unset !important;
+}
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+}

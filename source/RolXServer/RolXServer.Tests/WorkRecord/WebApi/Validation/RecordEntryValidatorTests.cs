@@ -202,5 +202,125 @@ namespace RolXServer.WorkRecord.WebApi.Validation
 
             this.sut.ShouldNotHaveValidationErrorFor(entry => entry.PhaseId, entry);
         }
+
+        [Test]
+        public void Begin_SucceedsWhenNull()
+        {
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Begin, (int?)null);
+        }
+
+        [Test]
+        public void Begin_SucceedsWhenZero()
+        {
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Begin, 0);
+        }
+
+        [Test]
+        public void Begin_SucceedsWhenWithin24h()
+        {
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Begin, 12 * 3600);
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Begin, 24 * 3600);
+        }
+
+        [Test]
+        public void Begin_FailsWhenAbove24h()
+        {
+            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, (24 * 3600) + 1);
+            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, (24 * 3600) + 123);
+        }
+
+        [Test]
+        public void Begin_FailsWhenNegative()
+        {
+            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, -1);
+            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, -11);
+            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, -111);
+        }
+
+        [Test]
+        public void Pause_SucceedsWhenNull()
+        {
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Pause, (int?)null);
+        }
+
+        [Test]
+        public void Pause_FailsWhenNotNullButBeginIsNull()
+        {
+            var entry = new RecordEntry
+            {
+                Begin = null,
+                Pause = 3600,
+            };
+
+            this.sut.ShouldHaveValidationErrorFor(entry => entry.Pause, entry);
+        }
+
+        [Test]
+        public void Pause_SucceedsWhenZero()
+        {
+            var entry = new RecordEntry
+            {
+                Begin = 0,
+                Pause = 0,
+            };
+
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Pause, entry);
+        }
+
+        [Test]
+        public void Pause_SucceedsWhenWithin24h()
+        {
+            var entry = new RecordEntry
+            {
+                Begin = 0,
+                Pause = 12 * 3600,
+            };
+
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Pause, entry);
+
+            entry.Pause = 24 * 3600;
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Pause, entry);
+        }
+
+        [Test]
+        public void Pause_FailsWhenNegative()
+        {
+            var entry = new RecordEntry
+            {
+                Begin = 0,
+                Pause = -111,
+            };
+
+            this.sut.ShouldHaveValidationErrorFor(entry => entry.Pause, entry);
+        }
+
+        [Test]
+        public void BeginPlusPausePlusDuration_SucceedsWhenWithin24h()
+        {
+            var entry = new RecordEntry
+            {
+                Duration = 11 * 3600,
+                Begin = 12 * 3600,
+                Pause = 1800,
+            };
+
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Duration, entry);
+
+            entry.Pause = 3600;
+            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Duration, entry);
+        }
+
+        [Test]
+        public void BeginPlusPausePlusDuration_FailsWhenAbove24h()
+        {
+            var entry = new RecordEntry
+            {
+                Duration = 11 * 3600,
+                Begin = 12 * 3600,
+                Pause = 3601,
+            };
+
+            this.sut.ShouldHaveValidationErrorFor(entry => entry.Duration, entry);
+        }
     }
 }

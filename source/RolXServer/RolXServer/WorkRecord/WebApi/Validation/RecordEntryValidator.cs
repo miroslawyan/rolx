@@ -21,6 +21,8 @@ namespace RolXServer.WorkRecord.WebApi.Validation
     /// </summary>
     internal sealed class RecordEntryValidator : AbstractValidator<RecordEntry>
     {
+        private const int SecondsPerDay = 24 * 3600;
+
         private readonly Record parent;
         private readonly RolXContext dbContext;
 
@@ -43,6 +45,34 @@ namespace RolXServer.WorkRecord.WebApi.Validation
 
             this.RuleFor(e => e.Duration)
                 .GreaterThanOrEqualTo(0);
+
+            this.RuleFor(e => e.Begin)
+                .GreaterThanOrEqualTo(0)
+                .LessThanOrEqualTo(SecondsPerDay);
+
+            this.RuleFor(e => e.Pause)
+                .GreaterThanOrEqualTo(0)
+                .LessThanOrEqualTo(SecondsPerDay);
+
+            this.RuleFor(e => e.Pause)
+                .Null()
+                .Unless(e => e.Begin.HasValue);
+
+            this.RuleFor(e => e.Duration)
+                .Must(EndWhithinSameDay)
+                .Unless(e => !e.Begin.HasValue);
+        }
+
+        private static bool EndWhithinSameDay(RecordEntry candidate, long duration, PropertyValidatorContext context)
+        {
+            var end = duration + (candidate.Begin ?? 0) + (candidate.Pause ?? 0);
+            if (end > SecondsPerDay)
+            {
+                context.Rule.MessageBuilder = c => "begin + pause + duration must be within 24h";
+                return false;
+            }
+
+            return true;
         }
 
         private async Task<bool> BeOfExistingAndOpenPhase(RecordEntry candidate, int phaseId, PropertyValidatorContext context, CancellationToken token)

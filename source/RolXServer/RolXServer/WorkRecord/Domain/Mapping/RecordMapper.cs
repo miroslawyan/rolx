@@ -28,7 +28,6 @@ namespace RolXServer.WorkRecord.Domain.Mapping
         {
             return new Model.Record
             {
-                Id = entity.Id,
                 Date = entity.Date,
                 UserId = entity.UserId,
                 Entries = entity.Entries,
@@ -46,7 +45,6 @@ namespace RolXServer.WorkRecord.Domain.Mapping
         {
             return new DataAccess.Record
             {
-                Id = domain.Id,
                 Date = domain.Date,
                 UserId = domain.UserId,
                 Entries = domain.Entries,
