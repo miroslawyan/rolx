@@ -136,7 +136,7 @@ namespace RolXServer.Auth.Domain.Detail
             user.FirstName = payload.GivenName;
             user.LastName = payload.FamilyName;
             user.Email = payload.Email;
-            user.AvatarUrl = payload.Picture;
+            user.AvatarUrl = payload.Picture ?? string.Empty;
 
             await this.dbContext.SaveChangesAsync();
 
