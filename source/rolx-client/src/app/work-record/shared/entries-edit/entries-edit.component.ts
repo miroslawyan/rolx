@@ -76,7 +76,7 @@ export class EntriesEditComponent implements OnInit {
       return;
     }
 
-    if (duration.isSame(this.entry.duration)) {
+    if (this.entry && duration.isSame(this.entry.duration)) {
       this.cancel();
       return;
     }

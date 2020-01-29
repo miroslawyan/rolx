@@ -26,6 +26,10 @@ export class Record {
         (sum, e) => sum + e.duration.seconds, 0));
   }
 
+  get overtime(): Duration {
+    return this.totalDuration.sub(this.nominalWorkTime);
+  }
+
   get isWorkday(): boolean {
     return this.dayType === DayType.Workday;
   }
