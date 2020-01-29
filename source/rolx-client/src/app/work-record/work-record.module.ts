@@ -8,7 +8,7 @@ import {
   WeekPageComponent,
 } from './pages';
 import {
-  EntriesEditComponent,
+  DurationEditComponent,
   MonthTableComponent,
   MultiEntriesDialogComponent,
   WeekTableComponent,
@@ -21,7 +21,7 @@ import {
     CommonModule,
   ],
   declarations: [
-    EntriesEditComponent,
+    DurationEditComponent,
     MonthPageComponent,
     MonthTableComponent,
     MultiEntriesDialogComponent,

@@ -4,7 +4,7 @@ import { Phase } from '@app/account/core';
 import { GridCoordinates, GridNavigationService } from '@app/core/grid-navigation';
 import { Duration } from '@app/core/util';
 import { Record, RecordEntry, WorkRecordService } from '@app/work-record/core';
-import { EntriesEditComponent, MultiEntriesDialogComponent, MultiEntriesDialogData } from '@app/work-record/shared';
+import { DurationEditComponent, MultiEntriesDialogComponent, MultiEntriesDialogData } from '@app/work-record/shared';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -18,8 +18,8 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();
   private coordinates = new GridCoordinates(undefined, undefined);
 
-  @ViewChild(EntriesEditComponent, {static: false})
-  private entriesEdit: EntriesEditComponent;
+  @ViewChild(DurationEditComponent, {static: false})
+  private durationEdit: DurationEditComponent;
 
   @ViewChild('moreButton', {static: false})
   private moreButton: MatButton;
@@ -91,7 +91,10 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     this.gridNavigationService.navigateTo(this.coordinates.down());
   }
 
-  submitSingleEntry(entry: RecordEntry) {
+  submitSingleEntry(duration: Duration) {
+    const entry = new RecordEntry();
+    entry.duration = duration;
+
     const record = this.record.replaceEntriesOfPhase(this.phase, [entry]);
     this.workRecordService.update(record)
       .subscribe(() => this.record.entries = record.entries);
@@ -110,8 +113,8 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   }
 
   private enter(coordinates: GridCoordinates) {
-    if (this.entriesEdit) {
-      this.entriesEdit.enter();
+    if (this.durationEdit) {
+      this.durationEdit.enter();
     } else if (this.moreButton) {
       this.moreButton.focus();
     } else {

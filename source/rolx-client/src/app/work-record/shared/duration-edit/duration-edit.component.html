@@ -3,7 +3,7 @@
 
   <mat-form-field>
     <input #input
-           formControlName="duration"
+           [formControl]="control"
            matInput
            [errorStateMatcher]="errorStateMatcher"
            (focus)="input.select()"
@@ -15,7 +15,7 @@
     <button mat-icon-button matPrefix (click)="more.emit()" tabindex="-1">
       <mat-icon>more_horiz</mat-icon>
     </button>
-    <span matPrefix *ngIf="durationControl.dirty">*</span>
+    <span matPrefix *ngIf="control.dirty">*</span>
   </mat-form-field>
 
 </form>

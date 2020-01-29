@@ -42,6 +42,7 @@ export class Record {
     const clone = new Record();
     Object.assign(clone, this);
 
+    entries = entries.filter(e => !e.duration.isZero);
     entries.forEach(e => e.phaseId = phase.id);
 
     clone.entries = this.entries

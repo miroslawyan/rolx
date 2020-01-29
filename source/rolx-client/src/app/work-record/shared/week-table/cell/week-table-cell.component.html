@@ -4,11 +4,11 @@
      (keydown.arrowDown)="down(); false"
      (keydown.f2)="editEntries()">
 
-  <rolx-entries-edit *ngIf="isSimpleEditable; else total"
-                     [entry]="entries[0]"
+  <rolx-duration-edit *ngIf="isSimpleEditable; else total"
+                     [value]="entries[0]?.duration"
                      (changed)="submitSingleEntry($event)"
                      (more)="editEntries()">
-  </rolx-entries-edit>
+  </rolx-duration-edit>
 
   <ng-template #total>
     <span *ngIf="isPhaseOpen" class="total">

@@ -28,6 +28,6 @@ export class DurationBase<T extends DurationBase<T>> {
   }
 
   isSame(other: T): boolean {
-    return this.seconds === other.seconds;
+    return other && this.seconds === other.seconds;
   }
 }
