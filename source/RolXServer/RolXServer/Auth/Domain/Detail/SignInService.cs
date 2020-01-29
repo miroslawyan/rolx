@@ -129,7 +129,12 @@ namespace RolXServer.Auth.Domain.Detail
             {
                 this.logger.LogInformation("Adding yet unknown user {0}", payload.Name);
 
-                user = new User { GoogleId = payload.Subject };
+                user = new User
+                {
+                    GoogleId = payload.Subject,
+                    Role = Role.User,
+                };
+
                 this.dbContext.Users.Add(user);
             }
 

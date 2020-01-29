@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RolXServer.Account;
 using RolXServer.Auth;
+using RolXServer.UserManagement;
 using RolXServer.WorkRecord;
 
 namespace RolXServer
@@ -53,6 +54,7 @@ namespace RolXServer
             services.AddAccount(this.Configuration);
             services.AddAuth(this.Configuration);
             services.AddWorkRecord(this.Configuration);
+            services.AddUserManagement();
         }
 
         /// <summary>

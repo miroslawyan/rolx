@@ -8,6 +8,12 @@
       <a mat-list-item routerLink="/" routerLinkActive="active">Übersicht</a>
       <a mat-list-item routerLink="/week" routerLinkActive="active">Woche</a>
       <a mat-list-item routerLink="/project" routerLinkActive="active">Projekte</a>
+      <a
+        mat-list-item routerLink="/user"
+        routerLinkActive="active"
+        *ngIf="(authService.currentUser$ | async).role >= Role.Supervisor">
+        Mitarbeiter
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

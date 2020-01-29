@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
-import { AuthService } from '@app/auth/core';
+import { AuthService, Role } from '@app/auth/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -16,6 +16,8 @@ export class MainPageComponent {
       map(result => result.matches),
       shareReplay(),
     );
+
+  readonly Role = Role;
 
   constructor(public authService: AuthService,
               private breakpointObserver: BreakpointObserver) {}

@@ -18,9 +18,7 @@ export class AuthGuard implements CanActivate {
   private isAuthorized(state: RouterStateSnapshot) {
     const currentUser = this.authService.currentUser;
     if (currentUser.state !== SignInState.SignedIn) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(['/sign-in'], { queryParams: { forwardRoute: state.url } });
-      return false;
+      return this.router.createUrlTree(['/sign-in'], { queryParams: { forwardRoute: state.url } });
     }
 
     return true;

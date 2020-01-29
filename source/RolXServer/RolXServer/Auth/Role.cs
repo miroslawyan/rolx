@@ -19,6 +19,11 @@ namespace RolXServer.Auth
         User = 1,
 
         /// <summary>
+        /// A user with some privileges.
+        /// </summary>
+        Supervisor = 2,
+
+        /// <summary>
         /// A user with maximum privileges.
         /// </summary>
         Administrator = 1000,
