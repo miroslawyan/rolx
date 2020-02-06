@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RolXServer.Account;
 using RolXServer.Auth;
+using RolXServer.Common.Errors;
 using RolXServer.UserManagement;
 using RolXServer.WorkRecord;
 
@@ -69,6 +70,8 @@ namespace RolXServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExceptionHandlerMiddleware();
 
             app.UseRouting();
 

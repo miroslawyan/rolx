@@ -6,11 +6,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using RolXServer.Auth.DataAccess;
+using RolXServer.Common.Errors;
+using RolXServer.UserManagement.Domain.Model;
 
 namespace RolXServer.UserManagement.Domain.Detail
 {
@@ -39,6 +42,43 @@ namespace RolXServer.UserManagement.Domain.Detail
         public async Task<IEnumerable<User>> GetAll()
         {
             return await this.context.Users.ToListAsync();
+        }
+
+        /// <summary>
+        /// Gets a user by the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>The user or <c>null</c> if none has been found.</returns>
+        public async Task<User?> GetById(Guid id)
+        {
+            return await this.context.Users
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        /// <summary>
+        /// Updates the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>The async task.</returns>
+        public async Task Update(UpdatableUser user)
+        {
+            var entity = new User
+            {
+                Id = user.Id,
+                Role = user.Role,
+            };
+
+            var entry = this.context.Users.Attach(entity);
+            entry.Property(e => e.Role).IsModified = true;
+
+            try
+            {
+                await this.context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                throw new ItemNotFoundException($"No user with id '{user.Id}' found.", e);
+            }
         }
     }
 }

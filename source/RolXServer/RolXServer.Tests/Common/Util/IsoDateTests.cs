@@ -54,8 +54,6 @@ namespace RolXServer.Common.Util
         [Test]
         public void ParseThrowsOnWrongFormat()
         {
-            Action act = () => IsoDate.Parse("23.11.2013");
-
             "23.11.2013".Invoking(s => IsoDate.Parse(s))
                 .Should().Throw<FormatException>()
                 .WithMessage("value is not an ISO-formatted date");

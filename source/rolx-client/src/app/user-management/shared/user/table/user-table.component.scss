@@ -1,0 +1,20 @@
+table {
+  width: 100%;
+}
+
+.tools {
+  text-align: right;
+  width: 3em;
+}
+
+tr {
+  .tools a {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  &:hover .tools a {
+    opacity: 1;
+    transition: opacity 0.3s ease-in;
+  }
+}

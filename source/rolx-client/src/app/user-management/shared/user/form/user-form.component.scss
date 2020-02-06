@@ -1,0 +1,16 @@
+mat-card-title {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 0.5em;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button {
+  text-transform: uppercase;
+}

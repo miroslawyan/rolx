@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RolXServer.Auth.DataAccess;
 using RolXServer.UserManagement.Domain;
+using RolXServer.UserManagement.Domain.Model;
 
 namespace RolXServer.UserManagement.WebApi
 {
@@ -46,6 +48,47 @@ namespace RolXServer.UserManagement.WebApi
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return (await this.userService.GetAll()).ToList();
+        }
+
+        /// <summary>
+        /// Gets the user with the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// The requested user.
+        /// </returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetById(Guid id)
+        {
+            var domain = await this.userService.GetById(id);
+            if (domain is null)
+            {
+                return this.NotFound();
+            }
+
+            return domain;
+        }
+
+        /// <summary>
+        /// Updates the user with the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="user">The user.</param>
+        /// <returns>
+        /// No content.
+        /// </returns>
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> UpdateUser(Guid id, UpdatableUser user)
+        {
+            if (id != user.Id)
+            {
+                return this.BadRequest();
+            }
+
+            await this.userService.Update(user);
+
+            return this.NoContent();
         }
     }
 }

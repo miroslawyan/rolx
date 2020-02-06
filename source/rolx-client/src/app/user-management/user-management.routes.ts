@@ -1,11 +1,18 @@
 import { Routes } from '@angular/router';
-import { UserManagementGuard } from './core/user-management-guard';
-import { UserListPageComponent } from './pages';
+import { Role, RoleGuard } from '@app/auth/core';
+import { UserEditPageComponent, UserListPageComponent } from './pages';
 
 export const UserManagementRoutes: Routes = [
   {
     path: 'user',
-    canActivate: [UserManagementGuard],
     component: UserListPageComponent,
+    canActivate: [RoleGuard],
+    data: {allowedRoles: [Role.Supervisor, Role.Administrator]},
+  },
+  {
+    path: 'user/:id',
+    component: UserEditPageComponent,
+    canActivate: [RoleGuard],
+    data: {allowedRoles: [Role.Administrator]},
   },
 ];

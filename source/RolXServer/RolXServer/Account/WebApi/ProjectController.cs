@@ -52,7 +52,7 @@ namespace RolXServer.Account.WebApi
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>
-        /// All project.
+        /// The requested project.
         /// </returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetById(int id)

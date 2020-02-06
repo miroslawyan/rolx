@@ -6,10 +6,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using RolXServer.Auth.DataAccess;
+using RolXServer.UserManagement.Domain.Model;
 
 namespace RolXServer.UserManagement.Domain
 {
@@ -25,5 +27,19 @@ namespace RolXServer.UserManagement.Domain
         /// The Users.
         /// </returns>
         Task<IEnumerable<User>> GetAll();
+
+        /// <summary>
+        /// Gets a user by the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>The user or <c>null</c> if none has been found.</returns>
+        Task<User?> GetById(Guid id);
+
+        /// <summary>
+        /// Updates the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>The async task.</returns>
+        Task Update(UpdatableUser user);
     }
 }
