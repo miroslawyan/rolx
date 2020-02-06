@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer';
 import { Duration } from './duration';
-import { DurationBase } from './duration-base';
+import { DurationBase } from './duration.base';
 import { allowNull } from './utils';
 
 export class TimeOfDay extends DurationBase<TimeOfDay> {

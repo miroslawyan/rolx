@@ -16,7 +16,7 @@ namespace RolXServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("RolXServer.Account.DataAccess.FavouritePhase", b =>
@@ -98,7 +98,7 @@ namespace RolXServer.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("RolXServer.Auth.DataAccess.User", b =>
+            modelBuilder.Entity("RolXServer.Users.DataAccess.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -111,6 +111,9 @@ namespace RolXServer.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("EntryDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -135,7 +138,7 @@ namespace RolXServer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RolXServer.Auth.DataAccess.UserSetting", b =>
+            modelBuilder.Entity("RolXServer.Users.DataAccess.UserSetting", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -217,7 +220,7 @@ namespace RolXServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RolXServer.Auth.DataAccess.User", "User")
+                    b.HasOne("RolXServer.Users.DataAccess.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -233,9 +236,9 @@ namespace RolXServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RolXServer.Auth.DataAccess.UserSetting", b =>
+            modelBuilder.Entity("RolXServer.Users.DataAccess.UserSetting", b =>
                 {
-                    b.HasOne("RolXServer.Auth.DataAccess.User", "User")
+                    b.HasOne("RolXServer.Users.DataAccess.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -244,7 +247,7 @@ namespace RolXServer.Migrations
 
             modelBuilder.Entity("RolXServer.WorkRecord.DataAccess.Record", b =>
                 {
-                    b.HasOne("RolXServer.Auth.DataAccess.User", "User")
+                    b.HasOne("RolXServer.Users.DataAccess.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

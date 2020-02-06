@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthenticatedUserData } from '@app/auth/core/authenticated-user.data';
+import { AuthenticatedUser } from '@app/auth/core/authenticated.user';
 import { SignInData } from '@app/auth/core/sign-in.data';
+import { mapPlainToClass } from '@app/core/util';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { Info } from './info';
@@ -20,7 +21,9 @@ export class SignInService {
     return this.httpClient.get<Info>(SignInUrl + '/info');
   }
 
-  signIn(signInData: SignInData): Observable<AuthenticatedUserData> {
-    return this.httpClient.post<AuthenticatedUserData>(SignInUrl, signInData);
+  signIn(signInData: SignInData): Observable<AuthenticatedUser> {
+    return this.httpClient.post(SignInUrl, signInData).pipe(
+      mapPlainToClass(AuthenticatedUser),
+    );
   }
 }

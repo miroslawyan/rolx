@@ -1,23 +1,31 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="AuthenticatedUser.cs" company="Christian Ewald">
+// <copyright file="Role.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
 // </copyright>
 // -----------------------------------------------------------------------
 
-using RolXServer.Users.DataAccess;
-
-namespace RolXServer.Auth.Domain.Model
+namespace RolXServer.Users
 {
     /// <summary>
-    /// Represents an authenticated user.
+    /// The role of a user.
     /// </summary>
-    public class AuthenticatedUser : User
+    public enum Role
     {
         /// <summary>
-        /// Gets or sets the bearer token.
+        /// Just a user.
         /// </summary>
-        public string BearerToken { get; set; } = string.Empty;
+        User = 1,
+
+        /// <summary>
+        /// A user with some privileges.
+        /// </summary>
+        Supervisor = 2,
+
+        /// <summary>
+        /// A user with maximum privileges.
+        /// </summary>
+        Administrator = 1000,
     }
 }

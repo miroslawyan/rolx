@@ -16,7 +16,7 @@ using Microsoft.Extensions.Hosting;
 using RolXServer.Account;
 using RolXServer.Auth;
 using RolXServer.Common.Errors;
-using RolXServer.UserManagement;
+using RolXServer.Users;
 using RolXServer.WorkRecord;
 
 namespace RolXServer

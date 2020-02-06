@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using RolXServer.Auth.DataAccess;
 using RolXServer.Common.Util;
+using RolXServer.Users.DataAccess;
 using RolXServer.WorkRecord.Domain.Mapping;
 using RolXServer.WorkRecord.Domain.Model;
 

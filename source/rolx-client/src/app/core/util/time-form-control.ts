@@ -1,9 +1,9 @@
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { Duration } from './duration';
-import { DurationValidators } from './duration-validators';
+import { DurationValidators } from './duration.validators';
 import { StrongTypedFormControl } from './strong-typed-form-control';
 import { TimeOfDay } from './time-of-day';
-import { TimeOfDayValidators } from './time-of-day-validators';
+import { TimeOfDayValidators } from './time-of-day.validators';
 
 export class TimeFormControl  extends FormControl {
 

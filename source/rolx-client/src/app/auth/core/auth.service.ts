@@ -3,10 +3,10 @@ import { BehaviorSubject, bindCallback, forkJoin, from, Observable, of, Subject 
 import { catchError, filter, map, switchMap, take, tap, timeout } from 'rxjs/operators';
 
 import { enterZone } from '@app/core/util';
-import { CurrentUser } from './current-user';
+import { CurrentUser } from './current.user';
 import { Info } from './info';
-import { SignInState } from './sign-in-state';
 import { SignInService } from './sign-in.service';
+import { SignInState } from './sign-in.state';
 
 @Injectable({
   providedIn: 'root',

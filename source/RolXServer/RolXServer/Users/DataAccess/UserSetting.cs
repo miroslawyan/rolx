@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Record.cs" company="Christian Ewald">
+// <copyright file="UserSetting.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -7,29 +7,15 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using RolXServer.Users.DataAccess;
-
-namespace RolXServer.WorkRecord.DataAccess
+namespace RolXServer.Users.DataAccess
 {
     /// <summary>
-    /// A record for a day.
+    /// The settings of a user.
     /// </summary>
-    public sealed class Record
+    public sealed class UserSetting
     {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date.
-        /// </summary>
-        [Column(TypeName = "date")]
-        public DateTime Date { get; set; }
-
         /// <summary>
         /// Gets or sets the user identifier.
         /// </summary>
@@ -38,11 +24,17 @@ namespace RolXServer.WorkRecord.DataAccess
         /// <summary>
         /// Gets or sets the user.
         /// </summary>
-        public User? User { get; set; }
+        public User User { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets the entries.
+        /// Gets or sets the start date this setting is applicable.
         /// </summary>
-        public List<RecordEntry> Entries { get; set; } = new List<RecordEntry>();
+        [Column(TypeName = "date")]
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the part-time factor.
+        /// </summary>
+        public double PartTimeFactor { get; set; } = 1.0;
     }
 }

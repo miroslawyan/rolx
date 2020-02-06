@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccountRoutes } from '@app/account';
 import { AuthGuard, AuthResolve } from '@app/auth/core';
 import { SetupResolve } from '@app/core/setup';
-import { UserManagementRoutes } from '@app/user-management';
+import { UsersRoutes } from '@app/users';
 import { WorkRecordRoutes } from '@app/work-record';
 import { MainPageComponent } from './main-page/main-page.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
@@ -17,7 +17,7 @@ const routes: Routes = [
       resolve: { items: SetupResolve },
       children: [
         ...AccountRoutes,
-        ...UserManagementRoutes,
+        ...UsersRoutes,
         ...WorkRecordRoutes,
         {
           path: 'four-oh-four',

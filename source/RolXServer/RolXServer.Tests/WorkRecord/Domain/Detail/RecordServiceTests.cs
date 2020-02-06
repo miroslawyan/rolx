@@ -17,7 +17,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using RolXServer.Account.DataAccess;
-using RolXServer.Auth.DataAccess;
+using RolXServer.Users.DataAccess;
 
 namespace RolXServer.WorkRecord.Domain.Detail
 {

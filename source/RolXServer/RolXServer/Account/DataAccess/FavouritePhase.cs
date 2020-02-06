@@ -8,7 +8,7 @@
 
 using System;
 
-using RolXServer.Auth.DataAccess;
+using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Account.DataAccess
 {

@@ -8,7 +8,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using RolXServer.Account.DataAccess;
-using RolXServer.Auth.DataAccess;
+using RolXServer.Users.DataAccess;
 using RolXServer.WorkRecord.DataAccess;
 
 namespace RolXServer

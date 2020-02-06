@@ -14,9 +14,10 @@ using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RolXServer.Auth.DataAccess;
 using RolXServer.Auth.Domain.Mapping;
 using RolXServer.Auth.Domain.Model;
+using RolXServer.Users;
+using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Auth.Domain.Detail
 {

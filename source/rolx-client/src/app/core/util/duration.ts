@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { DurationBase } from './duration-base';
+import { DurationBase } from './duration.base';
 import { allowNull } from './utils';
 
 export class Duration extends DurationBase<Duration> {
