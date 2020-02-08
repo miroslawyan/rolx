@@ -29,5 +29,10 @@ namespace RolXServer.Users.Domain.Model
         /// Gets or sets the entry date.
         /// </summary>
         public DateTime? EntryDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the leaving date.
+        /// </summary>
+        public DateTime? LeavingDate { get; set; }
     }
 }

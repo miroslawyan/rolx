@@ -29,5 +29,10 @@ namespace RolXServer.Users.WebApi.Resource
         /// Gets or sets the entry date.
         /// </summary>
         public string? EntryDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the leaving date.
+        /// </summary>
+        public string? LeavingDate { get; set; }
     }
 }

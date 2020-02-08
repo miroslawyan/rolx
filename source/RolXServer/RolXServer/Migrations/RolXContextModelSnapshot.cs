@@ -127,6 +127,9 @@ namespace RolXServer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("LeavingDate")
+                        .HasColumnType("date");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 

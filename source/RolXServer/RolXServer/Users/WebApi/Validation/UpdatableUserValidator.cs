@@ -28,6 +28,18 @@ namespace RolXServer.Users.WebApi.Validation
                 .NotEmpty()
                 .SetValidator(new IsoDateValidator())
                 .Unless(u => u.EntryDate == null);
+
+            this.RuleFor(u => u.LeavingDate)
+                .NotEmpty()
+                .SetValidator(new IsoDateValidator())
+                .Unless(u => u.LeavingDate == null);
+
+            this.RuleFor(u => u.LeavingDate)
+                .Null()
+                .Unless(u => u.EntryDate != null);
+
+            this.RuleFor(u => u.LeavingDate)
+                .GreaterThan(u => u.EntryDate);
         }
     }
 }

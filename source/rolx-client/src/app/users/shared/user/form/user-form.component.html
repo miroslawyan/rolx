@@ -47,10 +47,21 @@
         <input matInput
                [formControl]="entryDateControl"
                [matDatepicker]="entryDatePicker"
-               placeholder="Entritt"
+               placeholder="Eintritt"
                (focus)="entryDatePicker.open()">
         <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #entryDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               [formControl]="leavingDateControl"
+               [matDatepicker]="leavingDatePicker"
+               placeholder="Austritt"
+               [min]="minLeavingDate"
+               (focus)="leavingDatePicker.open()">
+        <mat-datepicker-toggle matSuffix [for]="leavingDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #leavingDatePicker></mat-datepicker>
       </mat-form-field>
 
     </form>

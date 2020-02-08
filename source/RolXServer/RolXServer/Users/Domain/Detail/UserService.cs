@@ -67,11 +67,13 @@ namespace RolXServer.Users.Domain.Detail
                 Id = user.Id,
                 Role = user.Role,
                 EntryDate = user.EntryDate,
+                LeavingDate = user.LeavingDate,
             };
 
             var entry = this.context.Users.Attach(entity);
             entry.Property(e => e.Role).IsModified = true;
             entry.Property(e => e.EntryDate).IsModified = true;
+            entry.Property(e => e.LeavingDate).IsModified = true;
 
             try
             {

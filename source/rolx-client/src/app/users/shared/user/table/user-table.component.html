@@ -39,6 +39,11 @@
     <td mat-cell *matCellDef="let user">{{user.entryDate | date : 'mediumDate'}}</td>
   </ng-container>
 
+  <ng-container matColumnDef="leavingDate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Austritt</th>
+    <td mat-cell *matCellDef="let user">{{user.leavingDate | date : 'mediumDate'}}</td>
+  </ng-container>
+
   <ng-container matColumnDef="tools">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell class="tools" *matCellDef="let user">

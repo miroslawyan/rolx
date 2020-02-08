@@ -14,7 +14,7 @@ export class UserTableComponent implements OnInit {
   Role = Role;
 
   get displayedColumns(): string[] {
-    const allColumns = ['avatar', 'fullName', 'email', 'role', 'entryDate', 'tools'];
+    const allColumns = ['avatar', 'fullName', 'email', 'role', 'entryDate', 'leavingDate', 'tools'];
     if (this.authService.currentUser.role === Role.Administrator) {
       return allColumns;
     } else {

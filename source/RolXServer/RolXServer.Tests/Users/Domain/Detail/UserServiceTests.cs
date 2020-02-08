@@ -69,9 +69,8 @@ namespace RolXServer.Users.Domain.Detail
 
             await this.sut.Update(user);
 
-            (await this.sut.GetAll())
-                .Single(u => u.Id == this.userId)
-                .Role.Should().Be(role);
+            (await this.sut.GetById(this.userId))
+                !.Role.Should().Be(role);
         }
 
         [Test]
@@ -87,9 +86,25 @@ namespace RolXServer.Users.Domain.Detail
 
             await this.sut.Update(user);
 
-            (await this.sut.GetAll())
-                .Single(u => u.Id == this.userId)
-                .EntryDate.Should().Be(date);
+            (await this.sut.GetById(this.userId))
+                !.EntryDate.Should().Be(date);
+        }
+
+        [Test]
+        public async Task Update_LeavingDate()
+        {
+            var date = DateTime.Today;
+
+            var user = new UpdatableUser
+            {
+                Id = this.userId,
+                LeavingDate = date,
+            };
+
+            await this.sut.Update(user);
+
+            (await this.sut.GetById(this.userId))
+                !.LeavingDate.Should().Be(date);
         }
     }
 }

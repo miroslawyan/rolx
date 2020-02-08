@@ -57,5 +57,11 @@ namespace RolXServer.Users.DataAccess
         /// </summary>
         [Column(TypeName = "date")]
         public DateTime? EntryDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the leaving date.
+        /// </summary>
+        [Column(TypeName = "date")]
+        public DateTime? LeavingDate { get; set; }
     }
 }

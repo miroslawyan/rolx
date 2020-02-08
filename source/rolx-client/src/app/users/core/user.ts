@@ -14,6 +14,9 @@ export class User {
   @TransformAsIsoDate()
   entryDate: moment.Moment;
 
+  @TransformAsIsoDate()
+  leavingDate: moment.Moment;
+
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }

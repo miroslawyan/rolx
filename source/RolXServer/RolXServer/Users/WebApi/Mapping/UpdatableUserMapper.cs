@@ -29,6 +29,7 @@ namespace RolXServer.Users.WebApi.Mapping
                 Id = resource.Id,
                 Role = resource.Role,
                 EntryDate = IsoDate.ParseNullable(resource.EntryDate),
+                LeavingDate = IsoDate.ParseNullable(resource.LeavingDate),
             };
         }
     }
