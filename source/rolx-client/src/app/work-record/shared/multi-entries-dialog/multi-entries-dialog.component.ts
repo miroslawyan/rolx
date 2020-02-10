@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Phase } from '@app/account/core';
 import { Duration } from '@app/core/util';
 import { Record, RecordEntry, WorkRecordService } from '@app/work-record/core';

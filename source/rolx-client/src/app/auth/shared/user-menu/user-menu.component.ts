@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatMenu } from '@angular/material';
+import { MatMenu } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/auth/core';
 import { Theme, ThemeService } from '@app/core/theme';

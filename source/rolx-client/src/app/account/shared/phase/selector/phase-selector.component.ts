@@ -63,7 +63,7 @@ export class PhaseSelectorComponent implements OnInit, OnDestroy {
       map(phs => phs.sort((a, b) => a.fullName.localeCompare(b.fullName))),
     ).subscribe(this.allPhases$));
 
-    this.candidates$ = combineLatest(this.allPhases$, this.filterText$).pipe(
+    this.candidates$ = combineLatest([this.allPhases$, this.filterText$]).pipe(
       map(([phases, filterText]) => this.filterByEndAndFullName(phases, filterText).slice(0, 5)),
     );
   }

@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatButton, MatDialog } from '@angular/material';
+import { MatButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { Phase } from '@app/account/core';
 import { GridCoordinates, GridNavigationService } from '@app/core/grid-navigation';
 import { Duration } from '@app/core/util';
@@ -18,10 +19,10 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();
   private coordinates = new GridCoordinates(undefined, undefined);
 
-  @ViewChild(DurationEditComponent, {static: false})
+  @ViewChild(DurationEditComponent)
   private durationEdit: DurationEditComponent;
 
-  @ViewChild('moreButton', {static: false})
+  @ViewChild('moreButton')
   private moreButton: MatButton;
 
   @Input()

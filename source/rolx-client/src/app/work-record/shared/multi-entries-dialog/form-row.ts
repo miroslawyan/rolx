@@ -87,15 +87,15 @@ export class FormRow {
     this.duration.disable();
 
     const begin$ = this.begin.typedValue$.pipe(
-      startWith(null),
+      startWith(null as TimeOfDay),
       distinctUntilChanged(),
     );
     const end$ = this.end.typedValue$.pipe(
-      startWith(null),
+      startWith(null as TimeOfDay),
       distinctUntilChanged(),
     );
     const pause$ = this.pause.typedValue$.pipe(
-      startWith(null),
+      startWith(null as Duration),
       distinctUntilChanged(),
     );
 

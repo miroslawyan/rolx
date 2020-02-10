@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ShowOnDirtyErrorStateMatcher } from '@angular/material';
+import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { Duration, DurationValidators, TimeFormControl } from '@app/core/util';
 
 @Component({
@@ -12,7 +12,7 @@ export class DurationEditComponent implements OnInit {
 
   private valueShadow = Duration.Zero;
 
-  @ViewChild('input', {static: false})
+  @ViewChild('input')
   private inputElement: ElementRef;
 
   @Input()

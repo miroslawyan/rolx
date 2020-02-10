@@ -53,7 +53,7 @@ export class AuthService {
       )),
     );
 
-    return forkJoin(firstGoogleUser, initialization)
+    return forkJoin([firstGoogleUser, initialization])
       .toPromise()
       .then(() => this.isInitialized = true)
       .then(() => console.log('--- AuthService.initialize() done'));
