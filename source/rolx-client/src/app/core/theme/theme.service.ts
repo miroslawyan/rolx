@@ -12,7 +12,7 @@ export class ThemeService {
   currentTheme$ = this.currentTheme.asObservable();
 
   private static loadThemeFromStorage(): Theme {
-    const storedTheme = localStorage.getItem('theme');
+    const storedTheme = localStorage.getItem('theme') ?? '';
     const keyEnum = Theme[storedTheme];
     if (keyEnum != null) {
       return keyEnum;

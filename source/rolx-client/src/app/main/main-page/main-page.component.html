@@ -11,7 +11,7 @@
       <a
         mat-list-item routerLink="/user"
         routerLinkActive="active"
-        *ngIf="(authService.currentUser$ | async).role >= Role.Supervisor">
+        *ngIf="(authService.currentUser$ | async)?.role >= Role.Supervisor">
         Mitarbeiter
       </a>
     </mat-nav-list>

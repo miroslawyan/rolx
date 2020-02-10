@@ -28,7 +28,7 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   @Input()
   records: Record[] = [];
 
-  allPhases: Phase[] = [];
+  allPhases: (Phase | null)[] = [];
 
   isAddingPhase = false;
 

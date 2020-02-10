@@ -49,9 +49,9 @@ export class FormRow {
   private get isBeginEndBased() { return !!this.beginEndBased.value; }
   private get commentValue() { return this.comment.value.trim(); }
 
-  private static toDuration(begin: TimeOfDay, end: TimeOfDay, pause: Duration): Duration {
+  private static toDuration(begin: TimeOfDay | null, end: TimeOfDay | null, pause: Duration | null): Duration {
     return begin && end
-      ? end.sub(begin).sub(pause ? pause : Duration.Zero)
+      ? end.sub(begin).sub(pause ?? Duration.Zero)
       : Duration.Zero;
   }
 
@@ -87,15 +87,15 @@ export class FormRow {
     this.duration.disable();
 
     const begin$ = this.begin.typedValue$.pipe(
-      startWith(null as TimeOfDay),
+      startWith(null),
       distinctUntilChanged(),
     );
     const end$ = this.end.typedValue$.pipe(
-      startWith(null as TimeOfDay),
+      startWith(null),
       distinctUntilChanged(),
     );
     const pause$ = this.pause.typedValue$.pipe(
-      startWith(null as Duration),
+      startWith(null),
       distinctUntilChanged(),
     );
 
@@ -111,9 +111,9 @@ export class FormRow {
       .subscribe(([b, e]) => this.setPauseMax(b, e)));
   }
 
-  private setEndMin(begin: TimeOfDay, pause: Duration) {
+  private setEndMin(begin: TimeOfDay | null, pause: Duration | null) {
     if (begin) {
-      const endMin = pause ? begin.add(pause) : begin;
+      const endMin = pause ? begin.add(pause ?? Duration.Zero) : begin;
       this.end.setValidators(TimeOfDayValidators.min(endMin));
     } else {
       this.end.clearValidators();
@@ -122,7 +122,7 @@ export class FormRow {
     this.end.updateValueAndValidity();
   }
 
-  private setPauseMax(begin: TimeOfDay, end: TimeOfDay) {
+  private setPauseMax(begin: TimeOfDay | null, end: TimeOfDay | null) {
     if (begin && end && end.seconds >= begin.seconds) {
       this.pause.setValidators(DurationValidators.max(end.sub(begin)));
     } else {
@@ -148,10 +148,7 @@ export class FormRow {
   }
 
   private unsubscribe() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      this.subscription = null;
-    }
+    this.subscription?.unsubscribe();
   }
 
 }

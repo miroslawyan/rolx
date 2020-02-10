@@ -15,7 +15,7 @@ export class ErrorResponse {
     return result;
   }
 
-  private static validationErrorsFrom(errors: string[]): ValidationErrors {
+  private static validationErrorsFrom(errors: string[]): ValidationErrors | null {
     if (errors == null) {
       return null;
     }

@@ -24,8 +24,7 @@ export class WeekPageComponent implements OnInit {
 
   ngOnInit() {
     this.monday$ = this.route.paramMap.pipe(
-      map(params => moment(params.get('date'))),
-      map(date => date.isValid() ? date : moment()),
+      map(params => moment(params.get('date') ?? {})),
       map(date => date.clone().isoWeekday(1)),
     );
 

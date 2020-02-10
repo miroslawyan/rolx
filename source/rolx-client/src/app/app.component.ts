@@ -9,19 +9,10 @@ import { Theme, ThemeService } from './core/theme';
 })
 export class AppComponent {
 
-  themeClass$ = this.themeService.currentTheme$.pipe(map(this.themeClassMapper));
+  themeClass$ = this.themeService.currentTheme$.pipe(
+    map(t => t === Theme.bright ? 'bright-theme' : 'dark-theme'),
+  );
 
   constructor(public themeService: ThemeService) { }
-
-  themeClassMapper(theme: Theme): string {
-    switch (theme) {
-      case Theme.bright:
-        return 'bright-theme';
-      case Theme.dark:
-        return 'dark-theme';
-      default:
-        console.error('Unknown theme.');
-    }
-  }
 
 }

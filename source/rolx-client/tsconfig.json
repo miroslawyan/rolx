@@ -13,6 +13,7 @@
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "strictNullChecks": true,
     "paths": {
       "@app/*": ["src/app/*"],
       "@env/*": ["src/environments/*"]

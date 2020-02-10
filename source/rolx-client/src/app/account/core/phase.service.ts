@@ -15,12 +15,14 @@ export class PhaseService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAll(unlessEndedBefore: moment.Moment = null): Observable<Phase[]> {
-    const params = unlessEndedBefore ? {
-        unlessEndedBeforeDate: IsoDate.fromMoment(unlessEndedBefore),
-    } : null;
+  getAll(unlessEndedBefore: moment.Moment | null = null): Observable<Phase[]> {
+    const isoUnlessEndedBefore = IsoDate.fromMoment(unlessEndedBefore);
+    const options = isoUnlessEndedBefore ? {
+      params: {
+        unlessEndedBeforeDate: isoUnlessEndedBefore,
+      }} : undefined;
 
-    return this.httpClient.get<object[]>(PhaseUrl, { params }).pipe(
+    return this.httpClient.get(PhaseUrl, options).pipe(
       mapPlainToClassArray(Phase),
     );
   }

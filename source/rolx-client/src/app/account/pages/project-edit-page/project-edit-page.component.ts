@@ -32,7 +32,7 @@ export class ProjectEditPageComponent implements OnInit {
     );
   }
 
-  private initializeProject(idText: string): Observable<Project> {
+  private initializeProject(idText: string | null): Observable<Project> {
     return idText === 'new' ? of(new Project()) : this.projectService.getById(Number(idText));
   }
 

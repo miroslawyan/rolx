@@ -33,20 +33,22 @@ export class PhaseEditPageComponent implements OnInit {
     );
   }
 
-  private initializeProject(projectIdText: string, phaseIdText: string): Observable<Project> {
+  private initializeProject(projectIdText: string | null, phaseIdText: string | null): Observable<Project> {
     return this.projectService.getById(Number(projectIdText)).pipe(
       map(project => this.initializePhase(project, phaseIdText)),
     );
   }
 
-  private initializePhase(project: Project, phaseIdText: string): Project {
+  private initializePhase(project: Project, phaseIdText: string | null): Project {
     const phaseId = Number(phaseIdText);
 
-    this.phase = phaseIdText === 'new'
+    const phase = phaseIdText === 'new'
       ? project.addPhase()
       : project.phases.find(ph => ph.id === phaseId);
 
-    if (this.phase == null) {
+    if (phase != null) {
+      this.phase = phase;
+    } else {
       // noinspection JSIgnoredPromiseFromCall
       this.router.navigate(['/four-oh-four']);
     }

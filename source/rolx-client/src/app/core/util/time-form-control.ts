@@ -15,7 +15,7 @@ export class TimeFormControl  extends FormControl {
       ],
       value);
 
-    control.setValidators(validator);
+    control.setValidators(validator ?? null);
     return control;
   }
 
@@ -27,7 +27,7 @@ export class TimeFormControl  extends FormControl {
       ],
       value);
 
-    control.setValidators(validator);
+    control.setValidators(validator ?? null);
     return control;
   }
 

@@ -4,7 +4,7 @@ import { filter, map, share } from 'rxjs/operators';
 
 export class StrongTypedFormControl<T> extends FormControl {
 
-  readonly typedValue$: Observable<T> = this.valueChanges.pipe(
+  readonly typedValue$: Observable<T | null> = this.valueChanges.pipe(
     filter(() => this.valid),
     map(v =>  !this.isEmpty ? this.parserFn(v) : null),
     share(),

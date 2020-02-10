@@ -11,7 +11,7 @@ export class ErrorService {
   notifyGeneralError() {
     this.snackBar.open(
       'Hoppla, da ist etwas schief gelaufen. Versuch es noch einmal.',
-      null,
+      undefined,
       { duration: 5000 });
   }
 }

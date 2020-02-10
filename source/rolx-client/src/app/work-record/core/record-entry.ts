@@ -33,7 +33,7 @@ export class RecordEntry {
   }
 
   get hasComment(): boolean {
-    return this.comment && this.comment !== '';
+    return this.comment != null && this.comment !== '';
   }
 
 }

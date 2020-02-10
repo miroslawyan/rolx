@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserService } from '@app/users/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-user-edit-page',
@@ -19,7 +19,8 @@ export class UserEditPageComponent implements OnInit {
 
   ngOnInit() {
     this.user$ = this.route.paramMap.pipe(
-      switchMap(params => this.userService.getById(params.get('id'))),
+      map(params => params.get('id') ?? 'definitely-not-a-user-id'),
+      switchMap(id => this.userService.getById(id)),
       catchError(e => {
         if (e.status === 404) {
           // noinspection JSIgnoredPromiseFromCall

@@ -33,7 +33,7 @@ export class ProjectDetailPageComponent implements OnInit {
     );
   }
 
-  private initializeProject(idText: string): Observable<Project> {
+  private initializeProject(idText: string | null): Observable<Project> {
     return this.projectService.getById(Number(idText));
   }
 }
