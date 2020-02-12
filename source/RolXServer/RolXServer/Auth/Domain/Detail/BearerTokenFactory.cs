@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RolXServer.Common.Util;
 using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Auth.Domain.Detail
@@ -84,6 +85,16 @@ namespace RolXServer.Auth.Domain.Detail
         {
             yield return new Claim(ClaimTypes.NameIdentifier, user.Id.ToString());
             yield return new Claim(ClaimTypes.Role, user.Role.ToString());
+
+            if (user.EntryDate.HasValue)
+            {
+                yield return new Claim(RolXClaimTypes.EntryDate, user.EntryDate.Value.ToIsoDate());
+            }
+
+            if (user.LeavingDate.HasValue)
+            {
+                yield return new Claim(RolXClaimTypes.LeavingDate, user.LeavingDate.Value.ToIsoDate());
+            }
         }
     }
 }

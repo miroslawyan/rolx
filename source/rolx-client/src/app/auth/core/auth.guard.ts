@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import moment from 'moment';
 import { AuthService } from './auth.service';
 import { SignInState } from './sign-in.state';
 
@@ -19,6 +20,10 @@ export class AuthGuard implements CanActivate {
     const currentUser = this.authService.currentUser;
     if (currentUser.state !== SignInState.SignedIn) {
       return this.router.createUrlTree(['/sign-in'], { queryParams: { forwardRoute: state.url } });
+    }
+
+    if (!currentUser.isActiveAt(moment())) {
+      return this.router.createUrlTree(['/forbidden']);
     }
 
     return true;

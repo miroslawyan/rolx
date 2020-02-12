@@ -23,7 +23,7 @@ namespace RolXServer.Account.WebApi
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
+    [Authorize(Policy = "ActiveUser")]
     public sealed class ProjectController : ControllerBase
     {
         private readonly IProjectService projectService;

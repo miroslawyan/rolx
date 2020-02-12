@@ -32,6 +32,8 @@ namespace RolXServer.Auth.Domain.Mapping
                 Email = entity.Email,
                 AvatarUrl = entity.AvatarUrl,
                 Role = entity.Role,
+                EntryDate = entity.EntryDate,
+                LeavingDate = entity.LeavingDate,
                 BearerToken = bearerToken,
             };
         }

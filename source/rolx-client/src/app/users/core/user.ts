@@ -12,12 +12,18 @@ export class User {
   role: Role;
 
   @TransformAsIsoDate()
-  entryDate: moment.Moment;
+  entryDate: moment.Moment | null;
 
   @TransformAsIsoDate()
-  leavingDate: moment.Moment;
+  leavingDate: moment.Moment | null;
 
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  isActiveAt(date: moment.Moment): boolean {
+    return this.entryDate != null
+      && this.entryDate.isSameOrBefore(date, 'day')
+      && (this.leavingDate == null || this.leavingDate.isSameOrAfter(date, 'day'));
   }
 }

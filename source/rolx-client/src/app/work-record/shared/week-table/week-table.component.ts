@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FavouritePhaseService, Phase } from '@app/account/core';
+import { User } from '@app/users/core';
 import { Record } from '@app/work-record/core';
 import { Subscription } from 'rxjs';
 
@@ -27,6 +28,9 @@ export class WeekTableComponent implements OnInit, OnDestroy {
 
   @Input()
   records: Record[] = [];
+
+  @Input()
+  user: User;
 
   allPhases: (Phase | null)[] = [];
 

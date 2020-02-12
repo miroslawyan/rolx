@@ -9,6 +9,8 @@
 using System;
 using System.Security.Claims;
 
+using RolXServer.Common.Util;
+
 namespace RolXServer.Auth.Domain
 {
     /// <summary>
@@ -23,13 +25,52 @@ namespace RolXServer.Auth.Domain
         /// <returns>The user identifier.</returns>
         public static Guid GetUserId(this ClaimsPrincipal principal)
         {
-            var identity = principal.GetIdentity();
-            return Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty);
+            return Guid.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
         }
 
-        private static ClaimsIdentity GetIdentity(this ClaimsPrincipal principal)
+        /// <summary>
+        /// Gets the entry date.
+        /// </summary>
+        /// <param name="principal">The principal.</param>
+        /// <returns>The entry date.</returns>
+        public static DateTime? GetEntryDate(this ClaimsPrincipal principal)
         {
-            return (ClaimsIdentity)principal.Identity;
+            return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.EntryDate));
+        }
+
+        /// <summary>
+        /// Gets the leaving date.
+        /// </summary>
+        /// <param name="principal">The principal.</param>
+        /// <returns>The leaving date.</returns>
+        public static DateTime? GetLeavingDate(this ClaimsPrincipal principal)
+        {
+            return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.LeavingDate));
+        }
+
+        /// <summary>
+        /// Determines whether the specified principal is active at the specified date.
+        /// </summary>
+        /// <param name="principal">The principal.</param>
+        /// <param name="date">The date.</param>
+        /// <returns>
+        ///   <c>true</c> if specified principal is active at the specified date; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsActiveAt(this ClaimsPrincipal principal, DateTime date)
+        {
+            try
+            {
+                var entryDate = principal.GetEntryDate();
+                var leavingDate = principal.GetLeavingDate();
+
+                return entryDate.HasValue
+                    && entryDate.Value <= date
+                    && (!leavingDate.HasValue || leavingDate.Value >= date);
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
     }
 }

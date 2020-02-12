@@ -28,7 +28,7 @@ namespace RolXServer.WorkRecord.WebApi
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
+    [Authorize(Policy = "ActiveUser")]
     public sealed class WorkRecordController : ControllerBase
     {
         private readonly IRecordService recordService;
@@ -100,6 +100,11 @@ namespace RolXServer.WorkRecord.WebApi
             if (record.Date != date)
             {
                 return this.BadRequest("non-matching date");
+            }
+
+            if (!this.User.IsActiveAt(theDate))
+            {
+                return this.Forbid();
             }
 
             await this.recordService.Update(record.ToDomain());

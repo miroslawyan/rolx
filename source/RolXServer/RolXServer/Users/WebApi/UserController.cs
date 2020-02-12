@@ -25,7 +25,7 @@ namespace RolXServer.Users.WebApi
     /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Administrator, Supervisor")]
+    [Authorize(Roles = "Administrator, Supervisor", Policy = "ActiveUser")]
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
@@ -79,7 +79,7 @@ namespace RolXServer.Users.WebApi
         /// No content.
         /// </returns>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator", Policy = "ActiveUser")]
         public async Task<IActionResult> UpdateUser(Guid id, UpdatableUser user)
         {
             if (id != user.Id)

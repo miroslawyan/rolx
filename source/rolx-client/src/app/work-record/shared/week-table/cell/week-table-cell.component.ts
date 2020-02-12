@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Phase } from '@app/account/core';
 import { GridCoordinates, GridNavigationService } from '@app/core/grid-navigation';
 import { Duration } from '@app/core/util';
+import { User } from '@app/users/core';
 import { Record, RecordEntry, WorkRecordService } from '@app/work-record/core';
 import { DurationEditComponent, MultiEntriesDialogComponent, MultiEntriesDialogData } from '@app/work-record/shared';
 import { Subscription } from 'rxjs';
@@ -32,6 +33,9 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   phase: Phase;
 
   @Input()
+  user: User;
+
+  @Input()
   get row(): number {
     return this.coordinates.row;
   }
@@ -58,7 +62,7 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   }
 
   get isPhaseOpen(): boolean {
-    return this.phase.isOpenAt(this.record.date);
+    return this.phase.isOpenAt(this.record.date) && this.user.isActiveAt(this.record.date);
   }
 
   get totalDuration(): Duration {

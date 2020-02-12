@@ -25,7 +25,7 @@ namespace RolXServer.Account.WebApi
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
+    [Authorize(Policy = "ActiveUser")]
     public sealed class PhaseController : ControllerBase
     {
         private readonly IPhaseService phaseService;

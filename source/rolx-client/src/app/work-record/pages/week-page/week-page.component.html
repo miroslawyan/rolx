@@ -22,7 +22,8 @@
   <mat-card-content *ngIf="recordsAndPhases$ | async as recordsAndPhases">
 
     <rolx-week-table [records]="recordsAndPhases[0]"
-                     [phases]="recordsAndPhases[1]"></rolx-week-table>
+                     [phases]="recordsAndPhases[1]"
+                     [user]="user"></rolx-week-table>
 
   </mat-card-content>
 

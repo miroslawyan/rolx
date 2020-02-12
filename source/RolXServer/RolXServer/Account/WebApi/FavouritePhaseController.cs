@@ -24,7 +24,7 @@ namespace RolXServer.Account.WebApi
     /// </summary>
     [ApiController]
     [Route("api/v1/phase/favourite")]
-    [Authorize]
+    [Authorize(Policy = "ActiveUser")]
     public class FavouritePhaseController : ControllerBase
     {
         private readonly IFavouriteService favouriteService;

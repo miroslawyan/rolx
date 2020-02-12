@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Phase, PhaseService } from '@app/account/core';
+import { AuthService } from '@app/auth/core';
 import { IsoDate } from '@app/core/util';
 import { Record, WorkRecordService } from '@app/work-record/core';
 import moment from 'moment';
@@ -16,11 +17,13 @@ export class WeekPageComponent implements OnInit {
 
   monday$: Observable<moment.Moment>;
   recordsAndPhases$: Observable<[Record[], Phase[]]>;
+  user = this.authService.currentUser;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private workRecordService: WorkRecordService,
-              private phaseService: PhaseService) { }
+              private phaseService: PhaseService,
+              private authService: AuthService) { }
 
   ngOnInit() {
     this.monday$ = this.route.paramMap.pipe(

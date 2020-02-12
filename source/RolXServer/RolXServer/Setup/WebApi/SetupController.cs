@@ -18,7 +18,7 @@ namespace RolXServer.Setup.WebApi
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
+    [Authorize(Policy = "ActiveUser")]
     public sealed class SetupController : ControllerBase
     {
         private readonly Account.Settings accountSettings;

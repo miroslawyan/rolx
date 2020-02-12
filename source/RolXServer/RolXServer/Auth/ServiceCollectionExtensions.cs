@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -40,6 +41,13 @@ namespace RolXServer.Auth
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // TODO: check if required
             }).AddJwtBearer(options => new Domain.Detail.BearerTokenFactory(settingsSection.Get<Settings>()).Configure(options));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ActiveUser", policy => policy.Requirements.Add(new WebApi.Detail.ActiveUserRequirement()));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, WebApi.Detail.ActiveUserHandler>();
 
             return services;
         }
