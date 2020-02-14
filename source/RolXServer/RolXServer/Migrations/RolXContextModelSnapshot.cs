@@ -19,7 +19,7 @@ namespace RolXServer.Migrations
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("RolXServer.Account.DataAccess.FavouritePhase", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.FavouritePhase", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -34,7 +34,7 @@ namespace RolXServer.Migrations
                     b.ToTable("FavouritePhases");
                 });
 
-            modelBuilder.Entity("RolXServer.Account.DataAccess.Phase", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Phase", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,7 +75,7 @@ namespace RolXServer.Migrations
                     b.ToTable("Phases");
                 });
 
-            modelBuilder.Entity("RolXServer.Account.DataAccess.Project", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,6 +96,64 @@ namespace RolXServer.Migrations
                         .IsUnique();
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("RolXServer.Records.DataAccess.Record", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Date", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("Records");
+                });
+
+            modelBuilder.Entity("RolXServer.Records.DataAccess.RecordEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<TimeSpan?>("Begin")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("interval");
+
+                    b.Property<TimeSpan?>("Pause")
+                        .HasColumnType("interval");
+
+                    b.Property<int>("PhaseId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RecordId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhaseId");
+
+                    b.HasIndex("RecordId");
+
+                    b.ToTable("RecordEntries");
                 });
 
             modelBuilder.Entity("RolXServer.Users.DataAccess.User", b =>
@@ -157,67 +215,9 @@ namespace RolXServer.Migrations
                     b.ToTable("UserSettings");
                 });
 
-            modelBuilder.Entity("RolXServer.WorkRecord.DataAccess.Record", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.FavouritePhase", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("Date", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("Records");
-                });
-
-            modelBuilder.Entity("RolXServer.WorkRecord.DataAccess.RecordEntry", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<TimeSpan?>("Begin")
-                        .HasColumnType("time");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("interval");
-
-                    b.Property<TimeSpan?>("Pause")
-                        .HasColumnType("interval");
-
-                    b.Property<int>("PhaseId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RecordId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PhaseId");
-
-                    b.HasIndex("RecordId");
-
-                    b.ToTable("RecordEntries");
-                });
-
-            modelBuilder.Entity("RolXServer.Account.DataAccess.FavouritePhase", b =>
-                {
-                    b.HasOne("RolXServer.Account.DataAccess.Phase", "Phase")
+                    b.HasOne("RolXServer.Projects.DataAccess.Phase", "Phase")
                         .WithMany()
                         .HasForeignKey("PhaseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -230,11 +230,35 @@ namespace RolXServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RolXServer.Account.DataAccess.Phase", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Phase", b =>
                 {
-                    b.HasOne("RolXServer.Account.DataAccess.Project", "Project")
+                    b.HasOne("RolXServer.Projects.DataAccess.Project", "Project")
                         .WithMany("Phases")
                         .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RolXServer.Records.DataAccess.Record", b =>
+                {
+                    b.HasOne("RolXServer.Users.DataAccess.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RolXServer.Records.DataAccess.RecordEntry", b =>
+                {
+                    b.HasOne("RolXServer.Projects.DataAccess.Phase", "Phase")
+                        .WithMany()
+                        .HasForeignKey("PhaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RolXServer.Records.DataAccess.Record", null)
+                        .WithMany("Entries")
+                        .HasForeignKey("RecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -244,30 +268,6 @@ namespace RolXServer.Migrations
                     b.HasOne("RolXServer.Users.DataAccess.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RolXServer.WorkRecord.DataAccess.Record", b =>
-                {
-                    b.HasOne("RolXServer.Users.DataAccess.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RolXServer.WorkRecord.DataAccess.RecordEntry", b =>
-                {
-                    b.HasOne("RolXServer.Account.DataAccess.Phase", "Phase")
-                        .WithMany()
-                        .HasForeignKey("PhaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RolXServer.WorkRecord.DataAccess.Record", null)
-                        .WithMany("Entries")
-                        .HasForeignKey("RecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

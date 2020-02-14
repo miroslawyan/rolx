@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { AccountModule} from '@app/account';
 import { AppImportModule } from '@app/app-import.module';
 import { AuthModule } from '@app/auth';
+import { ProjectsModule} from '@app/projects';
+import { RecordsModule } from '@app/records';
 import { UsersModule } from '@app/users';
-import { WorkRecordModule } from '@app/work-record';
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
@@ -19,13 +19,13 @@ import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
     SignInPageComponent,
   ],
   imports: [
-    AccountModule,
+    ProjectsModule,
     AppImportModule,
     AuthModule,
     CommonModule,
     MainRoutingModule,
     UsersModule,
-    WorkRecordModule,
+    RecordsModule,
   ],
 })
 export class MainModule { }

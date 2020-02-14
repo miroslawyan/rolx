@@ -67,7 +67,6 @@ jobs:
       - script: npm run ng -- build --prod
         displayName: "ng build --prod"
         workingDirectory: '$(rolXClient)'
-        failOnStderr: true
 
       - script: npm run ng -- lint
         displayName: "ng lint"

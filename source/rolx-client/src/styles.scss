@@ -6,7 +6,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @include mat-core();
 
 @import 'theme';
-@import 'app/work-record/shared/theme';
+@import 'app/records/shared/theme';
 
 @mixin apply-theme($theme) {
   @include work-record-shared-theme($theme);

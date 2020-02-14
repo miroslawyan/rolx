@@ -21,13 +21,13 @@ namespace RolXServer.Setup.WebApi
     [Authorize(Policy = "ActiveUser")]
     public sealed class SetupController : ControllerBase
     {
-        private readonly Account.Settings accountSettings;
+        private readonly Projects.Settings accountSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SetupController" /> class.
         /// </summary>
         /// <param name="accountSettingsAccessor">The account settings accessor.</param>
-        public SetupController(IOptions<Account.Settings> accountSettingsAccessor)
+        public SetupController(IOptions<Projects.Settings> accountSettingsAccessor)
         {
             this.accountSettings = accountSettingsAccessor.Value;
         }
