@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AppImportModule } from '@app/app-import.module';
-import { AuthModule } from '@app/auth';
 import { ProjectsModule} from '@app/projects';
 import { RecordsModule } from '@app/records';
 import { UsersModule } from '@app/users';
@@ -21,7 +20,6 @@ import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
   imports: [
     ProjectsModule,
     AppImportModule,
-    AuthModule,
     CommonModule,
     MainRoutingModule,
     UsersModule,

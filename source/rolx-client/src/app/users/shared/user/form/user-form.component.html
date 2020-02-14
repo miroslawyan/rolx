@@ -1,16 +1,10 @@
 <mat-card>
 
   <mat-card-title>
-
-    <!-- TODO: pack this into a component -->
-    <img mat-card-avatar
-         src="{{ user.avatarUrl || 'assets/images/defaultAvatar.png' }}"
-         alt="avatar" />
-
+    <rolx-user-avatar [user]="user"></rolx-user-avatar>
     <span>
       {{user.fullName}}
     </span>
-
   </mat-card-title>
 
   <mat-card-content>

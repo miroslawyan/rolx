@@ -18,15 +18,16 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
+      <button *ngIf="isHandset$ | async"
+              type="button"
+              aria-label="Toggle sidenav"
+              mat-icon-button
+              (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <rolx-user-avatar></rolx-user-avatar>
+
+      <rolx-user-menu></rolx-user-menu>
+
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

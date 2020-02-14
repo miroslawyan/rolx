@@ -9,11 +9,7 @@
   <ng-container matColumnDef="avatar">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let user">
-      <img
-        mat-card-avatar
-        src="{{ user.avatarUrl || 'assets/images/defaultAvatar.png' }}"
-        alt="avatar"
-      />
+      <rolx-user-avatar [user]="user"></rolx-user-avatar>
     </td>
   </ng-container>
 
