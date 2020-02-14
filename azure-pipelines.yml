@@ -1,0 +1,88 @@
+trigger:
+  - master
+  - issue/*
+
+variables:
+  rolXServer: 'source/RolXServer'
+  rolXClient: 'source/rolx-client'
+
+jobs:
+  - job: Server
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    variables:
+      buildConfiguration: 'Release'
+      NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    steps:
+      - task: UseDotNet@2
+        displayName: "install .NET Core 3.1"
+        inputs:
+          version: '3.1.x'
+          packageType: sdk
+
+      # - task: Cache@2
+      #   displayName: "cache NuGet packages"
+      #   inputs:
+      #     key: 'nuget | "$(Agent.OS)" | **/packages.lock.json'
+      #     restoreKeys: |
+      #       nuget | "$(Agent.OS)"
+      #       nuget
+      #     path: $(NUGET_PACKAGES)
+
+      - task: DotNetCoreCLI@2
+        displayName: "dotnet build"
+        inputs:
+          command: build
+          projects: '$(rolXServer)/**/*.csproj'
+          arguments: '--configuration $(buildConfiguration) /p:TreatWarningsAsErrors="true"'
+
+      - task: DotNetCoreCLI@2
+        displayName: "dotnet test"
+        inputs:
+          command: test
+          projects: '$(rolXServer)/**/*Tests/*.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+
+  - job: Client
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+      - task: Cache@2
+        displayName: "cache node_modules"
+        inputs:
+          key: '$(rolXClient)/package-lock.json'
+          path: '$(rolXClient)/node_modules'
+          cacheHitVar: NODE_MODULES_RESTORED
+
+      - script: npm ci
+        displayName: "npm ci"
+        workingDirectory: '$(rolXClient)'
+        condition: ne(variables.NODE_MODULES_RESTORED, 'true')
+
+      - script: npm run ng -- build --prod
+        displayName: "ng build --prod"
+        workingDirectory: '$(rolXClient)'
+        failOnStderr: true
+
+      - script: npm run ng -- lint
+        displayName: "ng lint"
+        workingDirectory: '$(rolXClient)'
+        failOnStderr: true
+
+      - script: npm run ng -- test --watch=false
+        displayName: "ng test"
+        workingDirectory: '$(rolXClient)'
+
+      - task: PublishTestResults@2
+        displayName: 'publish test results'
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '$(rolXClient)/**/TESTS-*.xml'
+
+
