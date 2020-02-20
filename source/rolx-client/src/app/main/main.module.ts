@@ -9,6 +9,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
+import { SomethingWentWrongPageComponent } from './something-went-wrong-page/something-went-wrong-page.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
     MainPageComponent,
     NotFoundPageComponent,
     SignInPageComponent,
+    SomethingWentWrongPageComponent,
   ],
   imports: [
     ProjectsModule,

@@ -9,6 +9,7 @@ import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.componen
 import { MainPageComponent } from './main-page/main-page.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
+import { SomethingWentWrongPageComponent } from './something-went-wrong-page/something-went-wrong-page.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
       {
         path: 'four-oh-four',
         component: NotFoundPageComponent,
+      },
+      {
+        path: 'server-error',
+        component: SomethingWentWrongPageComponent,
       },
     ],
   },
