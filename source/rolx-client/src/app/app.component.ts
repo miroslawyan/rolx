@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { Theme, ThemeService } from './core/theme';
 
 @Component({
@@ -7,12 +7,25 @@ import { Theme, ThemeService } from './core/theme';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  themeClass$ = this.themeService.currentTheme$.pipe(
-    map(t => t === Theme.bright ? 'bright-theme' : 'dark-theme'),
-  );
+  private static readonly ThemeClasses = ['dark-theme', 'bright-theme'];
 
-  constructor(public themeService: ThemeService) { }
+  @HostBinding('class') componentCssClass;
 
+  constructor(public themeService: ThemeService, public overlayContainer: OverlayContainer) { }
+
+  ngOnInit() {
+    this.themeService.currentTheme$
+      .subscribe(t => this.applyTheme(t));
+  }
+
+  private applyTheme(theme: Theme) {
+    const themeClass = AppComponent.ThemeClasses[theme];
+    this.componentCssClass = themeClass;
+
+    const overlayClassList = this.overlayContainer.getContainerElement().classList;
+    overlayClassList.remove(...AppComponent.ThemeClasses);
+    overlayClassList.add(themeClass);
+  }
 }
