@@ -1,48 +1,52 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, SignInState } from '@app/auth/core';
+import { AuthService, GoogleAuthService } from '@app/auth/core';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-sign-in',
   templateUrl: './sign-in-page.component.html',
   styleUrls: ['./sign-in-page.component.scss'],
 })
-export class SignInPageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SignInPageComponent implements OnInit, OnDestroy {
 
-  SignInState = SignInState;
-
+  private readonly subscriptions = new Subscription();
   private forwardRoute = '';
-  private subscriptions: Subscription[] = [];
+
+  busy = false;
 
   constructor(private authService: AuthService,
+              private googleAuthService: GoogleAuthService,
               private route: ActivatedRoute,
               private router: Router) { }
-
-  get currentUser() {
-    return this.authService.currentUser;
-  }
 
   ngOnInit(): void {
     this.forwardRoute = this.route.snapshot.queryParams.forwardRoute || '/';
 
-    this.subscriptions.push(this.authService.currentUser$.pipe(
-      filter(u => u.state === SignInState.SignedIn),
-    ).subscribe(() => this.navigateForward()));
-  }
-
-  ngAfterViewInit() {
-    this.authService.renderSignInButton('sign-in-button');
+    this.busy = true;
+    Promise.all([
+      this.googleAuthService.initialize(),
+      this.authService.initialize(),
+    ]).then(() => {
+      this.googleAuthService.signOut();
+      this.busy = false;
+    });
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.map(s => s.unsubscribe());
+    this.subscriptions.unsubscribe();
   }
 
-  private navigateForward() {
-    this.router.navigateByUrl(this.forwardRoute)
-      .catch(e => console.log(e.name + ': ' + e.message));
+  async signIn() {
+    this.busy = true;
+
+    try {
+      const googleUser = await this.googleAuthService.signIn();
+      await this.authService.signIn(googleUser.getAuthResponse().id_token);
+      await this.router.navigateByUrl(this.forwardRoute);
+    } finally {
+      this.busy = false;
+    }
   }
 
 }

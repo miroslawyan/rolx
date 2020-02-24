@@ -33,8 +33,10 @@ export class UserMenuComponent implements OnInit {
   }
 
   signOut() {
-    this.authService.signOut()
-      .subscribe(() => this.router.navigateByUrl('/sign-in'));
+    this.authService.signOut();
+
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigateByUrl('/sign-in');
   }
 
   toggleTheme() {

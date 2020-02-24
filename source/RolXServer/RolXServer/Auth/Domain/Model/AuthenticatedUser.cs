@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+
 using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Auth.Domain.Model
@@ -19,5 +21,10 @@ namespace RolXServer.Auth.Domain.Model
         /// Gets or sets the bearer token.
         /// </summary>
         public string BearerToken { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the date/time this token expires.
+        /// </summary>
+        public DateTime Expires { get; set; }
     }
 }

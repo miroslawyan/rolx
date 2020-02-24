@@ -1,6 +1,7 @@
 export * from './duration';
 export * from './duration.validators';
 export * from './iso-date';
+export * from './iso-date-time';
 export * from './operators';
 export * from './strong-typed-form-control';
 export * from './time-form-control';

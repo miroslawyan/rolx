@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using RolXServer.Auth.Domain.Detail;
 using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Auth.Domain.Mapping
@@ -20,8 +21,10 @@ namespace RolXServer.Auth.Domain.Mapping
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="bearerToken">The bearer token.</param>
-        /// <returns>The domain.</returns>
-        public static Model.AuthenticatedUser ToDomain(this User entity, string bearerToken)
+        /// <returns>
+        /// The domain.
+        /// </returns>
+        public static Model.AuthenticatedUser ToDomain(this User entity, BearerToken bearerToken)
         {
             return new Model.AuthenticatedUser
             {
@@ -34,7 +37,8 @@ namespace RolXServer.Auth.Domain.Mapping
                 Role = entity.Role,
                 EntryDate = entity.EntryDate,
                 LeavingDate = entity.LeavingDate,
-                BearerToken = bearerToken,
+                BearerToken = bearerToken.Token,
+                Expires = bearerToken.Expires,
             };
         }
     }

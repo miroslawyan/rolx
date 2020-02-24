@@ -1,7 +1,7 @@
 <button type="button"
         mat-icon-button
         [matMenuTriggerFor]="menu"
-        matTooltip="{{user.fullName}}&#13;{{user.email}}"
+        matTooltip="{{user?.fullName}}&#13;{{user?.email}}"
         matTooltipPosition="before"
         matTooltipClass="tooltip-no-line-wrap">
   <rolx-user-avatar [user]="user"></rolx-user-avatar>

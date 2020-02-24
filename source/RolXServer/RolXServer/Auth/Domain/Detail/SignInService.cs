@@ -24,7 +24,7 @@ namespace RolXServer.Auth.Domain.Detail
     /// <summary>
     /// Service for signing users in.
     /// </summary>
-    public sealed class SignInService : ISignInService
+    internal sealed class SignInService : ISignInService
     {
         private readonly RolXContext dbContext;
         private readonly BearerTokenFactory bearerTokenFactory;

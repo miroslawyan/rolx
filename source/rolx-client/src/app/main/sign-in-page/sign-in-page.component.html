@@ -4,13 +4,16 @@
   </mat-card-title>
 
   <mat-card-content>
-
-    <div id="sign-in-button" [class.hidden]="currentUser.state >= SignInState.Authenticated"></div>
-
-    <mat-spinner *ngIf="currentUser.state >= SignInState.Authenticated"
+    <mat-spinner *ngIf="busy"
                  [diameter]="60"
                  [color]="'accent'"></mat-spinner>
-
   </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-raised-button
+            color="primary"
+            [disabled]="busy"
+            (click)="signIn()">Sign-in with Google</button>
+  </mat-card-actions>
 
 </mat-card>

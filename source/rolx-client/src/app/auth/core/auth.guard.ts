@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import moment from 'moment';
 import { AuthService } from './auth.service';
-import { SignInState } from './sign-in.state';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -11,14 +10,14 @@ export class AuthGuard implements CanActivate {
     private authService: AuthService,
   ) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.authService.initialize()
-      .then(() => this.isAuthorized(state));
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    await this.authService.initialize();
+    return this.isAuthorized(state);
   }
 
   private isAuthorized(state: RouterStateSnapshot) {
     const currentUser = this.authService.currentUser;
-    if (currentUser.state !== SignInState.SignedIn) {
+    if (!currentUser) {
       return this.router.createUrlTree(['/sign-in'], { queryParams: { forwardRoute: state.url } });
     }
 

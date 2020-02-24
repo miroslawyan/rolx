@@ -3,9 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { AuthService } from './auth.service';
-import { SignInState } from './sign-in.state';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -15,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const currentUser = this.authService.currentUser;
-    if (currentUser.state === SignInState.SignedIn && currentUser.bearerToken) {
+    if (currentUser) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${currentUser.bearerToken}`,
@@ -35,9 +33,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
     if (error instanceof HttpErrorResponse) {
       if (error.status === 401) {
-        this.authService.signOut()
-          .subscribe(
-            () => this.router.navigate(['/sign-in'], { queryParams: { forwardRoute: state.url } }));
+        this.authService.signOut();
+
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/sign-in'], { queryParams: { forwardRoute: state.url } });
       }
     }
   }

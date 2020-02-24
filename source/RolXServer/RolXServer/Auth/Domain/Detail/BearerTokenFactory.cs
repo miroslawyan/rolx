@@ -23,7 +23,7 @@ namespace RolXServer.Auth.Domain.Detail
     /// <summary>
     /// Produces JWT bearer tokens.
     /// </summary>
-    public sealed class BearerTokenFactory
+    internal sealed class BearerTokenFactory
     {
         private readonly Settings settings;
         private readonly SymmetricSecurityKey key;
@@ -67,7 +67,7 @@ namespace RolXServer.Auth.Domain.Detail
         /// </summary>
         /// <param name="user">The user.</param>
         /// <returns>The bearer token.</returns>
-        public string ProduceFor(User user)
+        public BearerToken ProduceFor(User user)
         {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -78,7 +78,11 @@ namespace RolXServer.Auth.Domain.Detail
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return new BearerToken
+            {
+                Token = tokenHandler.WriteToken(token),
+                Expires = tokenDescriptor.Expires.Value,
+            };
         }
 
         private static IEnumerable<Claim> ProduceClaimsFor(User user)

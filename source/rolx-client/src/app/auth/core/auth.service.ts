@@ -1,99 +1,84 @@
-import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject, bindCallback, forkJoin, from, Observable, of, Subject } from 'rxjs';
-import { catchError, filter, map, switchMap, take, tap, timeout } from 'rxjs/operators';
-
-import { enterZone } from '@app/core/util';
-import { CurrentUser } from './current.user';
-import { Info } from './info';
+import { Injectable } from '@angular/core';
+import { AuthenticatedUser } from '@app/auth/core/authenticated.user';
+import { classToPlain, plainToClass } from 'class-transformer';
+import { BehaviorSubject } from 'rxjs';
 import { SignInService } from './sign-in.service';
-import { SignInState } from './sign-in.state';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private static readonly CurrentUserKey = 'currentUser';
 
+  private readonly currentUserSubject = new BehaviorSubject<AuthenticatedUser | null>(null);
   private isInitialized = false;
-  private googleUserSubject = new Subject<gapi.auth2.GoogleUser>();
-  private currentUserSubject = new BehaviorSubject<CurrentUser>(new CurrentUser());
+
   currentUser$ = this.currentUserSubject.asObservable();
-
-  constructor(private signInService: SignInService,
-              private zone: NgZone) {
-    console.log('--- AuthService.ctor()');
-
-    this.currentUser$.pipe(
-      filter(u => u.state === SignInState.Authenticated),
-      switchMap(u => this.signInService.signIn(u).pipe(
-        map(au => CurrentUser.fromAuthenticatedUser(au)),
-        catchError(e => this.handleSignInError(e)),
-      )),
-    ).subscribe(u => this.currentUserSubject.next(u));
-
-    this.googleUserSubject.subscribe(u => this.currentUserSubject.next(CurrentUser.fromGoogleUser(u)));
-  }
-
-  initialize(): Promise<void> {
-    if (this.isInitialized) {
-      return Promise.resolve();
-    }
-
-    console.log('--- AuthService.initialize()');
-
-    const firstGoogleUser = this.googleUserSubject.pipe(
-      timeout(500),
-      catchError(() => of(null)),
-      take(1),
-    );
-
-    const gapiLoader = bindCallback(gapi.load);
-    const initialization = this.signInService.getInfo().pipe(
-      switchMap(info => gapiLoader('auth2').pipe(
-        map(() => this.initializeGApi(info)),
-      )),
-    );
-
-    return forkJoin([firstGoogleUser, initialization])
-      .toPromise()
-      .then(() => this.isInitialized = true)
-      .then(() => console.log('--- AuthService.initialize() done'));
-  }
-
   get currentUser() {
     return this.currentUserSubject.value;
   }
 
-  renderSignInButton(targetElementId: string) {
-    gapi.signin2.render(targetElementId, {
-      scope: 'profile email',
-      width: 240,
-      height: 50,
-      longtitle: true,
-      theme: 'dark',
-      onfailure: reason => console.warn('Failed to authenticate with google. Reason:', reason),
-    });
+  constructor(private signInService: SignInService) {
+    console.log('--- AuthService.ctor()');
   }
 
-  signOut(): Observable<CurrentUser> {
-    return from(gapi.auth2.getAuthInstance().disconnect())
-      .pipe(
-        enterZone(this.zone),
-        map(() => new CurrentUser()),
-        tap(u => this.currentUserSubject.next(u)),
-      );
+  private static LoadCurrentUser(): AuthenticatedUser | null {
+    const userJson = localStorage.getItem(AuthService.CurrentUserKey);
+    if (!userJson) {
+      return null;
+    }
+
+    const userPlain = JSON.parse(userJson);
+    return plainToClass(AuthenticatedUser, userPlain);
   }
 
-  private initializeGApi(info: Info) {
-    gapi.auth2.init({
-      client_id: info.googleClientId,
-    });
-
-    const auth2 = gapi.auth2.getAuthInstance();
-    auth2.currentUser.listen(u => this.zone.run(() => this.googleUserSubject.next(u)));
+  private static StoreCurrentUser(user: AuthenticatedUser) {
+    localStorage.setItem(AuthService.CurrentUserKey, JSON.stringify(classToPlain(user)));
   }
 
-  private handleSignInError(error: any) {
-    console.warn('Failed to sign in', error);
-    return this.signOut();
+  private static ClearCurrentUser() {
+    localStorage.removeItem(AuthService.CurrentUserKey);
+  }
+
+  async initialize(): Promise<void> {
+    if (this.isInitialized) {
+      return;
+    }
+
+    console.log('--- AuthService.initialize()');
+    this.isInitialized = true;
+
+    let currentUser = AuthService.LoadCurrentUser();
+
+    if (!currentUser || currentUser.isExpired) {
+      AuthService.ClearCurrentUser();
+      this.currentUserSubject.next(null);
+
+      console.log('--- AuthService.initialize() done');
+      return;
+    }
+
+    if (currentUser.willExpireSoon) {
+      currentUser = await this.signInService.extend().toPromise();
+    }
+
+    AuthService.StoreCurrentUser(currentUser);
+    this.currentUserSubject.next(currentUser);
+
+    console.log('--- AuthService.initialize() done');
+  }
+
+  async signIn(googleIdToken: string): Promise<void> {
+    const currentUser = await this.signInService.signIn({
+      googleIdToken,
+    }).toPromise();
+
+    AuthService.StoreCurrentUser(currentUser);
+    this.currentUserSubject.next(currentUser);
+  }
+
+  signOut() {
+    AuthService.ClearCurrentUser();
+    this.currentUserSubject.next(null);
   }
 }

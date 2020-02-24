@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard, AuthResolve } from '@app/auth/core';
+import { AuthGuard } from '@app/auth/core';
 import { SetupResolve } from '@app/core/setup';
 import { ProjectsRoutes } from '@app/projects';
 import { RecordsRoutes } from '@app/records';
@@ -34,7 +34,6 @@ const routes: Routes = [
   {
     path: 'sign-in',
     component: SignInPageComponent,
-    resolve: { items: AuthResolve },
   },
   {
     path: 'forbidden',

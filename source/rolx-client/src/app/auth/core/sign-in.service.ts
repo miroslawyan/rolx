@@ -26,4 +26,10 @@ export class SignInService {
       mapPlainToClass(AuthenticatedUser),
     );
   }
+
+  extend(): Observable<AuthenticatedUser> {
+    return this.httpClient.get(SignInUrl + '/extend').pipe(
+      mapPlainToClass(AuthenticatedUser),
+    );
+  }
 }
