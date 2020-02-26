@@ -30,6 +30,8 @@ namespace RolXServer.Records.Domain.Mapping
             {
                 Date = entity.Date,
                 UserId = entity.UserId,
+                PaidLeaveType = entity.PaidLeaveType,
+                PaidLeaveReason = entity.PaidLeaveReason,
                 Entries = entity.Entries,
             };
         }
@@ -47,6 +49,8 @@ namespace RolXServer.Records.Domain.Mapping
             {
                 Date = domain.Date,
                 UserId = domain.UserId,
+                PaidLeaveType = domain.PaidLeaveType,
+                PaidLeaveReason = domain.PaidLeaveReason,
                 Entries = domain.Entries,
             };
         }
@@ -79,6 +83,20 @@ namespace RolXServer.Records.Domain.Mapping
             {
                 yield return empty;
             }
+        }
+
+        /// <summary>
+        /// Updates the specified entity.
+        /// </summary>
+        /// <param name="domain">The domain.</param>
+        /// <param name="entity">The entity.</param>
+        public static void Update(this Model.Record domain, DataAccess.Record entity)
+        {
+            entity.PaidLeaveType = domain.PaidLeaveType;
+            entity.PaidLeaveReason = domain.PaidLeaveReason;
+
+            entity.Entries.Clear();
+            entity.Entries = domain.Entries;
         }
 
         private static IEnumerable<Model.Record> ToEmptyDomain(this DateRange range, Guid userId)

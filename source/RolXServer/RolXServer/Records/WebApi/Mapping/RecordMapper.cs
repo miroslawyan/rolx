@@ -32,6 +32,8 @@ namespace RolXServer.Records.WebApi.Mapping
                 DayType = domain.DayType,
                 DayName = domain.DayName,
                 NominalWorkTime = (long)domain.NominalWorkTime.TotalSeconds,
+                PaidLeaveType = domain.PaidLeaveType,
+                PaidLeaveReason = domain.PaidLeaveReason,
                 Entries = domain.Entries.Select(e => e.ToResource()).ToList(),
             };
         }
@@ -52,6 +54,8 @@ namespace RolXServer.Records.WebApi.Mapping
                 DayType = resource.DayType,
                 DayName = resource.DayName,
                 NominalWorkTime = TimeSpan.FromSeconds(resource.NominalWorkTime),
+                PaidLeaveType = resource.PaidLeaveType,
+                PaidLeaveReason = resource.PaidLeaveReason,
                 Entries = resource.Entries.Select(e => e.ToDomain()).ToList(),
             };
         }

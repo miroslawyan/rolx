@@ -42,8 +42,23 @@ namespace RolXServer.Records.Domain.Model
         public TimeSpan NominalWorkTime { get; set; }
 
         /// <summary>
+        /// Gets or sets the type of paid leave.
+        /// </summary>
+        public PaidLeaveType? PaidLeaveType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the paid leave reason.
+        /// </summary>
+        public string? PaidLeaveReason { get; set; }
+
+        /// <summary>
         /// Gets or sets the entries.
         /// </summary>
         public List<DataAccess.RecordEntry> Entries { get; set; } = new List<DataAccess.RecordEntry>();
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is empty.
+        /// </summary>
+        public bool IsEmpty => this.Entries.Count == 0 && !this.PaidLeaveType.HasValue && this.PaidLeaveReason == null;
     }
 }

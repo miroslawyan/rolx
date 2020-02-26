@@ -1,0 +1,20 @@
+<mat-select class="rolx-paid-leave-select"
+            [(value)]="type"
+            [placeholder]="record.overtime.toString()"
+            [matTooltip]="record.paidLeaveReason">
+
+  <mat-select-trigger *ngIf="type != null">
+    <mat-icon [svgIcon]="iconForPaidLeaveType(type)"></mat-icon>
+  </mat-select-trigger>
+
+  <mat-option>
+    <mat-icon svgIcon="hammer-wrench"></mat-icon>
+    Arbeit
+  </mat-option>
+
+  <mat-option *ngFor="let type of PaidLeaveType | enumToArray" [value]="type">
+    <mat-icon [svgIcon]="iconForPaidLeaveType(type)"></mat-icon>
+    {{textForPaidLeaveType(type)}}
+  </mat-option>
+
+</mat-select>

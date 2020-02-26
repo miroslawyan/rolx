@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>
+  Begründung für die Abwesenheit?
+</h1>
+
+<form id="reason-edit"
+      mat-dialog-content
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      autocomplete="off">
+
+  <mat-form-field>
+    <input matInput
+           [formControl]="reason"
+           placeholder="Grund"
+           required>
+  </mat-form-field>
+
+</form>
+
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="null">Abbruch</button>
+  <button mat-button
+          type="submit"
+          form="reason-edit"
+          [disabled]="!form.valid">
+    Speichern
+  </button>
+</mat-dialog-actions>

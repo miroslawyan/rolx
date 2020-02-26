@@ -6,7 +6,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Linq;
+
 using FluentValidation;
+using FluentValidation.Validators;
 using RolXServer.Common.Util;
 using RolXServer.Records.WebApi.Resource;
 
@@ -34,6 +37,31 @@ namespace RolXServer.Records.WebApi.Validation
 
             this.RuleForEach(r => r.Entries)
                 .SetValidator(r => new RecordEntryValidator(r, this.rolXContext));
+
+            this.RuleFor(r => r.PaidLeaveReason)
+                .NotNull()
+                .NotEmpty()
+                .Unless(r => r.PaidLeaveType != PaidLeaveType.Other);
+
+            this.RuleFor(r => r.PaidLeaveType)
+                .Must(NotHaveOvertime)
+                .Unless(r => !r.PaidLeaveType.HasValue);
+        }
+
+        private static bool NotHaveOvertime(Record candidate, PaidLeaveType? type, PropertyValidatorContext context)
+        {
+            var workTime = candidate.Entries
+                .Select(e => e.Duration)
+                .DefaultIfEmpty(0)
+                .Sum();
+
+            if (workTime > candidate.NominalWorkTime)
+            {
+                context.Rule.MessageBuilder = c => "It's not allowed to do overtime on days with paid leave.";
+                return false;
+            }
+
+            return true;
         }
     }
 }

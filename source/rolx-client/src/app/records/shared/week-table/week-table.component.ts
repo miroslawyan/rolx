@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FavouritePhaseService, Phase } from '@app/projects/core';
-import { Record } from '@app/records/core';
+import { Record, WorkRecordService } from '@app/records/core';
 import { User } from '@app/users/core';
 import { Subscription } from 'rxjs';
 
@@ -41,7 +41,8 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   private homegrownPhases: Phase[] = [];
   private subscriptions = new Subscription();
 
-  constructor(private favouritePhaseService: FavouritePhaseService) { }
+  constructor(private favouritePhaseService: FavouritePhaseService,
+              private workRecordService: WorkRecordService) { }
 
   @Input()
   get phases(): Phase[] {
@@ -74,6 +75,11 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     this.isAddingPhase = false;
     this.homegrownPhases.push(phase);
     this.update();
+  }
+
+  submit(record: Record, index: number) {
+    this.workRecordService.update(record)
+      .subscribe(r => this.records[index] = r);
   }
 
   private set favourites(value: Phase[]) {

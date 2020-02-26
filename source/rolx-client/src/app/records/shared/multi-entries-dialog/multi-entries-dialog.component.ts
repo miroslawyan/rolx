@@ -3,7 +3,7 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Duration } from '@app/core/util';
 import { Phase } from '@app/projects/core';
-import { Record, RecordEntry, WorkRecordService } from '@app/records/core';
+import { Record, RecordEntry } from '@app/records/core';
 import { FormRow } from './form-row';
 
 export interface MultiEntriesDialogData {
@@ -34,7 +34,6 @@ export class MultiEntriesDialogComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: MultiEntriesDialogData,
               private dialogRef: MatDialogRef<MultiEntriesDialogComponent>,
-              private workRecordService: WorkRecordService,
               private fb: FormBuilder) {
     this.dialogRef.disableClose = true;
   }
@@ -64,15 +63,11 @@ export class MultiEntriesDialogComponent implements OnInit {
       .map(r => r.toEntry());
 
     const record = this.data.record.replaceEntriesOfPhase(this.data.phase, entries);
-    this.workRecordService.update(record)
-      .subscribe(() => {
-        this.data.record.entries = record.entries;
-        this.close();
-      });
+    this.dialogRef.close(record);
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(null);
   }
 
   tryAddRow(index: number) {

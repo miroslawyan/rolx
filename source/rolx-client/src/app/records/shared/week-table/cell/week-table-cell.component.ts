@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { GridCoordinates, GridNavigationService } from '@app/core/grid-navigation';
 import { Duration } from '@app/core/util';
 import { Phase } from '@app/projects/core';
-import { Record, RecordEntry, WorkRecordService } from '@app/records/core';
+import { Record, RecordEntry } from '@app/records/core';
 import { DurationEditComponent, MultiEntriesDialogComponent, MultiEntriesDialogData } from '@app/records/shared';
 import { User } from '@app/users/core';
 import { Subscription } from 'rxjs';
@@ -51,6 +51,9 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     this.coordinates = new GridCoordinates(value, this.coordinates.row);
   }
 
+  @Output()
+  changed = new EventEmitter<Record>();
+
   get entries(): RecordEntry[] {
     return this.record.entriesOf(this.phase);
   }
@@ -72,8 +75,7 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   }
 
   constructor(private gridNavigationService: GridNavigationService,
-              private dialog: MatDialog,
-              private workRecordService: WorkRecordService) { }
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     this.subscription.add(
@@ -101,8 +103,7 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     entry.duration = duration;
 
     const record = this.record.replaceEntriesOfPhase(this.phase, [entry]);
-    this.workRecordService.update(record)
-      .subscribe(() => this.record.entries = record.entries);
+    this.changed.emit(record);
   }
 
   editEntries() {
@@ -114,7 +115,9 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     this.dialog.open(MultiEntriesDialogComponent, {
       closeOnNavigation: true,
       data,
-    });
+    }).afterClosed().pipe(
+      filter(r => r != null),
+    ).subscribe(r => this.changed.emit(r));
   }
 
   private enter(coordinates: GridCoordinates) {

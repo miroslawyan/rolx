@@ -53,6 +53,10 @@ export class Duration extends DurationBase<Duration> {
   sub(other: Duration): Duration {
     return new Duration(this.seconds - other.seconds);
   }
+
+  isGreaterThanOrEqualTo(other: Duration): boolean {
+    return this.seconds >= other.seconds;
+  }
 }
 
 export function TransformAsDuration(): (target: any, key: string) => void {

@@ -1,7 +1,8 @@
 import { registerLocaleData } from '@angular/common';
 import localeDeCh from '@angular/common/locales/de-CH';
 import { LOCALE_ID, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
@@ -24,4 +25,8 @@ registerLocaleData(localeDeCh);
   providers: [{ provide: LOCALE_ID, useValue: 'de-CH' }],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
+  }
+}

@@ -1,5 +1,6 @@
 export * from './duration';
 export * from './duration.validators';
+export * from './enum-to-array.pipe';
 export * from './iso-date';
 export * from './iso-date-time';
 export * from './operators';

@@ -52,7 +52,8 @@
                             [column]="i"
                             [record]="records[i]"
                             [phase]="phase"
-                            [user]="user"></rolx-week-table-cell>
+                            [user]="user"
+                            (changed)="submit($event, i)"></rolx-week-table-cell>
     </td>
 
     <td mat-footer-cell
@@ -60,9 +61,13 @@
         class="day"
         [class.non-workday]="!records[i].isWorkday">
 
-      <span>
-        {{records[i].overtime}}
-      </span>
+      <rolx-paid-leave-select *ngIf="records[i].mayHavePaidLeave; else overtime"
+                              [record]="records[i]"
+                              (changed)="submit($event, i)"></rolx-paid-leave-select>
+
+      <ng-template #overtime>
+        <span>{{records[i].overtime}}</span>
+      </ng-template>
 
     </td>
 

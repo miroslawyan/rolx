@@ -42,6 +42,16 @@ namespace RolXServer.Records.WebApi.Resource
         public long NominalWorkTime { get; set; }
 
         /// <summary>
+        /// Gets or sets the type of paid leave.
+        /// </summary>
+        public PaidLeaveType? PaidLeaveType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the paid leave reason.
+        /// </summary>
+        public string? PaidLeaveReason { get; set; }
+
+        /// <summary>
         /// Gets or sets the entries.
         /// </summary>
         public List<RecordEntry> Entries { get; set; } = new List<RecordEntry>();

@@ -82,7 +82,7 @@ namespace RolXServer.Records.Domain.Detail
                 .Include(r => r.Entries)
                 .SingleOrDefaultAsync(r => r.Date == record.Date && r.UserId == record.UserId);
 
-            if (record.Entries.Count == 0)
+            if (record.IsEmpty)
             {
                 if (entity != null)
                 {
@@ -95,8 +95,7 @@ namespace RolXServer.Records.Domain.Detail
 
             if (entity != null)
             {
-                entity.Entries.Clear();
-                entity.Entries = record.Entries;
+                record.Update(entity);
             }
             else
             {

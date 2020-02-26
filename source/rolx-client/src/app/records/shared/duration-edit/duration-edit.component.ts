@@ -2,6 +2,8 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { FormGroup } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { Duration, DurationValidators, TimeFormControl } from '@app/core/util';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-duration-edit',
@@ -10,6 +12,7 @@ import { Duration, DurationValidators, TimeFormControl } from '@app/core/util';
 })
 export class DurationEditComponent implements OnInit {
 
+  private readonly changedSubject = new Subject<Duration>();
   private valueShadow = Duration.Zero;
 
   @ViewChild('input')
@@ -28,7 +31,9 @@ export class DurationEditComponent implements OnInit {
   more = new EventEmitter();
 
   @Output()
-  changed = new EventEmitter<Duration>();
+  changed = this.changedSubject.pipe(
+    debounceTime(20), // filter multiple events cause by enter-key leading to blur
+  );
 
   readonly errorStateMatcher = new ShowOnDirtyErrorStateMatcher();
 
@@ -65,7 +70,7 @@ export class DurationEditComponent implements OnInit {
       return;
     }
 
-    this.changed.emit(editedValue);
+    this.changedSubject.next(editedValue);
   }
 
   cancel() {
