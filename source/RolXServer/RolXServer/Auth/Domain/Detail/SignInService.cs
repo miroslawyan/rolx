@@ -130,10 +130,13 @@ namespace RolXServer.Auth.Domain.Detail
             {
                 this.logger.LogInformation("Adding yet unknown user {0}", payload.Name);
 
+                var isFirstUser = !(await this.dbContext.Users.AnyAsync());
+
                 user = new User
                 {
                     GoogleId = payload.Subject,
-                    Role = Role.User,
+                    Role = isFirstUser ? Role.Administrator : Role.User,
+                    EntryDate = isFirstUser ? DateTime.Today : (DateTime?)null,
                 };
 
                 this.dbContext.Users.Add(user);
