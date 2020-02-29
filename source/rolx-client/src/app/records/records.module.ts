@@ -8,6 +8,7 @@ import {
   WeekPageComponent,
 } from './pages';
 import {
+  BalanceIndicatorComponent,
   DurationEditComponent,
   MonthTableComponent,
   MultiEntriesDialogComponent,
@@ -25,6 +26,7 @@ import { WeekTableCellComponent } from './shared/week-table/cell/week-table-cell
     CoreModule,
   ],
   declarations: [
+    BalanceIndicatorComponent,
     DurationEditComponent,
     MonthPageComponent,
     MonthTableComponent,
@@ -41,6 +43,7 @@ import { WeekTableCellComponent } from './shared/week-table/cell/week-table-cell
   exports: [
     MonthPageComponent,
     WeekPageComponent,
+    BalanceIndicatorComponent,
   ],
 })
 export class RecordsModule { }

@@ -10,6 +10,7 @@ import { MainRoutingModule } from './main-routing.module';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 import { SomethingWentWrongPageComponent } from './something-went-wrong-page/something-went-wrong-page.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { SomethingWentWrongPageComponent } from './something-went-wrong-page/som
     NotFoundPageComponent,
     SignInPageComponent,
     SomethingWentWrongPageComponent,
+    ToolbarComponent,
   ],
   imports: [
     ProjectsModule,

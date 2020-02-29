@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RolXServer.Users.DataAccess
@@ -59,9 +60,14 @@ namespace RolXServer.Users.DataAccess
         public DateTime? EntryDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the leaving date.
+        /// Gets or sets the leaving date (inclusive).
         /// </summary>
         [Column(TypeName = "date")]
         public DateTime? LeavingDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the settings.
+        /// </summary>
+        public List<UserSetting> Settings { get; set; } = new List<UserSetting>();
     }
 }

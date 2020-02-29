@@ -29,9 +29,30 @@ namespace RolXServer.Records.DataAccess
         public int RecordId { get; set; }
 
         /// <summary>
+        /// Gets or sets the duration in seconds.
+        /// </summary>
+        public long DurationSeconds { get; set; }
+
+        /// <summary>
         /// Gets or sets the duration.
         /// </summary>
-        public TimeSpan Duration { get; set; }
+        /// <remarks>
+        /// As we cannot sum-up durations in the database through TimeSpan,
+        /// We have to map them into seconds manually.
+        /// </remarks>
+        [NotMapped]
+        public TimeSpan Duration
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(this.DurationSeconds);
+            }
+
+            set
+            {
+                this.DurationSeconds = (long)value.TotalSeconds;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the begin as time since midnight.

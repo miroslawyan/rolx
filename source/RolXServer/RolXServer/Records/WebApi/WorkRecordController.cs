@@ -25,7 +25,6 @@ namespace RolXServer.Records.WebApi
     /// <summary>
     /// Controller for work records.
     /// </summary>
-    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [ApiController]
     [Route("api/v1/[controller]")]
     [Authorize(Policy = "ActiveUser")]

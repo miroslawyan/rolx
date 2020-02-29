@@ -16,21 +16,16 @@
       </a>
     </mat-nav-list>
   </mat-sidenav>
+
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button *ngIf="isHandset$ | async"
-              type="button"
-              aria-label="Toggle sidenav"
-              mat-icon-button
-              (click)="drawer.toggle()">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
 
-      <rolx-user-menu></rolx-user-menu>
+    <rolx-toolbar [isHandset]="isHandset$ | async"
+                  (menuClicked)="drawer.toggle()"></rolx-toolbar>
 
-    </mat-toolbar>
     <router-outlet></router-outlet>
+
   </mat-sidenav-content>
+
 </mat-sidenav-container>
 
 <ng-template #requestPendingSpinner>
