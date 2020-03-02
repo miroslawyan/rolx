@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RolXServer.Common.Util;
+using RolXServer.Records.Domain.Detail.Balances;
 using RolXServer.Records.Domain.Model;
 
 namespace RolXServer.Records.Domain.Detail
@@ -46,31 +47,32 @@ namespace RolXServer.Records.Domain.Detail
         /// </returns>
         public async Task<Balance> GetByDate(DateTime date, Guid userId)
         {
-            var user = await this.dbContext.Users
+            var data = await this.dbContext.Users
                 .Include(u => u.Settings)
-                .SingleAsync(u => u.Id == userId);
+                .Where(u => u.Id == userId)
+                .Select(u => new BalanceData
+                {
+                    User = u,
 
-            if (!user.EntryDate.HasValue)
-            {
-                throw new InvalidOperationException("Only users with valid entry date may have a balance.");
-            }
+                    ActualWorkTimeSeconds = u.Records
+                        .Where(r => r.Date <= date)
+                        .SelectMany(r => r.Entries)
+                        .Sum(e => e.DurationSeconds),
 
-            var endDate = date.AddDays(1);
-            var nominalWorkTime = user.NominalWorkTime(
-                new DateRange(user.EntryDate.Value, endDate),
-                this.settings.NominalWorkTimePerDay);
+                    PaidLeaveDays = u.Records
+                        .Where(r => r.Date <= date && r.PaidLeaveType != null)
+                        .Select(r => new PaidLeaveDay
+                        {
+                            Date = r.Date,
+                            ActualWorkTimeSeconds = r.Entries.Sum(e => e.DurationSeconds),
+                        }).ToList(),
+                })
+                .SingleAsync();
 
-            var actualWorkTime = TimeSpan.FromSeconds(
-               await this.dbContext.Records
-                   .Where(r => r.UserId == userId && r.Date < endDate)
-                   .SelectMany(r => r.Entries)
-                   .SumAsync(e => e.DurationSeconds));
+            data.ByDate = date;
+            data.NominalWorkTimePerDay = this.settings.NominalWorkTimePerDay;
 
-            return new Balance
-            {
-                ByDate = date,
-                Overtime = actualWorkTime - nominalWorkTime,
-            };
+            return data.ToBalance();
         }
     }
 }

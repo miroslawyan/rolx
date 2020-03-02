@@ -8,7 +8,7 @@
 
 using System;
 
-namespace RolXServer.Records.Domain.Detail.Holiday
+namespace RolXServer.Records.Domain.Detail.Holidays
 {
     /// <summary>
     /// Rule for holidays in relation to the easter Sunday of the requested year.

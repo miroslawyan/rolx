@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using RolXServer.Common.Util;
-using RolXServer.Records.Domain.Detail.Holiday;
+using RolXServer.Records.Domain.Detail.Holidays;
 using RolXServer.Records.Domain.Model;
 using RolXServer.Users.DataAccess;
 
@@ -77,6 +77,22 @@ namespace RolXServer.Records.Domain.Detail
         {
             return new TimeSpan(
                 user.DayInfos(range, nominalWorkTimePerDay)
+                .Sum(i => i.NominalWorkTime.Ticks));
+        }
+
+        /// <summary>
+        /// Gets the nominal work-time for the specified user at the specified date.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="date">The date.</param>
+        /// <param name="nominalWorkTimePerDay">The nominal work time per day.</param>
+        /// <returns>
+        /// The nominal work-time.
+        /// </returns>
+        public static TimeSpan NominalWorkTime(this User user, DateTime date, TimeSpan nominalWorkTimePerDay)
+        {
+            return new TimeSpan(
+                user.DayInfos(new DateRange(date, date.AddDays(1)), nominalWorkTimePerDay)
                 .Sum(i => i.NominalWorkTime.Ticks));
         }
 

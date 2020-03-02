@@ -69,5 +69,10 @@ namespace RolXServer.Users.DataAccess
         /// Gets or sets the settings.
         /// </summary>
         public List<UserSetting> Settings { get; set; } = new List<UserSetting>();
+
+        /// <summary>
+        /// Gets or sets the records.
+        /// </summary>
+        public List<Records.DataAccess.Record> Records { get; set; } = new List<Records.DataAccess.Record>();
     }
 }

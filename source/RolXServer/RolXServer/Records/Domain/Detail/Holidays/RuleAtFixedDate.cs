@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RuleBase.cs" company="Christian Ewald">
+// <copyright file="RuleAtFixedDate.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -8,26 +8,28 @@
 
 using System;
 
-namespace RolXServer.Records.Domain.Detail.Holiday
+namespace RolXServer.Records.Domain.Detail.Holidays
 {
     /// <summary>
-    /// Base class for holiday rules.
+    /// A holiday rule matching fixed dates.
     /// </summary>
-    public abstract class RuleBase
+    public class RuleAtFixedDate : RuleBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RuleBase"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        protected RuleBase(string name)
-        {
-            this.Name = name;
-        }
+        private readonly int month;
+        private readonly int day;
 
         /// <summary>
-        /// Gets the name.
+        /// Initializes a new instance of the <see cref="RuleAtFixedDate" /> class.
         /// </summary>
-        public string Name { get; }
+        /// <param name="name">The name.</param>
+        /// <param name="month">The month.</param>
+        /// <param name="day">The day.</param>
+        public RuleAtFixedDate(string name, int month, int day)
+            : base(name)
+        {
+            this.month = month;
+            this.day = day;
+        }
 
         /// <summary>
         /// Determines whether the specified candidate is matching.
@@ -36,6 +38,9 @@ namespace RolXServer.Records.Domain.Detail.Holiday
         /// <returns>
         ///   <c>true</c> if the specified candidate is matching; otherwise, <c>false</c>.
         /// </returns>
-        public abstract bool IsMatching(DateTime candidate);
+        public override bool IsMatching(DateTime candidate)
+        {
+            return candidate.Month == this.month && candidate.Day == this.day;
+        }
     }
 }
