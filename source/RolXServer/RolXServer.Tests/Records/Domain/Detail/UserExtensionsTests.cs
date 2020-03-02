@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="DayInfoServiceTests.cs" company="Christian Ewald">
+// <copyright file="UserExtensionsTests.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -10,22 +10,21 @@ using System;
 using System.Linq;
 
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using RolXServer.Common.Util;
 using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Records.Domain.Detail
 {
-    public sealed class DayInfoServiceTests
+    public sealed class UserExtensionsTests
     {
-        private readonly IDayInfoService sut = new DayInfoService(
-            Options.Create(new Settings()));
+        private static readonly TimeSpan NominalWorkTimePerDay = TimeSpan.FromHours(8);
 
         [Test]
         public void AnInfoForEachDayInRange()
         {
-            this.sut.Get(new User(), new DateRange(new DateTime(2020, 1, 1), new DateTime(2020, 1, 11)))
+            new User()
+                .DayInfos(new DateRange(new DateTime(2020, 1, 1), new DateTime(2020, 1, 11)), NominalWorkTimePerDay)
                 .Count().Should().Be(10);
         }
 
@@ -38,7 +37,8 @@ namespace RolXServer.Records.Domain.Detail
             var begin = new DateTime(year, month, day);
             var end = begin.AddDays(1);
 
-            this.sut.Get(new User(), new DateRange(begin, end))
+            new User()
+                .DayInfos(new DateRange(begin, end), NominalWorkTimePerDay)
                 .Single()
                 .DayType.Should().Be(DayType.Weekend);
         }
@@ -53,7 +53,8 @@ namespace RolXServer.Records.Domain.Detail
             var begin = new DateTime(year, month, day);
             var end = begin.AddDays(1);
 
-            this.sut.Get(new User(), new DateRange(begin, end))
+            new User()
+                .DayInfos(new DateRange(begin, end), NominalWorkTimePerDay)
                 .Single()
                 .DayType.Should().Be(DayType.Workday);
         }
@@ -66,7 +67,8 @@ namespace RolXServer.Records.Domain.Detail
             var begin = new DateTime(year, month, day);
             var end = begin.AddDays(1);
 
-            this.sut.Get(new User(), new DateRange(begin, end))
+            new User()
+                .DayInfos(new DateRange(begin, end), NominalWorkTimePerDay)
                 .Single()
                 .DayType.Should().Be(DayType.Holiday);
         }
@@ -79,7 +81,8 @@ namespace RolXServer.Records.Domain.Detail
             var begin = new DateTime(year, month, day);
             var end = begin.AddDays(1);
 
-            this.sut.Get(new User(), new DateRange(begin, end))
+            new User()
+                .DayInfos(new DateRange(begin, end), NominalWorkTimePerDay)
                 .Single()
                 .DayName.Should().Be(name);
         }
@@ -98,7 +101,8 @@ namespace RolXServer.Records.Domain.Detail
             var begin = new DateTime(year, month, day);
             var end = begin.AddDays(1);
 
-            this.sut.Get(new User(), new DateRange(begin, end))
+            new User()
+                .DayInfos(new DateRange(begin, end), NominalWorkTimePerDay)
                 .Single()
                 .DayName.Should().BeEmpty();
         }
@@ -113,7 +117,8 @@ namespace RolXServer.Records.Domain.Detail
             var begin = new DateTime(year, month, day);
             var end = begin.AddDays(1);
 
-            this.sut.Get(new User(), new DateRange(begin, end))
+            new User()
+                .DayInfos(new DateRange(begin, end), NominalWorkTimePerDay)
                 .Single()
                 .NominalWorkTime.Should().Be(TimeSpan.FromHours(8));
         }
@@ -130,7 +135,8 @@ namespace RolXServer.Records.Domain.Detail
             var begin = new DateTime(year, month, day);
             var end = begin.AddDays(1);
 
-            this.sut.Get(new User(), new DateRange(begin, end))
+            new User()
+                .DayInfos(new DateRange(begin, end), NominalWorkTimePerDay)
                 .Single()
                 .NominalWorkTime.Should().Be(default);
         }
@@ -138,55 +144,69 @@ namespace RolXServer.Records.Domain.Detail
         [Test]
         public void PartTime_Before()
         {
-            var user = new User
-            {
-                EntryDate = new DateTime(2020, 2, 1),
-            };
-
+            var user = new User();
             user.Settings.Add(new UserSetting
             {
                 StartDate = new DateTime(2020, 1, 1),
                 PartTimeFactor = 0.5,
             });
 
-            this.sut.GetNominalWorkTime(user, new DateTime(2020, 2, 8))
+            user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
                 .Should().Be(TimeSpan.FromHours(20));
         }
 
         [Test]
         public void PartTime_Between()
         {
-            var user = new User
-            {
-                EntryDate = new DateTime(2020, 2, 1),
-            };
-
+            var user = new User();
             user.Settings.Add(new UserSetting
             {
                 StartDate = new DateTime(2020, 2, 5),
                 PartTimeFactor = 0.5,
             });
 
-            this.sut.GetNominalWorkTime(user, new DateTime(2020, 2, 8))
+            user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
                 .Should().Be(TimeSpan.FromHours(28));
         }
 
         [Test]
         public void PartTime_After()
         {
-            var user = new User
-            {
-                EntryDate = new DateTime(2020, 2, 1),
-            };
-
+            var user = new User();
             user.Settings.Add(new UserSetting
             {
                 StartDate = new DateTime(2020, 8, 1),
                 PartTimeFactor = 0.5,
             });
 
-            this.sut.GetNominalWorkTime(user, new DateTime(2020, 2, 8))
+            user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
                 .Should().Be(TimeSpan.FromHours(40));
+        }
+
+        [TestCase(1, 2016)]
+        [TestCase(2, 3622.4)]
+        [TestCase(5, 9284.8)]
+        [TestCase(10, 18168.0)]
+        [TestCase(20, 36344.0)]
+        [TestCase(50, 90944.0)]
+        public void NominalWorkTime_LongTime(int years, double expectedHours)
+        {
+            var begin = new DateTime(2000, 1, 1);
+            var end = begin.AddYears(years);
+
+            var user = new User();
+
+            for (var i = 0; i < years; ++i)
+            {
+                user.Settings.Add(new UserSetting
+                {
+                    StartDate = begin.AddYears(i),
+                    PartTimeFactor = i % 2 == 0 ? 1.0 : 0.8,
+                });
+            }
+
+            user.NominalWorkTime(new DateRange(begin, end), NominalWorkTimePerDay)
+                .TotalHours.Should().Be(expectedHours);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="DayInfoService.cs" company="Christian Ewald">
+// <copyright file="UserExtensions.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Microsoft.Extensions.Options;
 using RolXServer.Common.Util;
 using RolXServer.Records.Domain.Detail.Holiday;
 using RolXServer.Records.Domain.Model;
@@ -19,9 +18,9 @@ using RolXServer.Users.DataAccess;
 namespace RolXServer.Records.Domain.Detail
 {
     /// <summary>
-    /// Provides informations on days.
+    /// Extensions methods for <see cref="User"/> instances.
     /// </summary>
-    public sealed class DayInfoService : IDayInfoService
+    public static class UserExtensions
     {
         private static readonly List<RuleBase> HolidayRules = new List<RuleBase>
         {
@@ -39,57 +38,46 @@ namespace RolXServer.Records.Domain.Detail
             new RuleEasterBased("Pfingstmontag", 50),
         };
 
-        private readonly Settings settings;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="DayInfoService" /> class.
-        /// </summary>
-        /// <param name="settingsAccessor">The settings accessor.</param>
-        public DayInfoService(IOptions<Settings> settingsAccessor)
-        {
-            this.settings = settingsAccessor.Value;
-        }
-
-        /// <summary>
-        /// Gets the day-information for the specified user in the specified range.
+        /// Gets the day-informations for the specified user in the specified range.
         /// </summary>
         /// <param name="user">The user.</param>
         /// <param name="range">The range.</param>
-        /// <returns>
-        /// The informations.
-        /// </returns>
-        public IEnumerable<DayInfo> Get(User user, DateRange range)
+        /// <param name="nominalWorkTimePerDay">The nominal work time per day.</param>
+        /// <returns>The day-informations.</returns>
+        public static IEnumerable<DayInfo> DayInfos(this User user, DateRange range, TimeSpan nominalWorkTimePerDay)
         {
             var sortedSettings = user.Settings
                 .OrderByDescending(s => s.StartDate)
                 .ToList();
 
-            return Sanitize(range, user)
-                .Days
+            var activeRange = new DateRange(
+                user.EntryDate ?? range.Begin,
+                user.LeavingDate?.AddDays(1) ?? range.End);
+
+            return range.Days
                 .Select(d => new DayInfo
                 {
                     Date = d,
-                    NominalWorkTime = this.settings.NominalWorkTimePerDay,
+                    NominalWorkTime = activeRange.Contains(d) ? nominalWorkTimePerDay : default(TimeSpan),
                 })
                 .Select(d => ApplyWeekend(d))
                 .Select(d => ApplyHoliday(d))
                 .Select(d => ApplyPartTimeFactor(d, sortedSettings));
         }
 
-        private static DateRange Sanitize(DateRange range, User user)
+        /// <summary>
+        /// Gets the nominal work-time for the specified user in the specified range.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="range">The range.</param>
+        /// <param name="nominalWorkTimePerDay">The nominal work time per day.</param>
+        /// <returns>The nominal work-time.</returns>
+        public static TimeSpan NominalWorkTime(this User user, DateRange range, TimeSpan nominalWorkTimePerDay)
         {
-            if (user.EntryDate.HasValue && user.EntryDate < range.Begin)
-            {
-                range = new DateRange(user.EntryDate.Value, range.End);
-            }
-
-            var leftDate = user.LeavingDate?.AddDays(1);
-            if (leftDate.HasValue && leftDate > range.End)
-            {
-                range = new DateRange(range.Begin, leftDate.Value);
-            }
-
-            return range;
+            return new TimeSpan(
+                user.DayInfos(range, nominalWorkTimePerDay)
+                .Sum(i => i.NominalWorkTime.Ticks));
         }
 
         private static DayInfo ApplyWeekend(DayInfo info)

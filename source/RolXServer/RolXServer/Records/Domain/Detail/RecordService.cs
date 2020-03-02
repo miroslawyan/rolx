@@ -16,7 +16,6 @@ using Microsoft.Extensions.Options;
 using RolXServer.Common.Util;
 using RolXServer.Records.Domain.Mapping;
 using RolXServer.Records.Domain.Model;
-using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Records.Domain.Detail
 {
@@ -25,22 +24,18 @@ namespace RolXServer.Records.Domain.Detail
     /// </summary>
     public sealed class RecordService : IRecordService
     {
-        private readonly IHolidayRules holidayRules;
         private readonly RolXContext dbContext;
         private readonly Settings settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RecordService" /> class.
         /// </summary>
-        /// <param name="holidayRules">The holiday rules.</param>
         /// <param name="dbContext">The database context.</param>
         /// <param name="settingsAccessor">The settings accessor.</param>
         public RecordService(
-            IHolidayRules holidayRules,
             RolXContext dbContext,
             IOptions<Settings> settingsAccessor)
         {
-            this.holidayRules = holidayRules;
             this.dbContext = dbContext;
             this.settings = settingsAccessor.Value;
         }
@@ -55,18 +50,18 @@ namespace RolXServer.Records.Domain.Detail
         /// </returns>
         public async Task<IEnumerable<Record>> GetRange(DateRange range, Guid userId)
         {
+            var user = await this.dbContext.Users
+                .Include(u => u.Settings)
+                .SingleAsync(u => u.Id == userId);
+
             var entities = await this.dbContext.Records
                 .Include(r => r.Entries).ThenInclude(e => e.Phase)
                 .Where(r => r.Date >= range.Begin && r.Date < range.End && r.UserId == userId)
                 .OrderBy(r => r.Date)
                 .ToListAsync();
 
-            var result = entities.ToDomainsIn(range, userId)
-                .Select(r => ApplyWeekends(r))
-                .Select(r => this.holidayRules.Apply(r))
-                .Select(r => this.ApplyNominalWorkTime(r));
-
-            return await this.ApplyPartTimeFactor(result.ToList(), userId);
+            return user.DayInfos(range, this.settings.NominalWorkTimePerDay)
+                .ToRecords(userId, entities);
         }
 
         /// <summary>
@@ -80,7 +75,7 @@ namespace RolXServer.Records.Domain.Detail
 
             var entity = await this.dbContext.Records
                 .Include(r => r.Entries)
-                .SingleOrDefaultAsync(r => r.Date == record.Date && r.UserId == record.UserId);
+                .SingleOrDefaultAsync(r => r.Date == record.DayInfo.Date && r.UserId == record.UserId);
 
             if (record.IsEmpty)
             {
@@ -104,55 +99,6 @@ namespace RolXServer.Records.Domain.Detail
             }
 
             await this.dbContext.SaveChangesAsync();
-        }
-
-        private static Record ApplyWeekends(Record record)
-        {
-            if (record.Date.DayOfWeek == DayOfWeek.Saturday || record.Date.DayOfWeek == DayOfWeek.Sunday)
-            {
-                record.DayType = DayType.Weekend;
-            }
-
-            return record;
-        }
-
-        private static Record ApplyPartTimeFactor(Record record, IEnumerable<UserSetting> settings)
-        {
-            var factor = settings
-                .Where(s => s.StartDate <= record.Date)
-                .Select(s => s.PartTimeFactor)
-                .DefaultIfEmpty(1.0)
-                .First();
-
-            record.NominalWorkTime *= factor;
-
-            return record;
-        }
-
-        private Record ApplyNominalWorkTime(Record record)
-        {
-            if (record.DayType == DayType.Workday)
-            {
-                record.NominalWorkTime = this.settings.NominalWorkTimePerDay;
-            }
-
-            return record;
-        }
-
-        private async Task<IEnumerable<Record>> ApplyPartTimeFactor(IEnumerable<Record> records, Guid userId)
-        {
-            var settings = (await this.GetUserSettings(userId)).ToList();
-            return records.Select(r => ApplyPartTimeFactor(r, settings));
-        }
-
-        private async Task<IEnumerable<UserSetting>> GetUserSettings(Guid userId)
-        {
-            // There usually are not too many setting entries.
-            // So it shouldn't be a problem to just load them all.
-            return await this.dbContext.UserSettings
-                .Where(s => s.UserId == userId)
-                .OrderByDescending(s => s.StartDate)
-                .ToListAsync();
         }
     }
 }

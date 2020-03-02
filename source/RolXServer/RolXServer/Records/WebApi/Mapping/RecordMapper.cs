@@ -27,11 +27,11 @@ namespace RolXServer.Records.WebApi.Mapping
         {
             return new Resource.Record
             {
-                Date = domain.Date.ToIsoDate(),
+                Date = domain.DayInfo.Date.ToIsoDate(),
                 UserId = domain.UserId,
-                DayType = domain.DayType,
-                DayName = domain.DayName,
-                NominalWorkTime = (long)domain.NominalWorkTime.TotalSeconds,
+                DayType = domain.DayInfo.DayType,
+                DayName = domain.DayInfo.DayName,
+                NominalWorkTime = (long)domain.DayInfo.NominalWorkTime.TotalSeconds,
                 PaidLeaveType = domain.PaidLeaveType,
                 PaidLeaveReason = domain.PaidLeaveReason,
                 Entries = domain.Entries.Select(e => e.ToResource()).ToList(),
@@ -47,13 +47,17 @@ namespace RolXServer.Records.WebApi.Mapping
         /// </returns>
         public static Domain.Model.Record ToDomain(this Resource.Record resource)
         {
-            return new Domain.Model.Record
+            var dayInfo = new Domain.Model.DayInfo
             {
                 Date = IsoDate.Parse(resource.Date),
-                UserId = resource.UserId,
                 DayType = resource.DayType,
                 DayName = resource.DayName,
                 NominalWorkTime = TimeSpan.FromSeconds(resource.NominalWorkTime),
+            };
+
+            return new Domain.Model.Record(dayInfo)
+            {
+                UserId = resource.UserId,
                 PaidLeaveType = resource.PaidLeaveType,
                 PaidLeaveReason = resource.PaidLeaveReason,
                 Entries = resource.Entries.Select(e => e.ToDomain()).ToList(),

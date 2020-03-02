@@ -11,6 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using RolXServer.Common.Util;
 using RolXServer.Records.Domain.Model;
 
 namespace RolXServer.Records.Domain.Detail
@@ -21,19 +23,17 @@ namespace RolXServer.Records.Domain.Detail
     public sealed class BalanceService : IBalanceService
     {
         private readonly RolXContext dbContext;
-        private readonly IDayInfoService dayInfoService;
+        private readonly Settings settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BalanceService"/> class.
+        /// Initializes a new instance of the <see cref="BalanceService" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
-        /// <param name="dayInfoService">The day information service.</param>
-        public BalanceService(
-            RolXContext dbContext,
-            IDayInfoService dayInfoService)
+        /// <param name="settingsAccessor">The settings accessor.</param>
+        public BalanceService(RolXContext dbContext, IOptions<Settings> settingsAccessor)
         {
             this.dbContext = dbContext;
-            this.dayInfoService = dayInfoService;
+            this.settings = settingsAccessor.Value;
         }
 
         /// <summary>
@@ -50,8 +50,15 @@ namespace RolXServer.Records.Domain.Detail
                 .Include(u => u.Settings)
                 .SingleAsync(u => u.Id == userId);
 
+            if (!user.EntryDate.HasValue)
+            {
+                throw new InvalidOperationException("Only users with valid entry date may have a balance.");
+            }
+
             var endDate = date.AddDays(1);
-            var nominalWorkTime = this.dayInfoService.GetNominalWorkTime(user, endDate);
+            var nominalWorkTime = user.NominalWorkTime(
+                new DateRange(user.EntryDate.Value, endDate),
+                this.settings.NominalWorkTimePerDay);
 
             var actualWorkTime = TimeSpan.FromSeconds(
                await this.dbContext.Records

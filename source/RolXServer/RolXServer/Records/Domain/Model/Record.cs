@@ -17,29 +17,23 @@ namespace RolXServer.Records.Domain.Model
     public sealed class Record
     {
         /// <summary>
-        /// Gets or sets the date.
+        /// Initializes a new instance of the <see cref="Record"/> class.
         /// </summary>
-        public DateTime Date { get; set; }
+        /// <param name="dayInfo">The day information.</param>
+        public Record(DayInfo dayInfo)
+        {
+            this.DayInfo = dayInfo;
+        }
+
+        /// <summary>
+        /// Gets the day information.
+        /// </summary>
+        public DayInfo DayInfo { get; }
 
         /// <summary>
         /// Gets or sets the user identifier.
         /// </summary>
         public Guid UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type of the day.
-        /// </summary>
-        public DayType DayType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the day.
-        /// </summary>
-        public string DayName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the nominal work-time.
-        /// </summary>
-        public TimeSpan NominalWorkTime { get; set; }
 
         /// <summary>
         /// Gets or sets the type of paid leave.

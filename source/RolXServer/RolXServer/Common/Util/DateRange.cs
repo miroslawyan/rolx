@@ -101,6 +101,18 @@ namespace RolXServer.Common.Util
             return new DateRange(begin, end);
         }
 
+        /// <summary>
+        /// Determines whether this range contains the specified date.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns>
+        ///   <c>true</c> if this range contains the specified date.
+        /// </returns>
+        public bool Contains(DateTime date)
+        {
+            return this.Begin <= date && this.End > date;
+        }
+
         /// <inheritdoc/>
         public override bool Equals(object? other)
         {

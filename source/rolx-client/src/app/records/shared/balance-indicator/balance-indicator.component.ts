@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '@app/auth/core';
 import { BalanceService, WorkRecordService } from '@app/records/core';
 import moment from 'moment';
@@ -10,7 +10,7 @@ import { catchError, filter, startWith, switchMap, throttleTime } from 'rxjs/ope
   templateUrl: './balance-indicator.component.html',
   styleUrls: ['./balance-indicator.component.scss'],
 })
-export class BalanceIndicatorComponent implements OnInit {
+export class BalanceIndicatorComponent {
 
   readonly balance$ = this.workRecordService.userUpdated$.pipe(
     filter(u => this.authService.currentUser?.id === u),
@@ -24,8 +24,5 @@ export class BalanceIndicatorComponent implements OnInit {
   constructor(private balanceService: BalanceService,
               private workRecordService: WorkRecordService,
               private authService: AuthService) { }
-
-  ngOnInit(): void {
-  }
 
 }

@@ -79,12 +79,11 @@ namespace RolXServer.Records.Domain.Detail
         {
             using (var context = this.contextFactory())
             {
-                var sut = new RecordService(Mock.Of<IHolidayRules>(), context, Mock.Of<IOptions<Settings>>());
+                var sut = new RecordService(context, Mock.Of<IOptions<Settings>>());
 
-                var record = new Model.Record
+                var record = new Model.Record(new Model.DayInfo { Date = Tomorrow })
                 {
                     UserId = this.user.Id,
-                    Date = Tomorrow,
                     Entries = new List<DataAccess.RecordEntry>
                     {
                         new DataAccess.RecordEntry
@@ -113,12 +112,11 @@ namespace RolXServer.Records.Domain.Detail
         {
             using (var context = this.contextFactory())
             {
-                var sut = new RecordService(Mock.Of<IHolidayRules>(), context, Mock.Of<IOptions<Settings>>());
+                var sut = new RecordService(context, Mock.Of<IOptions<Settings>>());
 
-                var record = new Model.Record
+                var record = new Model.Record(new Model.DayInfo { Date = Today })
                 {
                     UserId = this.user.Id,
-                    Date = Today,
                     Entries = new List<DataAccess.RecordEntry>
                     {
                         new DataAccess.RecordEntry
@@ -154,12 +152,11 @@ namespace RolXServer.Records.Domain.Detail
         {
             using (var context = this.contextFactory())
             {
-                var sut = new RecordService(Mock.Of<IHolidayRules>(), context, Mock.Of<IOptions<Settings>>());
+                var sut = new RecordService(context, Mock.Of<IOptions<Settings>>());
 
-                var record = new Model.Record
+                var record = new Model.Record(new Model.DayInfo { Date = Today })
                 {
                     UserId = this.user.Id,
-                    Date = Today,
                 };
 
                 await sut.Update(record);

@@ -29,9 +29,7 @@ namespace RolXServer.Records
             services.Configure<Settings>(configuration.GetSection("Records"));
 
             services.AddScoped<Domain.IBalanceService, Domain.Detail.BalanceService>();
-            services.AddSingleton<Domain.IDayInfoService, Domain.Detail.DayInfoService>();
             services.AddScoped<Domain.IRecordService, Domain.Detail.RecordService>();
-            services.AddSingleton<Domain.IHolidayRules, Domain.Detail.StaticHolidayRules>();
 
             return services;
         }

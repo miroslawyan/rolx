@@ -10,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using RolXServer.Common.Util;
-
 namespace RolXServer.Records.Domain.Mapping
 {
     /// <summary>
@@ -20,20 +18,18 @@ namespace RolXServer.Records.Domain.Mapping
     internal static class RecordMapper
     {
         /// <summary>
-        /// Converts to domain.
+        /// Maps the specified day-informations into records.
         /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <returns>The domain.</returns>
-        public static Model.Record ToDomain(this DataAccess.Record entity)
+        /// <param name="dayInfos">The day infos.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="entities">The entities.</param>
+        /// <returns>The records.</returns>
+        public static IEnumerable<Model.Record> ToRecords(
+            this IEnumerable<Model.DayInfo> dayInfos,
+            Guid userId,
+            ICollection<DataAccess.Record> entities)
         {
-            return new Model.Record
-            {
-                Date = entity.Date,
-                UserId = entity.UserId,
-                PaidLeaveType = entity.PaidLeaveType,
-                PaidLeaveReason = entity.PaidLeaveReason,
-                Entries = entity.Entries,
-            };
+            return dayInfos.Select(i => i.ToRecord(userId, entities.FirstOrDefault(e => e.Date == i.Date)));
         }
 
         /// <summary>
@@ -47,42 +43,12 @@ namespace RolXServer.Records.Domain.Mapping
         {
             return new DataAccess.Record
             {
-                Date = domain.Date,
+                Date = domain.DayInfo.Date,
                 UserId = domain.UserId,
                 PaidLeaveType = domain.PaidLeaveType,
                 PaidLeaveReason = domain.PaidLeaveReason,
                 Entries = domain.Entries,
             };
-        }
-
-        /// <summary>
-        /// Converts to all domains in the specified range.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <param name="range">The range.</param>
-        /// <param name="userId">The user identifier.</param>
-        /// <returns>
-        /// The domains.
-        /// </returns>
-        public static IEnumerable<Model.Record> ToDomainsIn(this IEnumerable<DataAccess.Record> entities, DateRange range, Guid userId)
-        {
-            var current = range.Begin;
-            foreach (var domain in entities.Select(e => e.ToDomain()))
-            {
-                foreach (var empty in new DateRange(current, domain.Date).ToEmptyDomain(userId))
-                {
-                    yield return empty;
-                }
-
-                yield return domain;
-
-                current = domain.Date.AddDays(1);
-            }
-
-            foreach (var empty in new DateRange(current, range.End).ToEmptyDomain(userId))
-            {
-                yield return empty;
-            }
         }
 
         /// <summary>
@@ -99,13 +65,21 @@ namespace RolXServer.Records.Domain.Mapping
             entity.Entries = domain.Entries;
         }
 
-        private static IEnumerable<Model.Record> ToEmptyDomain(this DateRange range, Guid userId)
+        private static Model.Record ToRecord(this Model.DayInfo dayInfo, Guid userId, DataAccess.Record? entity)
         {
-            return range.Days.Select(d => new Model.Record
+            var record = new Model.Record(dayInfo)
             {
-                Date = d,
                 UserId = userId,
-            });
+            };
+
+            if (entity != null)
+            {
+                record.PaidLeaveType = entity.PaidLeaveType;
+                record.PaidLeaveReason = entity.PaidLeaveReason;
+                record.Entries = entity.Entries;
+            }
+
+            return record;
         }
     }
 }
