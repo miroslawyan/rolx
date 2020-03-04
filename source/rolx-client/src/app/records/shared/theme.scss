@@ -6,9 +6,15 @@
   $background: map-get($theme, background);
   $nonWorkdayBackground: mat-color($background, disabled-button);
 
+  $primary: map-get($theme, primary);
+  $todayBackground: mat-color($primary,lighter);
+
   table {
     .non-workday {
       background-color: $nonWorkdayBackground;
+    }
+    .today{
+      background-color: $todayBackground;
     }
   }
 

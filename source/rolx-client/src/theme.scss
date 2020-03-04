@@ -2,8 +2,9 @@
 @include mat-core();
 
 // see https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
-$rolx-primary: mat-palette($mat-purple);
+$rolx-primary-light: mat-palette($mat-purple,400,100,800);
+$rolx-primary-dark: mat-palette($mat-purple,400,800,100);
 $rolx-accent: mat-palette($mat-green, A200, A100, A400);
 
-$rolx-dark-theme: mat-dark-theme($rolx-primary, $rolx-accent);
-$rolx-light-theme: mat-light-theme($rolx-primary, $rolx-accent);
+$rolx-dark-theme: mat-dark-theme($rolx-primary-dark, $rolx-accent);
+$rolx-light-theme: mat-light-theme($rolx-primary-light, $rolx-accent);

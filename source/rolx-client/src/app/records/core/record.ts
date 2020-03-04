@@ -42,6 +42,10 @@ export class Record {
     return this.dayType === DayType.Workday;
   }
 
+  get isToday(): boolean {
+    return this.date.isSame(moment(), 'day');
+  }
+
   get mayHavePaidLeave(): boolean {
     return this.isWorkday && !this.isComplete;
   }
@@ -83,5 +87,4 @@ export class Record {
 
     return clone;
   }
-
 }
