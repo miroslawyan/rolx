@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="UserExtensionsTests.cs" company="Christian Ewald">
+// <copyright file="NominalWorkTimeEvaluationTests.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -14,9 +14,9 @@ using NUnit.Framework;
 using RolXServer.Common.Util;
 using RolXServer.Users.DataAccess;
 
-namespace RolXServer.Records.Domain.Detail
+namespace RolXServer.Records.Domain.Detail.Balances
 {
-    public sealed class UserExtensionsTests
+    public sealed class NominalWorkTimeEvaluationTests
     {
         private static readonly TimeSpan NominalWorkTimePerDay = TimeSpan.FromHours(8);
 

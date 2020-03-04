@@ -22,5 +22,15 @@ namespace RolXServer.Records.WebApi.Resource
         /// Gets or sets the overtime in seconds.
         /// </summary>
         public long Overtime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the available vacation in days.
+        /// </summary>
+        public double VacationAvailableDays { get; set; }
+
+        /// <summary>
+        /// Gets or sets the planned vacation days.
+        /// </summary>
+        public double VacationPlannedDays { get; set; }
     }
 }

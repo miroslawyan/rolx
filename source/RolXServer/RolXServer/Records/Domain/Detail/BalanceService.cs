@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using RolXServer.Common.Util;
 using RolXServer.Records.Domain.Detail.Balances;
 using RolXServer.Records.Domain.Model;
 
@@ -66,11 +65,20 @@ namespace RolXServer.Records.Domain.Detail
                             Date = r.Date,
                             ActualWorkTimeSeconds = r.Entries.Sum(e => e.DurationSeconds),
                         }).ToList(),
+
+                    VacationDays = u.Records
+                        .Where(r => r.PaidLeaveType == PaidLeaveType.Vacation)
+                        .Select(r => new PaidLeaveDay
+                        {
+                            Date = r.Date,
+                            ActualWorkTimeSeconds = r.Entries.Sum(e => e.DurationSeconds),
+                        }).ToList(),
                 })
                 .SingleAsync();
 
             data.ByDate = date;
             data.NominalWorkTimePerDay = this.settings.NominalWorkTimePerDay;
+            data.VacationDaysPerYear = this.settings.VacationDaysPerYear;
 
             return data.ToBalance();
         }

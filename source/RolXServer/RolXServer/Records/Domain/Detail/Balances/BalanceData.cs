@@ -26,6 +26,11 @@ namespace RolXServer.Records.Domain.Detail.Balances
         public TimeSpan NominalWorkTimePerDay { get; set; }
 
         /// <summary>
+        /// Gets or sets the vacation days per year.
+        /// </summary>
+        public int VacationDaysPerYear { get; set; }
+
+        /// <summary>
         /// Gets or sets the by-date.
         /// </summary>
         public DateTime ByDate { get; set; }
@@ -54,16 +59,35 @@ namespace RolXServer.Records.Domain.Detail.Balances
         /// </summary>
         public List<PaidLeaveDay> PaidLeaveDays { get; set; } = new List<PaidLeaveDay>();
 
+        /// <summary>
+        /// Gets or sets the vacation days.
+        /// </summary>
+        public List<PaidLeaveDay> VacationDays { get; set; } = new List<PaidLeaveDay>();
+
         private TimeSpan NominalWorkTime => this.User.NominalWorkTime(
             new DateRange(this.User.EntryDate!.Value, this.ByDate.AddDays(1)),
             this.NominalWorkTimePerDay);
 
-        private TimeSpan PaidLeaveTime => new TimeSpan(
-            this.PaidLeaveDays
-                .Select(d => this.User.NominalWorkTime(d.Date, this.NominalWorkTimePerDay) - d.ActualWorkTime)
-                .Sum(t => t.Ticks));
+        private TimeSpan PaidLeaveTime => this.PaidLeaveDays
+            .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay);
 
         private TimeSpan Overtime => this.ActualWorkTime + this.PaidLeaveTime - this.NominalWorkTime;
+
+        private TimeSpan VacationBudget => this.User.VacationBudget(this.ByDate.Year, this.VacationDaysPerYear, this.NominalWorkTimePerDay);
+
+        private TimeSpan NominalWorkTimeAtByDate => this.User.NominalWorkTime(this.ByDate, this.NominalWorkTimePerDay);
+
+        private TimeSpan VacationConsumed => this.VacationDays
+            .Where(d => d.Date <= this.ByDate)
+            .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay);
+
+        private TimeSpan VacationPlanned => this.VacationDays
+            .Where(d => d.Date > this.ByDate)
+            .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay);
+
+        private double VacationAvailableDays => (this.VacationBudget - this.VacationConsumed) / this.NominalWorkTimeAtByDate;
+
+        private double VacationPlannedDays => this.VacationPlanned / this.NominalWorkTimeAtByDate;
 
         /// <summary>
         /// Converts this instance into a balance.
@@ -80,6 +104,8 @@ namespace RolXServer.Records.Domain.Detail.Balances
             {
                 ByDate = this.ByDate,
                 Overtime = this.Overtime,
+                VacationAvailableDays = this.VacationAvailableDays,
+                VacationPlannedDays = this.VacationPlannedDays,
             };
         }
     }

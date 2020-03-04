@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="UserExtensions.cs" company="Christian Ewald">
+// <copyright file="NominalWorkTimeEvaluation.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -15,12 +15,12 @@ using RolXServer.Records.Domain.Detail.Holidays;
 using RolXServer.Records.Domain.Model;
 using RolXServer.Users.DataAccess;
 
-namespace RolXServer.Records.Domain.Detail
+namespace RolXServer.Records.Domain.Detail.Balances
 {
     /// <summary>
     /// Extensions methods for <see cref="User"/> instances.
     /// </summary>
-    public static class UserExtensions
+    internal static class NominalWorkTimeEvaluation
     {
         private static readonly List<RuleBase> HolidayRules = new List<RuleBase>
         {

@@ -26,6 +26,8 @@ namespace RolXServer.Records.WebApi.Mapping
             {
                 ByDate = domain.ByDate.ToIsoDate(),
                 Overtime = (long)domain.Overtime.TotalSeconds,
+                VacationAvailableDays = domain.VacationAvailableDays,
+                VacationPlannedDays = domain.VacationPlannedDays,
             };
         }
     }

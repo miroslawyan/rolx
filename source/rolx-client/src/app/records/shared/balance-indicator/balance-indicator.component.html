@@ -1,4 +1,20 @@
-<span *ngIf="balance$ | async as balance">
+<span *ngIf="balance$ | async as balance" class="container">
   <small>Gleitzeit:</small>
-  {{balance.overtime}} h
+
+  <span>
+    {{balance.overtime}}
+    <small>h</small>
+  </span>
+
+  <small>Ferien:</small>
+
+  <span>
+    {{balance.vacationAvailableDays | number:'1.0-2'}}
+    <small>{{balance.vacationAvailableDays === 1 ? 'Tag' : 'Tage'}}</small>
+
+
+    <small *ngIf="balance.vacationPlannedDays > 0">
+      ({{balance.vacationPlannedDays | number:'1.0-2'}} geplant)
+    </small>
+  </span>
 </span>

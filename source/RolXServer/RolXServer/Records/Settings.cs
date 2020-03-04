@@ -19,5 +19,10 @@ namespace RolXServer.Records
         /// Gets or sets the nominal work time per day.
         /// </summary>
         public TimeSpan NominalWorkTimePerDay { get; set; } = TimeSpan.FromHours(8);
+
+        /// <summary>
+        /// Gets or sets the vacation days per year.
+        /// </summary>
+        public int VacationDaysPerYear { get; set; } = 25;
     }
 }

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RolXServer.Common.Util;
+using RolXServer.Records.Domain.Detail.Balances;
 using RolXServer.Records.Domain.Mapping;
 using RolXServer.Records.Domain.Model;
 

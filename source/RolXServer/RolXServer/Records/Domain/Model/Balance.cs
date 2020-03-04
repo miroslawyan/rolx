@@ -24,5 +24,15 @@ namespace RolXServer.Records.Domain.Model
         /// Gets or sets the overtime.
         /// </summary>
         public TimeSpan Overtime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the available vacation days.
+        /// </summary>
+        public double VacationAvailableDays { get; set; }
+
+        /// <summary>
+        /// Gets or sets the planned vacation days.
+        /// </summary>
+        public double VacationPlannedDays { get; set; }
     }
 }

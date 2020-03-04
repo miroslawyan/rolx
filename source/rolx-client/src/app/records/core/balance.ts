@@ -9,4 +9,7 @@ export class Balance {
   @TransformAsDuration()
   overtime: Duration;
 
+  vacationAvailableDays: number;
+  vacationPlannedDays: number;
+
 }
