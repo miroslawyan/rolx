@@ -13,7 +13,7 @@ import { catchError, filter, startWith, switchMap, throttleTime } from 'rxjs/ope
 export class BalanceIndicatorComponent {
 
   readonly balance$ = this.workRecordService.userUpdated$.pipe(
-    filter(u => this.authService.currentUser?.id === u),
+    filter(u => this.authService.currentApproval?.user.id === u),
     throttleTime(1000),
     startWith(1),
     switchMap(() => this.balanceService.getByDate(moment()).pipe(

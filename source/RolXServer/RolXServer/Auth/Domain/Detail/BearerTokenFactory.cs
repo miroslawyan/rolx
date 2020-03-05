@@ -95,9 +95,9 @@ namespace RolXServer.Auth.Domain.Detail
                 yield return new Claim(RolXClaimTypes.EntryDate, user.EntryDate.Value.ToIsoDate());
             }
 
-            if (user.LeavingDate.HasValue)
+            if (user.LeftDate.HasValue)
             {
-                yield return new Claim(RolXClaimTypes.LeavingDate, user.LeavingDate.Value.ToIsoDate());
+                yield return new Claim(RolXClaimTypes.LeftDate, user.LeftDate.Value.ToIsoDate());
             }
         }
     }

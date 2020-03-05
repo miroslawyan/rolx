@@ -40,6 +40,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.form.patchValue(this.user);
+
+    // somehow patchValue doesn't use the properties with getter
+    // lets do it explicitly
+    this.leavingDateControl.setValue(this.user.leavingDate);
   }
 
   ngOnDestroy() {

@@ -47,13 +47,13 @@ namespace RolXServer.Records.Domain.Detail.Balances
         /// <returns>The day-informations.</returns>
         public static IEnumerable<DayInfo> DayInfos(this User user, DateRange range, TimeSpan nominalWorkTimePerDay)
         {
-            var sortedSettings = user.Settings
+            var sortedSettings = user.PartTimeSettings
                 .OrderByDescending(s => s.StartDate)
                 .ToList();
 
             var activeRange = new DateRange(
                 user.EntryDate ?? range.Begin,
-                user.LeavingDate?.AddDays(1) ?? range.End);
+                user.LeftDate ?? range.End);
 
             return range.Days
                 .Select(d => new DayInfo
@@ -120,11 +120,11 @@ namespace RolXServer.Records.Domain.Detail.Balances
             return info;
         }
 
-        private static DayInfo ApplyPartTimeFactor(DayInfo info, IEnumerable<UserSetting> settings)
+        private static DayInfo ApplyPartTimeFactor(DayInfo info, IEnumerable<UserPartTimeSetting> settings)
         {
             var factor = settings
                 .Where(s => s.StartDate <= info.Date)
-                .Select(s => s.PartTimeFactor)
+                .Select(s => s.Factor)
                 .DefaultIfEmpty(1.0)
                 .First();
 

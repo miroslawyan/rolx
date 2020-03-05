@@ -145,10 +145,10 @@ namespace RolXServer.Records.Domain.Detail.Balances
         public void PartTime_Before()
         {
             var user = new User();
-            user.Settings.Add(new UserSetting
+            user.PartTimeSettings.Add(new UserPartTimeSetting
             {
                 StartDate = new DateTime(2020, 1, 1),
-                PartTimeFactor = 0.5,
+                Factor = 0.5,
             });
 
             user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
@@ -159,10 +159,10 @@ namespace RolXServer.Records.Domain.Detail.Balances
         public void PartTime_Between()
         {
             var user = new User();
-            user.Settings.Add(new UserSetting
+            user.PartTimeSettings.Add(new UserPartTimeSetting
             {
                 StartDate = new DateTime(2020, 2, 5),
-                PartTimeFactor = 0.5,
+                Factor = 0.5,
             });
 
             user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
@@ -173,10 +173,10 @@ namespace RolXServer.Records.Domain.Detail.Balances
         public void PartTime_After()
         {
             var user = new User();
-            user.Settings.Add(new UserSetting
+            user.PartTimeSettings.Add(new UserPartTimeSetting
             {
                 StartDate = new DateTime(2020, 8, 1),
-                PartTimeFactor = 0.5,
+                Factor = 0.5,
             });
 
             user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
@@ -198,10 +198,10 @@ namespace RolXServer.Records.Domain.Detail.Balances
 
             for (var i = 0; i < years; ++i)
             {
-                user.Settings.Add(new UserSetting
+                user.PartTimeSettings.Add(new UserPartTimeSetting
                 {
                     StartDate = begin.AddYears(i),
-                    PartTimeFactor = i % 2 == 0 ? 1.0 : 0.8,
+                    Factor = i % 2 == 0 ? 1.0 : 0.8,
                 });
             }
 

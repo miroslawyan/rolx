@@ -55,9 +55,9 @@ namespace RolXServer
         public DbSet<User> Users { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets the user settings.
+        /// Gets or sets the part-time settings.
         /// </summary>
-        public DbSet<UserSetting> UserSettings { get; set; } = null!;
+        public DbSet<UserPartTimeSetting> UserPartTimeSettings { get; set; } = null!;
 
         /// <summary>
         /// Override this method to further configure the model that was discovered by convention from the entity types
@@ -93,7 +93,7 @@ namespace RolXServer
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.GoogleId).IsUnique();
 
-            modelBuilder.Entity<UserSetting>()
+            modelBuilder.Entity<UserPartTimeSetting>()
                 .HasKey(s => new { s.UserId, s.StartDate });
         }
     }

@@ -108,10 +108,10 @@ namespace RolXServer.Records.Domain.Detail.Balances
                 EntryDate = new DateTime(2020, 1, 1),
             };
 
-            user.Settings.Add(new UserSetting
+            user.PartTimeSettings.Add(new UserPartTimeSetting
             {
                 StartDate = new DateTime(2020, 1, 1),
-                PartTimeFactor = 0.5,
+                Factor = 0.5,
             });
 
             user.VacationBudget(2020, 24, NominalWorkTimePerDay)
@@ -126,28 +126,28 @@ namespace RolXServer.Records.Domain.Detail.Balances
                 EntryDate = new DateTime(2020, 1, 1),
             };
 
-            user.Settings.Add(new UserSetting
+            user.PartTimeSettings.Add(new UserPartTimeSetting
             {
                 StartDate = new DateTime(2020, 2, 1),
-                PartTimeFactor = 0.5,
+                Factor = 0.5,
             });
 
-            user.Settings.Add(new UserSetting
+            user.PartTimeSettings.Add(new UserPartTimeSetting
             {
                 StartDate = new DateTime(2020, 3, 1),
-                PartTimeFactor = 1,
+                Factor = 1,
             });
 
-            user.Settings.Add(new UserSetting
+            user.PartTimeSettings.Add(new UserPartTimeSetting
             {
                 StartDate = new DateTime(2020, 8, 1),
-                PartTimeFactor = 0.5,
+                Factor = 0.5,
             });
 
-            user.Settings.Add(new UserSetting
+            user.PartTimeSettings.Add(new UserPartTimeSetting
             {
                 StartDate = new DateTime(2020, 11, 1),
-                PartTimeFactor = 1,
+                Factor = 1,
             });
 
             user.VacationBudget(2020, 24, NominalWorkTimePerDay)

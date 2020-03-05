@@ -44,57 +44,57 @@ namespace RolXServer.Users.WebApi.Validation
         [Test]
         public void LeavingDate_MayBeNull()
         {
-            this.sut.ShouldNotHaveValidationErrorFor(user => user.LeavingDate, (string?)null);
+            this.sut.ShouldNotHaveValidationErrorFor(user => user.LeftDate, (string?)null);
         }
 
         [Test]
         public void LeavingDate_MustNotBeEmpty()
         {
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeavingDate, string.Empty);
+            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, string.Empty);
         }
 
         [Test]
         public void LeavingDate_Valid()
         {
-            this.sut.ShouldNotHaveValidationErrorFor(user => user.LeavingDate, new UpdatableUser
+            this.sut.ShouldNotHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
             {
                 EntryDate = "2019-11-14",
-                LeavingDate = "2019-12-14",
+                LeftDate = "2019-12-14",
             });
         }
 
         [Test]
         public void LeavingDate_MustBeNullWhileEntryDateIsNull()
         {
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeavingDate, new UpdatableUser
+            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
             {
                 EntryDate = null,
-                LeavingDate = "2019-12-14",
+                LeftDate = "2019-12-14",
             });
         }
 
         [Test]
         public void LeavingDate_MustBeValidIsoDate()
         {
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeavingDate, new UpdatableUser
+            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
             {
                 EntryDate = "2019-12-14",
-                LeavingDate = "2019-13-14",
+                LeftDate = "2019-13-14",
             });
         }
 
         [Test]
         public void LeavingDate_MustBeAfterEntryDate()
         {
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeavingDate, new UpdatableUser
+            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
             {
                 EntryDate = "2019-12-14",
-                LeavingDate = "2019-12-14",
+                LeftDate = "2019-12-14",
             });
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeavingDate, new UpdatableUser
+            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
             {
                 EntryDate = "2019-12-14",
-                LeavingDate = "2019-12-13",
+                LeftDate = "2019-12-13",
             });
         }
     }

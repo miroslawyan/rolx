@@ -45,7 +45,6 @@ namespace RolXServer.Users.DataAccess
         /// <summary>
         /// Gets or sets the avatar URL.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1056:Uri properties should not be strings", Justification = "EF cannot map System.Uri")]
         public string AvatarUrl { get; set; } = string.Empty;
 
         /// <summary>
@@ -60,15 +59,18 @@ namespace RolXServer.Users.DataAccess
         public DateTime? EntryDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the leaving date (inclusive).
+        /// Gets or sets the date the user has left (exclusive).
         /// </summary>
+        /// <remarks>
+        /// This marks the first day the user no longer works with us.
+        /// </remarks>
         [Column(TypeName = "date")]
-        public DateTime? LeavingDate { get; set; }
+        public DateTime? LeftDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the settings.
+        /// Gets or sets the part-time settings.
         /// </summary>
-        public List<UserSetting> Settings { get; set; } = new List<UserSetting>();
+        public List<UserPartTimeSetting> PartTimeSettings { get; set; } = new List<UserPartTimeSetting>();
 
         /// <summary>
         /// Gets or sets the records.

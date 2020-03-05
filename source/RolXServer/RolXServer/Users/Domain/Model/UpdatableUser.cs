@@ -31,8 +31,11 @@ namespace RolXServer.Users.Domain.Model
         public DateTime? EntryDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the leaving date.
+        /// Gets or sets the date the user has left (exclusive).
         /// </summary>
-        public DateTime? LeavingDate { get; set; }
+        /// <remarks>
+        /// This marks the first day the user no longer works with us.
+        /// </remarks>
+        public DateTime? LeftDate { get; set; }
     }
 }

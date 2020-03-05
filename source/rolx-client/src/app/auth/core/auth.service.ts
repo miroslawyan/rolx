@@ -1,43 +1,43 @@
 import { Injectable } from '@angular/core';
-import { AuthenticatedUser } from '@app/auth/core/authenticated.user';
 import { classToPlain, plainToClass } from 'class-transformer';
 import { BehaviorSubject } from 'rxjs';
+import { Approval } from './approval';
 import { SignInService } from './sign-in.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private static readonly CurrentUserKey = 'currentUser';
+  private static readonly CurrentApprovalKey = 'currentApproval';
 
-  private readonly currentUserSubject = new BehaviorSubject<AuthenticatedUser | null>(null);
+  private readonly currentApprovalSubject = new BehaviorSubject<Approval | null>(null);
   private isInitialized = false;
 
-  currentUser$ = this.currentUserSubject.asObservable();
-  get currentUser() {
-    return this.currentUserSubject.value;
+  currentApproval$ = this.currentApprovalSubject.asObservable();
+  get currentApproval() {
+    return this.currentApprovalSubject.value;
   }
 
   constructor(private signInService: SignInService) {
     console.log('--- AuthService.ctor()');
   }
 
-  private static LoadCurrentUser(): AuthenticatedUser | null {
-    const userJson = localStorage.getItem(AuthService.CurrentUserKey);
-    if (!userJson) {
+  private static LoadCurrentApproval(): Approval | null {
+    const approvalJson = localStorage.getItem(AuthService.CurrentApprovalKey);
+    if (!approvalJson) {
       return null;
     }
 
-    const userPlain = JSON.parse(userJson);
-    return plainToClass(AuthenticatedUser, userPlain);
+    const approvalPlain = JSON.parse(approvalJson);
+    return plainToClass(Approval, approvalPlain);
   }
 
-  private static StoreCurrentUser(user: AuthenticatedUser) {
-    localStorage.setItem(AuthService.CurrentUserKey, JSON.stringify(classToPlain(user)));
+  private static StoreCurrentApproval(approval: Approval) {
+    localStorage.setItem(AuthService.CurrentApprovalKey, JSON.stringify(classToPlain(approval)));
   }
 
-  private static ClearCurrentUser() {
-    localStorage.removeItem(AuthService.CurrentUserKey);
+  private static ClearCurrentApproval() {
+    localStorage.removeItem(AuthService.CurrentApprovalKey);
   }
 
   async initialize(): Promise<void> {
@@ -48,37 +48,37 @@ export class AuthService {
     console.log('--- AuthService.initialize()');
     this.isInitialized = true;
 
-    let currentUser = AuthService.LoadCurrentUser();
+    let approval = AuthService.LoadCurrentApproval();
 
-    if (!currentUser || currentUser.isExpired) {
-      AuthService.ClearCurrentUser();
-      this.currentUserSubject.next(null);
+    if (!approval || approval.isExpired) {
+      AuthService.ClearCurrentApproval();
+      this.currentApprovalSubject.next(null);
 
       console.log('--- AuthService.initialize() done');
       return;
     }
 
-    if (currentUser.willExpireSoon) {
-      currentUser = await this.signInService.extend().toPromise();
+    if (approval.willExpireSoon) {
+      approval = await this.signInService.extend().toPromise();
     }
 
-    AuthService.StoreCurrentUser(currentUser);
-    this.currentUserSubject.next(currentUser);
+    AuthService.StoreCurrentApproval(approval);
+    this.currentApprovalSubject.next(approval);
 
     console.log('--- AuthService.initialize() done');
   }
 
   async signIn(googleIdToken: string): Promise<void> {
-    const currentUser = await this.signInService.signIn({
+    const approval = await this.signInService.signIn({
       googleIdToken,
     }).toPromise();
 
-    AuthService.StoreCurrentUser(currentUser);
-    this.currentUserSubject.next(currentUser);
+    AuthService.StoreCurrentApproval(approval);
+    this.currentApprovalSubject.next(approval);
   }
 
   signOut() {
-    AuthService.ClearCurrentUser();
-    this.currentUserSubject.next(null);
+    AuthService.ClearCurrentApproval();
+    this.currentApprovalSubject.next(null);
   }
 }

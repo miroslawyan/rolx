@@ -29,6 +29,11 @@ const routes: Routes = [
         path: 'server-error',
         component: SomethingWentWrongPageComponent,
       },
+      {
+        path: '',
+        redirectTo: '/week',
+        pathMatch: 'full',
+      },
     ],
   },
   {

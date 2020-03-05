@@ -11,7 +11,7 @@ export class RoleGuard implements CanActivate {
   ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const currentRole = this.authService.currentUser?.role || Role.User;
+    const currentRole = this.authService.currentApproval?.user.role || Role.User;
     const allowedRoles = route.data.allowedRoles as Role[] || [];
 
     if (!allowedRoles.includes(currentRole)) {

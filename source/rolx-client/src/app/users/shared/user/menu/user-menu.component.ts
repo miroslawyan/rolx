@@ -15,7 +15,7 @@ export class UserMenuComponent implements OnInit {
               public themeService: ThemeService) { }
 
   get user() {
-    return this.authService.currentUser;
+    return this.authService.currentApproval?.user;
   }
 
   get nextThemeName() {

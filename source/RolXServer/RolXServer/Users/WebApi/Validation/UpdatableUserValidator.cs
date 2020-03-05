@@ -29,16 +29,16 @@ namespace RolXServer.Users.WebApi.Validation
                 .SetValidator(new IsoDateValidator())
                 .Unless(u => u.EntryDate == null);
 
-            this.RuleFor(u => u.LeavingDate)
+            this.RuleFor(u => u.LeftDate)
                 .NotEmpty()
                 .SetValidator(new IsoDateValidator())
-                .Unless(u => u.LeavingDate == null);
+                .Unless(u => u.LeftDate == null);
 
-            this.RuleFor(u => u.LeavingDate)
+            this.RuleFor(u => u.LeftDate)
                 .Null()
                 .Unless(u => u.EntryDate != null);
 
-            this.RuleFor(u => u.LeavingDate)
+            this.RuleFor(u => u.LeftDate)
                 .GreaterThan(u => u.EntryDate);
         }
     }

@@ -29,15 +29,17 @@ namespace RolXServer.Auth.Domain
         /// </summary>
         /// <param name="signInData">The sign in data.</param>
         /// <returns>
-        /// The authenticated user.
+        /// The approval or <c>null</c> if authentication failed.
         /// </returns>
-        Task<AuthenticatedUser?> Authenticate(SignInData signInData);
+        Task<Approval?> Authenticate(SignInData signInData);
 
         /// <summary>
         /// Extends the authentication for user with the specified identifier.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
-        /// <returns>The authenticated user.</returns>
-        Task<AuthenticatedUser?> Extend(Guid userId);
+        /// <returns>
+        /// The approval or <c>null</c> if authentication failed.
+        /// </returns>
+        Task<Approval?> Extend(Guid userId);
     }
 }

@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthenticatedUser } from '@app/auth/core/authenticated.user';
-import { SignInData } from '@app/auth/core/sign-in.data';
 import { mapPlainToClass } from '@app/core/util';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
+import { Approval } from './approval';
 import { Info } from './info';
+import { SignInData } from './sign-in.data';
 
 const SignInUrl = environment.apiBaseUrl + '/v1/signin';
 
@@ -21,15 +21,15 @@ export class SignInService {
     return this.httpClient.get<Info>(SignInUrl + '/info');
   }
 
-  signIn(signInData: SignInData): Observable<AuthenticatedUser> {
+  signIn(signInData: SignInData): Observable<Approval> {
     return this.httpClient.post(SignInUrl, signInData).pipe(
-      mapPlainToClass(AuthenticatedUser),
+      mapPlainToClass(Approval),
     );
   }
 
-  extend(): Observable<AuthenticatedUser> {
+  extend(): Observable<Approval> {
     return this.httpClient.get(SignInUrl + '/extend').pipe(
-      mapPlainToClass(AuthenticatedUser),
+      mapPlainToClass(Approval),
     );
   }
 }

@@ -17,7 +17,7 @@ export class WeekPageComponent implements OnInit {
 
   monday$: Observable<moment.Moment>;
   recordsAndPhases$: Observable<[Record[], Phase[]]>;
-  user = this.authService.currentUser;
+  user = this.authService.currentApproval?.user;
 
   constructor(private route: ActivatedRoute,
               private router: Router,

@@ -14,7 +14,6 @@ using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RolXServer.Auth.Domain.Mapping;
 using RolXServer.Auth.Domain.Model;
 using RolXServer.Users;
 using RolXServer.Users.DataAccess;
@@ -71,9 +70,9 @@ namespace RolXServer.Auth.Domain.Detail
         /// </summary>
         /// <param name="signInData">The sign in data.</param>
         /// <returns>
-        /// The authenticated user or <c>null</c> if authentication failed.
+        /// The approval or <c>null</c> if authentication failed.
         /// </returns>
-        public async Task<AuthenticatedUser?> Authenticate(SignInData signInData)
+        public async Task<Approval?> Authenticate(SignInData signInData)
         {
             try
             {
@@ -103,9 +102,9 @@ namespace RolXServer.Auth.Domain.Detail
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>
-        /// The authenticated user.
+        /// The approval or <c>null</c> if authentication failed.
         /// </returns>
-        public async Task<AuthenticatedUser?> Extend(Guid userId)
+        public async Task<Approval?> Extend(Guid userId)
         {
             var user = await this.dbContext.Users.FindAsync(userId);
             if (user is null)
@@ -152,9 +151,16 @@ namespace RolXServer.Auth.Domain.Detail
             return user;
         }
 
-        private AuthenticatedUser Authenticate(User user)
+        private Approval Authenticate(User user)
         {
-            return user.ToDomain(this.bearerTokenFactory.ProduceFor(user));
+            var bearerToken = this.bearerTokenFactory.ProduceFor(user);
+
+            return new Approval
+            {
+                User = user,
+                BearerToken = bearerToken.Token,
+                Expires = bearerToken.Expires,
+            };
         }
     }
 }

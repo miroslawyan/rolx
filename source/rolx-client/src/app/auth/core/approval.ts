@@ -1,8 +1,13 @@
 import { TransformAsIsoDateTime } from '@app/core/util';
 import { User } from '@app/users/core';
+import { Type } from 'class-transformer';
 import moment from 'moment';
 
-export class AuthenticatedUser extends User {
+export class Approval {
+
+  @Type(() => User)
+  user: User;
+
   bearerToken: string;
 
   @TransformAsIsoDateTime()

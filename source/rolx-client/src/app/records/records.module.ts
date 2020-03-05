@@ -4,13 +4,11 @@ import { AppImportModule } from '@app/app-import.module';
 import { CoreModule } from '@app/core';
 import { ProjectsModule } from '@app/projects';
 import {
-  MonthPageComponent,
   WeekPageComponent,
 } from './pages';
 import {
   BalanceIndicatorComponent,
   DurationEditComponent,
-  MonthTableComponent,
   MultiEntriesDialogComponent,
   PaidLeaveSelectComponent,
   WeekTableComponent,
@@ -28,8 +26,6 @@ import { WeekTableCellComponent } from './shared/week-table/cell/week-table-cell
   declarations: [
     BalanceIndicatorComponent,
     DurationEditComponent,
-    MonthPageComponent,
-    MonthTableComponent,
     MultiEntriesDialogComponent,
     PaidLeaveSelectComponent,
     ReasonDialogComponent,
@@ -41,7 +37,6 @@ import { WeekTableCellComponent } from './shared/week-table/cell/week-table-cell
     MultiEntriesDialogComponent,
   ],
   exports: [
-    MonthPageComponent,
     WeekPageComponent,
     BalanceIndicatorComponent,
   ],

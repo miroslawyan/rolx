@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RolXServer.Users.DataAccess;
 using RolXServer.Users.Domain;
 using RolXServer.Users.WebApi.Mapping;
 using RolXServer.Users.WebApi.Resource;
@@ -48,7 +47,9 @@ namespace RolXServer.Users.WebApi
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return (await this.userService.GetAll()).ToList();
+            return (await this.userService.GetAll())
+                .Select(d => d.ToResource())
+                .ToList();
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace RolXServer.Users.WebApi
                 return this.NotFound();
             }
 
-            return domain;
+            return domain.ToResource();
         }
 
         /// <summary>

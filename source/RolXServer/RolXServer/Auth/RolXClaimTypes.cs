@@ -19,8 +19,8 @@ namespace RolXServer.Auth
         public const string EntryDate = "rolx://EntryDate";
 
         /// <summary>
-        /// A claim that specifies an leaving date.
+        /// A claim that specifies a left date.
         /// </summary>
-        public const string LeavingDate = "rolx://LeavingDate";
+        public const string LeftDate = "rolx://LeftDate";
     }
 }

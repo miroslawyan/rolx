@@ -52,7 +52,7 @@ namespace RolXServer.Records.Domain.Detail
         public async Task<IEnumerable<Record>> GetRange(DateRange range, Guid userId)
         {
             var user = await this.dbContext.Users
-                .Include(u => u.Settings)
+                .Include(u => u.PartTimeSettings)
                 .SingleAsync(u => u.Id == userId);
 
             var entities = await this.dbContext.Records

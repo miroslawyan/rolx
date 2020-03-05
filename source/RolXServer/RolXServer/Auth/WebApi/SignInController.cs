@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RolXServer.Auth.Domain;
-using RolXServer.Auth.Domain.Model;
+using RolXServer.Auth.WebApi.Mapping;
+using RolXServer.Auth.WebApi.Resource;
 
 namespace RolXServer.Auth.WebApi
 {
@@ -40,7 +41,7 @@ namespace RolXServer.Auth.WebApi
         /// </summary>
         /// <returns>The sign-in information.</returns>
         [HttpGet("info")]
-        public async Task<ActionResult<Info>> GetInfo()
+        public async Task<ActionResult<Domain.Model.Info>> GetInfo()
         {
             return await this.signInService.GetInfo();
         }
@@ -50,10 +51,10 @@ namespace RolXServer.Auth.WebApi
         /// </summary>
         /// <param name="signInData">The sign in data.</param>
         /// <returns>
-        /// The authenticated user.
+        /// The approval.
         /// </returns>
         [HttpPost]
-        public async Task<ActionResult<AuthenticatedUser>> SignIn(SignInData signInData)
+        public async Task<ActionResult<Approval>> SignIn(Domain.Model.SignInData signInData)
         {
             var user = await this.signInService.Authenticate(signInData);
             if (user is null)
@@ -61,16 +62,18 @@ namespace RolXServer.Auth.WebApi
                 return this.Unauthorized();
             }
 
-            return user;
+            return user.ToResource();
         }
 
         /// <summary>
         /// Extends the authentication of the calling user.
         /// </summary>
-        /// <returns>The extended, authenticated user.</returns>
+        /// <returns>
+        /// The extended approval.
+        /// </returns>
         [HttpGet("extend")]
         [Authorize]
-        public async Task<ActionResult<AuthenticatedUser>> Extend()
+        public async Task<ActionResult<Approval>> Extend()
         {
             var userId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await this.signInService.Extend(Guid.Parse(userId));
@@ -79,7 +82,7 @@ namespace RolXServer.Auth.WebApi
                 return this.Unauthorized();
             }
 
-            return user;
+            return user.ToResource();
         }
     }
 }

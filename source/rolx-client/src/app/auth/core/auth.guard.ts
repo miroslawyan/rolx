@@ -16,12 +16,12 @@ export class AuthGuard implements CanActivate {
   }
 
   private isAuthorized(state: RouterStateSnapshot) {
-    const currentUser = this.authService.currentUser;
-    if (!currentUser) {
+    const approval = this.authService.currentApproval;
+    if (!(approval?.user)) {
       return this.router.createUrlTree(['/sign-in'], { queryParams: { forwardRoute: state.url } });
     }
 
-    if (!currentUser.isActiveAt(moment())) {
+    if (!approval.user.isActiveAt(moment())) {
       return this.router.createUrlTree(['/forbidden']);
     }
 

@@ -39,13 +39,13 @@ namespace RolXServer.Auth.Domain
         }
 
         /// <summary>
-        /// Gets the leaving date.
+        /// Gets the left date.
         /// </summary>
         /// <param name="principal">The principal.</param>
-        /// <returns>The leaving date.</returns>
-        public static DateTime? GetLeavingDate(this ClaimsPrincipal principal)
+        /// <returns>The left date.</returns>
+        public static DateTime? GetLeftDate(this ClaimsPrincipal principal)
         {
-            return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.LeavingDate));
+            return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.LeftDate));
         }
 
         /// <summary>
@@ -61,11 +61,11 @@ namespace RolXServer.Auth.Domain
             try
             {
                 var entryDate = principal.GetEntryDate();
-                var leavingDate = principal.GetLeavingDate();
+                var leftDate = principal.GetLeftDate();
 
                 return entryDate.HasValue
                     && entryDate.Value <= date
-                    && (!leavingDate.HasValue || leavingDate.Value >= date);
+                    && (!leftDate.HasValue || leftDate.Value > date);
             }
             catch (FormatException)
             {

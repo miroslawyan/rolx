@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="AuthenticatedUser.cs" company="Christian Ewald">
+// <copyright file="Approval.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -13,10 +13,15 @@ using RolXServer.Users.DataAccess;
 namespace RolXServer.Auth.Domain.Model
 {
     /// <summary>
-    /// Represents an authenticated user.
+    /// An approval to a successful sign-in.
     /// </summary>
-    public class AuthenticatedUser : User
+    public class Approval
     {
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        public User User { get; set; } = new User();
+
         /// <summary>
         /// Gets or sets the bearer token.
         /// </summary>

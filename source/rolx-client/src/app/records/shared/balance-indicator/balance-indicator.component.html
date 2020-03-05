@@ -1,20 +1,26 @@
 <span *ngIf="balance$ | async as balance" class="container">
-  <small>Gleitzeit:</small>
 
   <span>
-    {{balance.overtime}}
-    <small>h</small>
-  </span>
+    <small>Gleitzeit:</small>
 
-  <small>Ferien:</small>
+    <span>
+      {{balance.overtime}}
+      <small>h</small>
+    </span>
+  </span>
 
   <span>
-    {{balance.vacationAvailableDays | number:'1.0-2'}}
-    <small>{{balance.vacationAvailableDays === 1 ? 'Tag' : 'Tage'}}</small>
+    <small>Ferien:</small>
+
+    <span>
+      {{balance.vacationAvailableDays | number:'1.0-2'}}
+      <small>{{balance.vacationAvailableDays === 1 ? 'Tag' : 'Tage'}}</small>
 
 
-    <small *ngIf="balance.vacationPlannedDays > 0">
-      ({{balance.vacationPlannedDays | number:'1.0-2'}} geplant)
-    </small>
+      <small *ngIf="balance.vacationPlannedDays > 0">
+        ({{balance.vacationPlannedDays | number:'1.0-2'}} geplant)
+      </small>
+    </span>
   </span>
+
 </span>

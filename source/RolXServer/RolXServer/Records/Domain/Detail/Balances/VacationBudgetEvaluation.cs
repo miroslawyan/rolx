@@ -57,21 +57,21 @@ namespace RolXServer.Records.Domain.Detail.Balances
             var lastStartDate = user.EntryDate.Value;
             var lastFactor = 1.0;
 
-            foreach (var setting in user.Settings)
+            foreach (var setting in user.PartTimeSettings)
             {
                 if (setting.StartDate > lastStartDate)
                 {
                     yield return (new DateRange(lastStartDate, setting.StartDate), lastFactor);
 
-                    lastFactor = setting.PartTimeFactor;
+                    lastFactor = setting.Factor;
                     lastStartDate = setting.StartDate;
                 }
 
-                lastFactor = setting.PartTimeFactor;
+                lastFactor = setting.Factor;
             }
 
-            var endDate = user.LeavingDate.HasValue && user.LeavingDate.Value.Year == year
-                ? user.LeavingDate.Value.AddDays(1)
+            var endDate = user.LeftDate.HasValue && user.LeftDate.Value.Year == year
+                ? user.LeftDate.Value
                 : new DateTime(year + 1, 1, 1);
 
             yield return (new DateRange(lastStartDate, endDate), lastFactor);

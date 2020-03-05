@@ -31,8 +31,11 @@ namespace RolXServer.Users.WebApi.Resource
         public string? EntryDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the leaving date.
+        /// Gets or sets the date the user has left (exclusive).
         /// </summary>
-        public string? LeavingDate { get; set; }
+        /// <remarks>
+        /// This marks the first day the user no longer works with us.
+        /// </remarks>
+        public string? LeftDate { get; set; }
     }
 }

@@ -12,11 +12,11 @@ export class AuthInterceptor implements HttpInterceptor {
               private authService: AuthService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const currentUser = this.authService.currentUser;
-    if (currentUser) {
+    const approval = this.authService.currentApproval;
+    if (approval) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${currentUser.bearerToken}`,
+          Authorization: `Bearer ${approval.bearerToken}`,
         },
       });
 

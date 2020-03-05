@@ -47,7 +47,7 @@ namespace RolXServer.Records.Domain.Detail
         public async Task<Balance> GetByDate(DateTime date, Guid userId)
         {
             var data = await this.dbContext.Users
-                .Include(u => u.Settings)
+                .Include(u => u.PartTimeSettings)
                 .Where(u => u.Id == userId)
                 .Select(u => new BalanceData
                 {

@@ -98,13 +98,13 @@ namespace RolXServer.Users.Domain.Detail
             var user = new UpdatableUser
             {
                 Id = this.userId,
-                LeavingDate = date,
+                LeftDate = date,
             };
 
             await this.sut.Update(user);
 
             (await this.sut.GetById(this.userId))
-                !.LeavingDate.Should().Be(date);
+                !.LeftDate.Should().Be(date);
         }
     }
 }
