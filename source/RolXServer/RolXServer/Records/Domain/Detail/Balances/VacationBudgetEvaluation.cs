@@ -30,10 +30,8 @@ namespace RolXServer.Records.Domain.Detail.Balances
         /// <returns>The vacation budget.</returns>
         public static TimeSpan VacationBudget(this User user, int year, int vacationDaysPerYear, TimeSpan nominalWorkTimePerDay)
         {
-            return new TimeSpan(
-                user.RangesWithPartTimeFactor(year)
-                    .Select(t => t.Item1.VacationDays(vacationDaysPerYear) * t.Item2 * nominalWorkTimePerDay)
-                    .Sum(s => s.Ticks));
+            return user.RangesWithPartTimeFactor(year)
+                .Sum(t => t.Item1.VacationDays(vacationDaysPerYear) * t.Item2 * nominalWorkTimePerDay);
         }
 
         /// <summary>

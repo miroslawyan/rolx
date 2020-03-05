@@ -55,6 +55,11 @@ namespace RolXServer
         public DbSet<User> Users { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets the balance corrections.
+        /// </summary>
+        public DbSet<UserBalanceCorrection> UserBalanceCorrections { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the part-time settings.
         /// </summary>
         public DbSet<UserPartTimeSetting> UserPartTimeSettings { get; set; } = null!;
@@ -94,7 +99,7 @@ namespace RolXServer
                 .HasIndex(u => u.GoogleId).IsUnique();
 
             modelBuilder.Entity<UserPartTimeSetting>()
-                .HasKey(s => new { s.UserId, s.StartDate });
+                .HasIndex(s => new { s.UserId, s.StartDate }).IsUnique();
         }
     }
 }

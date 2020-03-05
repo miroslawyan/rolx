@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using RolXServer.Common.Util;
 using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Records.Domain.Detail.Balances
@@ -28,10 +29,8 @@ namespace RolXServer.Records.Domain.Detail.Balances
         /// <returns>The sum of paid leave time.</returns>
         public static TimeSpan SumOfPaidLeaveTime(this IEnumerable<PaidLeaveDay> paidLeaveDays, User user, TimeSpan nominalWorkTimePerDay)
         {
-            return new TimeSpan(
-                paidLeaveDays
-                    .Select(d => user.NominalWorkTime(d.Date, nominalWorkTimePerDay) - d.ActualWorkTime)
-                    .Sum(t => t.Ticks));
+            return paidLeaveDays
+                .Sum(d => user.NominalWorkTime(d.Date, nominalWorkTimePerDay) - d.ActualWorkTime);
         }
     }
 }

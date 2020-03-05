@@ -75,9 +75,8 @@ namespace RolXServer.Records.Domain.Detail.Balances
         /// <returns>The nominal work-time.</returns>
         public static TimeSpan NominalWorkTime(this User user, DateRange range, TimeSpan nominalWorkTimePerDay)
         {
-            return new TimeSpan(
-                user.DayInfos(range, nominalWorkTimePerDay)
-                .Sum(i => i.NominalWorkTime.Ticks));
+            return user.DayInfos(range, nominalWorkTimePerDay)
+                .Sum(i => i.NominalWorkTime);
         }
 
         /// <summary>
@@ -91,9 +90,8 @@ namespace RolXServer.Records.Domain.Detail.Balances
         /// </returns>
         public static TimeSpan NominalWorkTime(this User user, DateTime date, TimeSpan nominalWorkTimePerDay)
         {
-            return new TimeSpan(
-                user.DayInfos(new DateRange(date, date.AddDays(1)), nominalWorkTimePerDay)
-                .Sum(i => i.NominalWorkTime.Ticks));
+            return user.DayInfos(new DateRange(date, date.AddDays(1)), nominalWorkTimePerDay)
+                .Sum(i => i.NominalWorkTime);
         }
 
         private static DayInfo ApplyWeekend(DayInfo info)

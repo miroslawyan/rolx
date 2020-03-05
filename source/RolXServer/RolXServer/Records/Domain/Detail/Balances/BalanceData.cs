@@ -71,9 +71,13 @@ namespace RolXServer.Records.Domain.Detail.Balances
         private TimeSpan PaidLeaveTime => this.PaidLeaveDays
             .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay);
 
-        private TimeSpan Overtime => this.ActualWorkTime + this.PaidLeaveTime - this.NominalWorkTime;
+        private TimeSpan Overtime => this.ActualWorkTime
+            + this.User.BalanceCorrections.Sum(c => c.Overtime)
+            + this.PaidLeaveTime
+            - this.NominalWorkTime;
 
-        private TimeSpan VacationBudget => this.User.VacationBudget(this.ByDate.Year, this.VacationDaysPerYear, this.NominalWorkTimePerDay);
+        private TimeSpan VacationBudget => this.User.VacationBudget(this.ByDate.Year, this.VacationDaysPerYear, this.NominalWorkTimePerDay)
+                + this.User.BalanceCorrections.Sum(c => c.Vacation);
 
         private TimeSpan NominalWorkTimeAtByDate => this.User.NominalWorkTime(this.ByDate, this.NominalWorkTimePerDay);
 

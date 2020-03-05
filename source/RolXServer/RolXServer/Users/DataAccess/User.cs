@@ -68,6 +68,11 @@ namespace RolXServer.Users.DataAccess
         public DateTime? LeftDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the balance corrections.
+        /// </summary>
+        public List<UserBalanceCorrection> BalanceCorrections { get; set; } = new List<UserBalanceCorrection>();
+
+        /// <summary>
         /// Gets or sets the part-time settings.
         /// </summary>
         public List<UserPartTimeSetting> PartTimeSettings { get; set; } = new List<UserPartTimeSetting>();

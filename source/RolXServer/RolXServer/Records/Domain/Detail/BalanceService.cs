@@ -46,13 +46,15 @@ namespace RolXServer.Records.Domain.Detail
         /// </returns>
         public async Task<Balance> GetByDate(DateTime date, Guid userId)
         {
-            var data = await this.dbContext.Users
+            var user = await this.dbContext.Users
                 .Include(u => u.PartTimeSettings)
+                .Include(u => u.BalanceCorrections)
+                .SingleAsync(u => u.Id == userId);
+
+            var data = await this.dbContext.Users
                 .Where(u => u.Id == userId)
                 .Select(u => new BalanceData
                 {
-                    User = u,
-
                     ActualWorkTimeSeconds = u.Records
                         .Where(r => r.Date <= date)
                         .SelectMany(r => r.Entries)
@@ -76,6 +78,7 @@ namespace RolXServer.Records.Domain.Detail
                 })
                 .SingleAsync();
 
+            data.User = user;
             data.ByDate = date;
             data.NominalWorkTimePerDay = this.settings.NominalWorkTimePerDay;
             data.VacationDaysPerYear = this.settings.VacationDaysPerYear;
