@@ -1,5 +1,5 @@
 <table mat-table
-       [dataSource]="users"
+       [dataSource]="dataSource"
        matSort
        matSortActive="fullName"
        matSortDirection="asc"
@@ -53,3 +53,7 @@
   <tr mat-row *matRowDef="let user; columns: displayedColumns;"></tr>
 
 </table>
+
+<div>
+  <mat-checkbox  (change)="update($event.checked)">Ehemalige Mitarbeiter anzeigen</mat-checkbox>
+</div>

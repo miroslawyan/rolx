@@ -3,6 +3,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthService, Role } from '@app/auth/core';
 import { User, UserService } from '@app/users/core';
+import moment from 'moment';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-user-table',
@@ -10,9 +12,10 @@ import { User, UserService } from '@app/users/core';
   styleUrls: ['./user-table.component.scss'],
 })
 export class UserTableComponent implements OnInit {
+  private users: User[] = [];
 
-  users: MatTableDataSource<User>;
-  Role = Role;
+  readonly dataSource = new MatTableDataSource<User>();
+  readonly Role = Role;
 
   get displayedColumns(): string[] {
     const allColumns = ['avatar', 'fullName', 'email', 'role', 'entryDate', 'leavingDate', 'tools'];
@@ -29,11 +32,14 @@ export class UserTableComponent implements OnInit {
               public authService: AuthService) { }
 
   ngOnInit() {
-    this.userService.getAll()
-      .subscribe(users => {
-        this.users = new MatTableDataSource<User>(users);
-        this.users.sort = this.sort;
-      });
+    this.dataSource.sort = this.sort;
+
+    this.userService.getAll().pipe(tap(users => this.users = users)).subscribe(() => this.update(false));
+  }
+
+  update(showFormerUsers: boolean) {
+    const deadline = moment().subtract(3, 'month');
+    this.dataSource.data = showFormerUsers ? this.users : this.users.filter(u => u.leavingDate?.isAfter(deadline) ?? true);
   }
 
 }
