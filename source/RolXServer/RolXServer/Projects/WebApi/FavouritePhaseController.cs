@@ -44,10 +44,9 @@ namespace RolXServer.Projects.WebApi
         /// <returns>The favourite phases.</returns>
         [HttpGet]
         public async Task<IEnumerable<Phase>> GetFavourites()
-        {
-            return (await this.favouriteService.GetAll(this.User.GetUserId()))
-                .Select(p => p.ToResource());
-        }
+            => (await this.favouriteService.GetAll(this.User.GetUserId()))
+                .Select(p => p.ToResource())
+                .ToList();
 
         /// <summary>
         /// Adds the specified phase to the favourites.

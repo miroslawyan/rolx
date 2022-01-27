@@ -67,7 +67,7 @@ namespace RolXServer.Projects.Domain.Detail
             return await this.context.Records
                 .Where(r => r.UserId == userId && r.Date >= begin && r.Date < end)
                 .SelectMany(r => r.Entries)
-                .Select(e => e.Phase)
+                .Select(e => e.Phase!)
                 .Distinct()
                 .ToListAsync();
         }

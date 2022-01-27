@@ -43,7 +43,7 @@ namespace RolXServer.Projects.Domain.Detail
         {
             return await this.context.FavouritePhases
                 .Where(f => f.UserId == userId)
-                .Select(f => f.Phase)
+                .Select(f => f.Phase!)
                 .ToListAsync();
         }
 

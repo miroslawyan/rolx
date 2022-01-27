@@ -72,10 +72,9 @@ namespace RolXServer.Projects.WebApi
                 return this.NotFound();
             }
 
-            var result = (await this.phaseService.GetSuitable(this.User.GetUserId(), theDate))
-                .Select(p => p.ToResource());
-
-            return new ActionResult<IEnumerable<Phase>>(result);
+            return (await this.phaseService.GetSuitable(this.User.GetUserId(), theDate))
+                .Select(p => p.ToResource())
+                .ToList();
         }
     }
 }
