@@ -107,6 +107,9 @@ export class FormRow {
     this.subscription.add(combineLatest([begin$, pause$])
       .subscribe(([b, p]) => this.setEndMin(b, p)));
 
+    this.subscription.add(combineLatest([ pause$, begin$, end$])
+    .subscribe(([p]) => this.setPauseMin(p)));
+
     this.subscription.add(combineLatest([begin$, end$])
       .subscribe(([b, e]) => this.setPauseMax(b, e)));
   }
@@ -120,6 +123,16 @@ export class FormRow {
     }
 
     this.end.updateValueAndValidity();
+  }
+
+  private setPauseMin(pause: Duration | null) {
+    if (pause) {
+    this.pause.setValidators(DurationValidators.min(Duration.Zero));
+    } else {
+      this.pause.clearValidators();
+    }
+
+    this.pause.updateValueAndValidity();
   }
 
   private setPauseMax(begin: TimeOfDay | null, end: TimeOfDay | null) {
