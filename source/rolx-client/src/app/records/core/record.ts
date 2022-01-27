@@ -1,5 +1,6 @@
-import { Duration, TransformAsDuration, TransformAsIsoDate } from '@app/core/util';
-import { Phase } from '@app/projects/core';
+import { Duration, TransformAsDuration } from '@app/core/util/duration';
+import { TransformAsIsoDate } from '@app/core/util/iso-date';
+import { Phase } from '@app/projects/core/phase';
 import { Type } from 'class-transformer';
 import moment from 'moment';
 import { DayType } from './day-type';

@@ -30,6 +30,7 @@ namespace RolXServer.Records
 
             services.AddScoped<Domain.IBalanceService, Domain.Detail.BalanceService>();
             services.AddScoped<Domain.IRecordService, Domain.Detail.RecordService>();
+            services.AddScoped<Domain.IYearInfoService, Domain.Detail.YearInfoService>();
 
             return services;
         }

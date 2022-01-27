@@ -1,9 +1,12 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ErrorResponse, ErrorService } from '@app/core/error';
-import { Duration } from '@app/core/util';
-import { Phase, Project, ProjectService } from '@app/projects/core';
+import { ErrorResponse } from '@app/core/error/error-response';
+import { ErrorService } from '@app/core/error/error.service';
+import { Duration } from '@app/core/util/duration';
+import { Phase } from '@app/projects/core/phase';
+import { Project } from '@app/projects/core/project';
+import { ProjectService } from '@app/projects/core/project.service';
 
 @Component({
   selector: 'rolx-phase-form',

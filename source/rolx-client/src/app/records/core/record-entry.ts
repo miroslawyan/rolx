@@ -1,4 +1,5 @@
-import { Duration, TimeOfDay, TransformAsDuration, TransformAsTimeOfDay } from '@app/core/util';
+import { Duration, TransformAsDuration } from '@app/core/util/duration';
+import { TimeOfDay, TransformAsTimeOfDay } from '@app/core/util/time-of-day';
 
 export class RecordEntry {
 

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Phase } from '@app/projects/core';
-import { PhaseService } from '@app/projects/core';
+import { Phase } from '@app/projects/core/phase';
+import { PhaseService } from '@app/projects/core/phase.service';
 import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';

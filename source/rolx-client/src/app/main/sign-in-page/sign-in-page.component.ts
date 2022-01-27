@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, GoogleAuthService } from '@app/auth/core';
+import { AuthService } from '@app/auth/core/auth.service';
+import { GoogleAuthService } from '@app/auth/core/google-auth.service';
 import { Subscription } from 'rxjs';
 
 @Component({

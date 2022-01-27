@@ -1,5 +1,5 @@
-import { Role } from '@app/auth/core';
-import { TransformAsIsoDate } from '@app/core/util';
+import { Role } from '@app/auth/core/role';
+import { TransformAsIsoDate } from '@app/core/util/iso-date';
 import { Exclude } from 'class-transformer';
 import moment from 'moment';
 

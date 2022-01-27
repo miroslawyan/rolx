@@ -6,8 +6,8 @@ import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
-import { CoreModule } from '@app/core';
-import { MainModule } from '@app/main';
+import { CoreModule } from '@app/core/core.module';
+import { MainModule } from '@app/main/main.module';
 
 registerLocaleData(localeDeCh);
 

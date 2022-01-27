@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@app/auth/core';
-import { IsoDate } from '@app/core/util';
-import { Phase, PhaseService } from '@app/projects/core';
-import { Record, WorkRecordService } from '@app/records/core';
+import { AuthService } from '@app/auth/core/auth.service';
+import { IsoDate } from '@app/core/util/iso-date';
+import { Phase } from '@app/projects/core/phase';
+import { PhaseService } from '@app/projects/core/phase.service';
+import { Record } from '@app/records/core/record';
+import { WorkRecordService } from '@app/records/core/work-record.service';
 import moment from 'moment';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -11,7 +13,6 @@ import { map, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'rolx-week-page',
   templateUrl: './week-page.component.html',
-  styleUrls: ['./week-page.component.scss'],
 })
 export class WeekPageComponent implements OnInit {
 

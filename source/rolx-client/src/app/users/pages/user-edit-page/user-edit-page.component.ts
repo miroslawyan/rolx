@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { User, UserService } from '@app/users/core';
+import { User } from '@app/users/core/user';
+import { UserService } from '@app/users/core/user.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 

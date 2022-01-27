@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
-import {
-  PhaseEditPageComponent,
-  ProjectDetailPageComponent,
-  ProjectEditPageComponent,
-  ProjectListPageComponent,
-} from './pages';
+import { PhaseEditPageComponent } from '@app/projects/pages/phase-edit-page/phase-edit-page.component';
+import { ProjectDetailPageComponent } from '@app/projects/pages/project-detail-page/project-detail-page.component';
+import { ProjectEditPageComponent } from '@app/projects/pages/project-edit-page/project-edit-page.component';
+import { ProjectListPageComponent } from '@app/projects/pages/project-list-page/project-list-page.component';
 
 export const ProjectsRoutes: Routes = [
   {

@@ -1,0 +1,2 @@
+# Disable all line-ending normalization as its already defined in editorconfig
+* -text

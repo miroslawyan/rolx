@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { mapPlainToClassArray } from '@app/core/util';
+import { mapPlainToClassArray } from '@app/core/util/operators';
 import { environment } from '@env/environment';
 import { classToPlain } from 'class-transformer';
 import { BehaviorSubject, Observable, of } from 'rxjs';

@@ -2,8 +2,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Component, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { AuthService, Role } from '@app/auth/core';
-import { PendingRequestService } from '@app/core/pending-request';
+import { AuthService } from '@app/auth/core/auth.service';
+import { Role } from '@app/auth/core/role';
+import { PendingRequestService } from '@app/core/pending-request/pending-request.service';
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 

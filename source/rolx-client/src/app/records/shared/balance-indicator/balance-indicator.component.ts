@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthService } from '@app/auth/core';
-import { BalanceService, WorkRecordService } from '@app/records/core';
+import { AuthService } from '@app/auth/core/auth.service';
+import { BalanceService } from '@app/records/core/balance.service';
+import { WorkRecordService } from '@app/records/core/work-record.service';
 import moment from 'moment';
 import { of } from 'rxjs';
 import { catchError, filter, startWith, switchMap, throttleTime } from 'rxjs/operators';

@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { AuthService, Role } from '@app/auth/core';
-import { User, UserService } from '@app/users/core';
+import { AuthService } from '@app/auth/core/auth.service';
+import { Role } from '@app/auth/core/role';
+import { User } from '@app/users/core/user';
+import { UserService } from '@app/users/core/user.service';
 import moment from 'moment';
 import { tap } from 'rxjs/operators';
 

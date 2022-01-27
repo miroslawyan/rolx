@@ -1,4 +1,5 @@
-import { Duration, TransformAsDuration, TransformAsIsoDate } from '@app/core/util';
+import { Duration, TransformAsDuration } from '@app/core/util/duration';
+import { TransformAsIsoDate } from '@app/core/util/iso-date';
 import moment from 'moment';
 
 export class Phase {

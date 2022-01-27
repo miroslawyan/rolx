@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorResponse } from '@app/core/error';
-import { mapPlainToClass, mapPlainToClassArray } from '@app/core/util';
+import { ErrorResponse } from '@app/core/error/error-response';
+import { mapPlainToClass, mapPlainToClassArray } from '@app/core/util/operators';
 import { environment } from '@env/environment';
 import { classToPlain } from 'class-transformer';
 import { Observable, throwError } from 'rxjs';

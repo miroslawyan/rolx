@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AppImportModule } from '@app/app-import.module';
-import { ProjectsModule} from '@app/projects';
-import { RecordsModule } from '@app/records';
-import { UsersModule } from '@app/users';
+import { ProjectsModule } from '@app/projects/projects.module';
+import { RecordsModule } from '@app/records/records.module';
+import { UsersModule } from '@app/users/users.module';
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
@@ -22,12 +22,12 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     ToolbarComponent,
   ],
   imports: [
-    ProjectsModule,
     AppImportModule,
     CommonModule,
     MainRoutingModule,
-    UsersModule,
+    ProjectsModule,
     RecordsModule,
+    UsersModule,
   ],
 })
 export class MainModule { }

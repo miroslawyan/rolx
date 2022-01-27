@@ -102,6 +102,19 @@ namespace RolXServer.Common.Util
         }
 
         /// <summary>
+        /// Creates a date-range for the specified year.
+        /// </summary>
+        /// <param name="year">The year.</param>
+        /// <returns>The date-range.</returns>
+        public static DateRange ForYear(int year)
+        {
+            var begin = new DateTime(year, 1, 1);
+            var end = new DateTime(year + 1, 1, 1);
+
+            return new DateRange(begin, end);
+        }
+
+        /// <summary>
         /// Determines whether this range contains the specified date.
         /// </summary>
         /// <param name="date">The date.</param>

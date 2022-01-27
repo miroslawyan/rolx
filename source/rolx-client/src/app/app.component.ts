@@ -1,11 +1,11 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { Theme, ThemeService } from './core/theme';
+import { Theme } from '@app/core/theme/theme';
+import { ThemeService } from '@app/core/theme/theme.service';
 
 @Component({
   selector: 'rolx-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
 

@@ -1,0 +1,21 @@
+<table mat-table
+       [dataSource]="dataSource"
+       class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Feiertag</th>
+    <td mat-cell *matCellDef="let holiday">{{holiday.name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>Datum</th>
+    <td mat-cell *matCellDef="let holiday">{{holiday.date | date: 'mediumDate'}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="weekday">
+    <th mat-header-cell *matHeaderCellDef>Datum</th>
+    <td mat-cell *matCellDef="let holiday">{{holiday.date | date: "EEEE"}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { FavouritePhaseService, Phase } from '@app/projects/core';
+import { FavouritePhaseService } from '@app/projects/core/favourite-phase.service';
+import { Phase } from '@app/projects/core/phase';
 
 @Component({
   selector: 'rolx-starred-phase-indicator',

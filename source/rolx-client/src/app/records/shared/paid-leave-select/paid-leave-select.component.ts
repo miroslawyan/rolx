@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PaidLeaveType, Record } from '@app/records/core';
+import { PaidLeaveType } from '@app/records/core/paid-leave-type';
+import { Record } from '@app/records/core/record';
 import { Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { ReasonDialogComponent, ReasonDialogData } from './reason-dialog/reason-dialog.component';
@@ -8,7 +9,6 @@ import { ReasonDialogComponent, ReasonDialogData } from './reason-dialog/reason-
 @Component({
   selector: 'rolx-paid-leave-select',
   templateUrl: './paid-leave-select.component.html',
-  styleUrls: ['./paid-leave-select.component.scss'],
 })
 export class PaidLeaveSelectComponent implements OnDestroy {
   private readonly subscriptions = new Subscription();

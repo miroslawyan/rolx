@@ -1,7 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
-import { Duration, DurationValidators, TimeFormControl } from '@app/core/util';
+import { Duration } from '@app/core/util/duration';
+import { DurationValidators } from '@app/core/util/duration.validators';
+import { TimeFormControl } from '@app/core/util/time-form-control';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 

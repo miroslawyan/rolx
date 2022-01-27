@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IsoDate, mapPlainToClassArray } from '@app/core/util';
+import { IsoDate } from '@app/core/util/iso-date';
+import { mapPlainToClassArray } from '@app/core/util/operators';
 import { environment } from '@env/environment';
 import moment from 'moment';
 import { Observable } from 'rxjs';

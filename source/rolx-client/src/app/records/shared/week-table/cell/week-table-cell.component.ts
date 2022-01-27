@@ -1,12 +1,18 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { GridCoordinates, GridNavigationService } from '@app/core/grid-navigation';
-import { Duration } from '@app/core/util';
-import { Phase } from '@app/projects/core';
-import { Record, RecordEntry } from '@app/records/core';
-import { DurationEditComponent, MultiEntriesDialogComponent, MultiEntriesDialogData } from '@app/records/shared';
-import { User } from '@app/users/core';
+import { GridCoordinates } from '@app/core/grid-navigation/grid-coordinates';
+import { GridNavigationService } from '@app/core/grid-navigation/grid-navigation.service';
+import { Duration } from '@app/core/util/duration';
+import { Phase } from '@app/projects/core/phase';
+import { Record } from '@app/records/core/record';
+import { RecordEntry } from '@app/records/core/record-entry';
+import { DurationEditComponent } from '@app/records/shared/duration-edit/duration-edit.component';
+import {
+  MultiEntriesDialogComponent,
+  MultiEntriesDialogData,
+} from '@app/records/shared/multi-entries-dialog/multi-entries-dialog.component';
+import { User } from '@app/users/core/user';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

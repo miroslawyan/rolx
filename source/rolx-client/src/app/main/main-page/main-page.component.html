@@ -13,6 +13,8 @@
         *ngIf="(authService.currentApproval$ | async)?.user?.role >= Role.Supervisor">
         Mitarbeiter
       </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/year-overview" routerLinkActive="active">Jahresarbeitszeit</a>
     </mat-nav-list>
   </mat-sidenav>
 

@@ -55,15 +55,27 @@ namespace RolXServer.Records.Domain.Detail.Balances
                 user.EntryDate ?? range.Begin,
                 user.LeftDate ?? range.End);
 
+            return range.DayInfos(nominalWorkTimePerDay)
+                .Select(d => ApplyUserActiveRange(d, activeRange))
+                .Select(d => ApplyPartTimeFactor(d, sortedSettings));
+        }
+
+        /// <summary>
+        /// Gets the day-informations for the specified range.
+        /// </summary>
+        /// <param name="range">The range.</param>
+        /// <param name="nominalWorkTimePerDay">The nominal work time per day.</param>
+        /// <returns>The nominal work-time.</returns>
+        public static IEnumerable<DayInfo> DayInfos(this DateRange range, TimeSpan nominalWorkTimePerDay)
+        {
             return range.Days
                 .Select(d => new DayInfo
                 {
                     Date = d,
-                    NominalWorkTime = activeRange.Contains(d) ? nominalWorkTimePerDay : default(TimeSpan),
+                    NominalWorkTime = nominalWorkTimePerDay,
                 })
                 .Select(d => ApplyWeekend(d))
-                .Select(d => ApplyHoliday(d))
-                .Select(d => ApplyPartTimeFactor(d, sortedSettings));
+                .Select(d => ApplyHoliday(d));
         }
 
         /// <summary>
@@ -120,14 +132,23 @@ namespace RolXServer.Records.Domain.Detail.Balances
 
         private static DayInfo ApplyPartTimeFactor(DayInfo info, IEnumerable<UserPartTimeSetting> settings)
         {
-            var factor = settings
-                .Where(s => s.StartDate <= info.Date)
-                .Select(s => s.Factor)
-                .DefaultIfEmpty(1.0)
-                .First();
+            if (info.NominalWorkTime > TimeSpan.Zero)
+            {
+                var factor = settings
+                    .Where(s => s.StartDate <= info.Date)
+                    .Select(s => s.Factor)
+                    .DefaultIfEmpty(1.0)
+                    .First();
 
-            info.NominalWorkTime *= factor;
+                info.NominalWorkTime *= factor;
+            }
 
+            return info;
+        }
+
+        private static DayInfo ApplyUserActiveRange(DayInfo info, DateRange activeRange)
+        {
+            info.NominalWorkTime = activeRange.Contains(info.Date) ? info.NominalWorkTime : default;
             return info;
         }
     }

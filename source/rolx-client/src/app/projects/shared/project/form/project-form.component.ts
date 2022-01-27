@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ErrorResponse, ErrorService } from '@app/core/error';
-import { SetupService } from '@app/core/setup';
-import { Project, ProjectService } from '@app/projects/core';
+import { ErrorResponse } from '@app/core/error/error-response';
+import { ErrorService } from '@app/core/error/error.service';
+import { SetupService } from '@app/core/setup/setup.service';
+import { Project } from '@app/projects/core/project';
+import { ProjectService } from '@app/projects/core/project.service';
 
 @Component({
   selector: 'rolx-project-form',

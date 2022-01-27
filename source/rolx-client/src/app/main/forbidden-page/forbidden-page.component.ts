@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '@app/auth/core';
+import { AuthService } from '@app/auth/core/auth.service';
 
 @Component({
   selector: 'rolx-forbidden-page',

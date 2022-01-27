@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Phase, Project, ProjectService } from '@app/projects/core';
+import { Phase } from '@app/projects/core/phase';
+import { Project } from '@app/projects/core/project';
+import { ProjectService } from '@app/projects/core/project.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 

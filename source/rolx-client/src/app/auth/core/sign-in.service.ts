@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { mapPlainToClass } from '@app/core/util';
+import { mapPlainToClass } from '@app/core/util/operators';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { Approval } from './approval';

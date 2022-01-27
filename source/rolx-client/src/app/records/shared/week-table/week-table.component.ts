@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FavouritePhaseService, Phase } from '@app/projects/core';
-import { Record, WorkRecordService } from '@app/records/core';
-import { User } from '@app/users/core';
+import { FavouritePhaseService } from '@app/projects/core/favourite-phase.service';
+import { Phase } from '@app/projects/core/phase';
+import { Record } from '@app/records/core/record';
+import { WorkRecordService } from '@app/records/core/work-record.service';
+import { User } from '@app/users/core/user';
 import { Subscription } from 'rxjs';
 
 @Component({

@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Duration } from '@app/core/util';
-import { Phase } from '@app/projects/core';
-import { Record, RecordEntry } from '@app/records/core';
+import { Duration } from '@app/core/util/duration';
+import { Phase } from '@app/projects/core/phase';
+import { Record } from '@app/records/core/record';
+import { RecordEntry } from '@app/records/core/record-entry';
 import { FormRow } from './form-row';
 
 export interface MultiEntriesDialogData {

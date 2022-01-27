@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Project, ProjectService } from '@app/projects/core';
+import { Project } from '@app/projects/core/project';
+import { ProjectService } from '@app/projects/core/project.service';
 
 @Component({
   selector: 'rolx-project-table',

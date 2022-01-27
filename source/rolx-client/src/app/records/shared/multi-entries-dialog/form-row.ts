@@ -1,6 +1,10 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { Duration, DurationValidators, TimeFormControl, TimeOfDay, TimeOfDayValidators } from '@app/core/util';
-import { RecordEntry } from '@app/records/core';
+import { Duration } from '@app/core/util/duration';
+import { DurationValidators } from '@app/core/util/duration.validators';
+import { TimeFormControl } from '@app/core/util/time-form-control';
+import { TimeOfDay } from '@app/core/util/time-of-day';
+import { TimeOfDayValidators } from '@app/core/util/time-of-day.validators';
+import { RecordEntry } from '@app/records/core/record-entry';
 import { combineLatest, Subscription } from 'rxjs';
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
 

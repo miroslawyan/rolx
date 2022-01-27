@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '@app/auth/core';
-import { Theme, ThemeService } from '@app/core/theme';
+import { AuthService } from '@app/auth/core/auth.service';
+import { Theme } from '@app/core/theme/theme';
+import { ThemeService } from '@app/core/theme/theme.service';
 
 @Component({
   selector: 'rolx-user-menu',
   templateUrl: './user-menu.component.html',
   styleUrls: ['./user-menu.component.scss'],
 })
-export class UserMenuComponent implements OnInit {
+export class UserMenuComponent {
 
   constructor(private authService: AuthService,
               private router: Router,
@@ -27,9 +28,6 @@ export class UserMenuComponent implements OnInit {
       default:
         return 'Bright';
     }
-  }
-
-  ngOnInit(): void {
   }
 
   signOut() {

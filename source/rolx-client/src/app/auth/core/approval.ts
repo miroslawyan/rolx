@@ -1,5 +1,5 @@
-import { TransformAsIsoDateTime } from '@app/core/util';
-import { User } from '@app/users/core';
+import { TransformAsIsoDateTime } from '@app/core/util/iso-date-time';
+import { User } from '@app/users/core/user';
 import { Type } from 'class-transformer';
 import moment from 'moment';
 

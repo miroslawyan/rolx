@@ -1,9 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Role } from '@app/auth/core';
-import { ErrorResponse, ErrorService } from '@app/core/error';
-import { User, UserService } from '@app/users/core';
+import { Role } from '@app/auth/core/role';
+import { ErrorResponse } from '@app/core/error/error-response';
+import { ErrorService } from '@app/core/error/error.service';
+import { User } from '@app/users/core/user';
+import { UserService } from '@app/users/core/user.service';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
 

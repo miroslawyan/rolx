@@ -40,6 +40,16 @@ namespace RolXServer.Records.Domain.Detail.Balances
         }
 
         [Test]
+        public void Overtime_UserPartiallyActive()
+        {
+            this.sut.User.EntryDate = new DateTime(2020, 3, 6);
+            this.sut.ActualWorkTime = TimeSpan.FromHours(8);
+
+            this.sut.ToBalance()
+                .Overtime.Should().Be(default);
+        }
+
+        [Test]
         public void Overtime_OneFullPaidLeave()
         {
             this.sut.ActualWorkTime = TimeSpan.FromHours(32);

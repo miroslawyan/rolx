@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '@app/auth/core';
-import { SetupResolve } from '@app/core/setup';
-import { ProjectsRoutes } from '@app/projects';
-import { RecordsRoutes } from '@app/records';
-import { UsersRoutes } from '@app/users';
+import { AuthGuard } from '@app/auth/core/auth.guard';
+import { SetupResolve } from '@app/core/setup/setup-resolve';
+import { ProjectsRoutes } from '@app/projects/projects.routes';
+import { RecordsRoutes } from '@app/records/records.routes';
+import { UsersRoutes } from '@app/users/users.routes';
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';

@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { User } from '@app/users/core';
+import { User } from '@app/users/core/user';
 
 @Component({
   selector: 'rolx-user-avatar',
   templateUrl: './user-avatar.component.html',
-  styleUrls: ['./user-avatar.component.scss'],
 })
 export class UserAvatarComponent {
 
