@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="RolXClaimTypes.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,21 +6,20 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace RolXServer.Auth
+namespace RolXServer.Auth;
+
+/// <summary>
+/// The (non-standard) claim types used in RolX.
+/// </summary>
+public static class RolXClaimTypes
 {
     /// <summary>
-    /// The (non-standard) claim types used in RolX.
+    /// A claim that specifies an entry date.
     /// </summary>
-    public static class RolXClaimTypes
-    {
-        /// <summary>
-        /// A claim that specifies an entry date.
-        /// </summary>
-        public const string EntryDate = "rolx://EntryDate";
+    public const string EntryDate = "rolx://EntryDate";
 
-        /// <summary>
-        /// A claim that specifies a left date.
-        /// </summary>
-        public const string LeftDate = "rolx://LeftDate";
-    }
+    /// <summary>
+    /// A claim that specifies a left date.
+    /// </summary>
+    public const string LeftDate = "rolx://LeftDate";
 }

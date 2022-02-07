@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="IYearInfoService.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -8,18 +8,17 @@
 
 using RolXServer.Records.Domain.Model;
 
-namespace RolXServer.Records.Domain
+namespace RolXServer.Records.Domain;
+
+/// <summary>
+/// Provides access to yearInfos.
+/// </summary>
+public interface IYearInfoService
 {
     /// <summary>
-    /// Provides access to yearInfos.
+    /// Gets the holidays and monthly work times for the specified year.
     /// </summary>
-    public interface IYearInfoService
-    {
-        /// <summary>
-        /// Gets the holidays and monthly work times for the specified year.
-        /// </summary>
-        /// <param name="year">The year.</param>
-        /// <returns>The year info.</returns>
-        YearInfo GetFor(int year);
-    }
+    /// <param name="year">The year.</param>
+    /// <returns>The year info.</returns>
+    YearInfo GetFor(int year);
 }

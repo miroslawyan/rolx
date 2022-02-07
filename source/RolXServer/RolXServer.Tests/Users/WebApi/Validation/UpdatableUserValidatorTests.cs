@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="UpdatableUserValidatorTests.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,96 +6,143 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using FluentValidation.TestHelper;
-using NUnit.Framework;
 using RolXServer.Users.WebApi.Resource;
 
-namespace RolXServer.Users.WebApi.Validation
+namespace RolXServer.Users.WebApi.Validation;
+
+public sealed class UpdatableUserValidatorTests
 {
-    public sealed class UpdatableUserValidatorTests
+    private UpdatableUserValidator sut = null!;
+
+    [SetUp]
+    public void SetUp()
     {
-        private UpdatableUserValidator sut = null!;
+        this.sut = new UpdatableUserValidator();
+    }
 
-        [SetUp]
-        public void SetUp()
+    [Test]
+    public void EntryDate_MayBeNull()
+    {
+        var model = new UpdatableUser
         {
-            this.sut = new UpdatableUserValidator();
-        }
+            EntryDate = null,
+        };
 
-        [Test]
-        public void EntryDate_MayBeNull()
-        {
-            this.sut.ShouldNotHaveValidationErrorFor(user => user.EntryDate, (string?)null);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.EntryDate);
+    }
 
-        [Test]
-        public void EntryDate_MustNotBeEmpty()
+    [Test]
+    public void EntryDate_MustNotBeEmpty()
+    {
+        var model = new UpdatableUser
         {
-            this.sut.ShouldHaveValidationErrorFor(user => user.EntryDate, string.Empty);
-        }
+            EntryDate = string.Empty,
+        };
 
-        [Test]
-        public void EntryDate_MustBeValidIsoDate()
-        {
-            this.sut.ShouldNotHaveValidationErrorFor(user => user.EntryDate, "2019-12-14");
-            this.sut.ShouldHaveValidationErrorFor(user => user.EntryDate, "2019-13-14");
-        }
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.EntryDate);
+    }
 
-        [Test]
-        public void LeavingDate_MayBeNull()
+    [Test]
+    public void EntryDate_MustBeValidIsoDate()
+    {
+        var model = new UpdatableUser
         {
-            this.sut.ShouldNotHaveValidationErrorFor(user => user.LeftDate, (string?)null);
-        }
+            EntryDate = "2019-12-14",
+        };
 
-        [Test]
-        public void LeavingDate_MustNotBeEmpty()
-        {
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, string.Empty);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.EntryDate);
+    }
 
-        [Test]
-        public void LeavingDate_Valid()
+    [Test]
+    public void EntryDate_MustNotBeInvalidIsoDate()
+    {
+        var model = new UpdatableUser
         {
-            this.sut.ShouldNotHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
-            {
-                EntryDate = "2019-11-14",
-                LeftDate = "2019-12-14",
-            });
-        }
+            EntryDate = "2019-13-14",
+        };
 
-        [Test]
-        public void LeavingDate_MustBeNullWhileEntryDateIsNull()
-        {
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
-            {
-                EntryDate = null,
-                LeftDate = "2019-12-14",
-            });
-        }
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.EntryDate);
+    }
 
-        [Test]
-        public void LeavingDate_MustBeValidIsoDate()
+    [Test]
+    public void LeavingDate_MayBeNull()
+    {
+        var model = new UpdatableUser
         {
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
-            {
-                EntryDate = "2019-12-14",
-                LeftDate = "2019-13-14",
-            });
-        }
+            LeftDate = null,
+        };
 
-        [Test]
-        public void LeavingDate_MustBeAfterEntryDate()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.LeftDate);
+    }
+
+    [Test]
+    public void LeavingDate_MustNotBeEmpty()
+    {
+        var model = new UpdatableUser
         {
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
-            {
-                EntryDate = "2019-12-14",
-                LeftDate = "2019-12-14",
-            });
-            this.sut.ShouldHaveValidationErrorFor(user => user.LeftDate, new UpdatableUser
-            {
-                EntryDate = "2019-12-14",
-                LeftDate = "2019-12-13",
-            });
-        }
+            LeftDate = string.Empty,
+        };
+
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.LeftDate);
+    }
+
+    [Test]
+    public void LeavingDate_Valid()
+    {
+        var model = new UpdatableUser
+        {
+            EntryDate = "2019-11-14",
+            LeftDate = "2019-12-14",
+        };
+
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.LeftDate);
+    }
+
+    [Test]
+    public void LeavingDate_MustBeNullWhileEntryDateIsNull()
+    {
+        var model = new UpdatableUser
+        {
+            EntryDate = null,
+            LeftDate = "2019-12-14",
+        };
+
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.LeftDate);
+    }
+
+    [Test]
+    public void LeavingDate_MustBeValidIsoDate()
+    {
+        var model = new UpdatableUser
+        {
+            EntryDate = "2019-12-14",
+            LeftDate = "2019-13-14",
+        };
+
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.LeftDate);
+    }
+
+    [Test]
+    public void LeavingDate_MustBeAfterEntryDate_One()
+    {
+        var model = new UpdatableUser
+        {
+            EntryDate = "2019-12-14",
+            LeftDate = "2019-12-14",
+        };
+
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.LeftDate);
+    }
+
+    [Test]
+    public void LeavingDate_MustBeAfterEntryDate_Two()
+    {
+        var model = new UpdatableUser
+        {
+            EntryDate = "2019-12-14",
+            LeftDate = "2019-12-13",
+        };
+
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.LeftDate);
     }
 }

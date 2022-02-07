@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="Holiday.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,21 +6,20 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace RolXServer.Records.WebApi.Resource
+namespace RolXServer.Records.WebApi.Resource;
+
+/// <summary>
+/// An entry in a <see cref="YearInfo"/>.
+/// </summary>
+public sealed class Holiday
 {
     /// <summary>
-    /// An entry in a <see cref="YearInfo"/>.
+    /// Gets or sets name of a holiday.
     /// </summary>
-    public sealed class Holiday
-    {
-        /// <summary>
-        /// Gets or sets name of a holiday.
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Gets or sets date of a holiday.
-        /// </summary>
-        public string Date { get; set; } = string.Empty;
-    }
+    /// <summary>
+    /// Gets or sets date of a holiday.
+    /// </summary>
+    public string Date { get; set; } = string.Empty;
 }

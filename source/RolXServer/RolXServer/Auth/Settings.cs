@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="Settings.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,34 +6,30 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
+namespace RolXServer.Auth;
 
-namespace RolXServer.Auth
+/// <summary>
+/// The settings for the Auth package.
+/// </summary>
+public sealed class Settings
 {
     /// <summary>
-    /// The settings for the Auth package.
+    /// Gets or sets the secret.
     /// </summary>
-    public sealed class Settings
-    {
-        /// <summary>
-        /// Gets or sets the secret.
-        /// </summary>
-        public string Secret { get; set; } = string.Empty;
+    public string Secret { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the token expiration duration.
-        /// </summary>
-        public TimeSpan TokenExpiration { get; set; } = TimeSpan.FromDays(1);
+    /// <summary>
+    /// Gets or sets the token expiration duration.
+    /// </summary>
+    public TimeSpan TokenExpiration { get; set; } = TimeSpan.FromDays(1);
 
-        /// <summary>
-        /// Gets or sets the google client identifier.
-        /// </summary>
-        public string GoogleClientId { get; set; } = string.Empty;
+    /// <summary>
+    /// Gets or sets the google client identifier.
+    /// </summary>
+    public string GoogleClientId { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the white-list of allowed google hosted domains.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Its just settings.")]
-        public string[] GoogleHostedDomainWhitelist { get; set; } = Array.Empty<string>();
-    }
+    /// <summary>
+    /// Gets or sets the white-list of allowed google hosted domains.
+    /// </summary>
+    public string[] GoogleHostedDomainWhitelist { get; set; } = Array.Empty<string>();
 }

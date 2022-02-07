@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="BalanceService.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,84 +6,79 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RolXServer.Records.Domain.Detail.Balances;
 using RolXServer.Records.Domain.Model;
 
-namespace RolXServer.Records.Domain.Detail
+namespace RolXServer.Records.Domain.Detail;
+
+/// <summary>
+/// The balance service.
+/// </summary>
+public sealed class BalanceService : IBalanceService
 {
+    private readonly RolXContext dbContext;
+    private readonly Settings settings;
+
     /// <summary>
-    /// The balance service.
+    /// Initializes a new instance of the <see cref="BalanceService" /> class.
     /// </summary>
-    public sealed class BalanceService : IBalanceService
+    /// <param name="dbContext">The database context.</param>
+    /// <param name="settingsAccessor">The settings accessor.</param>
+    public BalanceService(RolXContext dbContext, IOptions<Settings> settingsAccessor)
     {
-        private readonly RolXContext dbContext;
-        private readonly Settings settings;
+        this.dbContext = dbContext;
+        this.settings = settingsAccessor.Value;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BalanceService" /> class.
-        /// </summary>
-        /// <param name="dbContext">The database context.</param>
-        /// <param name="settingsAccessor">The settings accessor.</param>
-        public BalanceService(RolXContext dbContext, IOptions<Settings> settingsAccessor)
-        {
-            this.dbContext = dbContext;
-            this.settings = settingsAccessor.Value;
-        }
+    /// <summary>
+    /// Gets the balance of the specified user by the specified date.
+    /// </summary>
+    /// <param name="date">The date.</param>
+    /// <param name="userId">The user identifier.</param>
+    /// <returns>
+    /// The balance.
+    /// </returns>
+    public async Task<Balance> GetByDate(DateTime date, Guid userId)
+    {
+        var user = await this.dbContext.Users
+            .Include(u => u.PartTimeSettings)
+            .Include(u => u.BalanceCorrections)
+            .SingleAsync(u => u.Id == userId);
 
-        /// <summary>
-        /// Gets the balance of the specified user by the specified date.
-        /// </summary>
-        /// <param name="date">The date.</param>
-        /// <param name="userId">The user identifier.</param>
-        /// <returns>
-        /// The balance.
-        /// </returns>
-        public async Task<Balance> GetByDate(DateTime date, Guid userId)
-        {
-            var user = await this.dbContext.Users
-                .Include(u => u.PartTimeSettings)
-                .Include(u => u.BalanceCorrections)
-                .SingleAsync(u => u.Id == userId);
+        var data = await this.dbContext.Users
+            .Where(u => u.Id == userId)
+            .Select(u => new BalanceData
+            {
+                ActualWorkTimeSeconds = u.Records
+                    .Where(r => r.Date <= date)
+                    .SelectMany(r => r.Entries)
+                    .Sum(e => e.DurationSeconds),
 
-            var data = await this.dbContext.Users
-                .Where(u => u.Id == userId)
-                .Select(u => new BalanceData
-                {
-                    ActualWorkTimeSeconds = u.Records
-                        .Where(r => r.Date <= date)
-                        .SelectMany(r => r.Entries)
-                        .Sum(e => e.DurationSeconds),
+                PaidLeaveDays = u.Records
+                    .Where(r => r.Date <= date && r.PaidLeaveType != null)
+                    .Select(r => new PaidLeaveDay
+                    {
+                        Date = r.Date,
+                        ActualWorkTimeSeconds = r.Entries.Sum(e => e.DurationSeconds),
+                    }).ToList(),
 
-                    PaidLeaveDays = u.Records
-                        .Where(r => r.Date <= date && r.PaidLeaveType != null)
-                        .Select(r => new PaidLeaveDay
-                        {
-                            Date = r.Date,
-                            ActualWorkTimeSeconds = r.Entries.Sum(e => e.DurationSeconds),
-                        }).ToList(),
+                VacationDays = u.Records
+                    .Where(r => r.PaidLeaveType == PaidLeaveType.Vacation)
+                    .Select(r => new PaidLeaveDay
+                    {
+                        Date = r.Date,
+                        ActualWorkTimeSeconds = r.Entries.Sum(e => e.DurationSeconds),
+                    }).ToList(),
+            })
+            .SingleAsync();
 
-                    VacationDays = u.Records
-                        .Where(r => r.PaidLeaveType == PaidLeaveType.Vacation)
-                        .Select(r => new PaidLeaveDay
-                        {
-                            Date = r.Date,
-                            ActualWorkTimeSeconds = r.Entries.Sum(e => e.DurationSeconds),
-                        }).ToList(),
-                })
-                .SingleAsync();
+        data.User = user;
+        data.ByDate = date;
+        data.NominalWorkTimePerDay = this.settings.NominalWorkTimePerDay;
+        data.VacationDaysPerYear = this.settings.VacationDaysPerYear;
 
-            data.User = user;
-            data.ByDate = date;
-            data.NominalWorkTimePerDay = this.settings.NominalWorkTimePerDay;
-            data.VacationDaysPerYear = this.settings.VacationDaysPerYear;
-
-            return data.ToBalance();
-        }
+        return data.ToBalance();
     }
 }

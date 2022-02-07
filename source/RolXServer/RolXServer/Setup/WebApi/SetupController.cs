@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="SetupController.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -11,38 +11,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RolXServer.Setup.WebApi.Resource;
 
-namespace RolXServer.Setup.WebApi
+namespace RolXServer.Setup.WebApi;
+
+/// <summary>
+/// Controller for accessing the setup.
+/// </summary>
+[ApiController]
+[Route("api/v1/[controller]")]
+[Authorize(Policy = "ActiveUser")]
+public sealed class SetupController : ControllerBase
 {
+    private readonly Projects.Settings accountSettings;
+
     /// <summary>
-    /// Controller for accessing the setup.
+    /// Initializes a new instance of the <see cref="SetupController" /> class.
     /// </summary>
-    [ApiController]
-    [Route("api/v1/[controller]")]
-    [Authorize(Policy = "ActiveUser")]
-    public sealed class SetupController : ControllerBase
+    /// <param name="accountSettingsAccessor">The account settings accessor.</param>
+    public SetupController(IOptions<Projects.Settings> accountSettingsAccessor)
     {
-        private readonly Projects.Settings accountSettings;
+        this.accountSettings = accountSettingsAccessor.Value;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SetupController" /> class.
-        /// </summary>
-        /// <param name="accountSettingsAccessor">The account settings accessor.</param>
-        public SetupController(IOptions<Projects.Settings> accountSettingsAccessor)
+    /// <summary>
+    /// Gets the setup.
+    /// </summary>
+    /// <returns>All customers.</returns>
+    [HttpGet]
+    public Info Get()
+    {
+        return new Info
         {
-            this.accountSettings = accountSettingsAccessor.Value;
-        }
-
-        /// <summary>
-        /// Gets the setup.
-        /// </summary>
-        /// <returns>All customers.</returns>
-        [HttpGet]
-        public Info Get()
-        {
-            return new Info
-            {
-                ProjectNumberPattern = this.accountSettings.ProjectNumberPattern,
-            };
-        }
+            ProjectNumberPattern = this.accountSettings.ProjectNumberPattern,
+        };
     }
 }

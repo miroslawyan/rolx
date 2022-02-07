@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="PhaseExtensions.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,59 +6,55 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
 using RolXServer.Projects.DataAccess;
 
-namespace RolXServer.Projects.Domain.Detail
+namespace RolXServer.Projects.Domain.Detail;
+
+/// <summary>
+/// Extension methods for phases.
+/// </summary>
+internal static class PhaseExtensions
 {
+    private static readonly TimeSpan BudgetMin = TimeSpan.FromMinutes(1);
+
     /// <summary>
-    /// Extension methods for phases.
+    /// Sanitizes the specified phase.
     /// </summary>
-    internal static class PhaseExtensions
+    /// <param name="phase">The phase.</param>
+    public static void Sanitize(this Phase phase)
     {
-        private static readonly TimeSpan BudgetMin = TimeSpan.FromMinutes(1);
+        phase.ResetFullName();
+        phase.ClearEmptyBudget();
+    }
 
-        /// <summary>
-        /// Sanitizes the specified phase.
-        /// </summary>
-        /// <param name="phase">The phase.</param>
-        public static void Sanitize(this Phase phase)
+    /// <summary>
+    /// Sanitizes the specified phases.
+    /// </summary>
+    /// <param name="phases">The phases.</param>
+    public static void Sanitize(this IEnumerable<Phase> phases)
+    {
+        foreach (var phase in phases)
         {
-            phase.ResetFullName();
-            phase.ClearEmptyBudget();
+            phase.Sanitize();
+        }
+    }
+
+    private static void ResetFullName(this Phase phase)
+    {
+        if (phase.Project is null)
+        {
+            throw new ArgumentException("Property 'Project' must be set", nameof(phase));
         }
 
-        /// <summary>
-        /// Sanitizes the specified phases.
-        /// </summary>
-        /// <param name="phases">The phases.</param>
-        public static void Sanitize(this IEnumerable<Phase> phases)
-        {
-            foreach (var phase in phases)
-            {
-                phase.Sanitize();
-            }
-        }
+        var project = phase.Project;
+        phase.FullName = $"{project.Number}.{phase.Number:D3} - {project.Name} - {phase.Name}";
+    }
 
-        private static void ResetFullName(this Phase phase)
+    private static void ClearEmptyBudget(this Phase phase)
+    {
+        if ((phase.Budget ?? default) < BudgetMin)
         {
-            if (phase.Project is null)
-            {
-                throw new ArgumentException("Property 'Project' must be set", nameof(phase));
-            }
-
-            var project = phase.Project;
-            phase.FullName = $"{project.Number}.{phase.Number:D3} - {project.Name} - {phase.Name}";
-        }
-
-        private static void ClearEmptyBudget(this Phase phase)
-        {
-            if ((phase.Budget ?? default) < BudgetMin)
-            {
-                phase.Budget = null;
-            }
+            phase.Budget = null;
         }
     }
 }

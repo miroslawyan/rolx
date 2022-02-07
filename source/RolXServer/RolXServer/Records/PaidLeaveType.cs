@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="PaidLeaveType.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,32 +6,31 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace RolXServer.Records
+namespace RolXServer.Records;
+
+/// <summary>
+/// The types of paid leaves.
+/// </summary>
+public enum PaidLeaveType
 {
     /// <summary>
-    /// The types of paid leaves.
+    /// Vacation, holidays, vacay or whatever you like to call this nice but by far too short time of not working.
     /// </summary>
-    public enum PaidLeaveType
-    {
-        /// <summary>
-        /// Vacation, holidays, vacay or whatever you like to call this nice but by far too short time of not working.
-        /// </summary>
-        Vacation,
+    Vacation,
 
-        /// <summary>
-        /// Sickness or any other medical reason of not being able to work.
-        /// </summary>
-        Sickness,
+    /// <summary>
+    /// Sickness or any other medical reason of not being able to work.
+    /// </summary>
+    Sickness,
 
-        /// <summary>
-        /// Military-, community-service or civil defense.
-        /// </summary>
-        MilitaryService,
+    /// <summary>
+    /// Military-, community-service or civil defense.
+    /// </summary>
+    MilitaryService,
 
-        /// <summary>
-        /// Other reasons for legally taking a day off, like marriage, becoming parent, moving or a death in the family.
-        /// Requires a comment stating the exact reason.
-        /// </summary>
-        Other,
-    }
+    /// <summary>
+    /// Other reasons for legally taking a day off, like marriage, becoming parent, moving or a death in the family.
+    /// Requires a comment stating the exact reason.
+    /// </summary>
+    Other,
 }

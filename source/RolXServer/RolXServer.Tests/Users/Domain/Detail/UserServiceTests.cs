@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="UserServiceTests.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,105 +6,98 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-using FluentAssertions;
-using NUnit.Framework;
 using RolXServer.Common.Errors;
 using RolXServer.Users.DataAccess;
 using RolXServer.Users.Domain.Model;
 
-namespace RolXServer.Users.Domain.Detail
+namespace RolXServer.Users.Domain.Detail;
+
+public sealed class UserServiceTests
 {
-    public sealed class UserServiceTests
+    private Guid userId;
+    private RolXContext context = null!;
+    private UserService sut = null!;
+
+    [SetUp]
+    public void SetUp()
     {
-        private Guid userId;
-        private RolXContext context = null!;
-        private UserService sut = null!;
+        this.userId = Guid.NewGuid();
 
-        [SetUp]
-        public void SetUp()
+        var user = new User
         {
-            this.userId = Guid.NewGuid();
+            Id = this.userId,
+        };
 
-            var user = new User
-            {
-                Id = this.userId,
-            };
+        this.context = InMemory.ContextFactory(user)();
+        this.sut = new UserService(this.context);
+    }
 
-            this.context = InMemory.ContextFactory(user)();
-            this.sut = new UserService(this.context);
-        }
+    [TearDown]
+    public void TearDown()
+    {
+        this.context.Dispose();
+    }
 
-        [TearDown]
-        public void TearDown()
+    [Test]
+    public async Task Update_UserMustExist()
+    {
+        var user = new UpdatableUser
         {
-            this.context.Dispose();
-        }
+            Id = Guid.NewGuid(),
+        };
 
-        [Test]
-        public async Task Update_UserMustExist()
+        Func<Task> act = async () => { await this.sut.Update(user); };
+        await act.Should().ThrowAsync<ItemNotFoundException>();
+    }
+
+    [TestCase(Role.User)]
+    [TestCase(Role.Supervisor)]
+    [TestCase(Role.Administrator)]
+    public async Task Update_Role(Role role)
+    {
+        var user = new UpdatableUser
         {
-            var user = new UpdatableUser
-            {
-                Id = Guid.NewGuid(),
-            };
+            Id = this.userId,
+            Role = role,
+        };
 
-            Func<Task> act = async () => { await this.sut.Update(user); };
-            await act.Should().ThrowAsync<ItemNotFoundException>();
-        }
+        await this.sut.Update(user);
 
-        [TestCase(Role.User)]
-        [TestCase(Role.Supervisor)]
-        [TestCase(Role.Administrator)]
-        public async Task Update_Role(Role role)
+        (await this.sut.GetById(this.userId))
+            !.Role.Should().Be(role);
+    }
+
+    [Test]
+    public async Task Update_EntryDate()
+    {
+        var date = DateTime.Today;
+
+        var user = new UpdatableUser
         {
-            var user = new UpdatableUser
-            {
-                Id = this.userId,
-                Role = role,
-            };
+            Id = this.userId,
+            EntryDate = date,
+        };
 
-            await this.sut.Update(user);
+        await this.sut.Update(user);
 
-            (await this.sut.GetById(this.userId))
-                !.Role.Should().Be(role);
-        }
+        (await this.sut.GetById(this.userId))
+            !.EntryDate.Should().Be(date);
+    }
 
-        [Test]
-        public async Task Update_EntryDate()
+    [Test]
+    public async Task Update_LeavingDate()
+    {
+        var date = DateTime.Today;
+
+        var user = new UpdatableUser
         {
-            var date = DateTime.Today;
+            Id = this.userId,
+            LeftDate = date,
+        };
 
-            var user = new UpdatableUser
-            {
-                Id = this.userId,
-                EntryDate = date,
-            };
+        await this.sut.Update(user);
 
-            await this.sut.Update(user);
-
-            (await this.sut.GetById(this.userId))
-                !.EntryDate.Should().Be(date);
-        }
-
-        [Test]
-        public async Task Update_LeavingDate()
-        {
-            var date = DateTime.Today;
-
-            var user = new UpdatableUser
-            {
-                Id = this.userId,
-                LeftDate = date,
-            };
-
-            await this.sut.Update(user);
-
-            (await this.sut.GetById(this.userId))
-                !.LeftDate.Should().Be(date);
-        }
+        (await this.sut.GetById(this.userId))
+            !.LeftDate.Should().Be(date);
     }
 }

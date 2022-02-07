@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="BearerToken.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,23 +6,20 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
+namespace RolXServer.Auth.Domain.Detail;
 
-namespace RolXServer.Auth.Domain.Detail
+/// <summary>
+/// The bearer token.
+/// </summary>
+internal sealed class BearerToken
 {
     /// <summary>
-    /// The bearer token.
+    /// Gets or sets the token.
     /// </summary>
-    internal sealed class BearerToken
-    {
-        /// <summary>
-        /// Gets or sets the token.
-        /// </summary>
-        public string Token { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the date/time this token expires.
-        /// </summary>
-        public DateTime Expires { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the date/time this token expires.
+    /// </summary>
+    public DateTime Expires { get; set; }
 }

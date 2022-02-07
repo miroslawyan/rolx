@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="HolidayMapper.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -8,23 +8,22 @@
 
 using RolXServer.Common.Util;
 
-namespace RolXServer.Records.WebApi.Mapping
+namespace RolXServer.Records.WebApi.Mapping;
+
+/// <summary>
+/// Maps holidays from / to resource.
+/// </summary>
+internal static class HolidayMapper
 {
     /// <summary>
-    /// Maps holidays from / to resource.
+    /// Converts to resource.
     /// </summary>
-    internal static class HolidayMapper
-    {
-        /// <summary>
-        /// Converts to resource.
-        /// </summary>
-        /// <param name="domain">The domain.</param>
-        /// <returns>The resource.</returns>
-        public static Resource.Holiday ToResource(this Domain.Model.Holiday domain)
-            => new Resource.Holiday
-            {
-                Name = domain.Name,
-                Date = domain.Date.ToIsoDate(),
-            };
-    }
+    /// <param name="domain">The domain.</param>
+    /// <returns>The resource.</returns>
+    public static Resource.Holiday ToResource(this Domain.Model.Holiday domain)
+        => new Resource.Holiday
+        {
+            Name = domain.Name,
+            Date = domain.Date.ToIsoDate(),
+        };
 }

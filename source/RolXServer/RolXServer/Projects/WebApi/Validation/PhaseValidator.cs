@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="PhaseValidator.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -10,38 +10,37 @@ using FluentValidation;
 using RolXServer.Common.Util;
 using RolXServer.Projects.WebApi.Resource;
 
-namespace RolXServer.Projects.WebApi.Validation
+namespace RolXServer.Projects.WebApi.Validation;
+
+/// <summary>
+/// Validator for <see cref="Phase"/> instances.
+/// </summary>
+public sealed class PhaseValidator : AbstractValidator<Phase>
 {
     /// <summary>
-    /// Validator for <see cref="Phase"/> instances.
+    /// Initializes a new instance of the <see cref="PhaseValidator"/> class.
     /// </summary>
-    public sealed class PhaseValidator : AbstractValidator<Phase>
+    public PhaseValidator()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PhaseValidator"/> class.
-        /// </summary>
-        public PhaseValidator()
-        {
-            this.RuleFor(ph => ph.Number)
-                .GreaterThan(0);
+        this.RuleFor(ph => ph.Number)
+            .GreaterThan(0);
 
-            this.RuleFor(ph => ph.Name)
-                .NotNull()
-                .NotEmpty();
+        this.RuleFor(ph => ph.Name)
+            .NotNull()
+            .NotEmpty();
 
-            this.RuleFor(ph => ph.StartDate)
-                .NotNull()
-                .NotEmpty()
-                .SetValidator(new IsoDateValidator());
+        this.RuleFor(ph => ph.StartDate)
+            .NotNull()
+            .NotEmpty()
+            .SetValidator(new IsoDateValidator<Phase>());
 
-            this.RuleFor(ph => ph.EndDate)
-                .NotEmpty()
-                .SetValidator(new IsoDateValidator())
-                .GreaterThanOrEqualTo(ph => ph.StartDate)
-                .Unless(ph => ph.EndDate == null);
+        this.RuleFor(ph => ph.EndDate)
+            .NotEmpty()
+            .SetValidator(new IsoDateValidator<Phase>())
+            .GreaterThanOrEqualTo(ph => ph.StartDate)
+            .When(ph => ph.EndDate is not null);
 
-            this.RuleFor(ph => ph.Budget)
-                .GreaterThanOrEqualTo(0);
-        }
+        this.RuleFor(ph => ph.Budget)
+            .GreaterThanOrEqualTo(0);
     }
 }

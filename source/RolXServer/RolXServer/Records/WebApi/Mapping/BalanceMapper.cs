@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="BalanceMapper.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -8,27 +8,26 @@
 
 using RolXServer.Common.Util;
 
-namespace RolXServer.Records.WebApi.Mapping
+namespace RolXServer.Records.WebApi.Mapping;
+
+/// <summary>
+/// Maps records from / to resource.
+/// </summary>
+public static class BalanceMapper
 {
     /// <summary>
-    /// Maps records from / to resource.
+    /// Converts to resource.
     /// </summary>
-    public static class BalanceMapper
+    /// <param name="domain">The domain.</param>
+    /// <returns>The resource.</returns>
+    public static Resource.Balance ToResource(this Domain.Model.Balance domain)
     {
-        /// <summary>
-        /// Converts to resource.
-        /// </summary>
-        /// <param name="domain">The domain.</param>
-        /// <returns>The resource.</returns>
-        public static Resource.Balance ToResource(this Domain.Model.Balance domain)
+        return new Resource.Balance
         {
-            return new Resource.Balance
-            {
-                ByDate = domain.ByDate.ToIsoDate(),
-                Overtime = (long)domain.Overtime.TotalSeconds,
-                VacationAvailableDays = domain.VacationAvailableDays,
-                VacationPlannedDays = domain.VacationPlannedDays,
-            };
-        }
+            ByDate = domain.ByDate.ToIsoDate(),
+            Overtime = (long)domain.Overtime.TotalSeconds,
+            VacationAvailableDays = domain.VacationAvailableDays,
+            VacationPlannedDays = domain.VacationPlannedDays,
+        };
     }
 }

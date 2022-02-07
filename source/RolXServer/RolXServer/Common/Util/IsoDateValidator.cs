@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="IsoDateValidator.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,34 +6,25 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using FluentValidation;
 using FluentValidation.Validators;
 
-namespace RolXServer.Common.Util
-{
-    /// <summary>
-    /// Validator for ISO-formatted dates.
-    /// </summary>
-    public sealed class IsoDateValidator : PropertyValidator
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IsoDateValidator"/> class.
-        /// </summary>
-        public IsoDateValidator()
-            : base("{PropertyName} must be a valid, ISO-formatted date.")
-        {
-        }
+namespace RolXServer.Common.Util;
 
-        /// <summary>
-        /// Returns true if the validated context is valid.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified context is valid; otherwise, <c>false</c>.
-        /// </returns>
-        protected override bool IsValid(PropertyValidatorContext context)
-        {
-            return context.PropertyValue is string value
-                && IsoDate.TryParse(value, out var unused);
-        }
-    }
+/// <summary>
+/// Validator for ISO-formatted date properties.
+/// </summary>
+/// <typeparam name="T">The type owning the property to validate.</typeparam>
+public sealed class IsoDateValidator<T> : PropertyValidator<T, string?>
+{
+    /// <inheritdoc/>
+    public override string Name => nameof(IsoDateValidator<T>);
+
+    /// <inheritdoc/>
+    public override bool IsValid(ValidationContext<T> context, string? value)
+        => value is null || IsoDate.TryParse(value, out var _);
+
+    /// <inheritdoc/>
+    protected override string GetDefaultMessageTemplate(string errorCode)
+      => "{PropertyName} must be a valid, ISO-formatted date.";
 }

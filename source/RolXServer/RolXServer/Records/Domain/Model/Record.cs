@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="Record.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,53 +6,49 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
+namespace RolXServer.Records.Domain.Model;
 
-namespace RolXServer.Records.Domain.Model
+/// <summary>
+/// A record for a day.
+/// </summary>
+public sealed class Record
 {
     /// <summary>
-    /// A record for a day.
+    /// Initializes a new instance of the <see cref="Record"/> class.
     /// </summary>
-    public sealed class Record
+    /// <param name="dayInfo">The day information.</param>
+    public Record(DayInfo dayInfo)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Record"/> class.
-        /// </summary>
-        /// <param name="dayInfo">The day information.</param>
-        public Record(DayInfo dayInfo)
-        {
-            this.DayInfo = dayInfo;
-        }
-
-        /// <summary>
-        /// Gets the day information.
-        /// </summary>
-        public DayInfo DayInfo { get; }
-
-        /// <summary>
-        /// Gets or sets the user identifier.
-        /// </summary>
-        public Guid UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type of paid leave.
-        /// </summary>
-        public PaidLeaveType? PaidLeaveType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the paid leave reason.
-        /// </summary>
-        public string? PaidLeaveReason { get; set; }
-
-        /// <summary>
-        /// Gets or sets the entries.
-        /// </summary>
-        public List<DataAccess.RecordEntry> Entries { get; set; } = new List<DataAccess.RecordEntry>();
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is empty.
-        /// </summary>
-        public bool IsEmpty => this.Entries.Count == 0 && !this.PaidLeaveType.HasValue && this.PaidLeaveReason == null;
+        this.DayInfo = dayInfo;
     }
+
+    /// <summary>
+    /// Gets the day information.
+    /// </summary>
+    public DayInfo DayInfo { get; }
+
+    /// <summary>
+    /// Gets or sets the user identifier.
+    /// </summary>
+    public Guid UserId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the type of paid leave.
+    /// </summary>
+    public PaidLeaveType? PaidLeaveType { get; set; }
+
+    /// <summary>
+    /// Gets or sets the paid leave reason.
+    /// </summary>
+    public string? PaidLeaveReason { get; set; }
+
+    /// <summary>
+    /// Gets or sets the entries.
+    /// </summary>
+    public List<DataAccess.RecordEntry> Entries { get; set; } = new List<DataAccess.RecordEntry>();
+
+    /// <summary>
+    /// Gets a value indicating whether this instance is empty.
+    /// </summary>
+    public bool IsEmpty => this.Entries.Count == 0 && !this.PaidLeaveType.HasValue && this.PaidLeaveReason == null;
 }

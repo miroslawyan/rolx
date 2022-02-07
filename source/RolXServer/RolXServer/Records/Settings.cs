@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="Settings.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,23 +6,20 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
+namespace RolXServer.Records;
 
-namespace RolXServer.Records
+/// <summary>
+/// The settings for the Records package.
+/// </summary>
+public sealed class Settings
 {
     /// <summary>
-    /// The settings for the Records package.
+    /// Gets or sets the nominal work time per day.
     /// </summary>
-    public sealed class Settings
-    {
-        /// <summary>
-        /// Gets or sets the nominal work time per day.
-        /// </summary>
-        public TimeSpan NominalWorkTimePerDay { get; set; } = TimeSpan.FromHours(8);
+    public TimeSpan NominalWorkTimePerDay { get; set; } = TimeSpan.FromHours(8);
 
-        /// <summary>
-        /// Gets or sets the vacation days per year.
-        /// </summary>
-        public int VacationDaysPerYear { get; set; } = 25;
-    }
+    /// <summary>
+    /// Gets or sets the vacation days per year.
+    /// </summary>
+    public int VacationDaysPerYear { get; set; } = 25;
 }

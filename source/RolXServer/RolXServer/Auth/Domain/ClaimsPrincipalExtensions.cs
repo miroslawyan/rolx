@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ClaimsPrincipalExtensions.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,71 +6,69 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
 using System.Security.Claims;
 
 using RolXServer.Common.Util;
 
-namespace RolXServer.Auth.Domain
+namespace RolXServer.Auth.Domain;
+
+/// <summary>
+/// Extension methods for <see cref="ClaimsPrincipal"/> instances.
+/// </summary>
+public static class ClaimsPrincipalExtensions
 {
     /// <summary>
-    /// Extension methods for <see cref="ClaimsPrincipal"/> instances.
+    /// Gets the user identifier of the specified principal.
     /// </summary>
-    public static class ClaimsPrincipalExtensions
+    /// <param name="principal">The principal.</param>
+    /// <returns>The user identifier.</returns>
+    public static Guid GetUserId(this ClaimsPrincipal principal)
     {
-        /// <summary>
-        /// Gets the user identifier of the specified principal.
-        /// </summary>
-        /// <param name="principal">The principal.</param>
-        /// <returns>The user identifier.</returns>
-        public static Guid GetUserId(this ClaimsPrincipal principal)
+        return Guid.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
+    }
+
+    /// <summary>
+    /// Gets the entry date.
+    /// </summary>
+    /// <param name="principal">The principal.</param>
+    /// <returns>The entry date.</returns>
+    public static DateTime? GetEntryDate(this ClaimsPrincipal principal)
+    {
+        return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.EntryDate));
+    }
+
+    /// <summary>
+    /// Gets the left date.
+    /// </summary>
+    /// <param name="principal">The principal.</param>
+    /// <returns>The left date.</returns>
+    public static DateTime? GetLeftDate(this ClaimsPrincipal principal)
+    {
+        return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.LeftDate));
+    }
+
+    /// <summary>
+    /// Determines whether the specified principal is active at the specified date.
+    /// </summary>
+    /// <param name="principal">The principal.</param>
+    /// <param name="date">The date.</param>
+    /// <returns>
+    ///   <c>true</c> if specified principal is active at the specified date; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsActiveAt(this ClaimsPrincipal principal, DateTime date)
+    {
+        try
         {
-            return Guid.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
+            var entryDate = principal.GetEntryDate();
+            var leftDate = principal.GetLeftDate();
+
+            return entryDate.HasValue
+                && entryDate.Value <= date
+                && (!leftDate.HasValue || leftDate.Value > date);
         }
-
-        /// <summary>
-        /// Gets the entry date.
-        /// </summary>
-        /// <param name="principal">The principal.</param>
-        /// <returns>The entry date.</returns>
-        public static DateTime? GetEntryDate(this ClaimsPrincipal principal)
+        catch (FormatException)
         {
-            return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.EntryDate));
-        }
-
-        /// <summary>
-        /// Gets the left date.
-        /// </summary>
-        /// <param name="principal">The principal.</param>
-        /// <returns>The left date.</returns>
-        public static DateTime? GetLeftDate(this ClaimsPrincipal principal)
-        {
-            return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.LeftDate));
-        }
-
-        /// <summary>
-        /// Determines whether the specified principal is active at the specified date.
-        /// </summary>
-        /// <param name="principal">The principal.</param>
-        /// <param name="date">The date.</param>
-        /// <returns>
-        ///   <c>true</c> if specified principal is active at the specified date; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsActiveAt(this ClaimsPrincipal principal, DateTime date)
-        {
-            try
-            {
-                var entryDate = principal.GetEntryDate();
-                var leftDate = principal.GetLeftDate();
-
-                return entryDate.HasValue
-                    && entryDate.Value <= date
-                    && (!leftDate.HasValue || leftDate.Value > date);
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
+            return false;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="Role.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,26 +6,25 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace RolXServer.Users
+namespace RolXServer.Users;
+
+/// <summary>
+/// The role of a user.
+/// </summary>
+public enum Role
 {
     /// <summary>
-    /// The role of a user.
+    /// Just a user.
     /// </summary>
-    public enum Role
-    {
-        /// <summary>
-        /// Just a user.
-        /// </summary>
-        User = 1,
+    User = 1,
 
-        /// <summary>
-        /// A user with some privileges.
-        /// </summary>
-        Supervisor = 2,
+    /// <summary>
+    /// A user with some privileges.
+    /// </summary>
+    Supervisor = 2,
 
-        /// <summary>
-        /// A user with maximum privileges.
-        /// </summary>
-        Administrator = 1000,
-    }
+    /// <summary>
+    /// A user with maximum privileges.
+    /// </summary>
+    Administrator = 1000,
 }

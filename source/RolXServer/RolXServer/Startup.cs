@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="Startup.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -7,84 +7,79 @@
 // -----------------------------------------------------------------------
 
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+
 using RolXServer.Auth;
 using RolXServer.Common.Errors;
 using RolXServer.Projects;
 using RolXServer.Records;
 using RolXServer.Users;
 
-namespace RolXServer
+namespace RolXServer;
+
+/// <summary>
+/// The application startup specification.
+/// </summary>
+public class Startup
 {
     /// <summary>
-    /// The application startup specification.
+    /// Initializes a new instance of the <see cref="Startup"/> class.
     /// </summary>
-    public class Startup
+    /// <param name="configuration">The configuration.</param>
+    public Startup(IConfiguration configuration)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Startup"/> class.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        public Startup(IConfiguration configuration)
+        this.Configuration = configuration;
+    }
+
+    /// <summary>
+    /// Gets the configuration.
+    /// </summary>
+    public IConfiguration Configuration { get; }
+
+    /// <summary>
+    /// Configures the services.
+    /// </summary>
+    /// <param name="services">The services.</param>
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services
+            .AddControllers()
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+
+        services.AddDbContext<RolXContext>(options => options.UseNpgsql(this.Configuration.GetConnectionString("RolXContext")));
+
+        services.AddAccount(this.Configuration);
+        services.AddAuth(this.Configuration);
+        services.AddWorkRecord(this.Configuration);
+        services.AddUserManagement();
+    }
+
+    /// <summary>
+    /// Configures the specified application.
+    /// </summary>
+    /// <param name="app">The application.</param>
+    /// <param name="env">The environment.</param>
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
         {
-            this.Configuration = configuration;
+            app.UseDeveloperExceptionPage();
         }
 
-        /// <summary>
-        /// Gets the configuration.
-        /// </summary>
-        public IConfiguration Configuration { get; }
+        app.UseExceptionHandlerMiddleware();
 
-        /// <summary>
-        /// Configures the services.
-        /// </summary>
-        /// <param name="services">The services.</param>
-        public void ConfigureServices(IServiceCollection services)
+        app.UseRouting();
+
+        // Add CORS policy for development
+        app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
         {
-            services
-                .AddControllers()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
-
-            services.AddDbContext<RolXContext>(options => options.UseNpgsql(this.Configuration.GetConnectionString("RolXContext")));
-
-            services.AddAccount(this.Configuration);
-            services.AddAuth(this.Configuration);
-            services.AddWorkRecord(this.Configuration);
-            services.AddUserManagement();
-        }
-
-        /// <summary>
-        /// Configures the specified application.
-        /// </summary>
-        /// <param name="app">The application.</param>
-        /// <param name="env">The environment.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Asp.Net requires it this way.")]
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseExceptionHandlerMiddleware();
-
-            app.UseRouting();
-
-            // Add CORS policy for development
-            app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
+            endpoints.MapControllers();
+        });
     }
 }

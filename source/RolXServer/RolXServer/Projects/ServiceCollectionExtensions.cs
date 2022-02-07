@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ServiceCollectionExtensions.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,37 +6,33 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+namespace RolXServer.Projects;
 
-namespace RolXServer.Projects
+/// <summary>
+/// Extension methods for <see cref="IServiceCollection"/> instances.
+/// </summary>
+public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Extension methods for <see cref="IServiceCollection"/> instances.
+    /// Adds the services of the Projects package.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    /// <param name="services">The services.</param>
+    /// <param name="configuration">The configuration.</param>
+    /// <returns>
+    /// The service collection.
+    /// </returns>
+    public static IServiceCollection AddAccount(this IServiceCollection services, IConfiguration configuration)
     {
-        /// <summary>
-        /// Adds the services of the Projects package.
-        /// </summary>
-        /// <param name="services">The services.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <returns>
-        /// The service collection.
-        /// </returns>
-        public static IServiceCollection AddAccount(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<Settings>(configuration.GetSection("Projects"));
+        services.Configure<Settings>(configuration.GetSection("Projects"));
 
-            return services.AddDomain();
-        }
+        return services.AddDomain();
+    }
 
-        private static IServiceCollection AddDomain(this IServiceCollection services)
-        {
-            return services
-                .AddScoped<Domain.IFavouriteService, Domain.Detail.FavouriteService>()
-                .AddScoped<Domain.IPhaseService, Domain.Detail.PhaseService>()
-                .AddScoped<Domain.IProjectService, Domain.Detail.ProjectService>();
-        }
+    private static IServiceCollection AddDomain(this IServiceCollection services)
+    {
+        return services
+            .AddScoped<Domain.IFavouriteService, Domain.Detail.FavouriteService>()
+            .AddScoped<Domain.IPhaseService, Domain.Detail.PhaseService>()
+            .AddScoped<Domain.IProjectService, Domain.Detail.ProjectService>();
     }
 }

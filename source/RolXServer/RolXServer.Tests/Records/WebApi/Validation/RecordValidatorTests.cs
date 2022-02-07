@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="RecordValidatorTests.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,138 +6,133 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Generic;
-
-using FluentValidation.TestHelper;
-using NUnit.Framework;
 using RolXServer.Records.WebApi.Resource;
 
-namespace RolXServer.Records.WebApi.Validation
+namespace RolXServer.Records.WebApi.Validation;
+
+/// <summary>
+/// Unit tests for the <see cref="RecordValidator"/>.
+/// </summary>
+public sealed class RecordValidatorTests
 {
-    /// <summary>
-    /// Unit tests for the <see cref="RecordValidator"/>.
-    /// </summary>
-    public sealed class RecordValidatorTests
+    private RecordValidator sut = null!;
+    private RolXContext context = null!;
+
+    [SetUp]
+    public void SetUp()
     {
-        private RecordValidator sut = null!;
-        private RolXContext context = null!;
+        this.context = InMemory.ContextFactory()();
+        this.sut = new RecordValidator(this.context);
+    }
 
-        [SetUp]
-        public void SetUp()
+    [TearDown]
+    public void TearDown()
+    {
+        this.context.Dispose();
+    }
+
+    [Test]
+    public void PaidLeaveReason_MustBeNonNullWhenTypeIsOther()
+    {
+        var model = new Record
         {
-            this.context = InMemory.ContextFactory()();
-            this.sut = new RecordValidator(this.context);
-        }
+            PaidLeaveType = PaidLeaveType.Other,
+            PaidLeaveReason = null,
+        };
 
-        [TearDown]
-        public void TearDown()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.PaidLeaveReason);
+    }
+
+    [Test]
+    public void PaidLeaveReason_MustBeNonEmptyWhenTypeIsOther()
+    {
+        var model = new Record
         {
-            this.context.Dispose();
-        }
+            PaidLeaveType = PaidLeaveType.Other,
+            PaidLeaveReason = string.Empty,
+        };
 
-        [Test]
-        public void PaidLeaveReason_MustBeNonNullWhenTypeIsOther()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.PaidLeaveReason);
+    }
+
+    [Test]
+    public void PaidLeaveReason_FineWhenNonEmpty()
+    {
+        var model = new Record
         {
-            var record = new Record
-            {
-                PaidLeaveType = PaidLeaveType.Other,
-                PaidLeaveReason = null,
-            };
+            PaidLeaveType = PaidLeaveType.Other,
+            PaidLeaveReason = "The rain in Spain.",
+        };
 
-            this.sut.ShouldHaveValidationErrorFor(record => record.PaidLeaveReason, record);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.PaidLeaveReason);
+    }
 
-        [Test]
-        public void PaidLeaveReason_MustBeNonEmptyWhenTypeIsOther()
+    [TestCase(null)]
+    [TestCase(PaidLeaveType.Vacation)]
+    [TestCase(PaidLeaveType.Sickness)]
+    [TestCase(PaidLeaveType.MilitaryService)]
+    public void PaidLeaveReason_FineWhenNullForType(PaidLeaveType? type)
+    {
+        var model = new Record
         {
-            var record = new Record
-            {
-                PaidLeaveType = PaidLeaveType.Other,
-                PaidLeaveReason = string.Empty,
-            };
+            PaidLeaveType = type,
+            PaidLeaveReason = null,
+        };
 
-            this.sut.ShouldHaveValidationErrorFor(record => record.PaidLeaveReason, record);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.PaidLeaveReason);
+    }
 
-        [Test]
-        public void PaidLeaveReason_FineWhenNonEmpty()
+    [TestCase(PaidLeaveType.Vacation)]
+    [TestCase(PaidLeaveType.Sickness)]
+    [TestCase(PaidLeaveType.MilitaryService)]
+    [TestCase(PaidLeaveType.Other)]
+    public void PaidLeaveType_IsNotAllowedIfDoingOvertime(PaidLeaveType type)
+    {
+        var model = new Record
         {
-            var record = new Record
-            {
-                PaidLeaveType = PaidLeaveType.Other,
-                PaidLeaveReason = "The rain in Spain.",
-            };
-
-            this.sut.ShouldNotHaveValidationErrorFor(record => record.PaidLeaveReason, record);
-        }
-
-        [TestCase(null)]
-        [TestCase(PaidLeaveType.Vacation)]
-        [TestCase(PaidLeaveType.Sickness)]
-        [TestCase(PaidLeaveType.MilitaryService)]
-        public void PaidLeaveReason_FineWhenNullForType(PaidLeaveType? type)
-        {
-            var record = new Record
-            {
-                PaidLeaveType = type,
-                PaidLeaveReason = null,
-            };
-
-            this.sut.ShouldNotHaveValidationErrorFor(record => record.PaidLeaveReason, record);
-        }
-
-        [TestCase(PaidLeaveType.Vacation)]
-        [TestCase(PaidLeaveType.Sickness)]
-        [TestCase(PaidLeaveType.MilitaryService)]
-        [TestCase(PaidLeaveType.Other)]
-        public void PaidLeaveType_IsNotAllowedIfDoingOvertime(PaidLeaveType type)
-        {
-            var record = new Record
-            {
-                PaidLeaveType = type,
-                NominalWorkTime = 1000,
-                Entries = new List<RecordEntry>
+            PaidLeaveType = type,
+            NominalWorkTime = 1000,
+            Entries = new List<RecordEntry>
                 {
                     new RecordEntry { Duration = 1001 },
                 },
-            };
+        };
 
-            this.sut.ShouldHaveValidationErrorFor(record => record.PaidLeaveType, record);
-        }
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.PaidLeaveType);
+    }
 
-        [TestCase(PaidLeaveType.Vacation)]
-        [TestCase(PaidLeaveType.Sickness)]
-        [TestCase(PaidLeaveType.MilitaryService)]
-        [TestCase(PaidLeaveType.Other)]
-        public void PaidLeaveType_IsFineWhenNotDoingOvertime(PaidLeaveType type)
+    [TestCase(PaidLeaveType.Vacation)]
+    [TestCase(PaidLeaveType.Sickness)]
+    [TestCase(PaidLeaveType.MilitaryService)]
+    [TestCase(PaidLeaveType.Other)]
+    public void PaidLeaveType_IsFineWhenNotDoingOvertime(PaidLeaveType type)
+    {
+        var model = new Record
         {
-            var record = new Record
-            {
-                PaidLeaveType = type,
-                NominalWorkTime = 1000,
-                Entries = new List<RecordEntry>
+            PaidLeaveType = type,
+            NominalWorkTime = 1000,
+            Entries = new List<RecordEntry>
                 {
                     new RecordEntry { Duration = 1000 },
                 },
-            };
+        };
 
-            this.sut.ShouldNotHaveValidationErrorFor(record => record.PaidLeaveType, record);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.PaidLeaveType);
+    }
 
-        [Test]
-        public void PaidLeaveType_IsFineWhenNull()
+    [Test]
+    public void PaidLeaveType_IsFineWhenNull()
+    {
+        var model = new Record
         {
-            var record = new Record
-            {
-                PaidLeaveType = null,
-                NominalWorkTime = 1000,
-                Entries = new List<RecordEntry>
+            PaidLeaveType = null,
+            NominalWorkTime = 1000,
+            Entries = new List<RecordEntry>
                 {
                     new RecordEntry { Duration = 1001 },
                 },
-            };
+        };
 
-            this.sut.ShouldNotHaveValidationErrorFor(record => record.PaidLeaveType, record);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.PaidLeaveType);
     }
 }

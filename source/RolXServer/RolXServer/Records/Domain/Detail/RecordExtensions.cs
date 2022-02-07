@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="RecordExtensions.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -8,25 +8,24 @@
 
 using RolXServer.Records.Domain.Model;
 
-namespace RolXServer.Records.Domain.Detail
+namespace RolXServer.Records.Domain.Detail;
+
+/// <summary>
+/// Extensions methods for <see cref="Record"/> instances.
+/// </summary>
+internal static class RecordExtensions
 {
     /// <summary>
-    /// Extensions methods for <see cref="Record"/> instances.
+    /// Sanitizes the specified record.
     /// </summary>
-    internal static class RecordExtensions
+    /// <param name="record">The record.</param>
+    public static void Sanitize(this Record record)
     {
-        /// <summary>
-        /// Sanitizes the specified record.
-        /// </summary>
-        /// <param name="record">The record.</param>
-        public static void Sanitize(this Record record)
-        {
-            record.RemoveEmptyEntries();
-        }
+        record.RemoveEmptyEntries();
+    }
 
-        private static void RemoveEmptyEntries(this Record record)
-        {
-            record.Entries.RemoveAll(e => e.Duration == default);
-        }
+    private static void RemoveEmptyEntries(this Record record)
+    {
+        record.Entries.RemoveAll(e => e.Duration == default);
     }
 }

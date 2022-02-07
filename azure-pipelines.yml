@@ -19,26 +19,17 @@ jobs:
 
     steps:
       - task: UseDotNet@2
-        displayName: "install .NET Core 3.1"
+        displayName: "install .NET 6"
         inputs:
-          version: '3.1.x'
+          version: '6.x'
           packageType: sdk
-
-      # - task: Cache@2
-      #   displayName: "cache NuGet packages"
-      #   inputs:
-      #     key: 'nuget | "$(Agent.OS)" | **/packages.lock.json'
-      #     restoreKeys: |
-      #       nuget | "$(Agent.OS)"
-      #       nuget
-      #     path: $(NUGET_PACKAGES)
 
       - task: DotNetCoreCLI@2
         displayName: "dotnet build"
         inputs:
           command: build
           projects: '$(rolXServer)/**/*.csproj'
-          arguments: '--configuration $(buildConfiguration) /p:TreatWarningsAsErrors="true"'
+          arguments: --configuration $(buildConfiguration) /WarnAsError
 
       - task: DotNetCoreCLI@2
         displayName: "dotnet test"

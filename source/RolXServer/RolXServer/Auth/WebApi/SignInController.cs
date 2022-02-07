@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="SignInController.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,83 +6,86 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using RolXServer.Auth.Domain;
 using RolXServer.Auth.WebApi.Mapping;
 using RolXServer.Auth.WebApi.Resource;
 
-namespace RolXServer.Auth.WebApi
+namespace RolXServer.Auth.WebApi;
+
+/// <summary>
+/// Controller for signing in.
+/// </summary>
+[ApiController]
+[Route("api/v1/[controller]")]
+public sealed class SignInController : ControllerBase
 {
+    private readonly ISignInService signInService;
+
     /// <summary>
-    /// Controller for signing in.
+    /// Initializes a new instance of the <see cref="SignInController" /> class.
     /// </summary>
-    [ApiController]
-    [Route("api/v1/[controller]")]
-    public sealed class SignInController : ControllerBase
+    /// <param name="signInService">The sign-in service.</param>
+    public SignInController(ISignInService signInService)
     {
-        private readonly ISignInService signInService;
+        this.signInService = signInService;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SignInController" /> class.
-        /// </summary>
-        /// <param name="signInService">The sign-in service.</param>
-        public SignInController(ISignInService signInService)
+    /// <summary>
+    /// Provides information on the sign-in capabilities of this server.
+    /// </summary>
+    /// <returns>The sign-in information.</returns>
+    [HttpGet("info")]
+    public async Task<ActionResult<Domain.Model.Info>> GetInfo()
+    {
+        return await this.signInService.GetInfo();
+    }
+
+    /// <summary>
+    /// Signs in using the specified google identifier token.
+    /// </summary>
+    /// <param name="signInData">The sign in data.</param>
+    /// <returns>
+    /// The approval.
+    /// </returns>
+    [HttpPost]
+    public async Task<ActionResult<Approval>> SignIn(Domain.Model.SignInData signInData)
+    {
+        var user = await this.signInService.Authenticate(signInData);
+        if (user is null)
         {
-            this.signInService = signInService;
+            return this.Unauthorized();
         }
 
-        /// <summary>
-        /// Provides information on the sign-in capabilities of this server.
-        /// </summary>
-        /// <returns>The sign-in information.</returns>
-        [HttpGet("info")]
-        public async Task<ActionResult<Domain.Model.Info>> GetInfo()
+        return user.ToResource();
+    }
+
+    /// <summary>
+    /// Extends the authentication of the calling user.
+    /// </summary>
+    /// <returns>
+    /// The extended approval.
+    /// </returns>
+    [HttpGet("extend")]
+    [Authorize]
+    public async Task<ActionResult<Approval>> Extend()
+    {
+        var userId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId is null)
         {
-            return await this.signInService.GetInfo();
+            return this.Unauthorized();
         }
 
-        /// <summary>
-        /// Signs in using the specified google identifier token.
-        /// </summary>
-        /// <param name="signInData">The sign in data.</param>
-        /// <returns>
-        /// The approval.
-        /// </returns>
-        [HttpPost]
-        public async Task<ActionResult<Approval>> SignIn(Domain.Model.SignInData signInData)
+        var user = await this.signInService.Extend(Guid.Parse(userId));
+        if (user is null)
         {
-            var user = await this.signInService.Authenticate(signInData);
-            if (user is null)
-            {
-                return this.Unauthorized();
-            }
-
-            return user.ToResource();
+            return this.Unauthorized();
         }
 
-        /// <summary>
-        /// Extends the authentication of the calling user.
-        /// </summary>
-        /// <returns>
-        /// The extended approval.
-        /// </returns>
-        [HttpGet("extend")]
-        [Authorize]
-        public async Task<ActionResult<Approval>> Extend()
-        {
-            var userId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var user = await this.signInService.Extend(Guid.Parse(userId));
-            if (user is null)
-            {
-                return this.Unauthorized();
-            }
-
-            return user.ToResource();
-        }
+        return user.ToResource();
     }
 }

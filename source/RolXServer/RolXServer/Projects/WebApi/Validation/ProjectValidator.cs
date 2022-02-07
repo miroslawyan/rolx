@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ProjectValidator.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,97 +6,92 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
 using FluentValidation;
-using FluentValidation.Validators;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+
 using RolXServer.Projects.WebApi.Resource;
 
-namespace RolXServer.Projects.WebApi.Validation
+namespace RolXServer.Projects.WebApi.Validation;
+
+/// <summary>
+/// Validator for <see cref="Project"/> instances.
+/// </summary>
+public sealed class ProjectValidator : AbstractValidator<Project>
 {
+    private readonly RolXContext dbContext;
+
     /// <summary>
-    /// Validator for <see cref="Project"/> instances.
+    /// Initializes a new instance of the <see cref="ProjectValidator" /> class.
     /// </summary>
-    public sealed class ProjectValidator : AbstractValidator<Project>
+    /// <param name="dbContext">The database context.</param>
+    /// <param name="settingsAccessor">The settings accessor.</param>
+    public ProjectValidator(
+        RolXContext dbContext,
+        IOptions<Settings> settingsAccessor)
     {
-        private readonly RolXContext dbContext;
+        this.dbContext = dbContext;
+        this.dbContext = dbContext;
+        var settings = settingsAccessor.Value;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectValidator" /> class.
-        /// </summary>
-        /// <param name="dbContext">The database context.</param>
-        /// <param name="settingsAccessor">The settings accessor.</param>
-        public ProjectValidator(
-            RolXContext dbContext,
-            IOptions<Settings> settingsAccessor)
+        this.RuleFor(p => p.Number)
+            .NotNull()
+            .NotEmpty().WithMessage("required")
+            .Matches(settings.ProjectNumberPattern).WithMessage("pattern")
+            .MustAsync(this.BeUnique);
+
+        this.RuleFor(p => p.Name)
+            .NotNull()
+            .NotEmpty().WithMessage("required");
+
+        this.RuleFor(p => p.Phases)
+            .Must(this.HaveUniqueNumbers)
+            .MustAsync(this.BeOfCurrentProject);
+
+        this.RuleForEach(p => p.Phases)
+            .SetValidator(_ => new PhaseValidator());
+    }
+
+    private async Task<bool> BeUnique(Project candidate, string newNumber, ValidationContext<Project> context, CancellationToken token)
+    {
+        if (await this.dbContext.Projects
+            .AnyAsync(p => p.Id != candidate.Id && p.Number == newNumber, token))
         {
-            this.dbContext = dbContext;
-            this.dbContext = dbContext;
-            var settings = settingsAccessor.Value;
-
-            this.RuleFor(p => p.Number)
-                .NotNull()
-                .NotEmpty().WithMessage("required")
-                .Matches(settings.ProjectNumberPattern).WithMessage("pattern")
-                .MustAsync(this.BeUnique);
-
-            this.RuleFor(p => p.Name)
-                .NotNull()
-                .NotEmpty().WithMessage("required");
-
-            this.RuleFor(p => p.Phases)
-                .Must(this.HaveUniqueNumbers)
-                .MustAsync(this.BeOfCurrentProject);
-
-            this.RuleForEach(p => p.Phases)
-                .SetValidator(_ => new PhaseValidator());
+            context.AddFailure("notUnique");
+            return false;
         }
 
-        private async Task<bool> BeUnique(Project candidate, string newNumber, PropertyValidatorContext context, CancellationToken token)
-        {
-            if (await this.dbContext.Projects
-                .AnyAsync(p => p.Id != candidate.Id && p.Number == newNumber, token))
-            {
-                context.Rule.MessageBuilder = c => "notUnique";
-                return false;
-            }
+        return true;
+    }
 
-            return true;
+    private bool HaveUniqueNumbers(Project candidate, IEnumerable<Phase> phases, ValidationContext<Project> context)
+    {
+        if (phases.Select(ph => ph.Number)
+            .GroupBy(n => n)
+            .Any(g => g.Count() > 1))
+        {
+            context.AddFailure("phase numbers must be unique");
+            return false;
         }
 
-        private bool HaveUniqueNumbers(Project candidate, IEnumerable<Phase> phases, PropertyValidatorContext context)
-        {
-            if (phases.Select(ph => ph.Number)
-                .GroupBy(n => n)
-                .Any(g => g.Count() > 1))
-            {
-                context.Rule.MessageBuilder = c => "phase numbers must be unique";
-                return false;
-            }
+        return true;
+    }
 
-            return true;
+    private async Task<bool> BeOfCurrentProject(Project candidate, IEnumerable<Phase> phases, ValidationContext<Project> context, CancellationToken token)
+    {
+        var phaseIds = phases.Select(ph => ph.Id)
+            .Where(id => id != 0)
+            .ToArray();
+
+        if (await this.dbContext.Phases
+            .Where(ph => phaseIds.Contains(ph.Id))
+            .AnyAsync(ph => ph.ProjectId != candidate.Id))
+        {
+            context.AddFailure("phases must be of current project");
+            return false;
         }
 
-        private async Task<bool> BeOfCurrentProject(Project candidate, IEnumerable<Phase> phases, PropertyValidatorContext context, CancellationToken token)
-        {
-            var phaseIds = phases.Select(ph => ph.Id)
-                .Where(id => id != 0)
-                .ToArray();
-
-            if (await this.dbContext.Phases
-                .Where(ph => phaseIds.Contains(ph.Id))
-                .AnyAsync(ph => ph.ProjectId != candidate.Id))
-            {
-                context.Rule.MessageBuilder = c => "phases must be of current project";
-                return false;
-            }
-
-            return true;
-        }
+        return true;
     }
 }

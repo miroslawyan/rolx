@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="Program.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,39 +6,31 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Runtime.CompilerServices;
+namespace RolXServer;
 
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
-[assembly: InternalsVisibleTo("RolXServer.Tests")]
-
-namespace RolXServer
+/// <summary>
+/// The RolX server program.
+/// </summary>
+public static class Program
 {
     /// <summary>
-    /// The RolX server program.
+    /// Defines the entry point of the application.
     /// </summary>
-    public static class Program
+    /// <param name="args">The arguments.</param>
+    public static void Main(string[] args)
     {
-        /// <summary>
-        /// Defines the entry point of the application.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        /// <summary>
-        /// Creates the web host builder.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>The created builder.</returns>
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        CreateHostBuilder(args).Build().Run();
     }
+
+    /// <summary>
+    /// Creates the web host builder.
+    /// </summary>
+    /// <param name="args">The arguments.</param>
+    /// <returns>The created builder.</returns>
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
 }

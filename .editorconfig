@@ -9,5 +9,5 @@ charset = utf-8
 indent_style = space
 indent_size = 4
 
-[*.{yaml,json,config,csproj}]
+[*.{yaml,yml,json,config,csproj}]
 indent_size = 2

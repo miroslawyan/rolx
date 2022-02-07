@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="RecordEntryValidatorTests.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,32 +6,27 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-using FluentValidation.TestHelper;
-using NUnit.Framework;
 using RolXServer.Projects.DataAccess;
 using RolXServer.Records.WebApi.Resource;
 
-namespace RolXServer.Records.WebApi.Validation
-{
-    /// <summary>
-    /// Unit tests for the <see cref="RecordEntryValidator"/>.
-    /// </summary>
-    public sealed class RecordEntryValidatorTests
-    {
-        private RecordEntryValidator sut = null!;
-        private Project project = null!;
-        private RolXContext context = null!;
-        private Record record = null!;
+namespace RolXServer.Records.WebApi.Validation;
 
-        private static Project SeedProject => new Project
-        {
-            Id = 1,
-            Number = "1",
-            Name = "One",
-            Phases = new List<Phase>
+/// <summary>
+/// Unit tests for the <see cref="RecordEntryValidator"/>.
+/// </summary>
+public sealed class RecordEntryValidatorTests
+{
+    private RecordEntryValidator sut = null!;
+    private Project project = null!;
+    private RolXContext context = null!;
+    private Record record = null!;
+
+    private static Project SeedProject => new Project
+    {
+        Id = 1,
+        Number = "1",
+        Name = "One",
+        Phases = new List<Phase>
             {
                 new Phase
                 {
@@ -47,280 +42,333 @@ namespace RolXServer.Records.WebApi.Validation
                     EndDate = new DateTime(2019, 12, 19),
                 },
             },
+    };
+
+    [SetUp]
+    public void SetUp()
+    {
+        this.project = SeedProject;
+        this.context = InMemory.ContextFactory(this.project)();
+
+        this.record = new Record
+        {
+            Date = "2019-12-18",
         };
 
-        [SetUp]
-        public void SetUp()
+        this.sut = new RecordEntryValidator(this.record, this.context);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        this.context.Dispose();
+    }
+
+    [Test]
+    [TestCase(-12312312423432)]
+    [TestCase(-42)]
+    [TestCase(-1)]
+    public void Duration_FailsWhenNegative(long value)
+    {
+        var model = new RecordEntry
         {
-            this.project = SeedProject;
-            this.context = InMemory.ContextFactory(this.project)();
+            Duration = value,
+        };
 
-            this.record = new Record
-            {
-                Date = "2019-12-18",
-            };
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.Duration);
+    }
 
-            this.sut = new RecordEntryValidator(this.record, this.context);
-        }
-
-        [TearDown]
-        public void TearDown()
+    [Test]
+    public void Duration_SucceedsWhenZero()
+    {
+        var model = new RecordEntry
         {
-            this.context.Dispose();
-        }
+            Duration = 0,
+        };
 
-        [Test]
-        public void Duration_FailsWhenNegative()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Duration);
+    }
+
+    [Test]
+    [TestCase(12312312423432)]
+    [TestCase(42)]
+    [TestCase(1)]
+    public void Duration_SucceedsWhenPositive(long value)
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Duration, -12312312423432);
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Duration, -42);
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Duration, -1);
-        }
+            Duration = value,
+        };
 
-        [Test]
-        public void Duration_SucceedsWhenZero()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Duration);
+    }
+
+    [Test]
+    public void PhaseId_FailsWhenZero()
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Duration, 0);
-        }
+            PhaseId = 0,
+        };
 
-        [Test]
-        public void Duration_SucceedsWhenPositive()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.PhaseId);
+    }
+
+    [Test]
+    public void PhaseId_FailsWhenPhaseUnkownAndDurationNonZero()
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Duration, 12312312423432);
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Duration, 42);
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Duration, 1);
-        }
+            PhaseId = 31415,
+            Duration = 42,
+        };
 
-        [Test]
-        public void PhaseId_FailsWhenZero()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.PhaseId);
+    }
+
+    [Test]
+    public void PhaseId_SucceedsWhenPhaseUnkownButDurationIsZero()
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.PhaseId, 0);
-        }
+            PhaseId = 31415,
+            Duration = 0,
+        };
 
-        [Test]
-        public void PhaseId_FailsWhenPhaseUnkownAndDurationNonZero()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+    }
+
+    [Test]
+    public void PhaseId_SucceedsWhenPhaseIsKnownAndOpen()
+    {
+        var model = new RecordEntry
         {
-            var entry = new RecordEntry
-            {
-                PhaseId = 31415,
-                Duration = 42,
-            };
+            PhaseId = this.project.Phases[0].Id,
+            Duration = 42,
+        };
 
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.PhaseId, entry);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+    }
 
-        [Test]
-        public void PhaseId_SucceedsWhenPhaseUnkownButDurationIsZero()
+    [Test]
+    public void PhaseId_SucceedsWhenPhaseOpensToday()
+    {
+        this.record.Date = "2019-12-17";
+
+        var model = new RecordEntry
         {
-            var entry = new RecordEntry
-            {
-                PhaseId = 31415,
-                Duration = 0,
-            };
+            PhaseId = this.project.Phases[1].Id,
+            Duration = 42,
+        };
 
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.PhaseId, entry);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+    }
 
-        [Test]
-        public void PhaseId_SucceedsWhenPhaseIsKnownAndOpen()
+    [Test]
+    public void PhaseId_SucceedsWhenPhaseClosesToday()
+    {
+        this.record.Date = "2019-12-19";
+
+        var model = new RecordEntry
         {
-            var entry = new RecordEntry
-            {
-                PhaseId = this.project.Phases[0].Id,
-                Duration = 42,
-            };
+            PhaseId = this.project.Phases[1].Id,
+            Duration = 42,
+        };
 
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.PhaseId, entry);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+    }
 
-        [Test]
-        public void PhaseId_SucceedsWhenPhaseOpensToday()
+    [Test]
+    public void PhaseId_FailsWhenPhaseClosedYesterday()
+    {
+        this.record.Date = "2019-12-20";
+
+        var model = new RecordEntry
         {
-            this.record.Date = "2019-12-17";
+            PhaseId = this.project.Phases[1].Id,
+            Duration = 42,
+        };
 
-            var entry = new RecordEntry
-            {
-                PhaseId = this.project.Phases[1].Id,
-                Duration = 42,
-            };
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.PhaseId);
+    }
 
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.PhaseId, entry);
-        }
+    [Test]
+    public void PhaseId_FailsWhenPhaseOpensTomorrow()
+    {
+        this.record.Date = "2019-12-16";
 
-        [Test]
-        public void PhaseId_SucceedsWhenPhaseClosesToday()
+        var model = new RecordEntry
         {
-            this.record.Date = "2019-12-19";
+            PhaseId = this.project.Phases[0].Id,
+            Duration = 42,
+        };
 
-            var entry = new RecordEntry
-            {
-                PhaseId = this.project.Phases[1].Id,
-                Duration = 42,
-            };
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.PhaseId);
+    }
 
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.PhaseId, entry);
-        }
+    [Test]
+    public void PhaseId_SucceedsWhenPhaseIsClosedButDurationIsZero()
+    {
+        this.record.Date = "2019-12-16";
 
-        [Test]
-        public void PhaseId_FailsWhenPhaseClosedYesterday()
+        var model = new RecordEntry
         {
-            this.record.Date = "2019-12-20";
+            PhaseId = this.project.Phases[0].Id,
+            Duration = 0,
+        };
 
-            var entry = new RecordEntry
-            {
-                PhaseId = this.project.Phases[1].Id,
-                Duration = 42,
-            };
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+    }
 
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.PhaseId, entry);
-        }
-
-        [Test]
-        public void PhaseId_FailsWhenPhaseOpensTomorrow()
+    [Test]
+    public void Begin_SucceedsWhenNull()
+    {
+        var model = new RecordEntry
         {
-            this.record.Date = "2019-12-16";
+            Begin = null,
+        };
 
-            var entry = new RecordEntry
-            {
-                PhaseId = this.project.Phases[0].Id,
-                Duration = 42,
-            };
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Begin);
+    }
 
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.PhaseId, entry);
-        }
-
-        [Test]
-        public void PhaseId_SucceedsWhenPhaseIsClosedButDurationIsZero()
+    [Test]
+    public void Begin_SucceedsWhenZero()
+    {
+        var model = new RecordEntry
         {
-            this.record.Date = "2019-12-16";
+            Begin = 0,
+        };
 
-            var entry = new RecordEntry
-            {
-                PhaseId = this.project.Phases[0].Id,
-                Duration = 0,
-            };
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Begin);
+    }
 
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.PhaseId, entry);
-        }
-
-        [Test]
-        public void Begin_SucceedsWhenNull()
+    [Test]
+    public void Begin_SucceedsWhenWithin24h()
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Begin, (int?)null);
-        }
+            Begin = 12 * 3600,
+        };
 
-        [Test]
-        public void Begin_SucceedsWhenZero()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Begin);
+
+        model.Begin = 24 * 3600;
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Begin);
+    }
+
+    [Test]
+    public void Begin_FailsWhenAbove24h()
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Begin, 0);
-        }
+            Begin = (24 * 3600) + 1,
+        };
 
-        [Test]
-        public void Begin_SucceedsWhenWithin24h()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.Begin);
+    }
+
+    [Test]
+    [TestCase(-1)]
+    [TestCase(-11)]
+    [TestCase(-111)]
+    public void Begin_FailsWhenNegative(int value)
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Begin, 12 * 3600);
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Begin, 24 * 3600);
-        }
+            Begin = value,
+        };
 
-        [Test]
-        public void Begin_FailsWhenAbove24h()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.Begin);
+    }
+
+    [Test]
+    public void Pause_SucceedsWhenNull()
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, (24 * 3600) + 1);
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, (24 * 3600) + 123);
-        }
+            Pause = null,
+        };
 
-        [Test]
-        public void Begin_FailsWhenNegative()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Pause);
+    }
+
+    [Test]
+    public void Pause_FailsWhenNotNullButBeginIsNull()
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, -1);
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, -11);
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Begin, -111);
-        }
+            Begin = null,
+            Pause = 3600,
+        };
 
-        [Test]
-        public void Pause_SucceedsWhenNull()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.Pause);
+    }
+
+    [Test]
+    public void Pause_SucceedsWhenZero()
+    {
+        var model = new RecordEntry
         {
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Pause, (int?)null);
-        }
+            Begin = 0,
+            Pause = 0,
+        };
 
-        [Test]
-        public void Pause_FailsWhenNotNullButBeginIsNull()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Pause);
+    }
+
+    [Test]
+    public void Pause_SucceedsWhenWithin24h()
+    {
+        var model = new RecordEntry
         {
-            var entry = new RecordEntry
-            {
-                Begin = null,
-                Pause = 3600,
-            };
+            Begin = 0,
+            Pause = 12 * 3600,
+        };
 
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Pause, entry);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Pause);
 
-        [Test]
-        public void Pause_SucceedsWhenZero()
+        model.Pause = 24 * 3600;
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Pause);
+    }
+
+    [Test]
+    public void Pause_FailsWhenNegative()
+    {
+        var model = new RecordEntry
         {
-            var entry = new RecordEntry
-            {
-                Begin = 0,
-                Pause = 0,
-            };
+            Begin = 0,
+            Pause = -111,
+        };
 
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Pause, entry);
-        }
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.Pause);
+    }
 
-        [Test]
-        public void Pause_SucceedsWhenWithin24h()
+    [Test]
+    public void BeginPlusPausePlusDuration_SucceedsWhenWithin24h()
+    {
+        var model = new RecordEntry
         {
-            var entry = new RecordEntry
-            {
-                Begin = 0,
-                Pause = 12 * 3600,
-            };
+            Duration = 11 * 3600,
+            Begin = 12 * 3600,
+            Pause = 1800,
+        };
 
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Pause, entry);
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Duration);
 
-            entry.Pause = 24 * 3600;
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Pause, entry);
-        }
+        model.Pause = 3600;
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.Duration);
+    }
 
-        [Test]
-        public void Pause_FailsWhenNegative()
+    [Test]
+    public void BeginPlusPausePlusDuration_FailsWhenAbove24h()
+    {
+        var model = new RecordEntry
         {
-            var entry = new RecordEntry
-            {
-                Begin = 0,
-                Pause = -111,
-            };
+            Duration = 11 * 3600,
+            Begin = 12 * 3600,
+            Pause = 3601,
+        };
 
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Pause, entry);
-        }
-
-        [Test]
-        public void BeginPlusPausePlusDuration_SucceedsWhenWithin24h()
-        {
-            var entry = new RecordEntry
-            {
-                Duration = 11 * 3600,
-                Begin = 12 * 3600,
-                Pause = 1800,
-            };
-
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Duration, entry);
-
-            entry.Pause = 3600;
-            this.sut.ShouldNotHaveValidationErrorFor(entry => entry.Duration, entry);
-        }
-
-        [Test]
-        public void BeginPlusPausePlusDuration_FailsWhenAbove24h()
-        {
-            var entry = new RecordEntry
-            {
-                Duration = 11 * 3600,
-                Begin = 12 * 3600,
-                Pause = 3601,
-            };
-
-            this.sut.ShouldHaveValidationErrorFor(entry => entry.Duration, entry);
-        }
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.Duration);
     }
 }

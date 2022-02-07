@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ProjectServiceTests.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,25 +6,20 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
+
 using RolXServer.Projects.DataAccess;
 
-namespace RolXServer.Projects.Domain.Detail
+namespace RolXServer.Projects.Domain.Detail;
+
+public sealed class ProjectServiceTests
 {
-    public sealed class ProjectServiceTests
+    private static Project SeedProject => new Project
     {
-        private static Project SeedProject => new Project
-        {
-            Id = 1,
-            Number = "1",
-            Name = "One",
-            Phases = new List<Phase>
+        Id = 1,
+        Number = "1",
+        Name = "One",
+        Phases = new List<Phase>
             {
                 new Phase
                 {
@@ -37,81 +32,80 @@ namespace RolXServer.Projects.Domain.Detail
                     Name = "Two",
                 },
             },
-        };
+    };
 
-        [Test]
-        public async Task Update_ExistingPhaseChanged()
+    [Test]
+    public async Task Update_ExistingPhaseChanged()
+    {
+        var project = SeedProject;
+        var contextFactory = InMemory.ContextFactory(project);
+
+        using (var context = contextFactory())
         {
-            var project = SeedProject;
-            var contextFactory = InMemory.ContextFactory(project);
+            var sut = new ProjectService(context);
 
-            using (var context = contextFactory())
-            {
-                var sut = new ProjectService(context);
-
-                project.Phases[0].Name = "Changed";
-                await sut.Update(project);
-            }
-
-            using (var context = contextFactory())
-            {
-                context.Projects
-                    .Include(p => p.Phases)
-                    .Single(p => p.Id == 1)
-                    .Phases.Single(ph => ph.Number == 1)
-                    .Name.Should().Be("Changed");
-            }
+            project.Phases[0].Name = "Changed";
+            await sut.Update(project);
         }
 
-        [Test]
-        public async Task Update_ExistingPhaseRemoved()
+        using (var context = contextFactory())
         {
-            var project = SeedProject;
-            var contextFactory = InMemory.ContextFactory(project);
+            context.Projects
+                .Include(p => p.Phases)
+                .Single(p => p.Id == 1)
+                .Phases.Single(ph => ph.Number == 1)
+                .Name.Should().Be("Changed");
+        }
+    }
 
-            using (var context = contextFactory())
-            {
-                var sut = new ProjectService(context);
+    [Test]
+    public async Task Update_ExistingPhaseRemoved()
+    {
+        var project = SeedProject;
+        var contextFactory = InMemory.ContextFactory(project);
 
-                project.Phases.RemoveAt(0);
-                await sut.Update(project);
-            }
+        using (var context = contextFactory())
+        {
+            var sut = new ProjectService(context);
 
-            using (var context = contextFactory())
-            {
-                context.Projects
-                    .Include(p => p.Phases)
-                    .Single(p => p.Id == 1)
-                    .Phases.Count.Should().Be(1);
-            }
+            project.Phases.RemoveAt(0);
+            await sut.Update(project);
         }
 
-        [Test]
-        public async Task Update_NewPhaseAdded()
+        using (var context = contextFactory())
         {
-            var project = SeedProject;
-            var contextFactory = InMemory.ContextFactory(project);
+            context.Projects
+                .Include(p => p.Phases)
+                .Single(p => p.Id == 1)
+                .Phases.Count.Should().Be(1);
+        }
+    }
 
-            using (var context = contextFactory())
+    [Test]
+    public async Task Update_NewPhaseAdded()
+    {
+        var project = SeedProject;
+        var contextFactory = InMemory.ContextFactory(project);
+
+        using (var context = contextFactory())
+        {
+            var sut = new ProjectService(context);
+
+            project.Phases.Add(new Phase
             {
-                var sut = new ProjectService(context);
+                Number = 3,
+                Name = "Three",
+                Project = project,
+            });
+            await sut.Update(project);
+        }
 
-                project.Phases.Add(new Phase
-                {
-                    Number = 3,
-                    Name = "Three",
-                    Project = project,
-                });
-                await sut.Update(project);
-            }
-
-            using (var context = contextFactory())
-            {
-                context.Projects
-                    .Include(p => p.Phases)
-                    .Single(p => p.Id == 1)
-                    .Phases.Count.Should().Be(3);
-            }
+        using (var context = contextFactory())
+        {
+            context.Projects
+                .Include(p => p.Phases)
+                .Single(p => p.Id == 1)
+                .Phases.Count.Should().Be(3);
         }
     }
 }

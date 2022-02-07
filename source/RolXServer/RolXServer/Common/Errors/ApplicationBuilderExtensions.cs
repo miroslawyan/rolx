@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ApplicationBuilderExtensions.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,23 +6,20 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Builder;
+namespace RolXServer.Common.Errors;
 
-namespace RolXServer.Common.Errors
+/// <summary>
+/// Extension methods for <see cref="IApplicationBuilder"/> instances.
+/// </summary>
+public static class ApplicationBuilderExtensions
 {
     /// <summary>
-    /// Extension methods for <see cref="IApplicationBuilder"/> instances.
+    /// Uses the exception handler middleware.
     /// </summary>
-    public static class ApplicationBuilderExtensions
+    /// <param name="builder">The builder.</param>
+    /// <returns>The same builder.</returns>
+    public static IApplicationBuilder UseExceptionHandlerMiddleware(this IApplicationBuilder builder)
     {
-        /// <summary>
-        /// Uses the exception handler middleware.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns>The same builder.</returns>
-        public static IApplicationBuilder UseExceptionHandlerMiddleware(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<ExceptionHandlerMiddleware>();
-        }
+        return builder.UseMiddleware<ExceptionHandlerMiddleware>();
     }
 }

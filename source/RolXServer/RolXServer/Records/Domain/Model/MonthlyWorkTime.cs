@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="MonthlyWorkTime.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,28 +6,25 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
+namespace RolXServer.Records.Domain.Model;
 
-namespace RolXServer.Records.Domain.Model
+/// <summary>
+/// An entry in a <see cref="YearInfo"/>.
+/// </summary>
+public class MonthlyWorkTime
 {
     /// <summary>
-    /// An entry in a <see cref="YearInfo"/>.
+    /// Gets or sets the month.
     /// </summary>
-    public class MonthlyWorkTime
-    {
-        /// <summary>
-        /// Gets or sets the month.
-        /// </summary>
-        public DateTime Month { get; set; }
+    public DateTime Month { get; set; }
 
-        /// <summary>
-        /// Gets or sets the work days.
-        /// </summary>
-        public int Days { get; set; }
+    /// <summary>
+    /// Gets or sets the work days.
+    /// </summary>
+    public int Days { get; set; }
 
-        /// <summary>
-        /// Gets or sets the work hours in seconds.
-        /// </summary>
-        public TimeSpan Hours { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the work hours in seconds.
+    /// </summary>
+    public TimeSpan Hours { get; set; }
 }

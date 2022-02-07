@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="FavouritePhaseController.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,70 +6,66 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using RolXServer.Auth.Domain;
 using RolXServer.Projects.Domain;
 using RolXServer.Projects.WebApi.Mapping;
 using RolXServer.Projects.WebApi.Resource;
 
-namespace RolXServer.Projects.WebApi
+namespace RolXServer.Projects.WebApi;
+
+/// <summary>
+/// Controller for favourite phases.
+/// </summary>
+[ApiController]
+[Route("api/v1/phase/favourite")]
+[Authorize(Policy = "ActiveUser")]
+public class FavouritePhaseController : ControllerBase
 {
+    private readonly IFavouriteService favouriteService;
+
     /// <summary>
-    /// Controller for favourite phases.
+    /// Initializes a new instance of the <see cref="FavouritePhaseController"/> class.
     /// </summary>
-    [ApiController]
-    [Route("api/v1/phase/favourite")]
-    [Authorize(Policy = "ActiveUser")]
-    public class FavouritePhaseController : ControllerBase
+    /// <param name="favouriteService">The favourite service.</param>
+    public FavouritePhaseController(IFavouriteService favouriteService)
     {
-        private readonly IFavouriteService favouriteService;
+        this.favouriteService = favouriteService;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FavouritePhaseController"/> class.
-        /// </summary>
-        /// <param name="favouriteService">The favourite service.</param>
-        public FavouritePhaseController(IFavouriteService favouriteService)
-        {
-            this.favouriteService = favouriteService;
-        }
+    /// <summary>
+    /// Gets the favourite phases.
+    /// </summary>
+    /// <returns>The favourite phases.</returns>
+    [HttpGet]
+    public async Task<IEnumerable<Phase>> GetFavourites()
+        => (await this.favouriteService.GetAll(this.User.GetUserId()))
+            .Select(p => p.ToResource())
+            .ToList();
 
-        /// <summary>
-        /// Gets the favourite phases.
-        /// </summary>
-        /// <returns>The favourite phases.</returns>
-        [HttpGet]
-        public async Task<IEnumerable<Phase>> GetFavourites()
-            => (await this.favouriteService.GetAll(this.User.GetUserId()))
-                .Select(p => p.ToResource())
-                .ToList();
+    /// <summary>
+    /// Adds the specified phase to the favourites.
+    /// </summary>
+    /// <param name="phase">The phase.</param>
+    /// <returns>No content.</returns>
+    [HttpPut]
+    public async Task<IActionResult> AddFavourite(Phase phase)
+    {
+        await this.favouriteService.Add(phase.ToDomain(), this.User.GetUserId());
+        return this.NoContent();
+    }
 
-        /// <summary>
-        /// Adds the specified phase to the favourites.
-        /// </summary>
-        /// <param name="phase">The phase.</param>
-        /// <returns>No content.</returns>
-        [HttpPut]
-        public async Task<IActionResult> AddFavourite(Phase phase)
-        {
-            await this.favouriteService.Add(phase.ToDomain(), this.User.GetUserId());
-            return this.NoContent();
-        }
-
-        /// <summary>
-        /// Removes the specified phase from the favourites.
-        /// </summary>
-        /// <param name="phase">The phase.</param>
-        /// <returns>No content.</returns>
-        [HttpDelete]
-        public async Task<IActionResult> RemoveFavourite(Phase phase)
-        {
-            await this.favouriteService.Remove(phase.ToDomain(), this.User.GetUserId());
-            return this.NoContent();
-        }
+    /// <summary>
+    /// Removes the specified phase from the favourites.
+    /// </summary>
+    /// <param name="phase">The phase.</param>
+    /// <returns>No content.</returns>
+    [HttpDelete]
+    public async Task<IActionResult> RemoveFavourite(Phase phase)
+    {
+        await this.favouriteService.Remove(phase.ToDomain(), this.User.GetUserId());
+        return this.NoContent();
     }
 }

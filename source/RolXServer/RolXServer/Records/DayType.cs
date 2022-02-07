@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="DayType.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,26 +6,25 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace RolXServer.Records
+namespace RolXServer.Records;
+
+/// <summary>
+/// The types of a day.
+/// </summary>
+public enum DayType
 {
     /// <summary>
-    /// The types of a day.
+    /// A plain old, boring workday.
     /// </summary>
-    public enum DayType
-    {
-        /// <summary>
-        /// A plain old, boring workday.
-        /// </summary>
-        Workday,
+    Workday,
 
-        /// <summary>
-        /// Hurray, its weekend!
-        /// </summary>
-        Weekend,
+    /// <summary>
+    /// Hurray, its weekend.
+    /// </summary>
+    Weekend,
 
-        /// <summary>
-        /// A public holiday.
-        /// </summary>
-        Holiday,
-    }
+    /// <summary>
+    /// A public holiday.
+    /// </summary>
+    Holiday,
 }

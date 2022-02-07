@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="FavouritePhase.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,35 +6,32 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-
 using RolXServer.Users.DataAccess;
 
-namespace RolXServer.Projects.DataAccess
+namespace RolXServer.Projects.DataAccess;
+
+/// <summary>
+/// A favourite phase of a user.
+/// </summary>
+public sealed class FavouritePhase
 {
     /// <summary>
-    /// A favourite phase of a user.
+    /// Gets or sets the user identifier.
     /// </summary>
-    public sealed class FavouritePhase
-    {
-        /// <summary>
-        /// Gets or sets the user identifier.
-        /// </summary>
-        public Guid UserId { get; set; }
+    public Guid UserId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the user.
-        /// </summary>
-        public User? User { get; set; }
+    /// <summary>
+    /// Gets or sets the user.
+    /// </summary>
+    public User? User { get; set; }
 
-        /// <summary>
-        /// Gets or sets the phase identifier.
-        /// </summary>
-        public int PhaseId { get; set; }
+    /// <summary>
+    /// Gets or sets the phase identifier.
+    /// </summary>
+    public int PhaseId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the phase.
-        /// </summary>
-        public Phase? Phase { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the phase.
+    /// </summary>
+    public Phase? Phase { get; set; }
 }

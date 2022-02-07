@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="PhaseValidatorTests.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
@@ -6,155 +6,232 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using FluentValidation.TestHelper;
-using NUnit.Framework;
 using RolXServer.Projects.WebApi.Resource;
 
-namespace RolXServer.Projects.WebApi.Validation
+namespace RolXServer.Projects.WebApi.Validation;
+
+/// <summary>
+/// Unit tests for the <see cref="PhaseValidator"/>.
+/// </summary>
+public sealed class PhaseValidatorTests
 {
-    /// <summary>
-    /// Unit tests for the <see cref="PhaseValidator"/>.
-    /// </summary>
-    public sealed class PhaseValidatorTests
+    private PhaseValidator sut = null!;
+
+    [SetUp]
+    public void SetUp()
     {
-        private PhaseValidator sut = null!;
+        this.sut = new PhaseValidator();
+    }
 
-        [SetUp]
-        public void SetUp()
+    [Test]
+    public void Number_MustNotBeZero()
+    {
+        var model = new Phase
         {
-            this.sut = new PhaseValidator();
-        }
+            Number = 0,
+        };
 
-        [Test]
-        public void Number_MustNotBeZero()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.Number);
+    }
+
+    [Test]
+    public void Number_MustNotBeNegative()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.Number, 0);
-        }
+            Number = -42,
+        };
 
-        [Test]
-        public void Number_MustNotBeNegative()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.Number);
+    }
+
+    [Test]
+    public void Number_ShouldBePositive()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.Number, -42);
-        }
+            Number = 42,
+        };
 
-        [Test]
-        public void Number_ShouldBePositive()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.Number);
+    }
+
+    [Test]
+    public void Name_MustNotBeNull()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.Number, 42);
-        }
+            Name = null!,
+        };
 
-        [Test]
-        public void Name_MustNotBeNull()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.Name);
+    }
+
+    [Test]
+    public void Name_MustNotBeEmpty()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.Name, null as string);
-        }
+            Name = string.Empty,
+        };
 
-        [Test]
-        public void Name_MustNotBeEmpty()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.Name);
+    }
+
+    [Test]
+    public void Name_MayBeAnyText()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.Name, string.Empty);
-        }
+            Name = "The foo is in the bar!",
+        };
 
-        [Test]
-        public void Name_MayBeAnyText()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.Name);
+    }
+
+    [Test]
+    public void StartDate_MustNotBeNull()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.Name, "The foo is in the bar!");
-        }
+            StartDate = null!,
+        };
 
-        [Test]
-        public void StartDate_MustNotBeNull()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.StartDate);
+    }
+
+    [Test]
+    public void StartDate_MustNotBeEmpty()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.StartDate, null as string);
-        }
+            StartDate = string.Empty,
+        };
 
-        [Test]
-        public void StartDate_MustNotBeEmpty()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.StartDate);
+    }
+
+    [Test]
+    public void StartDate_ShouldBeAnIsoFormattedDate()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.StartDate, string.Empty);
-        }
+            StartDate = "2019-11-25",
+        };
 
-        [Test]
-        public void StartDate_ShouldBeAnIsoFormattedDate()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.StartDate);
+    }
+
+    [Test]
+    public void StartDate_MustBeAValidDate()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.StartDate, "2019-11-25");
-        }
+            StartDate = "2019-11-31",
+        };
 
-        [Test]
-        public void StartDate_MustBeAValidDate()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.StartDate);
+    }
+
+    [Test]
+    public void EndDate_MayBeNull()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.StartDate, "2019-11-31");
-        }
+            EndDate = null,
+        };
 
-        [Test]
-        public void EndDate_MayBeNull()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.EndDate);
+    }
+
+    [Test]
+    public void EndDate_IfNotNull_MustNotBeEmpty()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.EndDate, null as string);
-        }
+            EndDate = string.Empty,
+        };
 
-        [Test]
-        public void EndDate_IfNotNull_MustNotBeEmpty()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.EndDate);
+    }
+
+    [Test]
+    public void StartDate_IfNotNull_ShouldBeAnIsoFormattedDate()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.EndDate, string.Empty);
-        }
+            EndDate = "2019-11-25",
+        };
 
-        [Test]
-        public void StartDate_IfNotNull_ShouldBeAnIsoFormattedDate()
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.EndDate);
+    }
+
+    [Test]
+    public void EndDate_IfNotNull_MustNotBeBeforeStartDate()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.EndDate, "2019-11-25");
-        }
+            StartDate = "2019-11-25",
+            EndDate = "2019-11-24",
+        };
 
-        [Test]
-        public void EndDate_IfNotNull_MustNotBeBeforeStartDate()
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.EndDate);
+    }
+
+    [Test]
+    public void EndDate_IfNotNull_MayBeSameAsStartDate()
+    {
+        var model = new Phase
         {
-            var phase = new Phase
-            {
-                StartDate = "2019-11-25",
-                EndDate = "2019-11-24",
-            };
+            StartDate = "2019-11-25",
+            EndDate = "2019-11-25",
+        };
 
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.EndDate, phase);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.EndDate);
+    }
 
-        [Test]
-        public void EndDate_IfNotNull_MayBeSameAsStartDate()
+    [Test]
+    public void EndDate_IfNotNull_MayBeAfterStartDate()
+    {
+        var model = new Phase
         {
-            var phase = new Phase
-            {
-                StartDate = "2019-11-25",
-                EndDate = "2019-11-25",
-            };
+            StartDate = "2019-11-25",
+            EndDate = "2019-11-26",
+        };
 
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.EndDate, phase);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.EndDate);
+    }
 
-        [Test]
-        public void EndDate_IfNotNull_MayBeAfterStartDate()
+    [Test]
+    public void Budget_MustNotBeNegative()
+    {
+        var model = new Phase
         {
-            var phase = new Phase
-            {
-                StartDate = "2019-11-25",
-                EndDate = "2019-11-26",
-            };
+            Budget = -42,
+        };
 
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.EndDate, phase);
-        }
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(phase => phase.Budget);
+    }
 
-        [Test]
-        public void Budget_IfNotNull_MustNotBeNegative()
+    [Test]
+    public void Budget_ShouldBePositive()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldHaveValidationErrorFor(phase => phase.Budget, -42);
-        }
+            Budget = 42,
+        };
 
-        [Test]
-        public void Budget_IfNotNull_ShouldBePositive()
-        {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.Budget, 42);
-        }
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.Budget);
+    }
 
-        [Test]
-        public void Budget_IfNotNull_MayBeZero()
+    [Test]
+    public void Budget_MayBeZero()
+    {
+        var model = new Phase
         {
-            this.sut.ShouldNotHaveValidationErrorFor(phase => phase.Budget, 0);
-        }
+            Budget = 0,
+        };
+
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(phase => phase.Budget);
     }
 }
