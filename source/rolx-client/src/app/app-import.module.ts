@@ -59,4 +59,4 @@ const modules = [
   imports: modules,
   exports: modules,
 })
-export class AppImportModule { }
+export class AppImportModule {}

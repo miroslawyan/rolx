@@ -1,26 +1,22 @@
-<table mat-table
-       [dataSource]="dataSource"
-       class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="month">
+    <th mat-header-cell *matHeaderCellDef>Monat</th>
+    <td mat-cell *matCellDef="let monthlyWorkTime">{{monthlyWorkTime.month| date: 'MMMM'}}</td>
+    <td mat-footer-cell *matFooterCellDef>Totale Arbeitszeit</td>
+  </ng-container>
 
-<ng-container matColumnDef="month">
-  <th mat-header-cell *matHeaderCellDef >Monat</th>
-  <td mat-cell *matCellDef="let monthlyWorkTime">{{monthlyWorkTime.month| date: 'MMMM'}}</td>
-  <td mat-footer-cell *matFooterCellDef>Totale Arbeitszeit</td>
-</ng-container>
-
-<ng-container matColumnDef="days">
-  <th mat-header-cell *matHeaderCellDef>Arbeitstage</th>
-  <td mat-cell *matCellDef="let monthlyWorkTime">{{monthlyWorkTime.days }}</td>
-  <td mat-footer-cell *matFooterCellDef>{{getTotalWorkDays()}}</td>
-</ng-container>
-<ng-container matColumnDef="hours">
-  <th mat-header-cell *matHeaderCellDef >Arbeitsstunden</th>
-  <td mat-cell *matCellDef="let monthlyWorkTime">{{monthlyWorkTime.hours }}</td>
-  <td mat-footer-cell *matFooterCellDef>{{getTotalWorkHours()}}</td>
-</ng-container>
+  <ng-container matColumnDef="days">
+    <th mat-header-cell *matHeaderCellDef>Arbeitstage</th>
+    <td mat-cell *matCellDef="let monthlyWorkTime">{{monthlyWorkTime.days }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{getTotalWorkDays()}}</td>
+  </ng-container>
+  <ng-container matColumnDef="hours">
+    <th mat-header-cell *matHeaderCellDef>Arbeitsstunden</th>
+    <td mat-cell *matCellDef="let monthlyWorkTime">{{monthlyWorkTime.hours }}</td>
+    <td mat-footer-cell *matFooterCellDef>{{getTotalWorkHours()}}</td>
+  </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-
 </table>

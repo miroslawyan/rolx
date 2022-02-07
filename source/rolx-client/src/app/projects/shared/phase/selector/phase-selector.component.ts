@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Phase } from '@app/projects/core/phase';
 import { PhaseService } from '@app/projects/core/phase.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -11,12 +11,12 @@ import { map, switchMap } from 'rxjs/operators';
   styleUrls: ['./phase-selector.component.scss'],
 })
 export class PhaseSelectorComponent implements OnInit, OnDestroy {
+  private readonly subscription = new Subscription();
+  private readonly begin$ = new BehaviorSubject<moment.Moment>(moment('1900-01-01'));
+  private readonly allPhases$ = new BehaviorSubject<Phase[]>([]);
+  private readonly filterText$ = new BehaviorSubject<string>('');
 
-  private subscription = new Subscription();
-  private phaseShadow: Phase;
-  private begin$ = new BehaviorSubject<moment.Moment>(moment('1900-01-01'));
-  private allPhases$ = new BehaviorSubject<Phase[]>([]);
-  private filterText$ = new BehaviorSubject<string>('');
+  private phaseShadow = new Phase();
 
   @Output()
   selected = new EventEmitter<Phase>();
@@ -27,7 +27,12 @@ export class PhaseSelectorComponent implements OnInit, OnDestroy {
   @Input()
   end = moment('2999-12-31');
 
-  candidates$: Observable<Phase[]>;
+  readonly candidates$: Observable<Phase[]> = combineLatest([
+    this.allPhases$,
+    this.filterText$,
+  ]).pipe(
+    map(([phases, filterText]) => this.filterByEndAndFullName(phases, filterText).slice(0, 5)),
+  );
 
   constructor(private phaseService: PhaseService) {}
 
@@ -46,7 +51,7 @@ export class PhaseSelectorComponent implements OnInit, OnDestroy {
   set phase(value: any) {
     if (!(value instanceof Phase)) {
       this.filterText$.next(value);
-      value = this.allPhases$.value.find(ph => ph.fullName === value);
+      value = this.allPhases$.value.find((ph) => ph.fullName === value);
     }
 
     if (value) {
@@ -56,15 +61,15 @@ export class PhaseSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const excludedIds = new Set(this.excluded.map(ph => ph.id));
-    this.subscription.add(this.begin$.pipe(
-      switchMap(b => this.phaseService.getAll(b)),
-      map(phs => phs.filter(ph => !excludedIds.has(ph.id))),
-      map(phs => phs.sort((a, b) => a.fullName.localeCompare(b.fullName))),
-    ).subscribe(this.allPhases$));
-
-    this.candidates$ = combineLatest([this.allPhases$, this.filterText$]).pipe(
-      map(([phases, filterText]) => this.filterByEndAndFullName(phases, filterText).slice(0, 5)),
+    const excludedIds = new Set(this.excluded.map((ph) => ph.id));
+    this.subscription.add(
+      this.begin$
+        .pipe(
+          switchMap((b) => this.phaseService.getAll(b)),
+          map((phs) => phs.filter((ph) => !excludedIds.has(ph.id))),
+          map((phs) => phs.sort((a, b) => a.fullName.localeCompare(b.fullName))),
+        )
+        .subscribe(this.allPhases$),
     );
   }
 
@@ -78,8 +83,8 @@ export class PhaseSelectorComponent implements OnInit, OnDestroy {
 
   private filterByEndAndFullName(phases: Phase[], filterText: string): Phase[] {
     filterText = filterText.toLocaleLowerCase();
-    return phases
-      .filter(ph => ph.startDate <= this.end && ph.fullName.toLocaleLowerCase().includes(filterText));
+    return phases.filter(
+      (ph) => ph.startDate <= this.end && ph.fullName.toLocaleLowerCase().includes(filterText),
+    );
   }
-
 }

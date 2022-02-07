@@ -1,5 +1,4 @@
 <span *ngIf="balance$ | async as balance" class="container">
-
   <span>
     <small>Gleitzeit:</small>
 
@@ -16,11 +15,9 @@
       {{balance.vacationAvailableDays | number:'1.0-2'}}
       <small>{{balance.vacationAvailableDays === 1 ? 'Tag' : 'Tage'}}</small>
 
-
       <small *ngIf="balance.vacationPlannedDays > 0">
         ({{balance.vacationPlannedDays | number:'1.0-2'}} geplant)
       </small>
     </span>
   </span>
-
 </span>

@@ -6,11 +6,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent {
-
   @Input()
   isHandset = false;
 
   @Output()
   menuClicked = new EventEmitter();
-
 }

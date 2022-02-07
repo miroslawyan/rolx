@@ -10,25 +10,23 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./sign-in-page.component.scss'],
 })
 export class SignInPageComponent implements OnInit, OnDestroy {
-
   private readonly subscriptions = new Subscription();
   private forwardRoute = '';
 
   busy = false;
 
-  constructor(private authService: AuthService,
-              private googleAuthService: GoogleAuthService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private googleAuthService: GoogleAuthService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
-    this.forwardRoute = this.route.snapshot.queryParams.forwardRoute || '/';
+    this.forwardRoute = this.route.snapshot.queryParams['forwardRoute'] || '/';
 
     this.busy = true;
-    Promise.all([
-      this.googleAuthService.initialize(),
-      this.authService.initialize(),
-    ]).then(() => {
+    Promise.all([this.googleAuthService.initialize(), this.authService.initialize()]).then(() => {
       this.googleAuthService.signOut();
       this.busy = false;
     });
@@ -49,5 +47,4 @@ export class SignInPageComponent implements OnInit, OnDestroy {
       this.busy = false;
     }
   }
-
 }

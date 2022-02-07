@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { assertDefined } from '@app/core/util/utils';
 import { FavouritePhaseService } from '@app/projects/core/favourite-phase.service';
 import { Phase } from '@app/projects/core/phase';
 import { Record } from '@app/records/core/record';
@@ -12,6 +13,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./week-table.component.scss'],
 })
 export class WeekTableComponent implements OnInit, OnDestroy {
+  private inputPhases: Phase[] = [];
+  private favouritePhases: Phase[] = [];
+  private homegrownPhases: Phase[] = [];
+  private subscriptions = new Subscription();
 
   readonly weekdays = [
     'monday',
@@ -23,35 +28,29 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     'sunday',
   ];
 
-  readonly displayedColumns: string[] = [
-    'phase',
-    ...this.weekdays,
-  ];
+  readonly displayedColumns: string[] = ['phase', ...this.weekdays];
 
   @Input()
   records: Record[] = [];
 
   @Input()
-  user: User;
+  user!: User;
 
   allPhases: (Phase | null)[] = [];
 
   isAddingPhase = false;
 
-  private inputPhases: Phase[] = [];
-  private favouritePhases: Phase[] = [];
-  private homegrownPhases: Phase[] = [];
-  private subscriptions = new Subscription();
-
-  constructor(private favouritePhaseService: FavouritePhaseService,
-              private workRecordService: WorkRecordService) { }
+  constructor(
+    private favouritePhaseService: FavouritePhaseService,
+    private workRecordService: WorkRecordService,
+  ) {}
 
   @Input()
   get phases(): Phase[] {
     return this.inputPhases;
   }
   set phases(value: Phase[]) {
-    this.inputPhases = value.filter(ph => this.records.some(r => ph.isOpenAt(r.date)));
+    this.inputPhases = value.filter((ph) => this.records.some((r) => ph.isOpenAt(r.date)));
     this.homegrownPhases = [];
     this.isAddingPhase = false;
 
@@ -59,8 +58,10 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    assertDefined(this, 'user');
+
     this.subscriptions.add(
-      this.favouritePhaseService.favourites$.subscribe(phs => this.favourites = phs),
+      this.favouritePhaseService.favourites$.subscribe((phs) => (this.favourites = phs)),
     );
   }
 
@@ -80,8 +81,7 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   }
 
   submit(record: Record, index: number) {
-    this.workRecordService.update(record)
-      .subscribe(r => this.records[index] = r);
+    this.workRecordService.update(record).subscribe((r) => (this.records[index] = r));
   }
 
   private set favourites(value: Phase[]) {
@@ -90,20 +90,19 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   }
 
   private update() {
-    const localPhasesIds = new Set<number>([
-      ...this.inputPhases,
-      ...this.homegrownPhases,
-    ].map(ph => ph.id));
+    const localPhasesIds = new Set<number>(
+      [...this.inputPhases, ...this.homegrownPhases].map((ph) => ph.id),
+    );
 
-    const nonLocalFavourites = this.favouritePhases.filter(ph => !localPhasesIds.has(ph.id));
+    const nonLocalFavourites = this.favouritePhases.filter((ph) => !localPhasesIds.has(ph.id));
 
-    const sortedPhases = [...this.inputPhases, ...nonLocalFavourites]
-      .sort((a, b) => a.fullName.localeCompare(b.fullName));
+    const sortedPhases = [...this.inputPhases, ...nonLocalFavourites].sort((a, b) =>
+      a.fullName.localeCompare(b.fullName),
+    );
 
     this.allPhases = [...sortedPhases, ...this.homegrownPhases];
     if (this.isAddingPhase) {
       this.allPhases.push(null);
     }
   }
-
 }

@@ -9,14 +9,8 @@ import { UserMenuComponent } from '@app/users/shared/user/menu/user-menu.compone
 import { UserTableComponent } from '@app/users/shared/user/table/user-table.component';
 
 @NgModule({
-  imports: [
-    AppImportModule,
-    CommonModule,
-  ],
-  exports: [
-    UserAvatarComponent,
-    UserMenuComponent,
-  ],
+  imports: [AppImportModule, CommonModule],
+  exports: [UserAvatarComponent, UserMenuComponent],
   declarations: [
     UserAvatarComponent,
     UserEditPageComponent,
@@ -26,4 +20,4 @@ import { UserTableComponent } from '@app/users/shared/user/table/user-table.comp
     UserTableComponent,
   ],
 })
-export class UsersModule { }
+export class UsersModule {}

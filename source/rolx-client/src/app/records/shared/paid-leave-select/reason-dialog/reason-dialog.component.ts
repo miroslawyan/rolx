@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface ReasonDialogData {
-  reason: string | null;
+  reason?: string;
 }
 
 @Component({
@@ -12,17 +12,17 @@ export interface ReasonDialogData {
   styleUrls: ['./reason-dialog.component.scss'],
 })
 export class ReasonDialogComponent {
-
   readonly reason = new FormControl();
-  readonly form = new FormGroup({ reason: this.reason});
+  readonly form = new FormGroup({ reason: this.reason });
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: ReasonDialogData,
-              private dialogRef: MatDialogRef<ReasonDialogComponent>) {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: ReasonDialogData,
+    private dialogRef: MatDialogRef<ReasonDialogComponent>,
+  ) {
     this.reason.setValue(data.reason);
   }
 
   submit() {
     this.dialogRef.close(this.reason.value);
   }
-
 }

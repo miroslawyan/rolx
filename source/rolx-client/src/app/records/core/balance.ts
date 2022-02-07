@@ -1,16 +1,22 @@
 import { Duration, TransformAsDuration } from '@app/core/util/duration';
 import { TransformAsIsoDate } from '@app/core/util/iso-date';
-import moment from 'moment';
+import { assertDefined } from '@app/core/util/utils';
+import * as moment from 'moment';
 
 export class Balance {
-
   @TransformAsIsoDate()
-  byDate: moment.Moment;
+  byDate!: moment.Moment;
 
   @TransformAsDuration()
-  overtime: Duration;
+  overtime!: Duration;
 
-  vacationAvailableDays: number;
-  vacationPlannedDays: number;
+  vacationAvailableDays!: number;
+  vacationPlannedDays!: number;
 
+  validateModel(): void {
+    assertDefined(this, 'byDate');
+    assertDefined(this, 'overtime');
+    assertDefined(this, 'vacationAvailableDays');
+    assertDefined(this, 'vacationPlannedDays');
+  }
 }

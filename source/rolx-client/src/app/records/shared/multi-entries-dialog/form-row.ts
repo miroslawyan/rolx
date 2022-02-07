@@ -9,6 +9,7 @@ import { combineLatest, Subscription } from 'rxjs';
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
 export class FormRow {
+  private subscription?: Subscription;
 
   readonly beginEndBased = new FormControl(false);
   readonly begin = TimeFormControl.createTimeOfDay();
@@ -26,11 +27,8 @@ export class FormRow {
     comment: this.comment,
   });
 
-  private subscription: Subscription;
-
   constructor(entry?: RecordEntry | null) {
-    this.beginEndBased.valueChanges
-      .subscribe(() => this.updateMode());
+    this.beginEndBased.valueChanges.subscribe(() => this.updateMode());
 
     if (entry) {
       this.beginEndBased.setValue(entry.isBeginEndBased);
@@ -50,13 +48,11 @@ export class FormRow {
     return duration && !duration.isZero;
   }
 
-  private get isBeginEndBased() { return !!this.beginEndBased.value; }
-  private get commentValue() { return this.comment.value.trim(); }
-
-  private static toDuration(begin: TimeOfDay | null, end: TimeOfDay | null, pause: Duration | null): Duration {
-    return begin && end
-      ? end.sub(begin).sub(pause ?? Duration.Zero)
-      : Duration.Zero;
+  private get isBeginEndBased() {
+    return !!this.beginEndBased.value;
+  }
+  private get commentValue() {
+    return this.comment.value.trim();
   }
 
   toEntry(): RecordEntry {
@@ -72,6 +68,14 @@ export class FormRow {
 
   resetComment() {
     this.comment.setValue(this.commentValue);
+  }
+
+  private static toDuration(
+    begin: TimeOfDay | null,
+    end: TimeOfDay | null,
+    pause: Duration | null,
+  ): Duration {
+    return begin && end ? end.sub(begin).sub(pause ?? Duration.Zero) : Duration.Zero;
   }
 
   private updateMode() {
@@ -90,32 +94,25 @@ export class FormRow {
     this.pause.enable();
     this.duration.disable();
 
-    const begin$ = this.begin.typedValue$.pipe(
-      startWith(null),
-      distinctUntilChanged(),
+    const begin$ = this.begin.typedValue$.pipe(startWith(null), distinctUntilChanged());
+    const end$ = this.end.typedValue$.pipe(startWith(null), distinctUntilChanged());
+    const pause$ = this.pause.typedValue$.pipe(startWith(null), distinctUntilChanged());
+
+    this.subscription = combineLatest([begin$, end$, pause$])
+      .pipe(map(([b, e, p]) => FormRow.toDuration(b, e, p)))
+      .subscribe((d) => this.duration.setValue(d));
+
+    this.subscription.add(
+      combineLatest([begin$, pause$]).subscribe(([b, p]) => this.setEndMin(b, p)),
     );
-    const end$ = this.end.typedValue$.pipe(
-      startWith(null),
-      distinctUntilChanged(),
-    );
-    const pause$ = this.pause.typedValue$.pipe(
-      startWith(null),
-      distinctUntilChanged(),
+
+    this.subscription.add(
+      combineLatest([pause$, begin$, end$]).subscribe(([p]) => this.setPauseMin(p)),
     );
 
-    this.subscription = combineLatest([begin$, end$, pause$]).pipe(
-      map(([b, e, p]) => FormRow.toDuration(b, e, p)),
-      )
-      .subscribe(d => this.duration.setValue(d));
-
-    this.subscription.add(combineLatest([begin$, pause$])
-      .subscribe(([b, p]) => this.setEndMin(b, p)));
-
-    this.subscription.add(combineLatest([ pause$, begin$, end$])
-    .subscribe(([p]) => this.setPauseMin(p)));
-
-    this.subscription.add(combineLatest([begin$, end$])
-      .subscribe(([b, e]) => this.setPauseMax(b, e)));
+    this.subscription.add(
+      combineLatest([begin$, end$]).subscribe(([b, e]) => this.setPauseMax(b, e)),
+    );
   }
 
   private setEndMin(begin: TimeOfDay | null, pause: Duration | null) {
@@ -131,7 +128,7 @@ export class FormRow {
 
   private setPauseMin(pause: Duration | null) {
     if (pause) {
-    this.pause.setValidators(DurationValidators.min(Duration.Zero));
+      this.pause.setValidators(DurationValidators.min(Duration.Zero));
     } else {
       this.pause.clearValidators();
     }
@@ -166,6 +163,6 @@ export class FormRow {
 
   private unsubscribe() {
     this.subscription?.unsubscribe();
+    this.subscription = undefined;
   }
-
 }

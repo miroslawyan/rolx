@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { Component, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { AuthService } from '@app/auth/core/auth.service';
 import { Role } from '@app/auth/core/role';
 import { PendingRequestService } from '@app/core/pending-request/pending-request.service';
@@ -13,35 +13,40 @@ import { map, shareReplay } from 'rxjs/operators';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss'],
 })
-export class MainPageComponent implements OnInit {
-
+export class MainPageComponent {
   private readonly subscriptions = new Subscription();
   private overlayRef: OverlayRef | null = null;
 
-  @ViewChild('requestPendingSpinner') requestPendingSpinner: TemplateRef<any>;
+  @ViewChild('requestPendingSpinner') requestPendingSpinner?: TemplateRef<any>;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay(),
-    );
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+    map((result) => result.matches),
+    shareReplay(),
+  );
 
   readonly Role = Role;
 
-  constructor(public authService: AuthService,
-              private breakpointObserver: BreakpointObserver,
-              private pendingRequestService: PendingRequestService,
-              private viewContainerRef: ViewContainerRef,
-              private overlay: Overlay) {}
-
-  ngOnInit() {
+  constructor(
+    public authService: AuthService,
+    private breakpointObserver: BreakpointObserver,
+    private pendingRequestService: PendingRequestService,
+    private viewContainerRef: ViewContainerRef,
+    private overlay: Overlay,
+  ) {
     this.subscriptions.add(
-      this.pendingRequestService.hasOverdueRequest$
-        .subscribe(v => v ? this.showOverlay() : this.hideOverlay()));
+      this.pendingRequestService.hasOverdueRequest$.subscribe((v) =>
+        v ? this.showOverlay() : this.hideOverlay(),
+      ),
+    );
   }
 
   private showOverlay() {
     if (this.overlayRef != null) {
+      return;
+    }
+
+    if (!this.requestPendingSpinner) {
+      console.warn('requestPendingSpinner is undefined');
       return;
     }
 
@@ -60,5 +65,4 @@ export class MainPageComponent implements OnInit {
     this.overlayRef?.dispose();
     this.overlayRef = null;
   }
-
 }

@@ -5,6 +5,7 @@ import { Duration } from '@app/core/util/duration';
 import { Phase } from '@app/projects/core/phase';
 import { Record } from '@app/records/core/record';
 import { RecordEntry } from '@app/records/core/record-entry';
+
 import { FormRow } from './form-row';
 
 export interface MultiEntriesDialogData {
@@ -18,24 +19,18 @@ export interface MultiEntriesDialogData {
   styleUrls: ['./multi-entries-dialog.component.scss'],
 })
 export class MultiEntriesDialogComponent implements OnInit {
-
   form = this.fb.group({
     entries: this.fb.array([]),
   });
 
   formRows: FormRow[] = [];
-  displayedColumns: string[] = [
-    'mode',
-    'begin',
-    'end',
-    'pause',
-    'duration',
-    'comment',
-  ];
+  displayedColumns: string[] = ['mode', 'begin', 'end', 'pause', 'duration', 'comment'];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: MultiEntriesDialogData,
-              private dialogRef: MatDialogRef<MultiEntriesDialogComponent>,
-              private fb: FormBuilder) {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: MultiEntriesDialogData,
+    private dialogRef: MatDialogRef<MultiEntriesDialogComponent>,
+    private fb: FormBuilder,
+  ) {
     this.dialogRef.disableClose = true;
   }
 
@@ -43,9 +38,7 @@ export class MultiEntriesDialogComponent implements OnInit {
     const entries = this.data.record.entriesOf(this.data.phase);
 
     if (entries.length) {
-      entries
-        .filter(e => !e.duration.isZero)
-        .forEach(e => this.addRow(e));
+      entries.filter((e) => !e.duration.isZero).forEach((e) => this.addRow(e));
     } else {
       this.addRow();
     }
@@ -54,14 +47,13 @@ export class MultiEntriesDialogComponent implements OnInit {
   get totalDuration(): Duration {
     return new Duration(
       this.formRows
-        .filter(r => r.duration.value)
-        .reduce((sum, r) => sum + r.duration.value.seconds, 0));
+        .filter((r) => r.duration.value)
+        .reduce((sum, r) => sum + r.duration.value.seconds, 0),
+    );
   }
 
   submit() {
-    const entries = this.formRows
-      .filter(r => r.hasDuration)
-      .map(r => r.toEntry());
+    const entries = this.formRows.filter((r) => r.hasDuration).map((r) => r.toEntry());
 
     const record = this.data.record.replaceEntriesOfPhase(this.data.phase, entries);
     this.dialogRef.close(record);
@@ -80,8 +72,7 @@ export class MultiEntriesDialogComponent implements OnInit {
   addRow(entry?: RecordEntry | null) {
     const row = new FormRow(entry);
 
-    (this.form.controls.entries as FormArray).push(row.group);
+    (this.form.controls['entries'] as FormArray).push(row.group);
     this.formRows = [...this.formRows, row];
   }
-
 }

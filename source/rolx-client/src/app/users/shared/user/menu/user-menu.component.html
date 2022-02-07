@@ -1,20 +1,17 @@
-<button type="button"
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        matTooltip="{{user?.fullName}}&#13;{{user?.email}}"
-        matTooltipPosition="before"
-        matTooltipClass="tooltip-no-line-wrap">
-  <rolx-user-avatar [user]="user"></rolx-user-avatar>
+<button
+  type="button"
+  mat-icon-button
+  [matMenuTriggerFor]="menu"
+  matTooltip="{{user?.fullName}}&#13;{{user?.email}}"
+  matTooltipPosition="before"
+  matTooltipClass="tooltip-no-line-wrap">
+  <rolx-user-avatar *ngIf="user" [user]="user"></rolx-user-avatar>
 </button>
 
 <mat-menu #menu="matMenu">
-
-  <button mat-menu-item (click)="toggleTheme()">
-    {{nextThemeName}} Theme
-  </button>
+  <button mat-menu-item (click)="toggleTheme()">{{nextThemeName}} Theme</button>
 
   <mat-divider></mat-divider>
 
   <button mat-menu-item (click)="signOut()">Sign out</button>
-
 </mat-menu>

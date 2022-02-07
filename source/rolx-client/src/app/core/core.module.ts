@@ -6,18 +6,12 @@ import { PendingRequestInterceptor } from '@app/core/pending-request/pending-req
 import { EnumToArrayPipe } from '@app/core/util/enum-to-array.pipe';
 
 @NgModule({
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: PendingRequestInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: PendingRequestInterceptor, multi: true },
   ],
-  declarations: [
-    EnumToArrayPipe,
-  ],
-  exports: [
-    EnumToArrayPipe,
-  ],
+  declarations: [EnumToArrayPipe],
+  exports: [EnumToArrayPipe],
 })
-export class CoreModule { }
+export class CoreModule {}

@@ -3,9 +3,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from '@app/auth/core/auth.service';
 import { Role } from '@app/auth/core/role';
+import { assertDefined } from '@app/core/util/utils';
 import { User } from '@app/users/core/user';
 import { UserService } from '@app/users/core/user.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -28,20 +29,25 @@ export class UserTableComponent implements OnInit {
     }
   }
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(private userService: UserService,
-              public authService: AuthService) { }
+  constructor(private userService: UserService, public authService: AuthService) {}
 
   ngOnInit() {
+    assertDefined(this, 'sort');
+
     this.dataSource.sort = this.sort;
 
-    this.userService.getAll().pipe(tap(users => this.users = users)).subscribe(() => this.update(false));
+    this.userService
+      .getAll()
+      .pipe(tap((users) => (this.users = users)))
+      .subscribe(() => this.update(false));
   }
 
   update(showFormerUsers: boolean) {
     const deadline = moment().subtract(3, 'month');
-    this.dataSource.data = showFormerUsers ? this.users : this.users.filter(u => u.leavingDate?.isAfter(deadline) ?? true);
+    this.dataSource.data = showFormerUsers
+      ? this.users
+      : this.users.filter((u) => u.leavingDate?.isAfter(deadline) ?? true);
   }
-
 }

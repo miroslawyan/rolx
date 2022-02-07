@@ -1,20 +1,24 @@
 import { Duration, TransformAsDuration } from '@app/core/util/duration';
 import { TimeOfDay, TransformAsTimeOfDay } from '@app/core/util/time-of-day';
+import { assertDefined } from '@app/core/util/utils';
 
 export class RecordEntry {
-
-  phaseId: number;
+  phaseId!: number;
 
   @TransformAsDuration()
   duration = Duration.Zero;
 
   @TransformAsTimeOfDay()
-  begin: TimeOfDay | null;
+  begin?: TimeOfDay;
 
   @TransformAsDuration()
-  pause: Duration | null;
+  pause?: Duration;
 
-  comment: string | null;
+  comment?: string;
+
+  validateModel(): void {
+    assertDefined(this, 'phaseId');
+  }
 
   get end(): TimeOfDay | null {
     if (!this.begin) {
@@ -36,5 +40,4 @@ export class RecordEntry {
   get hasComment(): boolean {
     return this.comment != null && this.comment !== '';
   }
-
 }

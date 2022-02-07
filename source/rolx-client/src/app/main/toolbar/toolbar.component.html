@@ -1,11 +1,10 @@
-
-
 <mat-toolbar color="primary">
-  <button *ngIf="isHandset"
-          type="button"
-          aria-label="Toggle sidenav"
-          mat-icon-button
-          (click)="menuClicked.emit()">
+  <button
+    *ngIf="isHandset"
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    (click)="menuClicked.emit()">
     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
   </button>
 
@@ -14,5 +13,4 @@
   <span class="stretch"></span>
 
   <rolx-user-menu></rolx-user-menu>
-
 </mat-toolbar>

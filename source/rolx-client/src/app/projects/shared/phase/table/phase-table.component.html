@@ -1,7 +1,4 @@
-<table mat-table
-       [dataSource]="phases"
-       class="mat-elevation-z8">
-
+<table mat-table [dataSource]="phases" class="mat-elevation-z8">
   <ng-container matColumnDef="number">
     <th mat-header-cell *matHeaderCellDef>Phase</th>
     <td mat-cell class="number" *matCellDef="let phase">{{phase.number | number:'3.0'}}</td>
@@ -25,9 +22,7 @@
   <ng-container matColumnDef="budgetHours">
     <th mat-header-cell *matHeaderCellDef>Budget</th>
     <td mat-cell *matCellDef="let phase">
-      <span *ngIf="!phase.budget.isZero">
-        {{phase.budget.hours| number:'0.0'}} h
-      </span>
+      <span *ngIf="!phase.budget.isZero"> {{phase.budget.hours| number:'0.0'}} h </span>
     </td>
   </ng-container>
 
@@ -49,5 +44,4 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let phase; columns: displayedColumns;"></tr>
-
 </table>

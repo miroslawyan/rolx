@@ -1,34 +1,40 @@
 import { Duration, TransformAsDuration } from '@app/core/util/duration';
 import { TransformAsIsoDate } from '@app/core/util/iso-date';
+import { assertDefined } from '@app/core/util/utils';
 import { Phase } from '@app/projects/core/phase';
 import { Type } from 'class-transformer';
-import moment from 'moment';
+import * as moment from 'moment';
+
 import { DayType } from './day-type';
 import { PaidLeaveType } from './paid-leave-type';
 import { RecordEntry } from './record-entry';
 
 export class Record {
-
   @TransformAsIsoDate()
-  date: moment.Moment;
+  date!: moment.Moment;
 
-  userId: string;
+  userId!: string;
   dayType: DayType = DayType.Workday;
   dayName = '';
 
   @TransformAsDuration()
   nominalWorkTime = Duration.Zero;
 
-  paidLeaveType: PaidLeaveType | null;
-  paidLeaveReason: string | null;
+  paidLeaveType?: PaidLeaveType;
+  paidLeaveReason?: string;
 
   @Type(() => RecordEntry)
   entries: RecordEntry[] = [];
 
+  validateModel(): void {
+    assertDefined(this, 'date');
+    assertDefined(this, 'userId');
+
+    this.entries.forEach((e) => e.validateModel());
+  }
+
   get totalDuration(): Duration {
-    return new Duration(
-      this.entries.reduce(
-        (sum, e) => sum + e.duration.seconds, 0));
+    return new Duration(this.entries.reduce((sum, e) => sum + e.duration.seconds, 0));
   }
 
   get overtime(): Duration {
@@ -52,28 +58,29 @@ export class Record {
   }
 
   entriesOf(phase: Phase): RecordEntry[] {
-    return this.entries.filter(e => e.phaseId === phase.id);
+    return this.entries.filter((e) => e.phaseId === phase.id);
   }
 
   replaceEntriesOfPhase(phase: Phase, entries: RecordEntry[]): Record {
     const clone = this.clone();
 
-    entries = entries.filter(e => !e.duration.isZero);
-    entries.forEach(e => e.phaseId = phase.id);
+    entries = entries.filter((e) => !e.duration.isZero);
+    entries.forEach((e) => (e.phaseId = phase.id));
 
-    clone.entries = this.entries
-      .filter(e => e.phaseId !== phase.id)
-      .concat(...entries);
+    clone.entries = this.entries.filter((e) => e.phaseId !== phase.id).concat(...entries);
 
     if (!clone.mayHavePaidLeave) {
-      clone.paidLeaveType = null;
-      clone.paidLeaveReason = null;
+      clone.paidLeaveType = undefined;
+      clone.paidLeaveReason = undefined;
     }
 
     return clone;
   }
 
-  updatePaidLeaveType(paidLeaveType: PaidLeaveType | null, reason: string | null): Record {
+  updatePaidLeaveType(
+    paidLeaveType: PaidLeaveType | undefined,
+    reason: string | undefined,
+  ): Record {
     const clone = this.clone();
 
     clone.paidLeaveType = paidLeaveType;

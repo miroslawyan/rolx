@@ -19,7 +19,9 @@ export class MonthlyWorkTimeTableComponent {
 
   getTotalWorkDays(): number {
     return this.dataSource.data.reduce(
-      (accumulatedDays, currentDay) => accumulatedDays + currentDay.days, 0);
+      (accumulatedDays, currentDay) => accumulatedDays + currentDay.days,
+      0,
+    );
   }
 
   getTotalWorkHours(): Duration {

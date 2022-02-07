@@ -8,8 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./something-went-wrong-page.component.scss'],
 })
 export class SomethingWentWrongPageComponent {
-
-  constructor(private router: Router, private location: Location) { }
+  constructor(private router: Router, private location: Location) {}
 
   navigateHome() {
     // noinspection JSIgnoredPromiseFromCall
@@ -19,5 +18,4 @@ export class SomethingWentWrongPageComponent {
   retry() {
     this.location.back();
   }
-
 }

@@ -5,13 +5,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class ErrorService {
-
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar) {}
 
   notifyGeneralError() {
-    this.snackBar.open(
-      'Hoppla, da ist etwas schief gelaufen. Versuch es noch einmal.',
-      undefined,
-      { duration: 5000 });
+    this.snackBar.open('Hoppla, da ist etwas schief gelaufen. Versuch es noch einmal.', undefined, {
+      duration: 5000,
+    });
   }
 }

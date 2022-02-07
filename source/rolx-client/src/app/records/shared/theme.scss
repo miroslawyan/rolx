@@ -1,21 +1,19 @@
-@import '~@angular/material/theming';
+@use '~@angular/material/theming' as mat;
 
 // see https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
 @mixin work-record-shared-theme($theme) {
-
   $background: map-get($theme, background);
-  $nonWorkdayBackground: mat-color($background, disabled-button);
+  $nonWorkdayBackground: mat.mat-color($background, disabled-button);
 
   $primary: map-get($theme, primary);
-  $todayBackground: mat-color($primary,lighter);
+  $todayBackground: mat.mat-color($primary, lighter);
 
   table {
     .non-workday {
       background-color: $nonWorkdayBackground;
     }
-    .today{
+    .today {
       background-color: $todayBackground;
     }
   }
-
 }

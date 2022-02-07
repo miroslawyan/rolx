@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { assertDefined } from '@app/core/util/utils';
 import { FavouritePhaseService } from '@app/projects/core/favourite-phase.service';
 import { Phase } from '@app/projects/core/phase';
 
@@ -7,17 +8,20 @@ import { Phase } from '@app/projects/core/phase';
   templateUrl: './starred-phase-indicator.component.html',
   styleUrls: ['./starred-phase-indicator.component.scss'],
 })
-export class StarredPhaseIndicatorComponent {
-
+export class StarredPhaseIndicatorComponent implements OnInit {
   @Input()
-  phase: Phase;
+  phase!: Phase;
 
-  constructor(private favouritePhaseService: FavouritePhaseService) { }
+  constructor(private favouritePhaseService: FavouritePhaseService) {}
+
+  ngOnInit(): void {
+    assertDefined(this, 'phase');
+  }
 
   toggle() {
-    const request = this.isFavourite ?
-      this.favouritePhaseService.remove(this.phase) :
-      this.favouritePhaseService.add(this.phase);
+    const request = this.isFavourite
+      ? this.favouritePhaseService.remove(this.phase)
+      : this.favouritePhaseService.add(this.phase);
 
     request.subscribe();
   }

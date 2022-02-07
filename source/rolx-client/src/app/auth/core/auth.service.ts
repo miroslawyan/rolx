@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { classToPlain, plainToClass } from 'class-transformer';
-import { BehaviorSubject } from 'rxjs';
+import { Role } from '@app/auth/core/role';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { Approval } from './approval';
 import { SignInService } from './sign-in.service';
 
@@ -13,31 +16,17 @@ export class AuthService {
   private readonly currentApprovalSubject = new BehaviorSubject<Approval | null>(null);
   private isInitialized = false;
 
-  currentApproval$ = this.currentApprovalSubject.asObservable();
+  readonly currentApproval$ = this.currentApprovalSubject.asObservable();
   get currentApproval() {
     return this.currentApprovalSubject.value;
   }
 
+  readonly currentIsSupervisor$ = this.currentApproval$.pipe(
+    map((a) => (a?.user.role ?? Role.User) >= Role.Supervisor),
+  );
+
   constructor(private signInService: SignInService) {
     console.log('--- AuthService.ctor()');
-  }
-
-  private static LoadCurrentApproval(): Approval | null {
-    const approvalJson = localStorage.getItem(AuthService.CurrentApprovalKey);
-    if (!approvalJson) {
-      return null;
-    }
-
-    const approvalPlain = JSON.parse(approvalJson);
-    return plainToClass(Approval, approvalPlain);
-  }
-
-  private static StoreCurrentApproval(approval: Approval) {
-    localStorage.setItem(AuthService.CurrentApprovalKey, JSON.stringify(classToPlain(approval)));
-  }
-
-  private static ClearCurrentApproval() {
-    localStorage.removeItem(AuthService.CurrentApprovalKey);
   }
 
   async initialize(): Promise<void> {
@@ -59,7 +48,7 @@ export class AuthService {
     }
 
     if (approval.willExpireSoon) {
-      approval = await this.signInService.extend().toPromise();
+      approval = await lastValueFrom(this.signInService.extend());
     }
 
     AuthService.StoreCurrentApproval(approval);
@@ -69,9 +58,11 @@ export class AuthService {
   }
 
   async signIn(googleIdToken: string): Promise<void> {
-    const approval = await this.signInService.signIn({
-      googleIdToken,
-    }).toPromise();
+    const approval = await lastValueFrom(
+      this.signInService.signIn({
+        googleIdToken,
+      }),
+    );
 
     AuthService.StoreCurrentApproval(approval);
     this.currentApprovalSubject.next(approval);
@@ -80,5 +71,32 @@ export class AuthService {
   signOut() {
     AuthService.ClearCurrentApproval();
     this.currentApprovalSubject.next(null);
+  }
+
+  private static LoadCurrentApproval(): Approval | null {
+    const approvalJson = localStorage.getItem(AuthService.CurrentApprovalKey);
+    if (!approvalJson) {
+      return null;
+    }
+
+    const approvalPlain = JSON.parse(approvalJson);
+    const approval = plainToInstance(Approval, approvalPlain);
+
+    try {
+      approval.validateModel();
+    } catch (e) {
+      console.warn('failed to restore approval', e);
+      return null;
+    }
+
+    return approval;
+  }
+
+  private static StoreCurrentApproval(approval: Approval) {
+    localStorage.setItem(AuthService.CurrentApprovalKey, JSON.stringify(instanceToPlain(approval)));
+  }
+
+  private static ClearCurrentApproval() {
+    localStorage.removeItem(AuthService.CurrentApprovalKey);
   }
 }

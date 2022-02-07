@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { mapPlainToClass } from '@app/core/util/operators';
+import { mapPlainToInstance } from '@app/core/util/operators';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
 import { Approval } from './approval';
 import { Info } from './info';
 import { SignInData } from './sign-in.data';
@@ -23,13 +25,15 @@ export class SignInService {
 
   signIn(signInData: SignInData): Observable<Approval> {
     return this.httpClient.post(SignInUrl, signInData).pipe(
-      mapPlainToClass(Approval),
+      mapPlainToInstance(Approval),
+      tap((a) => a.validateModel()),
     );
   }
 
   extend(): Observable<Approval> {
     return this.httpClient.get(SignInUrl + '/extend').pipe(
-      mapPlainToClass(Approval),
+      mapPlainToInstance(Approval),
+      tap((a) => a.validateModel()),
     );
   }
 }

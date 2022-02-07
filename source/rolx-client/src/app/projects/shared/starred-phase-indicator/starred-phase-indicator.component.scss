@@ -6,7 +6,8 @@ button {
   opacity: 0;
   transition: opacity 0.3s ease-out;
 
-  &.active, &:hover {
+  &.active,
+  &:hover {
     opacity: 1;
     transition: opacity 0.3s ease-in;
   }

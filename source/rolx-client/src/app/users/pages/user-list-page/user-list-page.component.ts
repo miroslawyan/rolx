@@ -5,4 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './user-list-page.component.html',
   styleUrls: ['./user-list-page.component.scss'],
 })
-export class UserListPageComponent { }
+export class UserListPageComponent {}

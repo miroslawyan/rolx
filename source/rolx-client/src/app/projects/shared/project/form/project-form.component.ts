@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ErrorResponse } from '@app/core/error/error-response';
 import { ErrorService } from '@app/core/error/error.service';
 import { SetupService } from '@app/core/setup/setup.service';
+import { assertDefined } from '@app/core/util/utils';
 import { Project } from '@app/projects/core/project';
 import { ProjectService } from '@app/projects/core/project.service';
 
@@ -13,14 +14,13 @@ import { ProjectService } from '@app/projects/core/project.service';
   styleUrls: ['./project-form.component.scss'],
 })
 export class ProjectFormComponent implements OnInit {
-
-  @Input() project: Project;
+  @Input() project!: Project;
 
   projectForm = this.fb.group({
-    number: ['', [
-      Validators.required,
-      Validators.pattern(this.setupService.info.projectNumberPattern),
-    ]],
+    number: [
+      '',
+      [Validators.required, Validators.pattern(this.setupService.info.projectNumberPattern)],
+    ],
     name: ['', Validators.required],
   });
 
@@ -30,9 +30,11 @@ export class ProjectFormComponent implements OnInit {
     private projectService: ProjectService,
     private setupService: SetupService,
     private errorService: ErrorService,
-  ) { }
+  ) {}
 
   ngOnInit() {
+    assertDefined(this, 'project');
+
     this.projectForm.patchValue(this.project);
   }
 
@@ -47,8 +49,13 @@ export class ProjectFormComponent implements OnInit {
   submit() {
     Object.assign(this.project, this.projectForm.value);
 
-    const request = this.isNew ? this.projectService.create(this.project) : this.projectService.update(this.project);
-    request.subscribe(p => this.done(p), err => this.handleError(err));
+    const request = this.isNew
+      ? this.projectService.create(this.project)
+      : this.projectService.update(this.project);
+    request.subscribe(
+      (p) => this.done(p),
+      (err) => this.handleError(err),
+    );
   }
 
   done(project: Project) {
@@ -63,7 +70,7 @@ export class ProjectFormComponent implements OnInit {
   }
 
   cancel() {
-    const target: (number|string)[] = ['project'];
+    const target: (number | string)[] = ['project'];
     if (!this.isNew) {
       target.push(this.project.id);
     }
@@ -77,5 +84,4 @@ export class ProjectFormComponent implements OnInit {
       this.errorService.notifyGeneralError();
     }
   }
-
 }

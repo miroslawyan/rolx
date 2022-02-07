@@ -1,0 +1,113 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "ignorePatterns": ["projects/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/ng-cli-compat",
+        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "rolx",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "",
+            "style": "camelCase"
+          }
+        ],
+        "@typescript-eslint/explicit-member-accessibility": [
+          "off",
+          {
+            "accessibility": "explicit"
+          }
+        ],
+        "@typescript-eslint/no-namespace": "off",
+        "arrow-parens": ["off", "always"],
+        "comma-dangle": ["error", "always-multiline"],
+        "unused-imports/no-unused-imports": "error",
+        "import/order": [
+          "error",
+          {
+            "groups": ["builtin", "external", "parent", "sibling", "index"],
+            "newlines-between": "always",
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": false
+            }
+          }
+        ],
+        "linebreak-style": ["error", "unix"],
+        "no-shadow": "off",
+        "no-multiple-empty-lines": [
+          "error",
+          {
+            "max": 1
+          }
+        ],
+        "no-underscore-dangle": "off",
+        "id-blacklist": "off",
+        "@typescript-eslint/ban-types": [
+          "error",
+          {
+            "types": {
+              "object": false
+            },
+            "extendDefaults": true
+          }
+        ],
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "enumMember",
+            "format": ["PascalCase"]
+          }
+        ],
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "default": [
+              "public-static-field",
+              "private-static-field",
+              "private-instance-field",
+              "public-instance-field",
+              "protected-instance-field",
+              "constructor",
+              "public-static-method",
+              "public-instance-method",
+              "protected-static-method",
+              "protected-instance-method",
+              "protected-static-field",
+              "private-static-method",
+              "private-instance-method"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "eslint:recommended",
+        "plugin:prettier/recommended"
+      ],
+      "plugins": ["unused-imports"]
+    }
+  ]
+}

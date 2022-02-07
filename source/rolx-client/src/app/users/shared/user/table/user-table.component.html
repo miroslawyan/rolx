@@ -1,11 +1,11 @@
-<table mat-table
-       [dataSource]="dataSource"
-       matSort
-       matSortActive="fullName"
-       matSortDirection="asc"
-       matSortDisableClear
-       class="mat-elevation-z8">
-
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  matSortActive="fullName"
+  matSortDirection="asc"
+  matSortDisableClear
+  class="mat-elevation-z8">
   <ng-container matColumnDef="avatar">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let user">
@@ -25,9 +25,7 @@
 
   <ng-container matColumnDef="role">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Rolle</th>
-    <td mat-cell *matCellDef="let user">
-      {{ Role[user.role] }}
-    </td>
+    <td mat-cell *matCellDef="let user">{{ Role[user.role] }}</td>
   </ng-container>
 
   <ng-container matColumnDef="entryDate">
@@ -51,9 +49,8 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let user; columns: displayedColumns;"></tr>
-
 </table>
 
 <div>
-  <mat-checkbox  (change)="update($event.checked)">Ehemalige Mitarbeiter anzeigen</mat-checkbox>
+  <mat-checkbox (change)="update($event.checked)">Ehemalige Mitarbeiter anzeigen</mat-checkbox>
 </div>

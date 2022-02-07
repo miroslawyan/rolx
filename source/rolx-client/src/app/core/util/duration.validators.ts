@@ -1,11 +1,12 @@
 import { AbstractControl } from '@angular/forms';
+
 import { Duration } from './duration';
 
 export class DurationValidators {
   static isValid(control: AbstractControl) {
     const candidate = Duration.parse(control.value, true);
     if (!candidate.isValid) {
-      return {valid: true};
+      return { valid: true };
     }
 
     return null;
@@ -15,7 +16,7 @@ export class DurationValidators {
     return (control: AbstractControl) => {
       const candidate = Duration.parse(control.value);
       if (candidate.isValid && candidate.seconds < value.seconds) {
-        return {min: true};
+        return { min: true };
       }
 
       return null;
@@ -26,7 +27,7 @@ export class DurationValidators {
     return (control: AbstractControl) => {
       const candidate = Duration.parse(control.value);
       if (candidate.isValid && candidate.seconds > value.seconds) {
-        return {max: true};
+        return { max: true };
       }
 
       return null;

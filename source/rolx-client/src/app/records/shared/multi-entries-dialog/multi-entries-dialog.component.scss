@@ -21,7 +21,8 @@ td {
   &.time {
     width: 6em;
 
-    &, input {
+    &,
+    input {
       text-align: right;
     }
   }

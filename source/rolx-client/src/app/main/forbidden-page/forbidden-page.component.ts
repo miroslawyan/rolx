@@ -7,9 +7,7 @@ import { AuthService } from '@app/auth/core/auth.service';
   styleUrls: ['./forbidden-page.component.scss'],
 })
 export class ForbiddenPageComponent {
-
   constructor(authService: AuthService) {
     authService.signOut();
   }
-
 }

@@ -14,8 +14,8 @@ const routes: Routes = [
     RouterModule.forRoot(
       routes,
       // { enableTracing: true },
-      ),
+    ),
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

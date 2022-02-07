@@ -64,8 +64,8 @@ jobs:
         workingDirectory: '$(rolXClient)'
         condition: ne(variables.NODE_MODULES_RESTORED, 'true')
 
-      - script: npm run ng -- build --prod
-        displayName: "ng build --prod"
+      - script: npm run ng -- build
+        displayName: "ng build"
         workingDirectory: '$(rolXClient)'
 
       - script: npm run ng -- lint

@@ -4,6 +4,7 @@ import { AppImportModule } from '@app/app-import.module';
 import { ProjectsModule } from '@app/projects/projects.module';
 import { RecordsModule } from '@app/records/records.module';
 import { UsersModule } from '@app/users/users.module';
+
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
@@ -30,4 +31,4 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     UsersModule,
   ],
 })
-export class MainModule { }
+export class MainModule {}

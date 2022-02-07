@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { assertDefined } from '@app/core/util/utils';
 import { Phase } from '@app/projects/core/phase';
 
 @Component({
@@ -6,9 +7,8 @@ import { Phase } from '@app/projects/core/phase';
   templateUrl: './phase-table.component.html',
   styleUrls: ['./phase-table.component.scss'],
 })
-export class PhaseTableComponent {
-
-  @Input() phases: Phase[];
+export class PhaseTableComponent implements OnInit {
+  @Input() phases!: Phase[];
 
   displayedColumns: string[] = [
     'number',
@@ -20,4 +20,7 @@ export class PhaseTableComponent {
     'tools',
   ];
 
+  ngOnInit(): void {
+    assertDefined(this, 'phases');
+  }
 }

@@ -1,4 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { Duration } from '@app/core/util/duration';
@@ -13,12 +21,11 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./duration-edit.component.scss'],
 })
 export class DurationEditComponent implements OnInit {
-
   private readonly changedSubject = new Subject<Duration>();
   private valueShadow = Duration.Zero;
 
   @ViewChild('input')
-  private inputElement: ElementRef;
+  private inputElement?: ElementRef;
 
   @Input()
   get value() {
@@ -49,7 +56,7 @@ export class DurationEditComponent implements OnInit {
   }
 
   enter() {
-    this.inputElement.nativeElement.focus();
+    this.inputElement?.nativeElement.focus();
   }
 
   checkIfLeavingIsAllowed() {
@@ -78,5 +85,4 @@ export class DurationEditComponent implements OnInit {
   cancel() {
     this.control.reset(!this.value.isZero ? this.value : '');
   }
-
 }

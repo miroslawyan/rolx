@@ -1,20 +1,23 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { assertDefined } from '@app/core/util/utils';
 import { PaidLeaveType } from '@app/records/core/paid-leave-type';
 import { Record } from '@app/records/core/record';
 import { Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
+
 import { ReasonDialogComponent, ReasonDialogData } from './reason-dialog/reason-dialog.component';
 
 @Component({
   selector: 'rolx-paid-leave-select',
   templateUrl: './paid-leave-select.component.html',
 })
-export class PaidLeaveSelectComponent implements OnDestroy {
+export class PaidLeaveSelectComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription();
-  private recordShadow: Record;
-  private typeShadow: PaidLeaveType | null;
-  private typeSubject = new Subject<PaidLeaveType | null>();
+  private recordShadow!: Record;
+
+  private typeShadow?: PaidLeaveType;
+  private typeSubject = new Subject<PaidLeaveType | undefined>();
 
   readonly PaidLeaveType = PaidLeaveType;
 
@@ -39,17 +42,24 @@ export class PaidLeaveSelectComponent implements OnDestroy {
   }
 
   constructor(private dialog: MatDialog) {
+    this.subscriptions.add(
+      this.typeSubject
+        .pipe(
+          distinctUntilChanged(),
+          filter((t) => t !== PaidLeaveType.Other),
+        )
+        .subscribe((t) => this.submit(t, undefined)),
+    );
 
     this.subscriptions.add(
-      this.typeSubject.pipe(
-        distinctUntilChanged(),
-        filter(t => t !== PaidLeaveType.Other),
-      ).subscribe(t => this.submit(t, null)));
+      this.typeSubject
+        .pipe(filter((t) => t === PaidLeaveType.Other))
+        .subscribe(() => this.requestReason()),
+    );
+  }
 
-    this.subscriptions.add(
-      this.typeSubject.pipe(
-        filter(t => t === PaidLeaveType.Other),
-      ).subscribe(() => this.requestReason()));
+  ngOnInit(): void {
+    assertDefined(this, 'recordShadow');
   }
 
   ngOnDestroy(): void {
@@ -59,13 +69,13 @@ export class PaidLeaveSelectComponent implements OnDestroy {
   iconForPaidLeaveType(type: PaidLeaveType): string {
     switch (type) {
       case PaidLeaveType.Vacation:
-        return 'island';
+        return 'kitesurfing';
       case PaidLeaveType.Sickness:
-        return 'stethoscope';
+        return 'healing';
       case PaidLeaveType.MilitaryService:
-        return 'tank';
+        return 'military_tech';
       case PaidLeaveType.Other:
-        return 'account-question';
+        return 'question_mark';
     }
   }
 
@@ -87,20 +97,22 @@ export class PaidLeaveSelectComponent implements OnDestroy {
       reason: this.record.paidLeaveReason,
     };
 
-    this.dialog.open(ReasonDialogComponent, {
-      closeOnNavigation: true,
-      data,
-    }).afterClosed()
-      .subscribe(reason => {
+    this.dialog
+      .open(ReasonDialogComponent, {
+        closeOnNavigation: true,
+        data,
+      })
+      .afterClosed()
+      .subscribe((reason) => {
         if (reason != null && reason !== '') {
           this.submit(PaidLeaveType.Other, reason);
         } else {
-          this.typeShadow = null;
+          this.typeShadow = undefined;
         }
       });
   }
 
-  private submit(type: PaidLeaveType | null, reason: string | null) {
+  private submit(type: PaidLeaveType | undefined, reason: string | undefined) {
     const record = this.record.updatePaidLeaveType(type, reason);
     this.changed.emit(record);
   }

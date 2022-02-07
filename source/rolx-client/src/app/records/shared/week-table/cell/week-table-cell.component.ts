@@ -1,9 +1,18 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { GridCoordinates } from '@app/core/grid-navigation/grid-coordinates';
 import { GridNavigationService } from '@app/core/grid-navigation/grid-navigation.service';
 import { Duration } from '@app/core/util/duration';
+import { assertDefined } from '@app/core/util/utils';
 import { Phase } from '@app/projects/core/phase';
 import { Record } from '@app/records/core/record';
 import { RecordEntry } from '@app/records/core/record-entry';
@@ -22,24 +31,23 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./week-table-cell.component.scss'],
 })
 export class WeekTableCellComponent implements OnInit, OnDestroy {
-
   private readonly subscription = new Subscription();
-  private coordinates = new GridCoordinates(undefined, undefined);
+  private coordinates = new GridCoordinates(0, 0);
 
   @ViewChild(DurationEditComponent)
-  private durationEdit: DurationEditComponent;
+  private durationEdit?: DurationEditComponent;
 
   @ViewChild('moreButton')
-  private moreButton: MatButton;
+  private moreButton?: MatButton;
 
   @Input()
-  record: Record;
+  record!: Record;
 
   @Input()
-  phase: Phase;
+  phase!: Phase;
 
   @Input()
-  user: User;
+  user!: User;
 
   @Input()
   get row(): number {
@@ -65,9 +73,9 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   }
 
   get isSimpleEditable(): boolean {
-    return this.entries.length <= 1
-        && this.entries.every(e => e.isDurationOnly)
-        && this.isPhaseOpen;
+    return (
+      this.entries.length <= 1 && this.entries.every((e) => e.isDurationOnly) && this.isPhaseOpen
+    );
   }
 
   get isPhaseOpen(): boolean {
@@ -75,21 +83,21 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   }
 
   get totalDuration(): Duration {
-    return new Duration(
-      this.entries.reduce(
-        (sum, e) => sum + e.duration.seconds, 0));
+    return new Duration(this.entries.reduce((sum, e) => sum + e.duration.seconds, 0));
   }
 
-  constructor(private gridNavigationService: GridNavigationService,
-              private dialog: MatDialog) { }
+  constructor(private gridNavigationService: GridNavigationService, private dialog: MatDialog) {}
 
   ngOnInit() {
+    assertDefined(this, 'record');
+    assertDefined(this, 'phase');
+    assertDefined(this, 'user');
+
     this.subscription.add(
       this.gridNavigationService.coordinates$
-        .pipe(
-          filter(c => this.coordinates.isSame(c)),
-        )
-        .subscribe(c => this.enter(c)));
+        .pipe(filter((c) => this.coordinates.isSame(c)))
+        .subscribe((c) => this.enter(c)),
+    );
   }
 
   ngOnDestroy() {
@@ -118,12 +126,14 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
       phase: this.phase,
     };
 
-    this.dialog.open(MultiEntriesDialogComponent, {
-      closeOnNavigation: true,
-      data,
-    }).afterClosed().pipe(
-      filter(r => r != null),
-    ).subscribe(r => this.changed.emit(r));
+    this.dialog
+      .open(MultiEntriesDialogComponent, {
+        closeOnNavigation: true,
+        data,
+      })
+      .afterClosed()
+      .pipe(filter((r) => r != null))
+      .subscribe((r) => this.changed.emit(r));
   }
 
   private enter(coordinates: GridCoordinates) {
@@ -135,5 +145,4 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
       this.gridNavigationService.navigateTo(coordinates.down());
     }
   }
-
 }

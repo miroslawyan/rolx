@@ -10,15 +10,10 @@ import { PhaseSelectorComponent } from '@app/projects/shared/phase/selector/phas
 import { PhaseTableComponent } from '@app/projects/shared/phase/table/phase-table.component';
 import { ProjectFormComponent } from '@app/projects/shared/project/form/project-form.component';
 import { ProjectTableComponent } from '@app/projects/shared/project/table/project-table.component';
-import {
-  StarredPhaseIndicatorComponent,
-} from '@app/projects/shared/starred-phase-indicator/starred-phase-indicator.component';
+import { StarredPhaseIndicatorComponent } from '@app/projects/shared/starred-phase-indicator/starred-phase-indicator.component';
 
 @NgModule({
-  imports: [
-    AppImportModule,
-    CommonModule,
-  ],
+  imports: [AppImportModule, CommonModule],
   declarations: [
     PhaseEditPageComponent,
     ProjectDetailPageComponent,
@@ -40,4 +35,4 @@ import {
     StarredPhaseIndicatorComponent,
   ],
 })
-export class ProjectsModule { }
+export class ProjectsModule {}

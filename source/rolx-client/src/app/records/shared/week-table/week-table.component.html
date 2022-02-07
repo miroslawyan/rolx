@@ -1,5 +1,4 @@
 <table mat-table #table [dataSource]="allPhases" class="mat-elevation-z8">
-
   <ng-container matColumnDef="phase">
     <th mat-header-cell *matHeaderCellDef>Projekt - Phase</th>
 
@@ -10,74 +9,73 @@
       </span>
 
       <ng-template #phaseSelector>
-        <rolx-phase-selector [excluded]="phases"
-                             [begin]="records[0]?.date"
-                             [end]="records[records.length-1]?.date"
-                             (selected)="addHomegrown($event);table.renderRows()"></rolx-phase-selector>
+        <rolx-phase-selector
+          [excluded]="phases"
+          [begin]="records[0].date"
+          [end]="records[records.length-1].date"
+          (selected)="addHomegrown($event);table.renderRows()"></rolx-phase-selector>
       </ng-template>
     </td>
 
     <td mat-footer-cell *matFooterCellDef>
-      <button mat-icon-button
-              aria-label="Phase hinzufügen"
-              (click)="startAdding();table.renderRows()"
-              [disabled]="isAddingPhase">
+      <button
+        mat-icon-button
+        aria-label="Phase hinzufügen"
+        (click)="startAdding();table.renderRows()"
+        [disabled]="isAddingPhase">
         <mat-icon>add</mat-icon>
       </button>
     </td>
   </ng-container>
 
-  <ng-container *ngFor="let weekday of weekdays; let i = index"
-                [matColumnDef]="weekday">
-
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="day-header"
-        [class.non-workday]="!records[i].isWorkday && !records[i].isToday"
-        [class.today]="records[i].isToday">
-      <span>{{records[i].date | date: 'mediumDate'}}</span>
+  <ng-container *ngFor="let weekday of weekdays; let i = index" [matColumnDef]="weekday">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="day-header"
+      [class.non-workday]="!records[i].isWorkday && !records[i].isToday"
+      [class.today]="records[i].isToday">
+      <span>{{records[i].date.toDate() | date: 'mediumDate'}}</span>
       <ng-container *ngIf="records[i].dayName">
-        <br/>
+        <br />
         <small>{{records[i].dayName}}</small>
       </ng-container>
-
     </th>
 
-    <td mat-cell
-        *matCellDef="let phase, let row = index"
-        class="day"
-        [class.non-workday]="!records[i].isWorkday && !records[i].isToday"
-        [class.today]="records[i].isToday">
-
-      <rolx-week-table-cell *ngIf="phase"
-                            [row]="row"
-                            [column]="i"
-                            [record]="records[i]"
-                            [phase]="phase"
-                            [user]="user"
-                            (changed)="submit($event, i)"></rolx-week-table-cell>
+    <td
+      mat-cell
+      *matCellDef="let phase, let row = index"
+      class="day"
+      [class.non-workday]="!records[i].isWorkday && !records[i].isToday"
+      [class.today]="records[i].isToday">
+      <rolx-week-table-cell
+        *ngIf="phase"
+        [row]="row"
+        [column]="i"
+        [record]="records[i]"
+        [phase]="phase"
+        [user]="user"
+        (changed)="submit($event, i)"></rolx-week-table-cell>
     </td>
 
-    <td mat-footer-cell
-        *matFooterCellDef
-        class="day"
-        [class.non-workday]="!records[i].isWorkday && !records[i].isToday"
-        [class.today]="records[i].isToday">
-
-      <rolx-paid-leave-select *ngIf="records[i].mayHavePaidLeave; else overtime"
-                              [record]="records[i]"
-                              (changed)="submit($event, i)"></rolx-paid-leave-select>
+    <td
+      mat-footer-cell
+      *matFooterCellDef
+      class="day"
+      [class.non-workday]="!records[i].isWorkday && !records[i].isToday"
+      [class.today]="records[i].isToday">
+      <rolx-paid-leave-select
+        *ngIf="records[i].mayHavePaidLeave; else overtime"
+        [record]="records[i]"
+        (changed)="submit($event, i)"></rolx-paid-leave-select>
 
       <ng-template #overtime>
         <span>{{records[i].overtime}}</span>
       </ng-template>
-
     </td>
-
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let phase; columns: displayedColumns;"></tr>
   <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-
 </table>

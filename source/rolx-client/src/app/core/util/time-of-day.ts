@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
+
 import { Duration } from './duration';
 import { DurationBase } from './duration.base';
-import { allowNull } from './utils';
 
 export class TimeOfDay extends DurationBase<TimeOfDay> {
   static readonly Zero = new TimeOfDay();
@@ -13,7 +13,6 @@ export class TimeOfDay extends DurationBase<TimeOfDay> {
   };
 
   static parse(time: string | any, zeroIfEmpty: boolean = false): TimeOfDay {
-
     if (time instanceof TimeOfDay) {
       return time as TimeOfDay;
     }
@@ -37,10 +36,8 @@ export class TimeOfDay extends DurationBase<TimeOfDay> {
     return new TimeOfDay(seconds);
   }
 
-  get isValid(): boolean {
-    return super.isValid
-      && this.seconds >= 0
-      && this.seconds <= DurationBase.SecondsPerDay;
+  override get isValid(): boolean {
+    return super.isValid && this.seconds >= 0 && this.seconds <= DurationBase.SecondsPerDay;
   }
 
   get isZero(): boolean {
@@ -56,12 +53,14 @@ export class TimeOfDay extends DurationBase<TimeOfDay> {
   }
 }
 
-export function TransformAsTimeOfDay(): (target: any, key: string) => void {
-  const toClass = Transform(allowNull((v: number) => new TimeOfDay(v)), { toClassOnly: true });
-  const toPlain = Transform(allowNull((v: TimeOfDay) => v.seconds), { toPlainOnly: true });
+export const TransformAsTimeOfDay = (): ((target: any, key: string) => void) => {
+  const toClass = Transform(({ value }) => (value != null ? new TimeOfDay(value) : undefined), {
+    toClassOnly: true,
+  });
+  const toPlain = Transform(({ value }) => value?.seconds, { toPlainOnly: true });
 
   return (target: any, key: string) => {
     toClass(target, key);
     toPlain(target, key);
   };
-}
+};

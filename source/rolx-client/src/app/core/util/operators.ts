@@ -1,30 +1,20 @@
-import { NgZone } from '@angular/core';
-import { environment } from '@env/environment';
-import { plainToClass } from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
-import { ClassTransformOptions } from 'class-transformer/ClassTransformOptions';
+import { ClassTransformOptions, plainToInstance } from 'class-transformer';
+import { ClassConstructor } from 'class-transformer/types/interfaces';
 import { Observable } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
-export function enterZone(zone: NgZone) {
-  return <T>(source: Observable<T>) =>
-    new Observable<T>(observer =>
-      source.subscribe({
-        next: (x) => zone.run(() => observer.next(x)),
-        error: (err) => observer.error(err),
-        complete: () => observer.complete(),
-      }),
-    );
-}
+export const mapPlainToInstances =
+  <T, R>(
+    cls: ClassConstructor<R>,
+    options?: ClassTransformOptions,
+  ): ((s: Observable<T[]>) => Observable<R[]>) =>
+  (source: Observable<T[]>) =>
+    source.pipe(map((plain) => plainToInstance(cls, plain, options)));
 
-export function delayDebug(delayMillis: number) {
-  return <T>(source: Observable<T>) => !environment.production ? source.pipe(delay(delayMillis)) : source;
-}
-
-export function mapPlainToClassArray<T, R>(cls: ClassType<R>, options?: ClassTransformOptions): (s: Observable<T[]>) => Observable<R[]> {
-  return (source: Observable<T[]>) => source.pipe(map(plain => plainToClass(cls, plain, options)));
-}
-
-export function mapPlainToClass<T, R>(cls: ClassType<R>, options?: ClassTransformOptions): (s: Observable<T>) => Observable<R> {
-  return (source: Observable<T>) => source.pipe(map(plain => plainToClass(cls, plain, options)));
-}
+export const mapPlainToInstance =
+  <T, R>(
+    cls: ClassConstructor<R>,
+    options?: ClassTransformOptions,
+  ): ((s: Observable<T>) => Observable<R>) =>
+  (source: Observable<T>) =>
+    source.pipe(map((plain) => plainToInstance(cls, plain, options)));

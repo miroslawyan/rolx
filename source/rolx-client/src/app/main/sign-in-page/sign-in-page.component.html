@@ -1,19 +1,13 @@
 <mat-card>
-  <mat-card-title>
-    Sign in to RolX
-  </mat-card-title>
+  <mat-card-title> Sign in to RolX </mat-card-title>
 
   <mat-card-content>
-    <mat-spinner *ngIf="busy"
-                 [diameter]="60"
-                 [color]="'accent'"></mat-spinner>
+    <mat-spinner *ngIf="busy" [diameter]="60" [color]="'accent'"></mat-spinner>
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button mat-raised-button
-            color="primary"
-            [disabled]="busy"
-            (click)="signIn()">Sign-in with Google</button>
+    <button mat-raised-button color="primary" [disabled]="busy" (click)="signIn()">
+      Sign-in with Google
+    </button>
   </mat-card-actions>
-
 </mat-card>

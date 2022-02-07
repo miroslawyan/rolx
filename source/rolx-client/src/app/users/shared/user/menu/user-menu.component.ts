@@ -10,10 +10,11 @@ import { ThemeService } from '@app/core/theme/theme.service';
   styleUrls: ['./user-menu.component.scss'],
 })
 export class UserMenuComponent {
-
-  constructor(private authService: AuthService,
-              private router: Router,
-              public themeService: ThemeService) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    public themeService: ThemeService,
+  ) {}
 
   get user() {
     return this.authService.currentApproval?.user;
@@ -21,10 +22,10 @@ export class UserMenuComponent {
 
   get nextThemeName() {
     switch (this.themeService.theme) {
-      case Theme.bright:
+      case Theme.Bright:
         return 'Dark';
 
-      case Theme.dark:
+      case Theme.Dark:
       default:
         return 'Bright';
     }
@@ -38,9 +39,6 @@ export class UserMenuComponent {
   }
 
   toggleTheme() {
-    this.themeService.theme = this.themeService.theme === Theme.dark
-      ? Theme.bright
-      : Theme.dark;
+    this.themeService.theme = this.themeService.theme === Theme.Dark ? Theme.Bright : Theme.Dark;
   }
-
 }

@@ -2,12 +2,15 @@ table {
   width: 100%;
 }
 
-th.day-header, td.day {
+th.day-header,
+td.day {
   width: 1%;
 }
 
 td.day {
-  span, rolx-week-table-cell, rolx-paid-leave-select {
+  span,
+  rolx-week-table-cell,
+  rolx-paid-leave-select {
     display: inline-block;
     padding-left: 0.75em;
     padding-right: 0.75em;
@@ -15,7 +18,9 @@ td.day {
   }
 
   &:last-child {
-    span, rolx-week-table-cell, rolx-paid-leave-select {
+    span,
+    rolx-week-table-cell,
+    rolx-paid-leave-select {
       padding-right: 0;
     }
   }

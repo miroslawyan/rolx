@@ -9,12 +9,12 @@ export const UsersRoutes: Routes = [
     path: 'user',
     component: UserListPageComponent,
     canActivate: [RoleGuard],
-    data: {allowedRoles: [Role.Supervisor, Role.Administrator]},
+    data: { allowedRoles: [Role.Supervisor, Role.Administrator] },
   },
   {
     path: 'user/:id',
     component: UserEditPageComponent,
     canActivate: [RoleGuard],
-    data: {allowedRoles: [Role.Administrator]},
+    data: { allowedRoles: [Role.Administrator] },
   },
 ];

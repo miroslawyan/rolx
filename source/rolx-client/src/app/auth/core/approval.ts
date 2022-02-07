@@ -1,17 +1,23 @@
 import { TransformAsIsoDateTime } from '@app/core/util/iso-date-time';
+import { assertDefined } from '@app/core/util/utils';
 import { User } from '@app/users/core/user';
 import { Type } from 'class-transformer';
-import moment from 'moment';
+import * as moment from 'moment';
 
 export class Approval {
-
   @Type(() => User)
-  user: User;
+  user!: User;
 
-  bearerToken: string;
+  bearerToken!: string;
 
   @TransformAsIsoDateTime()
-  expires: moment.Moment;
+  expires!: moment.Moment;
+
+  validateModel(): void {
+    assertDefined(this, 'user');
+    assertDefined(this, 'bearerToken');
+    assertDefined(this, 'expires');
+  }
 
   get isExpired(): boolean {
     return this.expires.isBefore(moment().add(5, 'm'));

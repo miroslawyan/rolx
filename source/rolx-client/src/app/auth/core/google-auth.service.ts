@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { lastValueFrom } from 'rxjs';
+
 import { Info } from './info';
 import { SignInService } from './sign-in.service';
 
@@ -19,17 +21,17 @@ export class GoogleAuthService {
     }
 
     console.log('--- GoogleAuthService.initialize()');
-    const [, info] = await Promise.all([
-      await this.loadGApi(),
-      await this.loadSignInInfo(),
-    ]);
+    const [, info] = await Promise.all([await this.loadGApi(), await this.loadSignInInfo()]);
 
     this.auth2 = gapi.auth2.init({
       client_id: info.googleClientId,
     });
 
     // ensure auth2 is initialized
-    await this.auth2.then(() => true, e => console.error('initializing gapi.auth2 failed:', e));
+    await this.auth2.then(
+      () => true,
+      (e) => console.error('initializing gapi.auth2 failed:', e),
+    );
 
     console.log('--- GoogleAuthService.initialize() done');
   }
@@ -51,11 +53,10 @@ export class GoogleAuthService {
   }
 
   private loadGApi(): Promise<void> {
-    return new Promise<void>(resolve =>
-      gapi.load('auth2', () => resolve()));
+    return new Promise<void>((resolve) => gapi.load('auth2', () => resolve()));
   }
 
   private loadSignInInfo(): Promise<Info> {
-    return this.signInService.getInfo().toPromise();
+    return lastValueFrom(this.signInService.getInfo());
   }
 }

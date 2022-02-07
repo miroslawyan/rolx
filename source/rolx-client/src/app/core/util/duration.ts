@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer';
+
 import { DurationBase } from './duration.base';
-import { allowNull } from './utils';
 
 export class Duration extends DurationBase<Duration> {
   static readonly Zero = new Duration();
@@ -17,7 +17,6 @@ export class Duration extends DurationBase<Duration> {
   }
 
   static parse(time: string | any, zeroIfEmpty: boolean = false): Duration {
-
     if (time instanceof Duration) {
       return time as Duration;
     }
@@ -59,12 +58,16 @@ export class Duration extends DurationBase<Duration> {
   }
 }
 
-export function TransformAsDuration(): (target: any, key: string) => void {
-  const toClass = Transform(allowNull((v: number)  => new Duration(v)), { toClassOnly: true });
-  const toPlain = Transform(allowNull((v: Duration) => v.seconds), { toPlainOnly: true });
+export const TransformAsDuration = (): ((target: any, key: string) => void) => {
+  const toClass = Transform(({ value }) => (value != null ? new Duration(value) : undefined), {
+    toClassOnly: true,
+  });
+  const toPlain = Transform(({ value }) => value?.seconds, {
+    toPlainOnly: true,
+  });
 
   return (target: any, key: string) => {
     toClass(target, key);
     toPlain(target, key);
   };
-}
+};

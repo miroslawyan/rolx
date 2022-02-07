@@ -39,30 +39,21 @@ const legalTimes = [
   [':23', '0:23'],
 ];
 
-const illegalTimes = [
-  '24:01',
-  '24:06',
-  '24:11',
-  '24:16',
-  '24:56',
-  '24:1',
-  '24:6',
-  '32:00',
-];
+const illegalTimes = ['24:01', '24:06', '24:11', '24:16', '24:56', '24:1', '24:6', '32:00'];
 
-describe('TimeOfDay.parse()', () => {
-  legalTimes.forEach(v => testParseValid(v[0], v[1]));
-  illegalTimes.forEach(v => testParseInvalid(v));
-});
-
-function testParseValid(time: string, expected: string) {
+const testParseValid = (time: string, expected: string) => {
   it(`${time} is parsed to ${expected}`, () => {
     expect(TimeOfDay.parse(time).toString()).toBe(expected);
   });
-}
+};
 
-function testParseInvalid(time: string) {
+const testParseInvalid = (time: string) => {
   it(`${time} is parsed as invalid`, () => {
     expect(TimeOfDay.parse(time).isValid).toBeFalsy();
   });
-}
+};
+
+describe('TimeOfDay.parse()', () => {
+  legalTimes.forEach((v) => testParseValid(v[0], v[1]));
+  illegalTimes.forEach((v) => testParseInvalid(v));
+});

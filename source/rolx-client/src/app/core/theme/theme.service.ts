@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+
 import { Theme } from './theme';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-
   private currentTheme = new BehaviorSubject<Theme>(ThemeService.loadThemeFromStorage());
 
   currentTheme$ = this.currentTheme.asObservable();
 
   private static loadThemeFromStorage(): Theme {
     const storedTheme = localStorage.getItem('theme') ?? '';
-    const keyEnum = Theme[storedTheme];
+    const keyEnum = Theme[storedTheme as keyof typeof Theme];
     if (keyEnum != null) {
       return keyEnum;
     } else {
-      const defaultTheme = Theme.dark;
+      const defaultTheme = Theme.Dark;
       localStorage.setItem('theme', Theme[defaultTheme]);
       return defaultTheme;
     }

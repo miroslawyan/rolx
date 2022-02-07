@@ -1,27 +1,24 @@
-
 <h1 mat-dialog-title>
   <small>
-    {{data.record.date | date: 'mediumDate'}}
+    {{data.record.date.toDate() | date: 'mediumDate'}}
     <span *ngIf="data.record.dayName">- {{data.record.dayName}}</span>
   </small>
-  <br/>
+  <br />
   {{data.phase.fullName}}
 </h1>
 
-<form id="entries-edit"
-      mat-dialog-content
-      [formGroup]="form"
-      (ngSubmit)="submit()"
-      (keydown.escape)="close()"
-      autocomplete="off">
-
+<form
+  id="entries-edit"
+  mat-dialog-content
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  (keydown.escape)="close()"
+  autocomplete="off">
   <table mat-table [dataSource]="formRows">
-
     <ng-container matColumnDef="mode">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let formRow">
-        <mat-checkbox [formControl]="formRow.beginEndBased">
-        </mat-checkbox>
+        <mat-checkbox [formControl]="formRow.beginEndBased"> </mat-checkbox>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <button mat-icon-button type="button" (click)="addRow();">
@@ -34,9 +31,10 @@
       <th mat-header-cell *matHeaderCellDef>Start</th>
       <td mat-cell *matCellDef="let formRow" class="time">
         <mat-form-field>
-          <input matInput
-                 [formControl]="formRow.begin"
-                 (blur)="formRow.begin.resetValueIfValid()">
+          <input
+            matInput
+            [formControl]="formRow.begin"
+            (blur)="formRow.begin.resetValueIfValid()" />
         </mat-form-field>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
@@ -46,9 +44,7 @@
       <th mat-header-cell *matHeaderCellDef>Ende</th>
       <td mat-cell *matCellDef="let formRow" class="time">
         <mat-form-field>
-          <input matInput
-                 [formControl]="formRow.end"
-                 (blur)="formRow.end.resetValueIfValid()">
+          <input matInput [formControl]="formRow.end" (blur)="formRow.end.resetValueIfValid()" />
         </mat-form-field>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
@@ -58,9 +54,10 @@
       <th mat-header-cell *matHeaderCellDef>Pause</th>
       <td mat-cell *matCellDef="let formRow" class="time">
         <mat-form-field>
-          <input matInput
-                 [formControl]="formRow.pause"
-                 (blur)="formRow.pause.resetValueIfValid()">
+          <input
+            matInput
+            [formControl]="formRow.pause"
+            (blur)="formRow.pause.resetValueIfValid()" />
         </mat-form-field>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
@@ -70,15 +67,14 @@
       <th mat-header-cell *matHeaderCellDef>Dauer</th>
       <td mat-cell *matCellDef="let formRow" class="time">
         <mat-form-field>
-          <input matInput
-                 [formControl]="formRow.duration"
-                 (blur)="formRow.duration.resetValueIfValid()">
+          <input
+            matInput
+            [formControl]="formRow.duration"
+            (blur)="formRow.duration.resetValueIfValid()" />
         </mat-form-field>
       </td>
       <td mat-footer-cell *matFooterCellDef class="time">
-        <span>
-          {{totalDuration}}
-        </span>
+        <span> {{totalDuration}} </span>
       </td>
     </ng-container>
 
@@ -86,10 +82,11 @@
       <th mat-header-cell *matHeaderCellDef>Kommentar</th>
       <td mat-cell *matCellDef="let formRow; let index = index">
         <mat-form-field>
-          <input matInput
-                 [formControl]="formRow.comment"
-                 (keydown.tab)="tryAddRow(index)"
-                 (blur)="formRow.resetComment()">
+          <input
+            matInput
+            [formControl]="formRow.comment"
+            (keydown.tab)="tryAddRow(index)"
+            (blur)="formRow.resetComment()" />
         </mat-form-field>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
@@ -98,17 +95,10 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let formRow; columns: displayedColumns;"></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
-
   </table>
-
 </form>
 
 <mat-dialog-actions>
   <button mat-button [mat-dialog-close]="null">Abbruch</button>
-  <button mat-button
-          type="submit"
-          form="entries-edit"
-          [disabled]="!form.valid">
-    Speichern
-  </button>
+  <button mat-button type="submit" form="entries-edit" [disabled]="!form.valid">Speichern</button>
 </mat-dialog-actions>

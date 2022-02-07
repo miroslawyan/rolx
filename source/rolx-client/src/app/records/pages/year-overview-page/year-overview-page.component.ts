@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { YearInfo } from '@app/records/core/year-info';
 import { YearInfoService } from '@app/records/core/year-info.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { map, switchMap} from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-year-overview-page',
@@ -20,12 +20,10 @@ export class YearOverviewPageComponent {
     yearInfoService: YearInfoService,
   ) {
     this.year$ = this.route.paramMap.pipe(
-      map(params => moment(params.get('date') ?? {})),
-      map(date => date.clone().year()),
+      map((params) => moment(params.get('date') ?? {})),
+      map((date) => date.clone().year()),
     );
-    this.yearInfo$ = this.year$.pipe(
-      switchMap( year => yearInfoService.getYearInfo(year)),
-    );
+    this.yearInfo$ = this.year$.pipe(switchMap((year) => yearInfoService.getYearInfo(year)));
   }
 
   async previous(year: number): Promise<void> {
@@ -33,7 +31,7 @@ export class YearOverviewPageComponent {
   }
 
   async next(year: number): Promise<void> {
-    await this.navigateTo(year + 1 );
+    await this.navigateTo(year + 1);
   }
 
   private async navigateTo(date: number): Promise<void> {

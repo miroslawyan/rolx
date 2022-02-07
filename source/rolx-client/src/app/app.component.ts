@@ -8,16 +8,17 @@ import { ThemeService } from '@app/core/theme/theme.service';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-
   private static readonly ThemeClasses = ['dark-theme', 'bright-theme'];
 
-  @HostBinding('class') componentCssClass;
+  @HostBinding('class') componentCssClass: any;
 
-  constructor(public themeService: ThemeService, public overlayContainer: OverlayContainer) { }
+  constructor(
+    public readonly themeService: ThemeService,
+    public readonly overlayContainer: OverlayContainer,
+  ) {}
 
   ngOnInit() {
-    this.themeService.currentTheme$
-      .subscribe(t => this.applyTheme(t));
+    this.themeService.currentTheme$.subscribe((t) => this.applyTheme(t));
   }
 
   private applyTheme(theme: Theme) {

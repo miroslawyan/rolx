@@ -1,7 +1,5 @@
 export class GridCoordinates {
-
-  constructor(public readonly column, public readonly row) {
-  }
+  constructor(public readonly column: number, public readonly row: number) {}
 
   up(): GridCoordinates {
     return new GridCoordinates(this.column, this.row - 1);
@@ -22,5 +20,4 @@ export class GridCoordinates {
   isSame(other: GridCoordinates): boolean {
     return this.column === other.column && this.row === other.row;
   }
-
 }

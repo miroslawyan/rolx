@@ -33,22 +33,22 @@ const hoursAndTimes: [number, string][] = [
   [-4711.016666, '-4711:01'],
 ];
 
-describe('Duration.toString()', () => {
-  secondsAndTimes.forEach(v => testSecondsToString(v[0], v[1]));
-  hoursAndTimes.forEach(v => testHoursToString(v[0], v[1]));
-});
-
-function testSecondsToString(seconds: number, expected: string) {
+const testSecondsToString = (seconds: number, expected: string) => {
   it(`${seconds} s is stringified to ${expected}`, () => {
     expect(new Duration(seconds).toString()).toBe(expected);
   });
-}
+};
 
-function testHoursToString(hours: number, expected: string) {
+const testHoursToString = (hours: number, expected: string) => {
   it(`${hours} h is stringified to ${expected}`, () => {
     expect(Duration.fromHours(hours).toString()).toBe(expected);
   });
-}
+};
+
+describe('Duration.toString()', () => {
+  secondsAndTimes.forEach((v) => testSecondsToString(v[0], v[1]));
+  hoursAndTimes.forEach((v) => testHoursToString(v[0], v[1]));
+});
 
 const hourStringsAndHours: [string, number][] = [
   ['0', 0],
@@ -57,17 +57,7 @@ const hourStringsAndHours: [string, number][] = [
   ['-12.5', -12.5],
 ];
 
-describe('Duration.parse()', () => {
-  hoursAndTimes.forEach(v => testParse(v[1], v[0]));
-
-  hourStringsAndHours.forEach(v => testParse(v[0], v[1]));
-
-  it('non-time string returns invalid', () => {
-    expect(Duration.parse('the rain in spain').isValid).toBeFalsy();
-  });
-});
-
-function testParse(time: string, expected: number) {
+const testParse = (time: string, expected: number) => {
   it(`${time} is parsed as valid`, () => {
     expect(Duration.parse(time).isValid).toBeTruthy();
   });
@@ -75,4 +65,14 @@ function testParse(time: string, expected: number) {
   it(`${time} is parsed close to ${expected} h`, () => {
     expect(Duration.parse(time).hours).toBeCloseTo(expected, 5);
   });
-}
+};
+
+describe('Duration.parse()', () => {
+  hoursAndTimes.forEach((v) => testParse(v[1], v[0]));
+
+  hourStringsAndHours.forEach((v) => testParse(v[0], v[1]));
+
+  it('non-time string returns invalid', () => {
+    expect(Duration.parse('the rain in spain').isValid).toBeFalsy();
+  });
+});

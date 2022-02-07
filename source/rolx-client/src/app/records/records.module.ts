@@ -8,9 +8,7 @@ import { YearOverviewPageComponent } from '@app/records/pages/year-overview-page
 import { BalanceIndicatorComponent } from '@app/records/shared/balance-indicator/balance-indicator.component';
 import { DurationEditComponent } from '@app/records/shared/duration-edit/duration-edit.component';
 import { HolidayTableComponent } from '@app/records/shared/holiday-table/holiday-table.component';
-import {
-  MonthlyWorkTimeTableComponent,
-} from '@app/records/shared/monthly-work-time-table/monthly-work-time-table.component';
+import { MonthlyWorkTimeTableComponent } from '@app/records/shared/monthly-work-time-table/monthly-work-time-table.component';
 import { MultiEntriesDialogComponent } from '@app/records/shared/multi-entries-dialog/multi-entries-dialog.component';
 import { PaidLeaveSelectComponent } from '@app/records/shared/paid-leave-select/paid-leave-select.component';
 import { ReasonDialogComponent } from '@app/records/shared/paid-leave-select/reason-dialog/reason-dialog.component';
@@ -18,12 +16,7 @@ import { WeekTableCellComponent } from '@app/records/shared/week-table/cell/week
 import { WeekTableComponent } from '@app/records/shared/week-table/week-table.component';
 
 @NgModule({
-  imports: [
-    AppImportModule,
-    CommonModule,
-    CoreModule,
-    ProjectsModule,
-  ],
+  imports: [AppImportModule, CommonModule, CoreModule, ProjectsModule],
   declarations: [
     BalanceIndicatorComponent,
     DurationEditComponent,
@@ -37,13 +30,7 @@ import { WeekTableComponent } from '@app/records/shared/week-table/week-table.co
     WeekTableComponent,
     YearOverviewPageComponent,
   ],
-  entryComponents: [
-    MultiEntriesDialogComponent,
-  ],
-  exports: [
-    BalanceIndicatorComponent,
-    WeekPageComponent,
-    YearOverviewPageComponent,
-  ],
+  entryComponents: [MultiEntriesDialogComponent],
+  exports: [BalanceIndicatorComponent, WeekPageComponent, YearOverviewPageComponent],
 })
-export class RecordsModule { }
+export class RecordsModule {}

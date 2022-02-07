@@ -1,29 +1,36 @@
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@use '@angular/material' as mat;
+@use 'theme' as theme;
+@use 'app/records/shared/theme' as shared;
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
 
 // see https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
-@import '~@angular/material/theming';
-@include mat-core();
 
-@import 'theme';
-@import 'app/records/shared/theme';
+@include mat.core();
 
 @mixin apply-theme($theme) {
-  @include work-record-shared-theme($theme);
-  @include angular-material-theme($theme);
+  @include shared.work-record-shared-theme($theme);
+  @include mat.all-component-themes($theme);
 }
 
 .bright-theme {
-  @include apply-theme($rolx-light-theme);
+  @include apply-theme(theme.$rolx-light-theme);
 }
 
 .dark-theme {
-  @include apply-theme($rolx-dark-theme);
+  @include apply-theme(theme.$rolx-dark-theme);
 }
 
 // disable all spin buttons on number inputs
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

@@ -1,45 +1,29 @@
 <mat-card>
+  <mat-card-title *ngIf="isNew"> Neues Projekt </mat-card-title>
 
-  <mat-card-title *ngIf="isNew">
-    Neues Projekt
-  </mat-card-title>
-
-  <mat-card-title *ngIf="!isNew">
-    Projekt bearbeiten
-  </mat-card-title>
+  <mat-card-title *ngIf="!isNew"> Projekt bearbeiten </mat-card-title>
 
   <mat-card-content>
     <form id="project-edit" [formGroup]="projectForm" (ngSubmit)="submit()" autocomplete="off">
-
       <mat-form-field>
-        <input matInput formControlName="number" placeholder="Projekt Nr." required>
-        <mat-error *ngIf="hasError('number', 'required')">
-          Pflichtfeld
-        </mat-error>
+        <input matInput formControlName="number" placeholder="Projekt Nr." required />
+        <mat-error *ngIf="hasError('number', 'required')"> Pflichtfeld </mat-error>
         <mat-error *ngIf="hasError('number', 'notUnique')">
           Diese Nummer ist bereits vergeben
         </mat-error>
-        <mat-error *ngIf="hasError('number', 'pattern')">
-          Ungültiges Format
-        </mat-error>
+        <mat-error *ngIf="hasError('number', 'pattern')"> Ungültiges Format </mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput formControlName="name" placeholder="Name" required>
-        <mat-error *ngIf="hasError('name', 'required')">
-          Pflichtfeld
-        </mat-error>
+        <input matInput formControlName="name" placeholder="Name" required />
+        <mat-error *ngIf="hasError('name', 'required')"> Pflichtfeld </mat-error>
       </mat-form-field>
-
     </form>
   </mat-card-content>
 
   <mat-card-actions align="end">
     <button mat-button (click)="cancel()">Abbruch</button>
-    <button mat-button
-            type="submit"
-            form="project-edit"
-            [disabled]="!projectForm.valid">
+    <button mat-button type="submit" form="project-edit" [disabled]="!projectForm.valid">
       Speichern
     </button>
   </mat-card-actions>

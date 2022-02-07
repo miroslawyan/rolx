@@ -1,5 +1,4 @@
 <mat-card *ngIf="year$ | async as year">
-
   <mat-card-title>
     <button mat-icon-button (click)="previous(year)">
       <mat-icon>chevron_left</mat-icon>
@@ -12,11 +11,12 @@
     Jahr {{year}}
   </mat-card-title>
 
-  <mat-card-content *ngIf="yearInfo$ | async as yearInfo" >
+  <mat-card-content *ngIf="yearInfo$ | async as yearInfo">
     <h3>Feiertage</h3>
-    <rolx-holiday-table [holidays]= "yearInfo.holidays"></rolx-holiday-table>
+    <rolx-holiday-table [holidays]="yearInfo.holidays"></rolx-holiday-table>
 
-    <h3>Monatliche Arbeitszeiten </h3>
-    <rolx-monthly-work-time-table [monthlyWorkTimes]= "yearInfo.monthlyWorkTimes"></rolx-monthly-work-time-table>
+    <h3>Monatliche Arbeitszeiten</h3>
+    <rolx-monthly-work-time-table
+      [monthlyWorkTimes]="yearInfo.monthlyWorkTimes"></rolx-monthly-work-time-table>
   </mat-card-content>
 </mat-card>
