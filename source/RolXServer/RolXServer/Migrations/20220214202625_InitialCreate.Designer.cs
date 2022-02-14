@@ -4,30 +4,30 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RolXServer;
+
+#nullable disable
 
 namespace RolXServer.Migrations
 {
     [DbContext(typeof(RolXContext))]
-    [Migration("20200229170840_DurationInSeconds")]
-    partial class DurationInSeconds
+    [Migration("20220214202625_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("RolXServer.Projects.DataAccess.FavouritePhase", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("PhaseId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "PhaseId");
 
@@ -40,31 +40,30 @@ namespace RolXServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
 
                     b.Property<TimeSpan?>("Budget")
-                        .HasColumnType("interval");
+                        .HasColumnType("time(6)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("date");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsBillable")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Number")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("date");
@@ -81,16 +80,15 @@ namespace RolXServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -104,20 +102,19 @@ namespace RolXServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
                     b.Property<string>("PaidLeaveReason")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("PaidLeaveType")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -133,27 +130,26 @@ namespace RolXServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
 
                     b.Property<TimeSpan?>("Begin")
                         .HasColumnType("time");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<long>("DurationSeconds")
                         .HasColumnType("bigint");
 
                     b.Property<TimeSpan?>("Pause")
-                        .HasColumnType("interval");
+                        .HasColumnType("time(6)");
 
                     b.Property<int>("PhaseId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("RecordId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -161,43 +157,43 @@ namespace RolXServer.Migrations
 
                     b.HasIndex("RecordId");
 
-                    b.ToTable("RecordEntries");
+                    b.ToTable("RecordEntries", (string)null);
                 });
 
             modelBuilder.Entity("RolXServer.Users.DataAccess.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("AvatarUrl")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("EntryDate")
                         .HasColumnType("date");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("GoogleId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("LeavingDate")
+                    b.Property<DateTime?>("LeftDate")
                         .HasColumnType("date");
 
                     b.Property<int>("Role")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -207,20 +203,52 @@ namespace RolXServer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RolXServer.Users.DataAccess.UserSetting", b =>
+            modelBuilder.Entity("RolXServer.Users.DataAccess.UserBalanceCorrection", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<TimeSpan>("Overtime")
+                        .HasColumnType("time(6)");
+
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("char(36)");
+
+                    b.Property<TimeSpan>("Vacation")
+                        .HasColumnType("time(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserBalanceCorrections");
+                });
+
+            modelBuilder.Entity("RolXServer.Users.DataAccess.UserPartTimeSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<double>("Factor")
+                        .HasColumnType("double");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("date");
 
-                    b.Property<double>("PartTimeFactor")
-                        .HasColumnType("double precision");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
-                    b.HasKey("UserId", "StartDate");
+                    b.HasKey("Id");
 
-                    b.ToTable("UserSettings");
+                    b.HasIndex("UserId", "StartDate")
+                        .IsUnique();
+
+                    b.ToTable("UserPartTimeSettings");
                 });
 
             modelBuilder.Entity("RolXServer.Projects.DataAccess.FavouritePhase", b =>
@@ -236,6 +264,10 @@ namespace RolXServer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Phase");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RolXServer.Projects.DataAccess.Phase", b =>
@@ -245,15 +277,19 @@ namespace RolXServer.Migrations
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("RolXServer.Records.DataAccess.Record", b =>
                 {
                     b.HasOne("RolXServer.Users.DataAccess.User", "User")
-                        .WithMany()
+                        .WithMany("Records")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RolXServer.Records.DataAccess.RecordEntry", b =>
@@ -269,15 +305,45 @@ namespace RolXServer.Migrations
                         .HasForeignKey("RecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Phase");
                 });
 
-            modelBuilder.Entity("RolXServer.Users.DataAccess.UserSetting", b =>
+            modelBuilder.Entity("RolXServer.Users.DataAccess.UserBalanceCorrection", b =>
                 {
-                    b.HasOne("RolXServer.Users.DataAccess.User", "User")
-                        .WithMany("Settings")
+                    b.HasOne("RolXServer.Users.DataAccess.User", null)
+                        .WithMany("BalanceCorrections")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("RolXServer.Users.DataAccess.UserPartTimeSetting", b =>
+                {
+                    b.HasOne("RolXServer.Users.DataAccess.User", null)
+                        .WithMany("PartTimeSettings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Project", b =>
+                {
+                    b.Navigation("Phases");
+                });
+
+            modelBuilder.Entity("RolXServer.Records.DataAccess.Record", b =>
+                {
+                    b.Navigation("Entries");
+                });
+
+            modelBuilder.Entity("RolXServer.Users.DataAccess.User", b =>
+                {
+                    b.Navigation("BalanceCorrections");
+
+                    b.Navigation("PartTimeSettings");
+
+                    b.Navigation("Records");
                 });
 #pragma warning restore 612, 618
         }

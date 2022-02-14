@@ -17,7 +17,6 @@ namespace RolXServer;
 /// The database context in use.
 /// </summary>
 /// <seealso cref="DbContext" />
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "DI")]
 public sealed class RolXContext : DbContext
 {
     /// <summary>
@@ -100,5 +99,71 @@ public sealed class RolXContext : DbContext
 
         modelBuilder.Entity<UserPartTimeSetting>()
             .HasIndex(s => new { s.UserId, s.StartDate }).IsUnique();
+
+#if DEBUG
+        SeedProjects(modelBuilder);
+#endif
+    }
+
+    private static void SeedProjects(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Project>().HasData(new Project
+        {
+            Id = 1,
+            Number = "P0001",
+            Name = "Lockheed Martin",
+        });
+
+        modelBuilder.Entity<Phase>().HasData(new Phase
+        {
+            Id = 1,
+            ProjectId = 1,
+            Number = 1,
+            Name = "F35",
+            FullName = "P0001.001 - Lockheed Martin - F35",
+            StartDate = new DateTime(2021, 8, 22),
+            IsBillable = true,
+        });
+
+        modelBuilder.Entity<Phase>().HasData(new Phase
+        {
+            Id = 2,
+            ProjectId = 1,
+            Number = 2,
+            Name = "F117-A",
+            FullName = "P0001.002 - Lockheed Martin - F117-A",
+            StartDate = new DateTime(2022, 2, 16),
+            IsBillable = false,
+        });
+
+        modelBuilder.Entity<Phase>().HasData(new Phase
+        {
+            Id = 3,
+            ProjectId = 1,
+            Number = 3,
+            Name = "HaGaHuWa",
+            FullName = "P0001.003 - Lockheed Martin - HaGaHuWa",
+            StartDate = new DateTime(2021, 1, 1),
+            EndDate = new DateTime(2022, 2, 16),
+            IsBillable = true,
+        });
+
+        modelBuilder.Entity<Project>().HasData(new Project
+        {
+            Id = 2,
+            Number = "P0002",
+            Name = "SRF",
+        });
+
+        modelBuilder.Entity<Phase>().HasData(new Phase
+        {
+            Id = 4,
+            ProjectId = 2,
+            Number = 1,
+            Name = "Malony",
+            FullName = "P0002.001 - SRF - Malony",
+            StartDate = new DateTime(2021, 12, 5),
+            IsBillable = true,
+        });
     }
 }

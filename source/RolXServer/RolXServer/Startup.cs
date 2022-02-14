@@ -47,7 +47,14 @@ public class Startup
             .AddControllers()
             .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
-        services.AddDbContext<RolXContext>(options => options.UseNpgsql(this.Configuration.GetConnectionString("RolXContext")));
+        var connectionString = this.Configuration.GetConnectionString("RolXContext");
+        services.AddDbContextPool<RolXContext>(options => options.UseMySql(
+            connectionString,
+            ServerVersion.AutoDetect(connectionString),
+            options => options.EnableRetryOnFailure(
+                maxRetryCount: 10,
+                maxRetryDelay: TimeSpan.FromSeconds(5),
+                errorNumbersToAdd: Array.Empty<int>())));
 
         services.AddAccount(this.Configuration);
         services.AddAuth(this.Configuration);
