@@ -22,7 +22,7 @@ internal static class RecordEntryMapper
     {
         return new Resource.RecordEntry
         {
-            PhaseId = domain.PhaseId,
+            ActivityId = domain.ActivityId,
             Duration = (long)domain.Duration.TotalSeconds,
             Begin = (int?)domain.Begin?.TotalSeconds,
             Pause = (int?)domain.Pause?.TotalSeconds,
@@ -41,7 +41,7 @@ internal static class RecordEntryMapper
     {
         return new DataAccess.RecordEntry
         {
-            PhaseId = resource.PhaseId,
+            ActivityId = resource.ActivityId,
             Duration = TimeSpan.FromSeconds(resource.Duration),
             Begin = resource.Begin.HasValue ? TimeSpan.FromSeconds(resource.Begin.Value) : (TimeSpan?)null,
             Pause = resource.Pause.HasValue && resource.Pause > 0 ? TimeSpan.FromSeconds(resource.Pause.Value) : (TimeSpan?)null,

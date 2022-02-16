@@ -34,7 +34,7 @@ export class UserService {
   update(user: User): Observable<User> {
     return this.httpClient.put(UserService.UrlWithId(user.id), instanceToPlain(user)).pipe(
       mapTo(user),
-      catchError((e) => throwError(new ErrorResponse(e))),
+      catchError((e) => throwError(() => new ErrorResponse(e))),
     );
   }
 

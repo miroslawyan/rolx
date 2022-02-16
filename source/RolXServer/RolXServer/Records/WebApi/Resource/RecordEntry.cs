@@ -14,9 +14,9 @@ namespace RolXServer.Records.WebApi.Resource;
 public sealed class RecordEntry
 {
     /// <summary>
-    /// Gets or sets the phase identifier.
+    /// Gets or sets the activity identifier.
     /// </summary>
-    public int PhaseId { get; set; }
+    public int ActivityId { get; set; }
 
     /// <summary>
     /// Gets or sets the duration in seconds.

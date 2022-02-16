@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Duration } from '@app/core/util/duration';
-import { Phase } from '@app/projects/core/phase';
+import { Activity } from '@app/projects/core/activity';
 import { Record } from '@app/records/core/record';
 import { RecordEntry } from '@app/records/core/record-entry';
 
@@ -10,7 +10,7 @@ import { FormRow } from './form-row';
 
 export interface MultiEntriesDialogData {
   record: Record;
-  phase: Phase;
+  activity: Activity;
 }
 
 @Component({
@@ -35,7 +35,7 @@ export class MultiEntriesDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    const entries = this.data.record.entriesOf(this.data.phase);
+    const entries = this.data.record.entriesOf(this.data.activity);
 
     if (entries.length) {
       entries.filter((e) => !e.duration.isZero).forEach((e) => this.addRow(e));
@@ -55,7 +55,7 @@ export class MultiEntriesDialogComponent implements OnInit {
   submit() {
     const entries = this.formRows.filter((r) => r.hasDuration).map((r) => r.toEntry());
 
-    const record = this.data.record.replaceEntriesOfPhase(this.data.phase, entries);
+    const record = this.data.record.replaceEntriesOfActivity(this.data.activity, entries);
     this.dialogRef.close(record);
   }
 

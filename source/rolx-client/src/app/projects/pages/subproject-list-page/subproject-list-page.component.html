@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-title>
+    <span>Subprojekte</span>
+
+    <a
+      mat-mini-fab
+      aria-label="Subprojekt hinzufügen"
+      [routerLink]="['new', 'edit']"
+      color="primary">
+      <mat-icon>add</mat-icon>
+    </a>
+  </mat-card-title>
+
+  <mat-card-content>
+    <rolx-subproject-table></rolx-subproject-table>
+  </mat-card-content>
+</mat-card>

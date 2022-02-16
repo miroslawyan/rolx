@@ -13,11 +13,11 @@
     <small>(KW{{monday.week() | number: '2.0'}})</small>
   </mat-card-title>
 
-  <mat-card-content *ngIf="recordsAndPhases$ | async as recordsAndPhases">
+  <mat-card-content *ngIf="recordsAndActivities$ | async as recordsAndActivities">
     <rolx-week-table
       *ngIf="user !== undefined"
-      [records]="recordsAndPhases[0]"
-      [phases]="recordsAndPhases[1]"
+      [records]="recordsAndActivities[0]"
+      [activities]="recordsAndActivities[1]"
       [user]="user"></rolx-week-table>
   </mat-card-content>
 </mat-card>

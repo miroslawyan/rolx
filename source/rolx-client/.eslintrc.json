@@ -2,6 +2,10 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "ignorePatterns": ["projects/**/*"],
+  "plugins": ["deprecation"],
+  "rules": {
+    "deprecation/deprecation": "warn"
+  },
   "overrides": [
     {
       "files": ["*.ts"],

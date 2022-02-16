@@ -11,32 +11,32 @@ using RolXServer.Projects.DataAccess;
 namespace RolXServer.Projects.Domain;
 
 /// <summary>
-/// Provides access to favourite <see cref="Phase"/> instances.
+/// Provides access to favourite <see cref="Activity"/> instances.
 /// </summary>
 public interface IFavouriteService
 {
     /// <summary>
-    /// Gets all favourite phases of the specified user.
+    /// Gets all favourite activities of the specified user.
     /// </summary>
     /// <param name="userId">The user identifier.</param>
     /// <returns>
-    /// The favourite phases.
+    /// The favourite activities.
     /// </returns>
-    Task<IEnumerable<Phase>> GetAll(Guid userId);
+    Task<IEnumerable<Activity>> GetAll(Guid userId);
 
     /// <summary>
-    /// Adds the specified phase to the favourites of the specified user.
+    /// Adds the specified activity to the favourites of the specified user.
     /// </summary>
-    /// <param name="phase">The phase.</param>
+    /// <param name="activity">The activity.</param>
     /// <param name="userId">The user identifier.</param>
     /// <returns>The async task.</returns>
-    Task Add(Phase phase, Guid userId);
+    Task Add(Activity activity, Guid userId);
 
     /// <summary>
-    /// Removes the specified phase from the favourites of the specified user.
+    /// Removes the specified activity from the favourites of the specified user.
     /// </summary>
-    /// <param name="phase">The phase.</param>
+    /// <param name="activity">The activity.</param>
     /// <param name="userId">The user identifier.</param>
     /// <returns>The async task.</returns>
-    Task Remove(Phase phase, Guid userId);
+    Task Remove(Activity activity, Guid userId);
 }

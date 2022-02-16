@@ -56,7 +56,7 @@ export class WorkRecordService {
       tap(() => nextSequence.next(0)),
       catchError((e) => {
         nextSequence.next(0);
-        return throwError(e);
+        return throwError(() => e);
       }),
     );
   }
@@ -66,7 +66,7 @@ export class WorkRecordService {
     return this.httpClient.put(url, instanceToPlain(record)).pipe(
       mapTo(record),
       tap((r) => this.userUpdatedSubject.next(r.userId)),
-      catchError((e) => throwError(new ErrorResponse(e))),
+      catchError((e) => throwError(() => new ErrorResponse(e))),
     );
   }
 }

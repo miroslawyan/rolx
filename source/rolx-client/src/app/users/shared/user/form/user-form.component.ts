@@ -61,10 +61,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
   submit() {
     Object.assign(this.user, this.form.value);
 
-    this.userService.update(this.user).subscribe(
-      () => this.cancel(),
-      (err) => this.handleError(err),
-    );
+    this.userService.update(this.user).subscribe({
+      next: () => this.cancel(),
+      error: (err) => this.handleError(err),
+    });
   }
 
   cancel() {

@@ -33,11 +33,11 @@ internal sealed class RecordEntryValidator : AbstractValidator<RecordEntry>
         this.parent = parent;
         this.dbContext = dbContext;
 
-        this.RuleFor(e => e.PhaseId)
+        this.RuleFor(e => e.ActivityId)
             .NotEqual(0);
 
-        this.RuleFor(e => e.PhaseId)
-            .MustAsync(this.BeOfExistingAndOpenPhase)
+        this.RuleFor(e => e.ActivityId)
+            .MustAsync(this.BeOfExistingAndOpenActivity)
             .Unless(e => e.Duration == 0);
 
         this.RuleFor(e => e.Duration)
@@ -72,25 +72,25 @@ internal sealed class RecordEntryValidator : AbstractValidator<RecordEntry>
         return true;
     }
 
-    private async Task<bool> BeOfExistingAndOpenPhase(RecordEntry candidate, int phaseId, ValidationContext<RecordEntry> context, CancellationToken token)
+    private async Task<bool> BeOfExistingAndOpenActivity(RecordEntry candidate, int activityId, ValidationContext<RecordEntry> context, CancellationToken token)
     {
-        var phase = await this.dbContext.Phases.FindAsync(phaseId);
-        if (phase == null)
+        var activity = await this.dbContext.Activities.FindAsync(activityId);
+        if (activity == null)
         {
-            context.AddFailure("phaseId must be of an existing phase");
+            context.AddFailure("activityId must be of an existing activity");
             return false;
         }
 
         var recordDate = IsoDate.Parse(this.parent.Date);
-        if (phase.StartDate > recordDate)
+        if (activity.StartDate > recordDate)
         {
-            context.AddFailure("phase isn't open yet");
+            context.AddFailure("activity isn't open yet");
             return false;
         }
 
-        if (phase.EndDate.HasValue && phase.EndDate.Value < recordDate)
+        if (activity.EndDate.HasValue && activity.EndDate.Value < recordDate)
         {
-            context.AddFailure("phase has already been closed");
+            context.AddFailure("activity has already been closed");
             return false;
         }
 

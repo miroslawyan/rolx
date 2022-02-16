@@ -9,7 +9,7 @@
 namespace RolXServer.Projects;
 
 /// <summary>
-/// The settings for the Projects package.
+/// The settings for the Subprojects package.
 /// </summary>
 public sealed class Settings
 {

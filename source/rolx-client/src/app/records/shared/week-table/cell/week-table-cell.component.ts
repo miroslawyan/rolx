@@ -13,7 +13,7 @@ import { GridCoordinates } from '@app/core/grid-navigation/grid-coordinates';
 import { GridNavigationService } from '@app/core/grid-navigation/grid-navigation.service';
 import { Duration } from '@app/core/util/duration';
 import { assertDefined } from '@app/core/util/utils';
-import { Phase } from '@app/projects/core/phase';
+import { Activity } from '@app/projects/core/activity';
 import { Record } from '@app/records/core/record';
 import { RecordEntry } from '@app/records/core/record-entry';
 import { DurationEditComponent } from '@app/records/shared/duration-edit/duration-edit.component';
@@ -44,7 +44,7 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   record!: Record;
 
   @Input()
-  phase!: Phase;
+  activity!: Activity;
 
   @Input()
   user!: User;
@@ -69,17 +69,17 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
   changed = new EventEmitter<Record>();
 
   get entries(): RecordEntry[] {
-    return this.record.entriesOf(this.phase);
+    return this.record.entriesOf(this.activity);
   }
 
   get isSimpleEditable(): boolean {
     return (
-      this.entries.length <= 1 && this.entries.every((e) => e.isDurationOnly) && this.isPhaseOpen
+      this.entries.length <= 1 && this.entries.every((e) => e.isDurationOnly) && this.isActivityOpen
     );
   }
 
-  get isPhaseOpen(): boolean {
-    return this.phase.isOpenAt(this.record.date) && this.user.isActiveAt(this.record.date);
+  get isActivityOpen(): boolean {
+    return this.activity.isOpenAt(this.record.date) && this.user.isActiveAt(this.record.date);
   }
 
   get totalDuration(): Duration {
@@ -90,7 +90,7 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     assertDefined(this, 'record');
-    assertDefined(this, 'phase');
+    assertDefined(this, 'activity');
     assertDefined(this, 'user');
 
     this.subscription.add(
@@ -116,14 +116,14 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     const entry = new RecordEntry();
     entry.duration = duration;
 
-    const record = this.record.replaceEntriesOfPhase(this.phase, [entry]);
+    const record = this.record.replaceEntriesOfActivity(this.activity, [entry]);
     this.changed.emit(record);
   }
 
   editEntries() {
     const data: MultiEntriesDialogData = {
       record: this.record,
-      phase: this.phase,
+      activity: this.activity,
     };
 
     this.dialog

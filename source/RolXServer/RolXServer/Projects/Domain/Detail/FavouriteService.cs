@@ -13,7 +13,7 @@ using RolXServer.Projects.DataAccess;
 namespace RolXServer.Projects.Domain.Detail;
 
 /// <summary>
-/// Provides access to favourite <see cref="Phase"/> instances.
+/// Provides access to favourite <see cref="Activity"/> instances.
 /// </summary>
 internal sealed class FavouriteService : IFavouriteService
 {
@@ -29,51 +29,51 @@ internal sealed class FavouriteService : IFavouriteService
     }
 
     /// <summary>
-    /// Gets all favourite phases of the specified user.
+    /// Gets all favourite activities of the specified user.
     /// </summary>
     /// <param name="userId">The user identifier.</param>
     /// <returns>
-    /// The favourite phases.
+    /// The favourite activities.
     /// </returns>
-    public async Task<IEnumerable<Phase>> GetAll(Guid userId)
+    public async Task<IEnumerable<Activity>> GetAll(Guid userId)
     {
-        return await this.context.FavouritePhases
+        return await this.context.FavouriteActivities
             .Where(f => f.UserId == userId)
-            .Select(f => f.Phase!)
+            .Select(f => f.Activity!)
             .ToListAsync();
     }
 
     /// <summary>
-    /// Adds the specified phase to the favourites of the specified user.
+    /// Adds the specified activity to the favourites of the specified user.
     /// </summary>
-    /// <param name="phase">The phase.</param>
+    /// <param name="activity">The activity.</param>
     /// <param name="userId">The user identifier.</param>
     /// <returns>
     /// The async task.
     /// </returns>
-    public async Task Add(Phase phase, Guid userId)
+    public async Task Add(Activity activity, Guid userId)
     {
-        this.context.FavouritePhases.Add(ToEntity(phase, userId));
+        this.context.FavouriteActivities.Add(ToEntity(activity, userId));
         await this.context.SaveChangesAsync();
     }
 
     /// <summary>
-    /// Removes the specified phase from the favourites of the specified user.
+    /// Removes the specified activity from the favourites of the specified user.
     /// </summary>
-    /// <param name="phase">The phase.</param>
+    /// <param name="activity">The activity.</param>
     /// <param name="userId">The user identifier.</param>
     /// <returns>
     /// The async task.
     /// </returns>
-    public async Task Remove(Phase phase, Guid userId)
+    public async Task Remove(Activity activity, Guid userId)
     {
-        this.context.FavouritePhases.Remove(ToEntity(phase, userId));
+        this.context.FavouriteActivities.Remove(ToEntity(activity, userId));
         await this.context.SaveChangesAsync();
     }
 
-    private static FavouritePhase ToEntity(Phase phase, Guid userId) => new FavouritePhase
+    private static FavouriteActivity ToEntity(Activity activity, Guid userId) => new FavouriteActivity
     {
         UserId = userId,
-        PhaseId = phase.Id,
+        ActivityId = activity.Id,
     };
 }

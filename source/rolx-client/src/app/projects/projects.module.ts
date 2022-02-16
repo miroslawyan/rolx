@@ -1,38 +1,38 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AppImportModule } from '@app/app-import.module';
-import { PhaseEditPageComponent } from '@app/projects/pages/phase-edit-page/phase-edit-page.component';
-import { ProjectDetailPageComponent } from '@app/projects/pages/project-detail-page/project-detail-page.component';
-import { ProjectEditPageComponent } from '@app/projects/pages/project-edit-page/project-edit-page.component';
-import { ProjectListPageComponent } from '@app/projects/pages/project-list-page/project-list-page.component';
-import { PhaseFormComponent } from '@app/projects/shared/phase/form/phase-form.component';
-import { PhaseSelectorComponent } from '@app/projects/shared/phase/selector/phase-selector.component';
-import { PhaseTableComponent } from '@app/projects/shared/phase/table/phase-table.component';
-import { ProjectFormComponent } from '@app/projects/shared/project/form/project-form.component';
-import { ProjectTableComponent } from '@app/projects/shared/project/table/project-table.component';
-import { StarredPhaseIndicatorComponent } from '@app/projects/shared/starred-phase-indicator/starred-phase-indicator.component';
+import { ActivityEditPageComponent } from '@app/projects/pages/activity-edit-page/activity-edit-page.component';
+import { SubprojectDetailPageComponent } from '@app/projects/pages/subproject-detail-page/subproject-detail-page.component';
+import { SubprojectEditPageComponent } from '@app/projects/pages/subproject-edit-page/subproject-edit-page.component';
+import { SubprojectListPageComponent } from '@app/projects/pages/subproject-list-page/subproject-list-page.component';
+import { ActivityFormComponent } from '@app/projects/shared/activity/form/activity-form.component';
+import { ActivitySelectorComponent } from '@app/projects/shared/activity/selector/activity-selector.component';
+import { StarredActivityIndicatorComponent } from '@app/projects/shared/activity/starred-indicator/starred-activity-indicator.component';
+import { ActivityTableComponent } from '@app/projects/shared/activity/table/activity-table.component';
+import { SubprojectFormComponent } from '@app/projects/shared/subproject/form/subproject-form.component';
+import { SubprojectTableComponent } from '@app/projects/shared/subproject/table/subproject-table.component';
 
 @NgModule({
   imports: [AppImportModule, CommonModule],
   declarations: [
-    PhaseEditPageComponent,
-    ProjectDetailPageComponent,
-    ProjectEditPageComponent,
-    ProjectListPageComponent,
-    PhaseFormComponent,
-    PhaseSelectorComponent,
-    PhaseTableComponent,
-    ProjectFormComponent,
-    ProjectTableComponent,
-    StarredPhaseIndicatorComponent,
+    ActivityEditPageComponent,
+    SubprojectDetailPageComponent,
+    SubprojectEditPageComponent,
+    SubprojectListPageComponent,
+    ActivityFormComponent,
+    ActivitySelectorComponent,
+    ActivityTableComponent,
+    SubprojectFormComponent,
+    SubprojectTableComponent,
+    StarredActivityIndicatorComponent,
   ],
   exports: [
-    PhaseEditPageComponent,
-    ProjectDetailPageComponent,
-    ProjectEditPageComponent,
-    ProjectListPageComponent,
-    PhaseSelectorComponent,
-    StarredPhaseIndicatorComponent,
+    ActivityEditPageComponent,
+    SubprojectDetailPageComponent,
+    SubprojectEditPageComponent,
+    SubprojectListPageComponent,
+    ActivitySelectorComponent,
+    StarredActivityIndicatorComponent,
   ],
 })
 export class ProjectsModule {}

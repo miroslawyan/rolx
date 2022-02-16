@@ -1,24 +1,24 @@
 import { Routes } from '@angular/router';
-import { PhaseEditPageComponent } from '@app/projects/pages/phase-edit-page/phase-edit-page.component';
-import { ProjectDetailPageComponent } from '@app/projects/pages/project-detail-page/project-detail-page.component';
-import { ProjectEditPageComponent } from '@app/projects/pages/project-edit-page/project-edit-page.component';
-import { ProjectListPageComponent } from '@app/projects/pages/project-list-page/project-list-page.component';
+import { ActivityEditPageComponent } from '@app/projects/pages/activity-edit-page/activity-edit-page.component';
+import { SubprojectDetailPageComponent } from '@app/projects/pages/subproject-detail-page/subproject-detail-page.component';
+import { SubprojectEditPageComponent } from '@app/projects/pages/subproject-edit-page/subproject-edit-page.component';
+import { SubprojectListPageComponent } from '@app/projects/pages/subproject-list-page/subproject-list-page.component';
 
 export const ProjectsRoutes: Routes = [
   {
-    path: 'project',
-    component: ProjectListPageComponent,
+    path: 'subproject',
+    component: SubprojectListPageComponent,
   },
   {
-    path: 'project/:id',
-    component: ProjectDetailPageComponent,
+    path: 'subproject/:id',
+    component: SubprojectDetailPageComponent,
   },
   {
-    path: 'project/:id/edit',
-    component: ProjectEditPageComponent,
+    path: 'subproject/:id/edit',
+    component: SubprojectEditPageComponent,
   },
   {
-    path: 'project/:id/phase/:phaseId',
-    component: PhaseEditPageComponent,
+    path: 'subproject/:id/activity/:activityId',
+    component: ActivityEditPageComponent,
   },
 ];

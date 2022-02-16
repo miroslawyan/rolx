@@ -27,6 +27,6 @@ export class PendingRequestInterceptor implements HttpInterceptor {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/server-error']);
 
-    return throwError(err);
+    return throwError(() => err);
   }
 }

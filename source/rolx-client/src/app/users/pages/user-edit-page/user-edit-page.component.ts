@@ -20,7 +20,7 @@ export class UserEditPageComponent {
         this.router.navigate(['/four-oh-four']);
       }
 
-      return throwError(e);
+      return throwError(() => e);
     }),
   );
 

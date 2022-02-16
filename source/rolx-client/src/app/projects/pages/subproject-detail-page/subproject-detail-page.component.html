@@ -1,0 +1,26 @@
+<mat-card *ngIf="subproject$ | async as subproject">
+  <mat-card-title>
+    <span>
+      {{subproject.number}} - {{subproject.name}}
+      <a mat-icon-button class="edit" aria-label="Subprojekt editieren" [routerLink]="['edit']">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </span>
+
+    <a
+      mat-mini-fab
+      aria-label="Aktivität hinzufügen"
+      [routerLink]="['activity', 'new']"
+      color="primary">
+      <mat-icon>add</mat-icon>
+    </a>
+  </mat-card-title>
+
+  <rolx-activity-table
+    *ngIf="subproject.activities.length > 0"
+    [activities]="subproject.activities"></rolx-activity-table>
+  <rolx-activity-form
+    *ngIf="editedActivity !== undefined"
+    [subproject]="subproject"
+    [activity]="editedActivity"></rolx-activity-form>
+</mat-card>

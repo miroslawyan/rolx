@@ -3,7 +3,7 @@ import { TimeOfDay, TransformAsTimeOfDay } from '@app/core/util/time-of-day';
 import { assertDefined } from '@app/core/util/utils';
 
 export class RecordEntry {
-  phaseId!: number;
+  activityId!: number;
 
   @TransformAsDuration()
   duration = Duration.Zero;
@@ -17,7 +17,7 @@ export class RecordEntry {
   comment?: string;
 
   validateModel(): void {
-    assertDefined(this, 'phaseId');
+    assertDefined(this, 'activityId');
   }
 
   get end(): TimeOfDay | null {

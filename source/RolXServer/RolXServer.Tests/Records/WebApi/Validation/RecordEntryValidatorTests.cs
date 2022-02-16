@@ -17,24 +17,24 @@ namespace RolXServer.Records.WebApi.Validation;
 public sealed class RecordEntryValidatorTests
 {
     private RecordEntryValidator sut = null!;
-    private Project project = null!;
+    private Subproject subproject = null!;
     private RolXContext context = null!;
     private Record record = null!;
 
-    private static Project SeedProject => new Project
+    private static Subproject SeedSubproject => new Subproject
     {
         Id = 1,
         Number = "1",
         Name = "One",
-        Phases = new List<Phase>
+        Activities = new List<Activity>
             {
-                new Phase
+                new Activity
                 {
                     Number = 1,
                     Name = "One",
                     StartDate = new DateTime(2019, 12, 17),
                 },
-                new Phase
+                new Activity
                 {
                     Number = 2,
                     Name = "Two",
@@ -47,8 +47,8 @@ public sealed class RecordEntryValidatorTests
     [SetUp]
     public void SetUp()
     {
-        this.project = SeedProject;
-        this.context = InMemory.ContextFactory(this.project)();
+        this.subproject = SeedSubproject;
+        this.context = InMemory.ContextFactory(this.subproject)();
 
         this.record = new Record
         {
@@ -104,120 +104,120 @@ public sealed class RecordEntryValidatorTests
     }
 
     [Test]
-    public void PhaseId_FailsWhenZero()
+    public void ActivityId_FailsWhenZero()
     {
         var model = new RecordEntry
         {
-            PhaseId = 0,
+            ActivityId = 0,
         };
 
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]
-    public void PhaseId_FailsWhenPhaseUnkownAndDurationNonZero()
+    public void ActivityId_FailsWhenActivityUnkownAndDurationNonZero()
     {
         var model = new RecordEntry
         {
-            PhaseId = 31415,
+            ActivityId = 31415,
             Duration = 42,
         };
 
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]
-    public void PhaseId_SucceedsWhenPhaseUnkownButDurationIsZero()
+    public void ActivityId_SucceedsWhenActivityUnkownButDurationIsZero()
     {
         var model = new RecordEntry
         {
-            PhaseId = 31415,
+            ActivityId = 31415,
             Duration = 0,
         };
 
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]
-    public void PhaseId_SucceedsWhenPhaseIsKnownAndOpen()
+    public void ActivityId_SucceedsWhenActivityIsKnownAndOpen()
     {
         var model = new RecordEntry
         {
-            PhaseId = this.project.Phases[0].Id,
+            ActivityId = this.subproject.Activities[0].Id,
             Duration = 42,
         };
 
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]
-    public void PhaseId_SucceedsWhenPhaseOpensToday()
+    public void ActivityId_SucceedsWhenActivityOpensToday()
     {
         this.record.Date = "2019-12-17";
 
         var model = new RecordEntry
         {
-            PhaseId = this.project.Phases[1].Id,
+            ActivityId = this.subproject.Activities[1].Id,
             Duration = 42,
         };
 
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]
-    public void PhaseId_SucceedsWhenPhaseClosesToday()
+    public void ActivityId_SucceedsWhenActivityClosesToday()
     {
         this.record.Date = "2019-12-19";
 
         var model = new RecordEntry
         {
-            PhaseId = this.project.Phases[1].Id,
+            ActivityId = this.subproject.Activities[1].Id,
             Duration = 42,
         };
 
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]
-    public void PhaseId_FailsWhenPhaseClosedYesterday()
+    public void ActivityId_FailsWhenActivityClosedYesterday()
     {
         this.record.Date = "2019-12-20";
 
         var model = new RecordEntry
         {
-            PhaseId = this.project.Phases[1].Id,
+            ActivityId = this.subproject.Activities[1].Id,
             Duration = 42,
         };
 
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]
-    public void PhaseId_FailsWhenPhaseOpensTomorrow()
+    public void ActivityId_FailsWhenActivityOpensTomorrow()
     {
         this.record.Date = "2019-12-16";
 
         var model = new RecordEntry
         {
-            PhaseId = this.project.Phases[0].Id,
+            ActivityId = this.subproject.Activities[0].Id,
             Duration = 42,
         };
 
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]
-    public void PhaseId_SucceedsWhenPhaseIsClosedButDurationIsZero()
+    public void ActivityId_SucceedsWhenActivityIsClosedButDurationIsZero()
     {
         this.record.Date = "2019-12-16";
 
         var model = new RecordEntry
         {
-            PhaseId = this.project.Phases[0].Id,
+            ActivityId = this.subproject.Activities[0].Id,
             Duration = 0,
         };
 
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.PhaseId);
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]

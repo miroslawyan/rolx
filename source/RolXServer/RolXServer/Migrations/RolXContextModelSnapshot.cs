@@ -19,22 +19,7 @@ namespace RolXServer.Migrations
                 .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("RolXServer.Projects.DataAccess.FavouritePhase", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("PhaseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "PhaseId");
-
-                    b.HasIndex("PhaseId");
-
-                    b.ToTable("FavouritePhases");
-                });
-
-            modelBuilder.Entity("RolXServer.Projects.DataAccess.Phase", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,18 +45,18 @@ namespace RolXServer.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("date");
 
+                    b.Property<int>("SubprojectId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId", "Number")
+                    b.HasIndex("SubprojectId", "Number")
                         .IsUnique();
 
-                    b.ToTable("Phases");
+                    b.ToTable("Activities");
 
                     b.HasData(
                         new
@@ -81,8 +66,8 @@ namespace RolXServer.Migrations
                             IsBillable = true,
                             Name = "F35",
                             Number = 1,
-                            ProjectId = 1,
-                            StartDate = new DateTime(2021, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateTime(2021, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 1
                         },
                         new
                         {
@@ -91,8 +76,8 @@ namespace RolXServer.Migrations
                             IsBillable = false,
                             Name = "F117-A",
                             Number = 2,
-                            ProjectId = 1,
-                            StartDate = new DateTime(2022, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateTime(2022, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 1
                         },
                         new
                         {
@@ -102,8 +87,8 @@ namespace RolXServer.Migrations
                             IsBillable = true,
                             Name = "HaGaHuWa",
                             Number = 3,
-                            ProjectId = 1,
-                            StartDate = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 1
                         },
                         new
                         {
@@ -112,12 +97,27 @@ namespace RolXServer.Migrations
                             IsBillable = true,
                             Name = "Malony",
                             Number = 1,
-                            ProjectId = 2,
-                            StartDate = new DateTime(2021, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateTime(2021, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 2
                         });
                 });
 
-            modelBuilder.Entity("RolXServer.Projects.DataAccess.Project", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.FavouriteActivity", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ActivityId");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("FavouriteActivities");
+                });
+
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Subproject", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,7 +136,7 @@ namespace RolXServer.Migrations
                     b.HasIndex("Number")
                         .IsUnique();
 
-                    b.ToTable("Projects");
+                    b.ToTable("Subprojects");
 
                     b.HasData(
                         new
@@ -187,6 +187,9 @@ namespace RolXServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan?>("Begin")
                         .HasColumnType("time");
 
@@ -200,15 +203,12 @@ namespace RolXServer.Migrations
                     b.Property<TimeSpan?>("Pause")
                         .HasColumnType("time(6)");
 
-                    b.Property<int>("PhaseId")
-                        .HasColumnType("int");
-
                     b.Property<int>("RecordId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PhaseId");
+                    b.HasIndex("ActivityId");
 
                     b.HasIndex("RecordId");
 
@@ -306,11 +306,22 @@ namespace RolXServer.Migrations
                     b.ToTable("UserPartTimeSettings");
                 });
 
-            modelBuilder.Entity("RolXServer.Projects.DataAccess.FavouritePhase", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Activity", b =>
                 {
-                    b.HasOne("RolXServer.Projects.DataAccess.Phase", "Phase")
+                    b.HasOne("RolXServer.Projects.DataAccess.Subproject", "Subproject")
+                        .WithMany("Activities")
+                        .HasForeignKey("SubprojectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subproject");
+                });
+
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.FavouriteActivity", b =>
+                {
+                    b.HasOne("RolXServer.Projects.DataAccess.Activity", "Activity")
                         .WithMany()
-                        .HasForeignKey("PhaseId")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -320,20 +331,9 @@ namespace RolXServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Phase");
+                    b.Navigation("Activity");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RolXServer.Projects.DataAccess.Phase", b =>
-                {
-                    b.HasOne("RolXServer.Projects.DataAccess.Project", "Project")
-                        .WithMany("Phases")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("RolXServer.Records.DataAccess.Record", b =>
@@ -349,9 +349,9 @@ namespace RolXServer.Migrations
 
             modelBuilder.Entity("RolXServer.Records.DataAccess.RecordEntry", b =>
                 {
-                    b.HasOne("RolXServer.Projects.DataAccess.Phase", "Phase")
+                    b.HasOne("RolXServer.Projects.DataAccess.Activity", "Activity")
                         .WithMany()
-                        .HasForeignKey("PhaseId")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -361,7 +361,7 @@ namespace RolXServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Phase");
+                    b.Navigation("Activity");
                 });
 
             modelBuilder.Entity("RolXServer.Users.DataAccess.UserBalanceCorrection", b =>
@@ -382,9 +382,9 @@ namespace RolXServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RolXServer.Projects.DataAccess.Project", b =>
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Subproject", b =>
                 {
-                    b.Navigation("Phases");
+                    b.Navigation("Activities");
                 });
 
             modelBuilder.Entity("RolXServer.Records.DataAccess.Record", b =>

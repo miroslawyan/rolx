@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/auth/core/auth.service';
 import { IsoDate } from '@app/core/util/iso-date';
-import { PhaseService } from '@app/projects/core/phase.service';
+import { ActivityService } from '@app/projects/core/activity.service';
 import { WorkRecordService } from '@app/records/core/work-record.service';
 import * as moment from 'moment';
 import { forkJoin, Observable } from 'rxjs';
@@ -18,11 +18,11 @@ export class WeekPageComponent {
     map((date) => date.clone().isoWeekday(1)),
   );
 
-  readonly recordsAndPhases$ = this.monday$.pipe(
+  readonly recordsAndActivities$ = this.monday$.pipe(
     switchMap((monday) =>
       forkJoin([
         this.workRecordService.getRange(monday, monday.clone().add(7, 'days')),
-        this.phaseService.getSuitable(monday),
+        this.activityService.getSuitable(monday),
       ]),
     ),
   );
@@ -33,7 +33,7 @@ export class WeekPageComponent {
     private route: ActivatedRoute,
     private router: Router,
     private workRecordService: WorkRecordService,
-    private phaseService: PhaseService,
+    private activityService: ActivityService,
     private authService: AuthService,
   ) {}
 

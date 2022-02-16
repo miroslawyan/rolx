@@ -29,19 +29,19 @@ public sealed class RolXContext : DbContext
     }
 
     /// <summary>
-    /// Gets or sets the favourite phases.
+    /// Gets or sets the favourite activities.
     /// </summary>
-    public DbSet<FavouritePhase> FavouritePhases { get; set; } = null!;
+    public DbSet<FavouriteActivity> FavouriteActivities { get; set; } = null!;
 
     /// <summary>
-    /// Gets or sets the phases.
+    /// Gets or sets the activities.
     /// </summary>
-    public DbSet<Phase> Phases { get; set; } = null!;
+    public DbSet<Activity> Activities { get; set; } = null!;
 
     /// <summary>
-    /// Gets or sets the projects.
+    /// Gets or sets the subprojects.
     /// </summary>
-    public DbSet<Project> Projects { get; set; } = null!;
+    public DbSet<Subproject> Subprojects { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the records.
@@ -77,8 +77,8 @@ public sealed class RolXContext : DbContext
     /// </remarks>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<FavouritePhase>()
-            .HasKey(s => new { s.UserId, s.PhaseId });
+        modelBuilder.Entity<FavouriteActivity>()
+            .HasKey(s => new { s.UserId, s.ActivityId });
 
         modelBuilder.Entity<Record>()
             .HasIndex(r => new { r.Date, r.UserId })
@@ -87,11 +87,11 @@ public sealed class RolXContext : DbContext
         modelBuilder.Entity<RecordEntry>()
             .ToTable("RecordEntries");
 
-        modelBuilder.Entity<Phase>()
-            .HasIndex(ph => new { ph.ProjectId, ph.Number })
+        modelBuilder.Entity<Activity>()
+            .HasIndex(ph => new { ph.SubprojectId, ph.Number })
             .IsUnique();
 
-        modelBuilder.Entity<Project>()
+        modelBuilder.Entity<Subproject>()
             .HasIndex(c => c.Number).IsUnique();
 
         modelBuilder.Entity<User>()
@@ -100,24 +100,22 @@ public sealed class RolXContext : DbContext
         modelBuilder.Entity<UserPartTimeSetting>()
             .HasIndex(s => new { s.UserId, s.StartDate }).IsUnique();
 
-#if DEBUG
-        SeedProjects(modelBuilder);
-#endif
+        SeedSubprojects(modelBuilder);
     }
 
-    private static void SeedProjects(ModelBuilder modelBuilder)
+    private static void SeedSubprojects(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Project>().HasData(new Project
+        modelBuilder.Entity<Subproject>().HasData(new Subproject
         {
             Id = 1,
             Number = "P0001",
             Name = "Lockheed Martin",
         });
 
-        modelBuilder.Entity<Phase>().HasData(new Phase
+        modelBuilder.Entity<Activity>().HasData(new Activity
         {
             Id = 1,
-            ProjectId = 1,
+            SubprojectId = 1,
             Number = 1,
             Name = "F35",
             FullName = "P0001.001 - Lockheed Martin - F35",
@@ -125,10 +123,10 @@ public sealed class RolXContext : DbContext
             IsBillable = true,
         });
 
-        modelBuilder.Entity<Phase>().HasData(new Phase
+        modelBuilder.Entity<Activity>().HasData(new Activity
         {
             Id = 2,
-            ProjectId = 1,
+            SubprojectId = 1,
             Number = 2,
             Name = "F117-A",
             FullName = "P0001.002 - Lockheed Martin - F117-A",
@@ -136,10 +134,10 @@ public sealed class RolXContext : DbContext
             IsBillable = false,
         });
 
-        modelBuilder.Entity<Phase>().HasData(new Phase
+        modelBuilder.Entity<Activity>().HasData(new Activity
         {
             Id = 3,
-            ProjectId = 1,
+            SubprojectId = 1,
             Number = 3,
             Name = "HaGaHuWa",
             FullName = "P0001.003 - Lockheed Martin - HaGaHuWa",
@@ -148,17 +146,17 @@ public sealed class RolXContext : DbContext
             IsBillable = true,
         });
 
-        modelBuilder.Entity<Project>().HasData(new Project
+        modelBuilder.Entity<Subproject>().HasData(new Subproject
         {
             Id = 2,
             Number = "P0002",
             Name = "SRF",
         });
 
-        modelBuilder.Entity<Phase>().HasData(new Phase
+        modelBuilder.Entity<Activity>().HasData(new Activity
         {
             Id = 4,
-            ProjectId = 2,
+            SubprojectId = 2,
             Number = 1,
             Name = "Malony",
             FullName = "P0002.001 - SRF - Malony",

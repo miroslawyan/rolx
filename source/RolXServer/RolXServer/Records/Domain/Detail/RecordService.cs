@@ -51,7 +51,7 @@ public sealed class RecordService : IRecordService
             .SingleAsync(u => u.Id == userId);
 
         var entities = await this.dbContext.Records
-            .Include(r => r.Entries).ThenInclude(e => e.Phase)
+            .Include(r => r.Entries).ThenInclude(e => e.Activity)
             .Where(r => r.Date >= range.Begin && r.Date < range.End && r.UserId == userId)
             .OrderBy(r => r.Date)
             .ToListAsync();

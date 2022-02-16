@@ -1,7 +1,7 @@
 import { Duration, TransformAsDuration } from '@app/core/util/duration';
 import { TransformAsIsoDate } from '@app/core/util/iso-date';
 import { assertDefined } from '@app/core/util/utils';
-import { Phase } from '@app/projects/core/phase';
+import { Activity } from '@app/projects/core/activity';
 import { Type } from 'class-transformer';
 import * as moment from 'moment';
 
@@ -57,17 +57,17 @@ export class Record {
     return this.isWorkday && !this.isComplete;
   }
 
-  entriesOf(phase: Phase): RecordEntry[] {
-    return this.entries.filter((e) => e.phaseId === phase.id);
+  entriesOf(activity: Activity): RecordEntry[] {
+    return this.entries.filter((e) => e.activityId === activity.id);
   }
 
-  replaceEntriesOfPhase(phase: Phase, entries: RecordEntry[]): Record {
+  replaceEntriesOfActivity(activity: Activity, entries: RecordEntry[]): Record {
     const clone = this.clone();
 
     entries = entries.filter((e) => !e.duration.isZero);
-    entries.forEach((e) => (e.phaseId = phase.id));
+    entries.forEach((e) => (e.activityId = activity.id));
 
-    clone.entries = this.entries.filter((e) => e.phaseId !== phase.id).concat(...entries);
+    clone.entries = this.entries.filter((e) => e.activityId !== activity.id).concat(...entries);
 
     if (!clone.mayHavePaidLeave) {
       clone.paidLeaveType = undefined;

@@ -1,0 +1,14 @@
+<mat-form-field>
+  <input
+    matInput
+    placeholder="Wähle eine Aktivität"
+    [(ngModel)]="activity"
+    [matAutocomplete]="auto"
+    autocomplete="off" />
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="fullNameOf">
+  <mat-option *ngFor="let candidate of candidates$ | async" [value]="candidate">
+    {{fullNameOf(candidate)}}
+  </mat-option>
+</mat-autocomplete>

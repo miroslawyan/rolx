@@ -23,7 +23,7 @@ public sealed class RecordServiceTests
 
     private Func<RolXContext> contextFactory = null!;
     private User user = null!;
-    private Phase phase = null!;
+    private Activity activity = null!;
 
     [SetUp]
     public void SetUp()
@@ -33,20 +33,20 @@ public sealed class RecordServiceTests
             Id = Guid.NewGuid(),
         };
 
-        this.phase = new Phase()
+        this.activity = new Activity()
         {
             Number = 42,
         };
 
-        var project = new Project
+        var subproject = new Subproject
         {
-            Phases = new List<Phase>
+            Activities = new List<Activity>
                 {
-                    this.phase,
+                    this.activity,
                 },
         };
 
-        this.contextFactory = InMemory.ContextFactory(this.user, project);
+        this.contextFactory = InMemory.ContextFactory(this.user, subproject);
 
         using (var context = this.contextFactory())
         {
@@ -58,7 +58,7 @@ public sealed class RecordServiceTests
                     {
                         new DataAccess.RecordEntry
                         {
-                            PhaseId = this.phase.Id,
+                            ActivityId = this.activity.Id,
                             Duration = TimeSpan.FromHours(2.5),
                         },
                     },
@@ -83,7 +83,7 @@ public sealed class RecordServiceTests
                     {
                         new DataAccess.RecordEntry
                         {
-                            PhaseId = this.phase.Id,
+                            ActivityId = this.activity.Id,
                             Duration = TimeSpan.FromHours(8.4),
                         },
                     },
@@ -116,12 +116,12 @@ public sealed class RecordServiceTests
                     {
                         new DataAccess.RecordEntry
                         {
-                            PhaseId = this.phase.Id,
+                            ActivityId = this.activity.Id,
                             Duration = TimeSpan.FromHours(3),
                         },
                         new DataAccess.RecordEntry
                         {
-                            PhaseId = this.phase.Id,
+                            ActivityId = this.activity.Id,
                             Duration = TimeSpan.FromHours(1),
                         },
                     },

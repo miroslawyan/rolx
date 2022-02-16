@@ -23,7 +23,7 @@ public static class ServiceCollectionExtensions
     /// </returns>
     public static IServiceCollection AddAccount(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<Settings>(configuration.GetSection("Projects"));
+        services.Configure<Settings>(configuration.GetSection("Subprojects"));
 
         return services.AddDomain();
     }
@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
     {
         return services
             .AddScoped<Domain.IFavouriteService, Domain.Detail.FavouriteService>()
-            .AddScoped<Domain.IPhaseService, Domain.Detail.PhaseService>()
-            .AddScoped<Domain.IProjectService, Domain.Detail.ProjectService>();
+            .AddScoped<Domain.IActivityService, Domain.Detail.ActivityService>()
+            .AddScoped<Domain.ISubprojectService, Domain.Detail.SubprojectService>();
     }
 }
