@@ -36,7 +36,8 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   @Input()
   user!: User;
 
-  allActivities: (Activity | null)[] = [];
+  rowActivities: (Activity | null)[] = [];
+  allActivities: Activity[] = [];
 
   isAddingActivity = false;
 
@@ -50,7 +51,9 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     return this.inputActivities;
   }
   set activities(value: Activity[]) {
-    this.inputActivities = value.filter((ph) => this.records.some((r) => ph.isOpenAt(r.date)));
+    this.inputActivities = value.filter((activity) =>
+      this.records.some((record) => activity.isOpenAt(record.date)),
+    );
     this.homegrownActivities = [];
     this.isAddingActivity = false;
 
@@ -99,12 +102,10 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     );
 
     const sortedActivities = [...this.inputActivities, ...nonLocalFavourites].sort((a, b) =>
-      a.fullName.localeCompare(b.fullName),
+      a.fullNumber.localeCompare(b.fullNumber),
     );
 
     this.allActivities = [...sortedActivities, ...this.homegrownActivities];
-    if (this.isAddingActivity) {
-      this.allActivities.push(null);
-    }
+    this.rowActivities = this.isAddingActivity ? [...this.allActivities, null] : this.allActivities;
   }
 }

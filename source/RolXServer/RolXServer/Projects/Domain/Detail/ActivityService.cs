@@ -37,11 +37,15 @@ internal sealed class ActivityService : IActivityService
     /// </returns>
     public async Task<IEnumerable<Activity>> GetAll(DateTime? unlessEndedBefore)
     {
-        var query = this.context.Activities.AsQueryable();
+        var query = this.context.Activities
+            .AsNoTracking()
+            .Include(a => a.Subproject)
+            .Include(a => a.Billability)
+            .AsQueryable();
 
         if (unlessEndedBefore.HasValue)
         {
-            query = query.Where(ph => !ph.EndDate.HasValue || ph.EndDate.Value >= unlessEndedBefore.Value);
+            query = query.Where(a => !a.EndDate.HasValue || a.EndDate.Value >= unlessEndedBefore.Value);
         }
 
         return await query.ToListAsync();
@@ -62,9 +66,16 @@ internal sealed class ActivityService : IActivityService
 
         return await this.context.Records
             .Where(r => r.UserId == userId && r.Date >= begin && r.Date < end)
+            .Include(r => r.Entries)
+                .ThenInclude(e => e.Activity)
+                    .ThenInclude(a => a!.Subproject)
+            .Include(r => r.Entries)
+                .ThenInclude(e => e.Activity)
+                    .ThenInclude(a => a!.Billability)
             .SelectMany(r => r.Entries)
             .Select(e => e.Activity!)
             .Distinct()
+            .AsNoTracking()
             .ToListAsync();
     }
 }

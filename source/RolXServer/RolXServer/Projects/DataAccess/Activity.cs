@@ -26,19 +26,9 @@ public sealed class Activity
     public int Number { get; set; }
 
     /// <summary>
-    /// Gets or sets the subproject identifier.
-    /// </summary>
-    public int SubprojectId { get; set; }
-
-    /// <summary>
     /// Gets or sets the name.
     /// </summary>
     public string Name { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the full name.
-    /// </summary>
-    public string FullName { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the start date.
@@ -53,17 +43,27 @@ public sealed class Activity
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is billable.
-    /// </summary>
-    public bool IsBillable { get; set; }
-
-    /// <summary>
     /// Gets or sets the time budget in seconds.
     /// </summary>
     public TimeSpan? Budget { get; set; }
 
     /// <summary>
+    /// Gets or sets the subproject identifier.
+    /// </summary>
+    public int SubprojectId { get; set; }
+
+    /// <summary>
     /// Gets or sets the subproject.
     /// </summary>
     public Subproject? Subproject { get; set; }
+
+    /// <summary>
+    /// Gets or sets the billability identifier.
+    /// </summary>
+    public int BillabilityId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the billability.
+    /// </summary>
+    public Billability? Billability { get; set; }
 }

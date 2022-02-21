@@ -25,18 +25,14 @@ namespace RolXServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan?>("Budget")
-                        .HasColumnType("time(6)");
+                    b.Property<int>("BillabilityId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("Budget")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("date");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsBillable")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -53,6 +49,8 @@ namespace RolXServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BillabilityId");
+
                     b.HasIndex("SubprojectId", "Number")
                         .IsUnique();
 
@@ -61,44 +59,144 @@ namespace RolXServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            FullName = "P0001.001 - Lockheed Martin - F35",
-                            IsBillable = true,
-                            Name = "F35",
+                            Id = 11,
+                            BillabilityId = 2,
+                            Name = "Take off",
                             Number = 1,
                             StartDate = new DateTime(2021, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SubprojectId = 1
                         },
                         new
                         {
-                            Id = 2,
-                            FullName = "P0001.002 - Lockheed Martin - F117-A",
-                            IsBillable = false,
-                            Name = "F117-A",
+                            Id = 12,
+                            BillabilityId = 1,
+                            Name = "Cruise",
                             Number = 2,
                             StartDate = new DateTime(2022, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SubprojectId = 1
                         },
                         new
                         {
-                            Id = 3,
-                            EndDate = new DateTime(2022, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FullName = "P0001.003 - Lockheed Martin - HaGaHuWa",
-                            IsBillable = true,
-                            Name = "HaGaHuWa",
+                            Id = 13,
+                            BillabilityId = 3,
+                            EndDate = new DateTime(2022, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Landing",
                             Number = 3,
-                            StartDate = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartDate = new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SubprojectId = 1
                         },
                         new
                         {
-                            Id = 4,
-                            FullName = "P0002.001 - SRF - Malony",
-                            IsBillable = true,
-                            Name = "Malony",
+                            Id = 21,
+                            BillabilityId = 4,
+                            Name = "Take off",
                             Number = 1,
-                            StartDate = new DateTime(2021, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartDate = new DateTime(2021, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SubprojectId = 2
+                        },
+                        new
+                        {
+                            Id = 22,
+                            BillabilityId = 1,
+                            Name = "Cruise",
+                            Number = 2,
+                            StartDate = new DateTime(2022, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 2
+                        },
+                        new
+                        {
+                            Id = 23,
+                            BillabilityId = 2,
+                            EndDate = new DateTime(2022, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Landing",
+                            Number = 3,
+                            StartDate = new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 2
+                        },
+                        new
+                        {
+                            Id = 31,
+                            BillabilityId = 3,
+                            Name = "Analyse",
+                            Number = 1,
+                            StartDate = new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 3
+                        },
+                        new
+                        {
+                            Id = 32,
+                            BillabilityId = 4,
+                            Name = "Umsetzung",
+                            Number = 2,
+                            StartDate = new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 3
+                        },
+                        new
+                        {
+                            Id = 33,
+                            BillabilityId = 2,
+                            Name = "Übergabe",
+                            Number = 3,
+                            StartDate = new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SubprojectId = 3
+                        });
+                });
+
+            modelBuilder.Entity("RolXServer.Projects.DataAccess.Billability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Inactive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsBillable")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("SortingWeight")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Billabilities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Inactive = false,
+                            IsBillable = false,
+                            Name = "Nicht verrechenbar",
+                            SortingWeight = 100
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Inactive = false,
+                            IsBillable = true,
+                            Name = "Verrechenbar Engineering",
+                            SortingWeight = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Inactive = false,
+                            IsBillable = true,
+                            Name = "Verrechenbar TP",
+                            SortingWeight = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Inactive = false,
+                            IsBillable = true,
+                            Name = "Verrechenbar 50+",
+                            SortingWeight = 3
                         });
                 });
 
@@ -123,17 +221,27 @@ namespace RolXServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Number")
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProjectName")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ProjectNumber")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Number")
+                    b.HasIndex("ProjectNumber", "Number")
                         .IsUnique();
 
                     b.ToTable("Subprojects");
@@ -142,14 +250,29 @@ namespace RolXServer.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Lockheed Martin",
-                            Number = "P0001"
+                            CustomerName = "Lockheed Martin",
+                            Name = "F35",
+                            Number = 1,
+                            ProjectName = "Auto Pilot",
+                            ProjectNumber = 4711
                         },
                         new
                         {
                             Id = 2,
-                            Name = "SRF",
-                            Number = "P0002"
+                            CustomerName = "Lockheed Martin",
+                            Name = "F117A",
+                            Number = 2,
+                            ProjectName = "Auto Pilot",
+                            ProjectNumber = 4711
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CustomerName = "SRF",
+                            Name = "Fragengenerator",
+                            Number = 1,
+                            ProjectName = "ABC SRF 3",
+                            ProjectNumber = 3141
                         });
                 });
 
@@ -308,11 +431,19 @@ namespace RolXServer.Migrations
 
             modelBuilder.Entity("RolXServer.Projects.DataAccess.Activity", b =>
                 {
+                    b.HasOne("RolXServer.Projects.DataAccess.Billability", "Billability")
+                        .WithMany()
+                        .HasForeignKey("BillabilityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("RolXServer.Projects.DataAccess.Subproject", "Subproject")
                         .WithMany("Activities")
                         .HasForeignKey("SubprojectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Billability");
 
                     b.Navigation("Subproject");
                 });
@@ -352,7 +483,7 @@ namespace RolXServer.Migrations
                     b.HasOne("RolXServer.Projects.DataAccess.Activity", "Activity")
                         .WithMany()
                         .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("RolXServer.Records.DataAccess.Record", null)

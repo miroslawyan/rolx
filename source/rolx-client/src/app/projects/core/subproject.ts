@@ -6,17 +6,28 @@ import { Activity } from './activity';
 
 export class Subproject {
   id!: number;
-  number!: string;
+  number!: number;
   name!: string;
+  projectNumber!: number;
+  projectName!: string;
+  customerName!: string;
 
   @Type(() => Activity)
   activities: Activity[] = [];
+
+  fullNumber!: string;
+  fullName!: string;
 
   validateModel(): void {
     assertDefined(this, 'id');
     assertDefined(this, 'number');
     assertDefined(this, 'name');
+    assertDefined(this, 'projectNumber');
+    assertDefined(this, 'projectName');
+    assertDefined(this, 'customerName');
     assertDefined(this, 'activities');
+    assertDefined(this, 'fullNumber');
+    assertDefined(this, 'fullName');
 
     this.activities.forEach((a) => a.validateModel());
   }

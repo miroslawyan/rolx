@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@app/auth/core/auth.guard';
-import { SetupResolve } from '@app/core/setup/setup-resolve';
 import { ProjectsRoutes } from '@app/projects/projects.routes';
 import { RecordsRoutes } from '@app/records/records.routes';
 import { UsersRoutes } from '@app/users/users.routes';
@@ -17,7 +16,6 @@ const routes: Routes = [
     path: '',
     component: MainPageComponent,
     canActivate: [AuthGuard],
-    resolve: { items: SetupResolve },
     children: [
       ...ProjectsRoutes,
       ...UsersRoutes,

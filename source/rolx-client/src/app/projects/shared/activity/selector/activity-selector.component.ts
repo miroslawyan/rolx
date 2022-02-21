@@ -32,7 +32,7 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
     this.filterText$,
   ]).pipe(
     map(([activities, filterText]) =>
-      this.filterByEndAndFullName(activities, filterText).slice(0, 5),
+      this.filterByEndAndFullName(activities, filterText).slice(0, 10),
     ),
   );
 
@@ -53,7 +53,7 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
   set activity(value: any) {
     if (!(value instanceof Activity)) {
       this.filterText$.next(value);
-      value = this.allActivities$.value.find((ph) => ph.fullName === value);
+      value = this.allActivities$.value.find((a) => a.fullNumber === value);
     }
 
     if (value) {
@@ -68,8 +68,8 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
       this.begin$
         .pipe(
           switchMap((b) => this.activityService.getAll(b)),
-          map((phs) => phs.filter((ph) => !excludedIds.has(ph.id))),
-          map((phs) => phs.sort((a, b) => a.fullName.localeCompare(b.fullName))),
+          map((as) => as.filter((a) => !excludedIds.has(a.id))),
+          map((as) => as.sort((a, b) => a.fullNumber.localeCompare(b.fullNumber))),
         )
         .subscribe(this.allActivities$),
     );
@@ -79,14 +79,14 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  fullNameOf(activity: Activity): string {
-    return activity ? activity.fullName : '';
+  fullNameOf(activity?: Activity): string {
+    return activity?.fullName ?? '';
   }
 
   private filterByEndAndFullName(activities: Activity[], filterText: string): Activity[] {
     filterText = filterText.toLocaleLowerCase();
     return activities.filter(
-      (ph) => ph.startDate <= this.end && ph.fullName.toLocaleLowerCase().includes(filterText),
+      (a) => a.startDate <= this.end && a.fullName.toLocaleLowerCase().includes(filterText),
     );
   }
 }

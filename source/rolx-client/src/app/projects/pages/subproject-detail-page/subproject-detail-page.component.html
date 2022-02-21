@@ -1,7 +1,7 @@
 <mat-card *ngIf="subproject$ | async as subproject">
   <mat-card-title>
     <span>
-      {{subproject.number}} - {{subproject.name}}
+      {{subproject.fullName}}
       <a mat-icon-button class="edit" aria-label="Subprojekt editieren" [routerLink]="['edit']">
         <mat-icon>edit</mat-icon>
       </a>

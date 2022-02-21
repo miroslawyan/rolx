@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ErrorResponse } from '@app/core/error/error-response';
 import { ErrorService } from '@app/core/error/error.service';
-import { SetupService } from '@app/core/setup/setup.service';
 import { assertDefined } from '@app/core/util/utils';
 import { Subproject } from '@app/projects/core/subproject';
 import { SubprojectService } from '@app/projects/core/subproject.service';
@@ -17,18 +16,17 @@ export class SubprojectFormComponent implements OnInit {
   @Input() subproject!: Subproject;
 
   form = this.fb.group({
-    number: [
-      '',
-      [Validators.required, Validators.pattern(this.setupService.info.projectNumberPattern)],
-    ],
+    number: ['', [Validators.required, Validators.min(1), Validators.max(999)]],
     name: ['', Validators.required],
+    projectNumber: ['', [Validators.required, Validators.min(1), Validators.max(9999)]],
+    projectName: ['', Validators.required],
+    customerName: ['', Validators.required],
   });
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private subprojectService: SubprojectService,
-    private setupService: SetupService,
     private errorService: ErrorService,
   ) {}
 
@@ -42,7 +40,11 @@ export class SubprojectFormComponent implements OnInit {
     return this.subproject.id == null;
   }
 
-  hasError(controlName: string, errorName: string) {
+  hasError(controlName: string, errorName: string | string[]) {
+    if (Array.isArray(errorName)) {
+      return errorName.some((e) => this.form.controls[controlName].hasError(e));
+    }
+
     return this.form.controls[controlName].hasError(errorName);
   }
 

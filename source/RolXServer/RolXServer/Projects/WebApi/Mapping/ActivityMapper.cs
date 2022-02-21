@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------
 
 using RolXServer.Common.Util;
+using RolXServer.Projects.Domain;
 
 namespace RolXServer.Projects.WebApi.Mapping;
 
@@ -27,11 +28,12 @@ internal static class ActivityMapper
             Id = domain.Id,
             Number = domain.Number,
             Name = domain.Name,
-            FullName = domain.FullName,
             StartDate = domain.StartDate.ToIsoDate(),
             EndDate = domain.EndDate.ToIsoDate(),
-            IsBillable = domain.IsBillable,
+            Billability = domain.Billability!,
             Budget = (long)(domain.Budget?.TotalSeconds ?? 0),
+            FullNumber = domain.FullNumber(),
+            FullName = domain.FullName(),
         };
     }
 
@@ -52,11 +54,11 @@ internal static class ActivityMapper
             SubprojectId = subproject?.Id ?? 0,
             Subproject = subproject,
             Name = resource.Name,
-            FullName = resource.FullName,
             StartDate = IsoDate.Parse(resource.StartDate),
             EndDate = IsoDate.ParseNullable(resource.EndDate),
-            IsBillable = resource.IsBillable,
             Budget = TimeSpan.FromSeconds(resource.Budget),
+            BillabilityId = resource.Billability.Id,
+            Billability = resource.Billability,
         };
     }
 }

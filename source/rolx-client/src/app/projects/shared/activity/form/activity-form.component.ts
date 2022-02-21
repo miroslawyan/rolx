@@ -6,6 +6,8 @@ import { ErrorService } from '@app/core/error/error.service';
 import { Duration } from '@app/core/util/duration';
 import { assertDefined } from '@app/core/util/utils';
 import { Activity } from '@app/projects/core/activity';
+import { Billability } from '@app/projects/core/billability';
+import { BillabilityService } from '@app/projects/core/billability.service';
 import { Subproject } from '@app/projects/core/subproject';
 import { SubprojectService } from '@app/projects/core/subproject.service';
 
@@ -19,19 +21,23 @@ export class ActivityFormComponent implements OnInit {
   @Input() activity!: Activity;
 
   form = this.fb.group({
+    number: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
     name: ['', Validators.required],
     startDate: ['', Validators.required],
     endDate: [''],
     budget: [null, Validators.min(0)],
-    isBillable: [false],
+    billability: [null],
   });
 
+  billabilities: Billability[] = [];
+
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private subprojectService: SubprojectService,
-    private errorService: ErrorService,
-    @Inject(LOCALE_ID) private locale: string,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly subprojectService: SubprojectService,
+    private readonly billabilityService: BillabilityService,
+    private readonly errorService: ErrorService,
+    @Inject(LOCALE_ID) private readonly locale: string,
   ) {}
 
   ngOnInit() {
@@ -40,6 +46,19 @@ export class ActivityFormComponent implements OnInit {
 
     this.form.patchValue(this.activity);
     this.formBudget = this.activity.budget;
+    this.billabilities = [this.activity.billability];
+
+    this.billabilityService.getAll().subscribe((billabilities) => {
+      if (!billabilities.some((b) => b.id === this.activity.billability.id)) {
+        billabilities = [this.activity.billability, ...billabilities];
+      }
+
+      this.billabilities = billabilities;
+    });
+  }
+
+  get isNew() {
+    return this.activity.id == null;
   }
 
   get formBudget(): Duration {
@@ -55,7 +74,11 @@ export class ActivityFormComponent implements OnInit {
     this.form.controls['budget'].setValue(formValue);
   }
 
-  hasError(controlName: string, errorName: string) {
+  hasError(controlName: string, errorName: string | string[]) {
+    if (Array.isArray(errorName)) {
+      return errorName.some((e) => this.form.controls[controlName].hasError(e));
+    }
+
     return this.form.controls[controlName].hasError(errorName);
   }
 
@@ -72,6 +95,10 @@ export class ActivityFormComponent implements OnInit {
   cancel() {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/subproject', this.subproject.id]);
+  }
+
+  compareById(option: Billability, value?: Billability) {
+    return option.id === value?.id;
   }
 
   private handleError(errorResponse: ErrorResponse) {

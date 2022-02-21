@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="Subproject.cs" company="Christian Ewald">
+// <copyright file="Billability.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -9,9 +9,9 @@
 namespace RolXServer.Projects.DataAccess;
 
 /// <summary>
-/// A subproject we are working on.
+/// The billability of activities.
 /// </summary>
-public sealed class Subproject
+public sealed class Billability
 {
     /// <summary>
     /// Gets or sets the identifier.
@@ -19,32 +19,22 @@ public sealed class Subproject
     public int Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the number.
-    /// </summary>
-    public int Number { get; set; }
-
-    /// <summary>
     /// Gets or sets the name.
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the project number.
+    /// Gets or sets a value indicating whether this instance is billable.
     /// </summary>
-    public int ProjectNumber { get; set; }
+    public bool IsBillable { get; set; }
 
     /// <summary>
-    /// Gets or sets the project name.
+    /// Gets or sets the sorting weight.
     /// </summary>
-    public string ProjectName { get; set; } = string.Empty;
+    public int SortingWeight { get; set; }
 
     /// <summary>
-    /// Gets or sets the name of the customer.
+    /// Gets or sets a value indicating whether this <see cref="Billability"/> is inactive.
     /// </summary>
-    public string CustomerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the activities.
-    /// </summary>
-    public List<Activity> Activities { get; set; } = new List<Activity>();
+    public bool Inactive { get; set; }
 }

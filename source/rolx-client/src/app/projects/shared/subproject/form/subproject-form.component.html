@@ -1,21 +1,38 @@
 <mat-card>
   <mat-card-title *ngIf="isNew"> Neues Subprojekt </mat-card-title>
-
   <mat-card-title *ngIf="!isNew"> Subprojekt bearbeiten </mat-card-title>
 
   <mat-card-content>
     <form id="subproject-edit" [formGroup]="form" (ngSubmit)="submit()" autocomplete="off">
-      <mat-form-field>
-        <input matInput formControlName="number" placeholder="Nummer" required />
-        <mat-error *ngIf="hasError('number', 'required')"> Pflichtfeld </mat-error>
-        <mat-error *ngIf="hasError('number', 'notUnique')">
-          Diese Nummer ist bereits vergeben
-        </mat-error>
-        <mat-error *ngIf="hasError('number', 'pattern')"> Ungültiges Format </mat-error>
+      <mat-form-field appearance="standard">
+        <mat-label>Projektnummer</mat-label>
+        <input matInput formControlName="projectNumber" placeholder="PPPP" />
+        <mat-error *ngIf="hasError('projectNumber', 'required')"> Pflichtfeld </mat-error>
+        <mat-error *ngIf="hasError('projectNumber', ['min', 'max'])"> 1..9999 </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <input matInput formControlName="name" placeholder="Name" required />
+      <mat-form-field appearance="standard">
+        <mat-label>Subprojektnummer</mat-label>
+        <input matInput formControlName="number" placeholder="SSS" />
+        <mat-error *ngIf="hasError('number', 'required')"> Pflichtfeld </mat-error>
+        <mat-error *ngIf="hasError('number', ['min', 'max'])"> 1..999 </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Kunde</mat-label>
+        <input matInput formControlName="customerName" />
+        <mat-error *ngIf="hasError('customerName', 'required')"> Pflichtfeld </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Projekt</mat-label>
+        <input matInput formControlName="projectName" />
+        <mat-error *ngIf="hasError('projectName', 'required')"> Pflichtfeld </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Subprojekt</mat-label>
+        <input matInput formControlName="name" />
         <mat-error *ngIf="hasError('name', 'required')"> Pflichtfeld </mat-error>
       </mat-form-field>
     </form>

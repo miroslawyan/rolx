@@ -21,7 +21,7 @@ public class Subproject
     /// <summary>
     /// Gets or sets the number.
     /// </summary>
-    public string Number { get; set; } = string.Empty;
+    public int Number { get; set; }
 
     /// <summary>
     /// Gets or sets the name.
@@ -29,7 +29,32 @@ public class Subproject
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the project number.
+    /// </summary>
+    public int ProjectNumber { get; set; }
+
+    /// <summary>
+    /// Gets or sets the project name.
+    /// </summary>
+    public string ProjectName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the name of the customer.
+    /// </summary>
+    public string CustomerName { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the activities.
     /// </summary>
     public List<Activity> Activities { get; set; } = new List<Activity>();
+
+    /// <summary>
+    /// Gets or sets the full-qualified number.
+    /// </summary>
+    public string FullNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the full-qualified name.
+    /// </summary>
+    public string FullName { get; set; } = string.Empty;
 }

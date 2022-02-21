@@ -7,6 +7,8 @@
 // -----------------------------------------------------------------------
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
 using RolXServer.Projects.DataAccess;
 using RolXServer.Records.DataAccess;
 using RolXServer.Users.DataAccess;
@@ -29,24 +31,29 @@ public sealed class RolXContext : DbContext
     }
 
     /// <summary>
-    /// Gets or sets the favourite activities.
-    /// </summary>
-    public DbSet<FavouriteActivity> FavouriteActivities { get; set; } = null!;
-
-    /// <summary>
     /// Gets or sets the activities.
     /// </summary>
     public DbSet<Activity> Activities { get; set; } = null!;
 
     /// <summary>
-    /// Gets or sets the subprojects.
+    /// Gets or sets the billabilities.
     /// </summary>
-    public DbSet<Subproject> Subprojects { get; set; } = null!;
+    public DbSet<Billability> Billabilities { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the favourite activities.
+    /// </summary>
+    public DbSet<FavouriteActivity> FavouriteActivities { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the records.
     /// </summary>
     public DbSet<Record> Records { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the subprojects.
+    /// </summary>
+    public DbSet<Subproject> Subprojects { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the users.
@@ -77,6 +84,19 @@ public sealed class RolXContext : DbContext
     /// </remarks>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Activity>()
+           .HasIndex(a => new { a.SubprojectId, a.Number })
+           .IsUnique();
+
+        modelBuilder.Entity<Activity>()
+            .Property(a => a.Budget)
+            .HasConversion(new TimeSpanToTicksConverter());
+
+        modelBuilder.Entity<Activity>()
+            .HasOne(e => e.Billability)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<FavouriteActivity>()
             .HasKey(s => new { s.UserId, s.ActivityId });
 
@@ -87,12 +107,13 @@ public sealed class RolXContext : DbContext
         modelBuilder.Entity<RecordEntry>()
             .ToTable("RecordEntries");
 
-        modelBuilder.Entity<Activity>()
-            .HasIndex(ph => new { ph.SubprojectId, ph.Number })
-            .IsUnique();
+        modelBuilder.Entity<RecordEntry>()
+            .HasOne(e => e.Activity)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Subproject>()
-            .HasIndex(c => c.Number).IsUnique();
+             .HasIndex(s => new { s.ProjectNumber, s.Number }).IsUnique();
 
         modelBuilder.Entity<User>()
             .HasIndex(u => u.GoogleId).IsUnique();
@@ -100,7 +121,40 @@ public sealed class RolXContext : DbContext
         modelBuilder.Entity<UserPartTimeSetting>()
             .HasIndex(s => new { s.UserId, s.StartDate }).IsUnique();
 
+        SeedBillabilities(modelBuilder);
         SeedSubprojects(modelBuilder);
+    }
+
+    private static void SeedBillabilities(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Billability>().HasData(new Billability
+        {
+            Id = 1,
+            Name = "Nicht verrechenbar",
+            IsBillable = false,
+            SortingWeight = 100,
+        });
+        modelBuilder.Entity<Billability>().HasData(new Billability
+        {
+            Id = 2,
+            Name = "Verrechenbar Engineering",
+            IsBillable = true,
+            SortingWeight = 1,
+        });
+        modelBuilder.Entity<Billability>().HasData(new Billability
+        {
+            Id = 3,
+            Name = "Verrechenbar TP",
+            IsBillable = true,
+            SortingWeight = 2,
+        });
+        modelBuilder.Entity<Billability>().HasData(new Billability
+        {
+            Id = 4,
+            Name = "Verrechenbar 50+",
+            IsBillable = true,
+            SortingWeight = 3,
+        });
     }
 
     private static void SeedSubprojects(ModelBuilder modelBuilder)
@@ -108,60 +162,123 @@ public sealed class RolXContext : DbContext
         modelBuilder.Entity<Subproject>().HasData(new Subproject
         {
             Id = 1,
-            Number = "P0001",
-            Name = "Lockheed Martin",
-        });
-
-        modelBuilder.Entity<Activity>().HasData(new Activity
-        {
-            Id = 1,
-            SubprojectId = 1,
             Number = 1,
             Name = "F35",
-            FullName = "P0001.001 - Lockheed Martin - F35",
-            StartDate = new DateTime(2021, 8, 22),
-            IsBillable = true,
+            ProjectNumber = 4711,
+            ProjectName = "Auto Pilot",
+            CustomerName = "Lockheed Martin",
         });
 
         modelBuilder.Entity<Activity>().HasData(new Activity
         {
-            Id = 2,
+            Id = 11,
+            SubprojectId = 1,
+            Number = 1,
+            Name = "Take off",
+            StartDate = new DateTime(2021, 8, 22),
+            BillabilityId = 2,
+        });
+
+        modelBuilder.Entity<Activity>().HasData(new Activity
+        {
+            Id = 12,
             SubprojectId = 1,
             Number = 2,
-            Name = "F117-A",
-            FullName = "P0001.002 - Lockheed Martin - F117-A",
+            Name = "Cruise",
             StartDate = new DateTime(2022, 2, 16),
-            IsBillable = false,
+            BillabilityId = 1,
         });
 
         modelBuilder.Entity<Activity>().HasData(new Activity
         {
-            Id = 3,
+            Id = 13,
             SubprojectId = 1,
             Number = 3,
-            Name = "HaGaHuWa",
-            FullName = "P0001.003 - Lockheed Martin - HaGaHuWa",
-            StartDate = new DateTime(2021, 1, 1),
-            EndDate = new DateTime(2022, 2, 16),
-            IsBillable = true,
+            Name = "Landing",
+            StartDate = new DateTime(2022, 1, 1),
+            EndDate = new DateTime(2022, 3, 16),
+            BillabilityId = 3,
         });
 
         modelBuilder.Entity<Subproject>().HasData(new Subproject
         {
             Id = 2,
-            Number = "P0002",
-            Name = "SRF",
+            Number = 2,
+            Name = "F117A",
+            ProjectNumber = 4711,
+            ProjectName = "Auto Pilot",
+            CustomerName = "Lockheed Martin",
         });
 
         modelBuilder.Entity<Activity>().HasData(new Activity
         {
-            Id = 4,
+            Id = 21,
             SubprojectId = 2,
             Number = 1,
-            Name = "Malony",
-            FullName = "P0002.001 - SRF - Malony",
-            StartDate = new DateTime(2021, 12, 5),
-            IsBillable = true,
+            Name = "Take off",
+            StartDate = new DateTime(2021, 8, 22),
+            BillabilityId = 4,
+        });
+
+        modelBuilder.Entity<Activity>().HasData(new Activity
+        {
+            Id = 22,
+            SubprojectId = 2,
+            Number = 2,
+            Name = "Cruise",
+            StartDate = new DateTime(2022, 2, 16),
+            BillabilityId = 1,
+        });
+
+        modelBuilder.Entity<Activity>().HasData(new Activity
+        {
+            Id = 23,
+            SubprojectId = 2,
+            Number = 3,
+            Name = "Landing",
+            StartDate = new DateTime(2022, 1, 1),
+            EndDate = new DateTime(2022, 3, 16),
+            BillabilityId = 2,
+        });
+
+        modelBuilder.Entity<Subproject>().HasData(new Subproject
+        {
+            Id = 3,
+            Number = 1,
+            Name = "Fragengenerator",
+            ProjectNumber = 3141,
+            ProjectName = "ABC SRF 3",
+            CustomerName = "SRF",
+        });
+
+        modelBuilder.Entity<Activity>().HasData(new Activity
+        {
+            Id = 31,
+            SubprojectId = 3,
+            Number = 1,
+            Name = "Analyse",
+            StartDate = new DateTime(2022, 1, 1),
+            BillabilityId = 3,
+        });
+
+        modelBuilder.Entity<Activity>().HasData(new Activity
+        {
+            Id = 32,
+            SubprojectId = 3,
+            Number = 2,
+            Name = "Umsetzung",
+            StartDate = new DateTime(2022, 1, 1),
+            BillabilityId = 4,
+        });
+
+        modelBuilder.Entity<Activity>().HasData(new Activity
+        {
+            Id = 33,
+            SubprojectId = 3,
+            Number = 3,
+            Name = "Übergabe",
+            StartDate = new DateTime(2022, 1, 1),
+            BillabilityId = 2,
         });
     }
 }

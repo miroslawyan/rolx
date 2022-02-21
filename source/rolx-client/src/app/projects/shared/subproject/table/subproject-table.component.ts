@@ -11,7 +11,7 @@ import { SubprojectService } from '@app/projects/core/subproject.service';
   styleUrls: ['./subproject-table.component.scss'],
 })
 export class SubprojectTableComponent implements OnInit {
-  displayedColumns: string[] = ['number', 'name', 'tools'];
+  displayedColumns: string[] = ['fullNumber', 'customerName', 'projectName', 'name', 'tools'];
   subprojects = new MatTableDataSource<Subproject>();
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;

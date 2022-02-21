@@ -17,7 +17,7 @@ public sealed class SubprojectServiceTests
     private static Subproject SeedSubproject => new Subproject
     {
         Id = 1,
-        Number = "1",
+        Number = 1,
         Name = "One",
         Activities = new List<Activity>
             {
@@ -51,9 +51,9 @@ public sealed class SubprojectServiceTests
         using (var context = contextFactory())
         {
             context.Subprojects
-                .Include(p => p.Activities)
-                .Single(p => p.Id == 1)
-                .Activities.Single(ph => ph.Number == 1)
+                .Include(s => s.Activities)
+                .Single(s => s.Id == 1)
+                .Activities.Single(a => a.Number == 1)
                 .Name.Should().Be("Changed");
         }
     }
@@ -75,8 +75,8 @@ public sealed class SubprojectServiceTests
         using (var context = contextFactory())
         {
             context.Subprojects
-                .Include(p => p.Activities)
-                .Single(p => p.Id == 1)
+                .Include(s => s.Activities)
+                .Single(s => s.Id == 1)
                 .Activities.Count.Should().Be(1);
         }
     }
@@ -103,8 +103,8 @@ public sealed class SubprojectServiceTests
         using (var context = contextFactory())
         {
             context.Subprojects
-                .Include(p => p.Activities)
-                .Single(p => p.Id == 1)
+                .Include(s => s.Activities)
+                .Single(s => s.Id == 1)
                 .Activities.Count.Should().Be(3);
         }
     }

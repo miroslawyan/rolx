@@ -29,11 +29,6 @@ public sealed class Activity
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the full name.
-    /// </summary>
-    public string FullName { get; set; } = string.Empty;
-
-    /// <summary>
     /// Gets or sets the start date.
     /// </summary>
     public string StartDate { get; set; } = string.Empty;
@@ -44,12 +39,22 @@ public sealed class Activity
     public string? EndDate { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether this instance is billable.
+    /// Gets or sets the billability.
     /// </summary>
-    public bool IsBillable { get; set; }
+    public DataAccess.Billability Billability { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the budget in seconds.
     /// </summary>
     public long Budget { get; set; }
+
+    /// <summary>
+    /// Gets or sets the full-qualified number.
+    /// </summary>
+    public string FullNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the full-qualified name.
+    /// </summary>
+    public string FullName { get; set; } = string.Empty;
 }

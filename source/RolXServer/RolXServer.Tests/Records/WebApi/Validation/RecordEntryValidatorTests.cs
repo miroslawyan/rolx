@@ -24,7 +24,7 @@ public sealed class RecordEntryValidatorTests
     private static Subproject SeedSubproject => new Subproject
     {
         Id = 1,
-        Number = "1",
+        Number = 1,
         Name = "One",
         Activities = new List<Activity>
             {

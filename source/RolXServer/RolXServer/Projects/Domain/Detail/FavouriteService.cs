@@ -39,7 +39,12 @@ internal sealed class FavouriteService : IFavouriteService
     {
         return await this.context.FavouriteActivities
             .Where(f => f.UserId == userId)
+            .Include(f => f.Activity)
+                .ThenInclude(a => a!.Subproject)
+            .Include(f => f.Activity)
+                .ThenInclude(a => a!.Billability)
             .Select(f => f.Activity!)
+            .AsNoTracking()
             .ToListAsync();
     }
 

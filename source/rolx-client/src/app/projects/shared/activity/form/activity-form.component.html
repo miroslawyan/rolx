@@ -1,23 +1,31 @@
 <mat-card>
-  <mat-card-title
-    >Aktivität {{subproject.number}}.{{activity.number | number:'3.0'}}</mat-card-title
-  >
+  <mat-card-title *ngIf="isNew"> Neue Aktivität </mat-card-title>
+  <mat-card-title *ngIf="!isNew"> Aktivität bearbeiten </mat-card-title>
 
   <mat-card-content>
-    <p>Subproject {{subproject.number}} - {{subproject.name}}</p>
+    <p>{{subproject.fullName}}</p>
 
     <form id="activity-edit" [formGroup]="form" (ngSubmit)="submit()" autocomplete="off">
-      <mat-form-field>
-        <input matInput formControlName="name" placeholder="Name" required />
+      <mat-form-field appearance="standard">
+        <mat-label>Aktivitätsnummer</mat-label>
+        <input matInput formControlName="number" placeholder="AA" />
+        <mat-error *ngIf="hasError('number', 'required')"> Pflichtfeld </mat-error>
+        <mat-error *ngIf="hasError('number', ['min', 'max'])"> 1..99 </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required />
         <mat-error *ngIf="hasError('name', 'required')"> Pflichtfeld </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>Start</mat-label>
         <input
           matInput
           formControlName="startDate"
           [matDatepicker]="startDatePicker"
-          placeholder="Start"
+          placeholder="dd.mm.yyyy"
           (focus)="startDatePicker.open()"
           required />
         <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
@@ -25,13 +33,14 @@
         <mat-error *ngIf="hasError('startDate', 'required')"> Pflichtfeld </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>Ende</mat-label>
         <input
           matInput
           formControlName="endDate"
           [matDatepicker]="endDatePicker"
           (focus)="endDatePicker.open()"
-          placeholder="Ende"
+          placeholder="dd.mm.yyyy"
           [min]="form.controls['startDate'].value" />
         <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #endDatePicker></mat-datepicker>
@@ -40,15 +49,23 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <input matInput type="number" formControlName="budget" placeholder="Budget" />
+      <mat-form-field appearance="standard">
+        <mat-label>Budget</mat-label>
+        <input matInput type="number" formControlName="budget" />
         <span matSuffix>h</span>
         <mat-error *ngIf="hasError('budget', 'min')">
           Negative Budgets sind nur schwer einzuhalten.
         </mat-error>
       </mat-form-field>
 
-      <mat-checkbox formControlName="isBillable">Verrechenbar</mat-checkbox>
+      <mat-form-field appearance="standard">
+        <mat-label>Verrechenbarkeit</mat-label>
+        <mat-select formControlName="billability" [compareWith]="compareById">
+          <mat-option *ngFor="let billability of billabilities" [value]="billability">
+            {{billability.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </form>
   </mat-card-content>
 

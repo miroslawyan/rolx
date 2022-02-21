@@ -35,11 +35,11 @@ internal sealed class SubprojectService : ISubprojectService
     /// The subprojects.
     /// </returns>
     public async Task<IEnumerable<Subproject>> GetAll()
-    {
-        return await this.dbContext.Subprojects
+        => await this.dbContext.Subprojects
+            .AsNoTracking()
             .Include(p => p.Activities)
+            .ThenInclude(a => a.Billability)
             .ToListAsync();
-    }
 
     /// <summary>
     /// Gets a subproject by the specified identifier.
@@ -49,11 +49,11 @@ internal sealed class SubprojectService : ISubprojectService
     /// The subproject or <c>null</c> if none has been found.
     /// </returns>
     public async Task<Subproject?> GetById(int id)
-    {
-        return await this.dbContext.Subprojects
+        => await this.dbContext.Subprojects
+            .AsNoTracking()
             .Include(p => p.Activities)
+            .ThenInclude(a => a.Billability)
             .FirstOrDefaultAsync(p => p.Id == id);
-    }
 
     /// <summary>
     /// Adds the specified subproject.
@@ -77,16 +77,17 @@ internal sealed class SubprojectService : ISubprojectService
     {
         subproject.Activities.Sanitize();
 
-        this.dbContext.Subprojects.Update(subproject);
-
         var activityIds = subproject.Activities
-            .Select(ph => ph.Id);
+            .Select(a => a.Id);
 
-        this.dbContext.RemoveRange(
-            this.dbContext.Subprojects
-            .Where(p => p.Id == subproject.Id)
-            .SelectMany(p => p.Activities)
-            .Where(ph => !activityIds.Contains(ph.Id)));
+        var orphanActivities = await this.dbContext.Subprojects
+            .Where(s => s.Id == subproject.Id)
+            .SelectMany(s => s.Activities)
+            .Where(a => !activityIds.Contains(a.Id))
+            .ToListAsync();
+
+        this.dbContext.Subprojects.Update(subproject);
+        this.dbContext.RemoveRange(orphanActivities);
 
         await this.dbContext.SaveChangesAsync();
     }

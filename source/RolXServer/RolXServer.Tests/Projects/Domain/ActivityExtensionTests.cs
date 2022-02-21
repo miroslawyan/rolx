@@ -8,29 +8,26 @@
 
 using RolXServer.Projects.DataAccess;
 
-namespace RolXServer.Projects.Domain.Detail;
+namespace RolXServer.Projects.Domain;
 
+[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 public sealed class ActivityExtensionTests
 {
-    private Subproject subproject = null!;
-
-    [SetUp]
-    public void SetUp()
+    private readonly Subproject subproject = new Subproject
     {
-        this.subproject = new Subproject
+        ProjectNumber = 4711,
+        Number = 1,
+        Activities = new List<Activity>
         {
-            Number = "P1234",
-            Name = "Foo",
-            Activities = new List<Activity>
-                {
-                    new Activity
-                    {
-                        Number = 42,
-                        Name = "Bar",
-                    },
-                },
-        };
+            new Activity
+            {
+                Number = 3,
+            },
+        },
+    };
 
+    public ActivityExtensionTests()
+    {
         foreach (var activity in this.subproject.Activities)
         {
             activity.Subproject = this.subproject;
@@ -38,12 +35,10 @@ public sealed class ActivityExtensionTests
     }
 
     [Test]
-    public void Sanitize_FullName()
+    public void FullNumber()
     {
-        var activity = this.subproject.Activities[0];
-        activity.Sanitize();
-
-        activity.FullName.Should().Be("P1234.042 - Foo - Bar");
+        this.subproject.Activities[0].FullNumber()
+            .Should().Be("#4711.001.03");
     }
 
     [Test]

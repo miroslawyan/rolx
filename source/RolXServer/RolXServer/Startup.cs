@@ -56,7 +56,7 @@ public class Startup
                 maxRetryDelay: TimeSpan.FromSeconds(5),
                 errorNumbersToAdd: Array.Empty<int>())));
 
-        services.AddAccount(this.Configuration);
+        services.AddProjects();
         services.AddAuth(this.Configuration);
         services.AddWorkRecord(this.Configuration);
         services.AddUserManagement();

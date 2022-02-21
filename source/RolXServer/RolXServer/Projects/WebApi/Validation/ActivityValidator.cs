@@ -22,25 +22,26 @@ public sealed class ActivityValidator : AbstractValidator<Activity>
     /// </summary>
     public ActivityValidator()
     {
-        this.RuleFor(ph => ph.Number)
-            .GreaterThan(0);
+        this.RuleFor(a => a.Number)
+            .GreaterThan(0)
+            .LessThan(100);
 
-        this.RuleFor(ph => ph.Name)
+        this.RuleFor(a => a.Name)
             .NotNull()
             .NotEmpty();
 
-        this.RuleFor(ph => ph.StartDate)
+        this.RuleFor(a => a.StartDate)
             .NotNull()
             .NotEmpty()
             .SetValidator(new IsoDateValidator<Activity>());
 
-        this.RuleFor(ph => ph.EndDate)
+        this.RuleFor(a => a.EndDate)
             .NotEmpty()
             .SetValidator(new IsoDateValidator<Activity>())
             .GreaterThanOrEqualTo(ph => ph.StartDate)
-            .When(ph => ph.EndDate is not null);
+            .When(a => a.EndDate is not null);
 
-        this.RuleFor(ph => ph.Budget)
+        this.RuleFor(a => a.Budget)
             .GreaterThanOrEqualTo(0);
     }
 }

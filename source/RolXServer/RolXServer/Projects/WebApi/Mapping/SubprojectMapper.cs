@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using RolXServer.Projects.Domain;
+
 namespace RolXServer.Projects.WebApi.Mapping;
 
 /// <summary>
@@ -25,7 +27,12 @@ internal static class SubprojectMapper
             Id = domain.Id,
             Number = domain.Number,
             Name = domain.Name,
+            ProjectNumber = domain.ProjectNumber,
+            ProjectName = domain.ProjectName,
+            CustomerName = domain.CustomerName,
             Activities = domain.Activities.Select(ph => ph.ToResource()).ToList(),
+            FullNumber = domain.FullNumber(),
+            FullName = domain.FullName(),
         };
     }
 
@@ -43,6 +50,9 @@ internal static class SubprojectMapper
             Id = resource.Id,
             Number = resource.Number,
             Name = resource.Name,
+            ProjectNumber = resource.ProjectNumber,
+            ProjectName = resource.ProjectName,
+            CustomerName = resource.CustomerName,
         };
 
         domain.Activities = resource.Activities

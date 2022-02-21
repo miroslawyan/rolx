@@ -8,9 +8,6 @@
 
 using FluentValidation;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-
 using RolXServer.Projects.WebApi.Resource;
 
 namespace RolXServer.Projects.WebApi.Validation;
@@ -20,75 +17,45 @@ namespace RolXServer.Projects.WebApi.Validation;
 /// </summary>
 public sealed class SubprojectValidator : AbstractValidator<Subproject>
 {
-    private readonly RolXContext dbContext;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="SubprojectValidator" /> class.
     /// </summary>
-    /// <param name="dbContext">The database context.</param>
-    /// <param name="settingsAccessor">The settings accessor.</param>
-    public SubprojectValidator(
-        RolXContext dbContext,
-        IOptions<Settings> settingsAccessor)
+    public SubprojectValidator()
     {
-        this.dbContext = dbContext;
-        this.dbContext = dbContext;
-        var settings = settingsAccessor.Value;
+        this.RuleFor(s => s.Number)
+            .GreaterThan(0)
+            .LessThan(1000);
 
-        this.RuleFor(p => p.Number)
-            .NotNull()
-            .NotEmpty().WithMessage("required")
-            .Matches(settings.ProjectNumberPattern).WithMessage("pattern")
-            .MustAsync(this.BeUnique);
-
-        this.RuleFor(p => p.Name)
+        this.RuleFor(s => s.Name)
             .NotNull()
             .NotEmpty().WithMessage("required");
 
-        this.RuleFor(p => p.Activities)
-            .Must(this.HaveUniqueNumbers)
-            .MustAsync(this.BeOfCurrentSubproject);
+        this.RuleFor(s => s.ProjectNumber)
+            .GreaterThan(0)
+            .LessThan(10000);
 
-        this.RuleForEach(p => p.Activities)
+        this.RuleFor(s => s.ProjectName)
+            .NotNull()
+            .NotEmpty().WithMessage("required");
+
+        this.RuleFor(s => s.CustomerName)
+            .NotNull()
+            .NotEmpty().WithMessage("required");
+
+        this.RuleFor(s => s.Activities)
+            .Must(this.HaveUniqueNumbers);
+
+        this.RuleForEach(s => s.Activities)
             .SetValidator(_ => new ActivityValidator());
-    }
-
-    private async Task<bool> BeUnique(Subproject candidate, string newNumber, ValidationContext<Subproject> context, CancellationToken token)
-    {
-        if (await this.dbContext.Subprojects
-            .AnyAsync(p => p.Id != candidate.Id && p.Number == newNumber, token))
-        {
-            context.AddFailure("notUnique");
-            return false;
-        }
-
-        return true;
     }
 
     private bool HaveUniqueNumbers(Subproject candidate, IEnumerable<Activity> activities, ValidationContext<Subproject> context)
     {
-        if (activities.Select(ph => ph.Number)
+        if (activities.Select(a => a.Number)
             .GroupBy(n => n)
             .Any(g => g.Count() > 1))
         {
-            context.AddFailure("activity numbers must be unique");
-            return false;
-        }
-
-        return true;
-    }
-
-    private async Task<bool> BeOfCurrentSubproject(Subproject candidate, IEnumerable<Activity> activities, ValidationContext<Subproject> context, CancellationToken token)
-    {
-        var activityIds = activities.Select(ph => ph.Id)
-            .Where(id => id != 0)
-            .ToArray();
-
-        if (await this.dbContext.Activities
-            .Where(ph => activityIds.Contains(ph.Id))
-            .AnyAsync(ph => ph.SubprojectId != candidate.Id))
-        {
-            context.AddFailure("activities must be of current subproject");
+            context.AddFailure("activity numbers must be unique within the subproject");
             return false;
         }
 

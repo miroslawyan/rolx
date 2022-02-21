@@ -10,225 +10,145 @@ using RolXServer.Projects.WebApi.Resource;
 
 namespace RolXServer.Projects.WebApi.Validation;
 
+[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 public sealed class ActivityValidatorTests
 {
-    private ActivityValidator sut = null!;
+    private readonly ActivityValidator sut = new ActivityValidator();
+    private readonly Activity model = new();
 
-    [SetUp]
-    public void SetUp()
+    [Test]
+    public void Number_MustBeGreaterThanZero()
     {
-        this.sut = new ActivityValidator();
+        this.model.Number = 0;
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.Number);
     }
 
     [Test]
-    public void Number_MustNotBeZero()
+    public void Number_MustBeLessThan100()
     {
-        var model = new Activity
-        {
-            Number = 0,
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.Number);
+        this.model.Number = 100;
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.Number);
     }
 
     [Test]
-    public void Number_MustNotBeNegative()
+    public void Number_FineWhenWithinRange()
     {
-        var model = new Activity
-        {
-            Number = -42,
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.Number);
-    }
-
-    [Test]
-    public void Number_ShouldBePositive()
-    {
-        var model = new Activity
-        {
-            Number = 42,
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.Number);
+        this.model.Number = 42;
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.Number);
     }
 
     [Test]
     public void Name_MustNotBeNull()
     {
-        var model = new Activity
-        {
-            Name = null!,
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.Name);
+        this.model.Name = null!;
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.Name);
     }
 
     [Test]
     public void Name_MustNotBeEmpty()
     {
-        var model = new Activity
-        {
-            Name = string.Empty,
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.Name);
+        this.model.Name = string.Empty;
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.Name);
     }
 
     [Test]
     public void Name_MayBeAnyText()
     {
-        var model = new Activity
-        {
-            Name = "The foo is in the bar!",
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.Name);
+        this.model.Name = "The foo is in the bar!";
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.Name);
     }
 
     [Test]
     public void StartDate_MustNotBeNull()
     {
-        var model = new Activity
-        {
-            StartDate = null!,
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.StartDate);
+        this.model.StartDate = null!;
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.StartDate);
     }
 
     [Test]
     public void StartDate_MustNotBeEmpty()
     {
-        var model = new Activity
-        {
-            StartDate = string.Empty,
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.StartDate);
+        this.model.StartDate = string.Empty;
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.StartDate);
     }
 
     [Test]
     public void StartDate_ShouldBeAnIsoFormattedDate()
     {
-        var model = new Activity
-        {
-            StartDate = "2019-11-25",
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.StartDate);
+        this.model.StartDate = "2019-11-25";
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.StartDate);
     }
 
     [Test]
     public void StartDate_MustBeAValidDate()
     {
-        var model = new Activity
-        {
-            StartDate = "2019-11-31",
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.StartDate);
+        this.model.StartDate = "2019-11-31";
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.StartDate);
     }
 
     [Test]
     public void EndDate_MayBeNull()
     {
-        var model = new Activity
-        {
-            EndDate = null,
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
+        this.model.EndDate = null;
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void EndDate_IfNotNull_MustNotBeEmpty()
     {
-        var model = new Activity
-        {
-            EndDate = string.Empty,
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.EndDate);
+        this.model.EndDate = string.Empty;
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void StartDate_IfNotNull_ShouldBeAnIsoFormattedDate()
     {
-        var model = new Activity
-        {
-            EndDate = "2019-11-25",
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
+        this.model.EndDate = "2019-11-25";
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void EndDate_IfNotNull_MustNotBeBeforeStartDate()
     {
-        var model = new Activity
-        {
-            StartDate = "2019-11-25",
-            EndDate = "2019-11-24",
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.EndDate);
+        this.model.StartDate = "2019-11-25";
+        this.model.EndDate = "2019-11-24";
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void EndDate_IfNotNull_MayBeSameAsStartDate()
     {
-        var model = new Activity
-        {
-            StartDate = "2019-11-25",
-            EndDate = "2019-11-25",
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
+        this.model.StartDate = "2019-11-25";
+        this.model.EndDate = "2019-11-25";
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void EndDate_IfNotNull_MayBeAfterStartDate()
     {
-        var model = new Activity
-        {
-            StartDate = "2019-11-25",
-            EndDate = "2019-11-26",
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
+        this.model.StartDate = "2019-11-25";
+        this.model.EndDate = "2019-11-26";
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void Budget_MustNotBeNegative()
     {
-        var model = new Activity
-        {
-            Budget = -42,
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.Budget);
+        this.model.Budget = -42;
+        this.sut.TestValidate(this.model).ShouldHaveValidationErrorFor(activity => activity.Budget);
     }
 
     [Test]
     public void Budget_ShouldBePositive()
     {
-        var model = new Activity
-        {
-            Budget = 42,
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.Budget);
+        this.model.Budget = 42;
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.Budget);
     }
 
     [Test]
     public void Budget_MayBeZero()
     {
-        var model = new Activity
-        {
-            Budget = 0,
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.Budget);
+        this.model.Budget = 0;
+        this.sut.TestValidate(this.model).ShouldNotHaveValidationErrorFor(activity => activity.Budget);
     }
 }

@@ -17,14 +17,11 @@ public static class ServiceCollectionExtensions
     /// Adds the services of the Projects package.
     /// </summary>
     /// <param name="services">The services.</param>
-    /// <param name="configuration">The configuration.</param>
     /// <returns>
     /// The service collection.
     /// </returns>
-    public static IServiceCollection AddAccount(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddProjects(this IServiceCollection services)
     {
-        services.Configure<Settings>(configuration.GetSection("Subprojects"));
-
         return services.AddDomain();
     }
 
