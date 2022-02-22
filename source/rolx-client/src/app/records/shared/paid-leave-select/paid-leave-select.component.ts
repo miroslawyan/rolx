@@ -4,7 +4,7 @@ import { assertDefined } from '@app/core/util/utils';
 import { PaidLeaveType } from '@app/records/core/paid-leave-type';
 import { Record } from '@app/records/core/record';
 import { Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import { ReasonDialogComponent, ReasonDialogData } from './reason-dialog/reason-dialog.component';
 
@@ -44,10 +44,7 @@ export class PaidLeaveSelectComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog) {
     this.subscriptions.add(
       this.typeSubject
-        .pipe(
-          distinctUntilChanged(),
-          filter((t) => t !== PaidLeaveType.Other),
-        )
+        .pipe(filter((t) => t !== PaidLeaveType.Other))
         .subscribe((t) => this.submit(t, undefined)),
     );
 

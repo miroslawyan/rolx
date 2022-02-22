@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ErrorService } from '@app/core/error/error.service';
 import { assertDefined } from '@app/core/util/utils';
 import { Activity } from '@app/projects/core/activity';
 import { FavouriteActivityService } from '@app/projects/core/favourite-activity.service';
@@ -44,6 +45,7 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   constructor(
     private favouriteActivityService: FavouriteActivityService,
     private workRecordService: WorkRecordService,
+    private errorService: ErrorService,
   ) {}
 
   @Input()
@@ -84,7 +86,13 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   }
 
   submit(record: Record, index: number) {
-    this.workRecordService.update(record).subscribe((r) => (this.records[index] = r));
+    this.workRecordService.update(record).subscribe({
+      next: (r) => (this.records[index] = r),
+      error: (err) => {
+        console.error(err);
+        this.errorService.notifyGeneralError();
+      },
+    });
   }
 
   private set favourites(value: Activity[]) {
