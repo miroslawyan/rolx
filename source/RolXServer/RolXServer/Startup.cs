@@ -67,8 +67,13 @@ public class Startup
     /// </summary>
     /// <param name="app">The application.</param>
     /// <param name="env">The environment.</param>
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    /// <param name="dbContext">The database context.</param>
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RolXContext dbContext)
     {
+        dbContext.Database.Migrate();
+
+        app.UseStaticFiles();
+
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -87,6 +92,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapFallbackToFile("index.html");
         });
     }
 }

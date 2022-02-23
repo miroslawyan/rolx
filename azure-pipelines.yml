@@ -3,76 +3,102 @@ trigger:
   - issue/*
 
 variables:
-  rolXServer: 'source/RolXServer'
-  rolXClient: 'source/rolx-client'
+  rolXServer: source/RolXServer
+  rolXClient: source/rolx-client
 
 jobs:
-  - job: Server
+  - job: Build
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: ubuntu-latest
 
     variables:
-      buildConfiguration: 'Release'
-      NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
     steps:
-      - task: UseDotNet@2
-        displayName: "install .NET 6"
-        inputs:
-          version: '6.x'
-          packageType: sdk
-
-      - task: DotNetCoreCLI@2
-        displayName: "dotnet build"
-        inputs:
-          command: build
-          projects: '$(rolXServer)/**/*.csproj'
-          arguments: --configuration $(buildConfiguration) /WarnAsError
-
-      - task: DotNetCoreCLI@2
-        displayName: "dotnet test"
-        inputs:
-          command: test
-          projects: '$(rolXServer)/**/*Tests/*.csproj'
-          arguments: '--configuration $(buildConfiguration)'
-
-  - job: Client
-    pool:
-      vmImage: 'ubuntu-latest'
-
-    steps:
       - task: Cache@2
-        displayName: "cache node_modules"
+        displayName: cache node_modules
         inputs:
-          key: '$(rolXClient)/package-lock.json'
-          path: '$(rolXClient)/node_modules'
+          key: $(rolXClient)/package-lock.json|build
+          path: $(rolXClient)/node_modules
           cacheHitVar: NODE_MODULES_RESTORED
 
       - script: npm ci
-        displayName: "npm ci"
-        workingDirectory: '$(rolXClient)'
-        condition: ne(variables.NODE_MODULES_RESTORED, 'true')
+        displayName: npm ci
+        workingDirectory: $(rolXClient)
+        condition: ne(variables.NODE_MODULES_RESTORED, true)
 
       - script: npm run ng -- build
-        displayName: "ng build"
-        workingDirectory: '$(rolXClient)'
+        displayName: ng build
+        workingDirectory: $(rolXClient)
+
+      - task: DotNetCoreCLI@2
+        displayName: dotnet publish
+        inputs:
+          command: publish
+          arguments: --configuration Release --output $(Build.StagingDirectory)/RolX
+          publishWebProjects: true
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Artifacts
+        inputs:
+          targetPath: $(Build.StagingDirectory)/RolX
+          artifactName: RolX
+
+  - job: TestServer
+    pool:
+      vmImage: ubuntu-latest
+
+    variables:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    steps:
+      - task: DotNetCoreCLI@2
+        displayName: dotnet build
+        inputs:
+          command: build
+          projects: $(rolXServer)/*.sln
+          arguments: --configuration Release /WarnAsError
+
+      - task: DotNetCoreCLI@2
+        displayName: dotnet test
+        inputs:
+          command: test
+          projects: $(rolXServer)/*.sln
+          arguments: --no-build --configuration Release
+
+  - job: TestClient
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+      - task: Cache@2
+        displayName: cache node_modules
+        inputs:
+          key: $(rolXClient)/package-lock.json|test
+          path: $(rolXClient)/node_modules
+          cacheHitVar: NODE_MODULES_RESTORED
+
+      - script: npm ci
+        displayName: npm ci
+        workingDirectory: $(rolXClient)
+        condition: ne(variables.NODE_MODULES_RESTORED, true)
 
       - script: npm run ng -- lint
-        displayName: "ng lint"
-        workingDirectory: '$(rolXClient)'
+        displayName: ng lint
+        workingDirectory: $(rolXClient)
         failOnStderr: true
 
       - script: npm run ng -- test --watch=false
-        displayName: "ng test"
-        workingDirectory: '$(rolXClient)'
+        displayName: ng test
+        workingDirectory: $(rolXClient)
 
       - task: PublishTestResults@2
-        displayName: 'publish test results'
+        displayName: publish test results
         condition: succeededOrFailed()
         inputs:
-          testResultsFormat: 'JUnit'
-          testResultsFiles: '$(rolXClient)/**/TESTS-*.xml'
+          testResultsFormat: JUnit
+          testResultsFiles: $(rolXClient)/**/TESTS-*.xml
 
 

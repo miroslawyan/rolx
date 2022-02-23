@@ -9,6 +9,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using NLog;
+
 using RolXServer.Projects.Domain;
 using RolXServer.Projects.WebApi.Mapping;
 using RolXServer.Projects.WebApi.Resource;
@@ -23,6 +25,8 @@ namespace RolXServer.Projects.WebApi;
 [Authorize(Policy = "ActiveUser")]
 public sealed class SubprojectController : ControllerBase
 {
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
     private readonly ISubprojectService subprojectService;
 
     /// <summary>

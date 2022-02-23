@@ -6,6 +6,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using NLog;
+using NLog.Web;
+
 namespace RolXServer;
 
 /// <summary>
@@ -19,7 +22,22 @@ public static class Program
     /// <param name="args">The arguments.</param>
     public static void Main(string[] args)
     {
-        CreateHostBuilder(args).Build().Run();
+        var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+
+        try
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+        catch (Exception exception)
+        {
+            logger.Error(exception, "Stopped program because of exception");
+            throw;
+        }
+        finally
+        {
+            // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+            LogManager.Shutdown();
+        }
     }
 
     /// <summary>
@@ -32,5 +50,11 @@ public static class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
-            });
+            })
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+            })
+            .UseNLog();
 }
