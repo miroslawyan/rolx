@@ -32,4 +32,9 @@ public sealed class Settings
     /// Gets or sets the white-list of allowed google hosted domains.
     /// </summary>
     public string[] GoogleHostedDomainWhitelist { get; set; } = Array.Empty<string>();
+
+    /// <summary>
+    /// Gets or sets the installation identifier.
+    /// </summary>
+    public string InstallationId { get; set; } = string.Empty;
 }

@@ -57,6 +57,7 @@ internal sealed class SignInService : ISignInService
         var info = new Info
         {
             GoogleClientId = this.settings.GoogleClientId,
+            InstallationId = this.settings.InstallationId,
         };
 
         return Task.FromResult(info);

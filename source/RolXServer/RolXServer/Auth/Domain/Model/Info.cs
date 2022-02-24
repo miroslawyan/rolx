@@ -17,4 +17,9 @@ public sealed class Info
     /// Gets or sets the google client identifier.
     /// </summary>
     public string GoogleClientId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the installation identifier.
+    /// </summary>
+    public string InstallationId { get; set; } = string.Empty;
 }

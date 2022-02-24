@@ -3,7 +3,9 @@ import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Component, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { AuthService } from '@app/auth/core/auth.service';
+import { Info } from '@app/auth/core/info';
 import { Role } from '@app/auth/core/role';
+import { SignInService } from '@app/auth/core/sign-in.service';
 import { PendingRequestService } from '@app/core/pending-request/pending-request.service';
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -25,6 +27,15 @@ export class MainPageComponent {
   );
 
   readonly Role = Role;
+  info?: Info;
+
+  get installationId(): string {
+    if (this.info !== undefined && this.info.installationId !== 'Production') {
+      return ' - ' + this.info.installationId;
+    }
+
+    return '';
+  }
 
   constructor(
     public authService: AuthService,
@@ -32,12 +43,15 @@ export class MainPageComponent {
     private pendingRequestService: PendingRequestService,
     private viewContainerRef: ViewContainerRef,
     private overlay: Overlay,
+    signInService: SignInService,
   ) {
     this.subscriptions.add(
       this.pendingRequestService.hasOverdueRequest$.subscribe((v) =>
         v ? this.showOverlay() : this.hideOverlay(),
       ),
     );
+
+    signInService.getInfo().subscribe((i) => (this.info = i));
   }
 
   private showOverlay() {
