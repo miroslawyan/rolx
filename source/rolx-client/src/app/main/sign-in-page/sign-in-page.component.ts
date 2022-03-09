@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/auth/core/auth.service';
 import { GoogleAuthService } from '@app/auth/core/google-auth.service';
-import { Info } from '@app/auth/core/info';
-import { SignInService } from '@app/auth/core/sign-in.service';
+import { InstallationIdService } from '@app/auth/core/installation-id.service';
 
 @Component({
   selector: 'rolx-sign-in',
@@ -13,25 +12,14 @@ import { SignInService } from '@app/auth/core/sign-in.service';
 export class SignInPageComponent implements OnInit {
   private forwardRoute = '';
   busy = false;
-  info?: Info;
-
-  get installationId(): string {
-    if (this.info !== undefined && this.info.installationId !== 'Production') {
-      return ' - ' + this.info.installationId;
-    }
-
-    return '';
-  }
 
   constructor(
     private readonly authService: AuthService,
     private readonly googleAuthService: GoogleAuthService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    signInService: SignInService,
-  ) {
-    signInService.getInfo().subscribe((i) => (this.info = i));
-  }
+    public readonly installationIdService: InstallationIdService,
+  ) {}
 
   ngOnInit(): void {
     this.forwardRoute = this.route.snapshot.queryParams['forwardRoute'] || '/';
