@@ -35,34 +35,32 @@ public sealed class RecordEntry
     /// <summary>
     /// Gets or sets the duration.
     /// </summary>
-    /// <remarks>
-    /// As we cannot sum-up durations in the database through TimeSpan,
-    /// We have to map them into seconds manually.
-    /// </remarks>
     [NotMapped]
     public TimeSpan Duration
     {
-        get
-        {
-            return TimeSpan.FromSeconds(this.DurationSeconds);
-        }
-
-        set
-        {
-            this.DurationSeconds = (long)value.TotalSeconds;
-        }
+        get => TimeSpan.FromSeconds(this.DurationSeconds);
+        set => this.DurationSeconds = (long)value.TotalSeconds;
     }
 
     /// <summary>
     /// Gets or sets the begin as time since midnight.
     /// </summary>
-    [Column(TypeName = "time")]
     public TimeSpan? Begin { get; set; }
+
+    /// <summary>
+    /// Gets or sets the pause duration in seconds.
+    /// </summary>
+    public long? PauseSeconds { get; set; }
 
     /// <summary>
     /// Gets or sets the pause duration.
     /// </summary>
-    public TimeSpan? Pause { get; set; }
+    [NotMapped]
+    public TimeSpan? Pause
+    {
+        get => this.PauseSeconds.HasValue ? TimeSpan.FromSeconds(this.PauseSeconds.Value) : null;
+        set => this.PauseSeconds = (long?)value?.TotalSeconds;
+    }
 
     /// <summary>
     /// Gets or sets the comment.

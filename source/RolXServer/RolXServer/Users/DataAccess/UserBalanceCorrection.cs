@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace RolXServer.Users.DataAccess;
 
 /// <summary>
@@ -29,12 +31,32 @@ public sealed class UserBalanceCorrection
     public DateTime DateTime { get; set; }
 
     /// <summary>
+    /// Gets or sets the overtime correction in seconds.
+    /// </summary>
+    public long OvertimeSeconds { get; set; }
+
+    /// <summary>
     /// Gets or sets the overtime correction.
     /// </summary>
-    public TimeSpan Overtime { get; set; }
+    [NotMapped]
+    public TimeSpan Overtime
+    {
+        get => TimeSpan.FromSeconds(this.OvertimeSeconds);
+        set => this.OvertimeSeconds = (long)value.TotalSeconds;
+    }
+
+    /// <summary>
+    /// Gets or sets the vacation correction in seconds.
+    /// </summary>
+    public long VacationSeconds { get; set; }
 
     /// <summary>
     /// Gets or sets the vacation correction.
     /// </summary>
-    public TimeSpan Vacation { get; set; }
+    [NotMapped]
+    public TimeSpan Vacation
+    {
+        get => TimeSpan.FromSeconds(this.VacationSeconds);
+        set => this.VacationSeconds = (long)value.TotalSeconds;
+    }
 }

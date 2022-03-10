@@ -7,7 +7,6 @@
 // -----------------------------------------------------------------------
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 using RolXServer.Projects.DataAccess;
 using RolXServer.Records.DataAccess;
@@ -70,27 +69,19 @@ public sealed class RolXContext : DbContext
     /// </summary>
     public DbSet<UserPartTimeSetting> UserPartTimeSettings { get; set; } = null!;
 
-    /// <summary>
-    /// Override this method to further configure the model that was discovered by convention from the entity types
-    /// exposed in <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1" /> properties on your derived context. The resulting model may be cached
-    /// and re-used for subsequent instances of your derived context.
-    /// </summary>
-    /// <param name="modelBuilder">The builder being used to construct the model for this context. Databases (and other extensions) typically
-    /// define extension methods on this object that allow you to configure aspects of the model that are specific
-    /// to a given database.</param>
-    /// <remarks>
-    /// If a model is explicitly set on the options for this context (via <see cref="M:Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.UseModel(Microsoft.EntityFrameworkCore.Metadata.IModel)" />)
-    /// then this method will not be run.
-    /// </remarks>
+    /// <inheritdoc/>
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<DateTime>().HavePrecision(0);
+        configurationBuilder.Properties<TimeSpan>().HavePrecision(0);
+    }
+
+    /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Activity>()
            .HasIndex(a => new { a.SubprojectId, a.Number })
            .IsUnique();
-
-        modelBuilder.Entity<Activity>()
-            .Property(a => a.Budget)
-            .HasConversion(new TimeSpanToTicksConverter());
 
         modelBuilder.Entity<Activity>()
             .HasOne(e => e.Billability)

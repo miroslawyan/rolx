@@ -43,8 +43,8 @@ internal static class RecordEntryMapper
         {
             ActivityId = resource.ActivityId,
             Duration = TimeSpan.FromSeconds(resource.Duration),
-            Begin = resource.Begin.HasValue ? TimeSpan.FromSeconds(resource.Begin.Value) : (TimeSpan?)null,
-            Pause = resource.Pause.HasValue && resource.Pause > 0 ? TimeSpan.FromSeconds(resource.Pause.Value) : (TimeSpan?)null,
+            Begin = resource.Begin.HasValue ? TimeSpan.FromSeconds(resource.Begin.Value) : null,
+            Pause = resource.Pause.HasValue && resource.Pause > 0 ? TimeSpan.FromSeconds(resource.Pause.Value) : null,
             Comment = resource.Comment ?? string.Empty,
         };
     }
