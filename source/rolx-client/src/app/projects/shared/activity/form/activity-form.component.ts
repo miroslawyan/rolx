@@ -26,7 +26,7 @@ export class ActivityFormComponent implements OnInit {
     startDate: ['', Validators.required],
     endDate: [''],
     budget: [null, Validators.min(0)],
-    billability: [null],
+    billability: [null, Validators.required],
   });
 
   billabilities: Billability[] = [];
