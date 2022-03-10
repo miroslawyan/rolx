@@ -17,7 +17,7 @@ export class Activity {
   endDate?: moment.Moment;
 
   @Type(() => Billability)
-  billability!: Billability;
+  billability?: Billability;
 
   @TransformAsDuration()
   budget!: Duration;
@@ -30,12 +30,11 @@ export class Activity {
     assertDefined(this, 'number');
     assertDefined(this, 'name');
     assertDefined(this, 'startDate');
-    assertDefined(this, 'billability');
     assertDefined(this, 'budget');
     assertDefined(this, 'fullNumber');
     assertDefined(this, 'fullName');
 
-    this.billability.validateModel();
+    this.billability?.validateModel();
   }
 
   isOpenAt(date: moment.Moment): boolean {
@@ -43,6 +42,6 @@ export class Activity {
   }
 
   get isBillable(): boolean {
-    return this.billability.isBillable;
+    return this.billability?.isBillable ?? false;
   }
 }

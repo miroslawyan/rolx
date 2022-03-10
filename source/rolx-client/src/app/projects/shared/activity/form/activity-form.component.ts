@@ -46,10 +46,13 @@ export class ActivityFormComponent implements OnInit {
 
     this.form.patchValue(this.activity);
     this.formBudget = this.activity.budget;
-    this.billabilities = [this.activity.billability];
+    this.billabilities = this.activity.billability != null ? [this.activity.billability] : [];
 
     this.billabilityService.getAll().subscribe((billabilities) => {
-      if (!billabilities.some((b) => b.id === this.activity.billability.id)) {
+      if (
+        this.activity.billability != null &&
+        !billabilities.some((b) => b.id === this.activity.billability?.id)
+      ) {
         billabilities = [this.activity.billability, ...billabilities];
       }
 

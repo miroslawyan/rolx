@@ -47,7 +47,7 @@ export class ActivityEditPageComponent {
     const activity =
       activityIdText === 'new'
         ? subproject.addActivity()
-        : subproject.activities.find((ph) => ph.id === activityId);
+        : subproject.activities.find((a) => a.id === activityId);
 
     if (activity != null) {
       this.activity = activity;
