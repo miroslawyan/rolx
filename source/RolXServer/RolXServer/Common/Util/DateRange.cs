@@ -71,16 +71,10 @@ public struct DateRange : IEquatable<DateRange>
     /// The result of the operator.
     /// </returns>
     public static bool operator ==(DateRange left, DateRange right)
-    {
-        return left.Begin == right.Begin &&
-                left.End == right.End;
-    }
+        => left.Begin == right.Begin && left.End == right.End;
 
     public static bool operator !=(DateRange left, DateRange right)
-    {
-        return left.Begin != right.Begin ||
-                left.End != right.End;
-    }
+        => left.Begin != right.Begin || left.End != right.End;
 
     /// <summary>
     /// Creates a date-range for the specified month.
@@ -111,16 +105,22 @@ public struct DateRange : IEquatable<DateRange>
     }
 
     /// <summary>
+    /// Safely creates a new <see cref="DateRange"/> instance.
+    /// </summary>
+    /// <param name="begin">The begin.</param>
+    /// <param name="end">The end.</param>
+    /// <returns>The created instance.</returns>
+    public static DateRange CreateSafe(DateTime begin, DateTime end)
+        => new DateRange(begin, end > begin ? end : begin);
+
+    /// <summary>
     /// Determines whether this range contains the specified date.
     /// </summary>
     /// <param name="date">The date.</param>
     /// <returns>
     ///   <c>true</c> if this range contains the specified date.
     /// </returns>
-    public bool Contains(DateTime date)
-    {
-        return this.Begin <= date && this.End > date;
-    }
+    public bool Contains(DateTime date) => this.Begin <= date && this.End > date;
 
     /// <inheritdoc/>
     public override bool Equals(object? other)
@@ -140,21 +140,8 @@ public struct DateRange : IEquatable<DateRange>
     /// <returns>
     ///   <see langword="true" /> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <see langword="false" />.
     /// </returns>
-    public bool Equals(DateRange other)
-    {
-        return this == other;
-    }
+    public bool Equals(DateRange other) => this == other;
 
     /// <inheritdoc/>
-    public override int GetHashCode()
-    {
-        // see https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-overriding-gethashcode
-        unchecked
-        {
-            // Overflow is fine, just wrap
-            int hash = 17;
-            hash = (hash * 23) + this.Begin.GetHashCode();
-            return (hash * 23) + this.End.GetHashCode();
-        }
-    }
+    public override int GetHashCode() => (this.Begin, this.End).GetHashCode();
 }

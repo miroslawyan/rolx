@@ -47,7 +47,7 @@ internal static class NominalWorkTimeEvaluation
             .OrderByDescending(s => s.StartDate)
             .ToList();
 
-        var activeRange = new DateRange(
+        var activeRange = DateRange.CreateSafe(
             user.EntryDate ?? range.Begin,
             user.LeftDate ?? range.End);
 
