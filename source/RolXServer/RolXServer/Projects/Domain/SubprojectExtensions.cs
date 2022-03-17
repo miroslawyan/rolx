@@ -29,7 +29,7 @@ internal static class SubprojectExtensions
     /// <param name="subproject">The subproject.</param>
     /// <returns>The full-qualified name.</returns>
     public static string FullName(this Subproject subproject)
-        => $"{subproject.FullNumber()} - {subproject.AllNames()}";
+        => $"{subproject.AllNames()} ({subproject.FullNumber()})";
 
     /// <summary>
     /// Gets all names of the specified subproject.

@@ -37,16 +37,15 @@ export class WeekPageComponent {
     private authService: AuthService,
   ) {}
 
-  previous(monday: moment.Moment) {
-    this.navigateTo(monday.clone().subtract(1, 'week'));
+  async previous(monday: moment.Moment): Promise<void> {
+    await this.navigateTo(monday.clone().subtract(1, 'week'));
   }
 
-  next(monday: moment.Moment) {
-    this.navigateTo(monday.clone().add(1, 'week'));
+  async next(monday: moment.Moment): Promise<void> {
+    await this.navigateTo(monday.clone().add(1, 'week'));
   }
 
-  private navigateTo(date: moment.Moment) {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['week', IsoDate.fromMoment(date)]);
+  private async navigateTo(date: moment.Moment): Promise<void> {
+    await this.router.navigate(['week', IsoDate.fromMoment(date)]);
   }
 }

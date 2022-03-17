@@ -393,9 +393,9 @@ namespace RolXServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("Date")
                         .HasPrecision(0)
-                        .HasColumnType("datetime(0)");
+                        .HasColumnType("date");
 
                     b.Property<long>("OvertimeSeconds")
                         .HasColumnType("bigint");
@@ -409,6 +409,9 @@ namespace RolXServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "Date")
+                        .IsUnique();
 
                     b.ToTable("UserBalanceCorrections");
                 });

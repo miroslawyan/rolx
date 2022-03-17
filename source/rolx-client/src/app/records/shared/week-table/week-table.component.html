@@ -2,7 +2,7 @@
   <ng-container matColumnDef="activity">
     <th mat-header-cell *matHeaderCellDef>Aktivität</th>
 
-    <td mat-cell *matCellDef="let activity">
+    <td mat-cell *matCellDef="let activity" [attr.colspan]="activity ? 1 : 8">
       <span *ngIf="activity else activitySelector">
         <rolx-starred-activity-indicator [activity]="activity"></rolx-starred-activity-indicator>
         {{activity.fullName}}
@@ -46,6 +46,7 @@
       mat-cell
       *matCellDef="let activity, let row = index"
       class="day"
+      [hidden]="!activity"
       [class.non-workday]="!records[i].isWorkday && !records[i].isToday"
       [class.today]="records[i].isToday">
       <rolx-week-table-cell

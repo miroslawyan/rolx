@@ -9,16 +9,16 @@ import { catchError, mapTo, tap } from 'rxjs/operators';
 
 import { User } from './user';
 
-const UserUrl = environment.apiBaseUrl + '/v1/user';
-
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  static readonly Url = environment.apiBaseUrl + '/v1/user';
+
   constructor(private httpClient: HttpClient) {}
 
   getAll(): Observable<User[]> {
-    return this.httpClient.get<object[]>(UserUrl).pipe(
+    return this.httpClient.get<object[]>(UserService.Url).pipe(
       mapPlainToInstances(User),
       tap((us) => us.forEach((u) => u.validateModel())),
     );
@@ -39,6 +39,6 @@ export class UserService {
   }
 
   private static UrlWithId(id: string) {
-    return UserUrl + '/' + id;
+    return UserService.Url + '/' + id;
   }
 }

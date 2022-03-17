@@ -4,7 +4,6 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { Component, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { AuthService } from '@app/auth/core/auth.service';
 import { InstallationIdService } from '@app/auth/core/installation-id.service';
-import { Role } from '@app/auth/core/role';
 import { PendingRequestService } from '@app/core/pending-request/pending-request.service';
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -24,8 +23,6 @@ export class MainPageComponent {
     map((result) => result.matches),
     shareReplay(),
   );
-
-  readonly Role = Role;
 
   constructor(
     public readonly authService: AuthService,

@@ -26,9 +26,10 @@ public sealed class UserBalanceCorrection
     public Guid UserId { get; set; }
 
     /// <summary>
-    /// Gets or sets the date/time.
+    /// Gets or sets the date of this correction.
     /// </summary>
-    public DateTime DateTime { get; set; }
+    [Column(TypeName = "date")]
+    public DateTime Date { get; set; }
 
     /// <summary>
     /// Gets or sets the overtime correction in seconds.

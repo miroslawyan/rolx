@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@app/auth/core/auth.guard';
 import { ProjectsRoutes } from '@app/projects/projects.routes';
 import { RecordsRoutes } from '@app/records/records.routes';
+import { ReportsRoutes } from '@app/reports/reports.routes';
 import { UsersRoutes } from '@app/users/users.routes';
 
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
       ...ProjectsRoutes,
       ...UsersRoutes,
       ...RecordsRoutes,
+      ...ReportsRoutes,
       {
         path: 'four-oh-four',
         component: NotFoundPageComponent,

@@ -8,6 +8,7 @@
 
 using RolXServer.Common.Util;
 using RolXServer.Users.DataAccess;
+using RolXServer.Users.Domain;
 
 namespace RolXServer.Records.Domain.Detail.Balances;
 
@@ -68,14 +69,15 @@ internal sealed class BalanceData
         .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay);
 
     private TimeSpan Overtime => this.ActualWorkTime
-        + this.User.BalanceCorrections.Sum(c => c.Overtime)
+        + this.BalanceCorrections.Sum(c => c.Overtime)
         + this.PaidLeaveTime
         - this.NominalWorkTime;
 
     private TimeSpan VacationBudget => this.User.VacationBudget(this.ByDate.Year, this.VacationDaysPerYear, this.NominalWorkTimePerDay)
-            + this.User.BalanceCorrections.Sum(c => c.Vacation);
+            + this.BalanceCorrections.Sum(c => c.Vacation);
 
-    private TimeSpan NominalWorkTimeAtByDate => this.User.NominalWorkTime(this.ByDate, this.NominalWorkTimePerDay);
+    private IEnumerable<UserBalanceCorrection> BalanceCorrections => this.User.BalanceCorrections
+        .Where(c => c.Date <= this.ByDate);
 
     private TimeSpan VacationConsumed => this.VacationDays
         .Where(d => d.Date <= this.ByDate)
@@ -84,10 +86,6 @@ internal sealed class BalanceData
     private TimeSpan VacationPlanned => this.VacationDays
         .Where(d => d.Date > this.ByDate)
         .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay);
-
-    private double VacationAvailableDays => (this.VacationBudget - this.VacationConsumed) / this.NominalWorkTimeAtByDate;
-
-    private double VacationPlannedDays => this.VacationPlanned / this.NominalWorkTimeAtByDate;
 
     /// <summary>
     /// Converts this instance into a balance.
@@ -100,12 +98,24 @@ internal sealed class BalanceData
             throw new InvalidOperationException("Only users with valid entry date may have a balance.");
         }
 
+        if (this.User.EntryDate > this.ByDate)
+        {
+            return new Model.Balance
+            {
+                ByDate = this.ByDate,
+            };
+        }
+
+        var nominalWorkTime = this.NominalWorkTimePerDay * this.User.PartTimeFactorAt(this.ByDate);
+        var vacationAvailableDays = (this.VacationBudget - this.VacationConsumed) / nominalWorkTime;
+        var vacationPlannedDays = this.VacationPlanned / nominalWorkTime;
+
         return new Model.Balance
         {
             ByDate = this.ByDate,
             Overtime = this.Overtime,
-            VacationAvailableDays = this.VacationAvailableDays,
-            VacationPlannedDays = this.VacationPlannedDays,
+            VacationAvailableDays = vacationAvailableDays,
+            VacationPlannedDays = vacationPlannedDays,
         };
     }
 }

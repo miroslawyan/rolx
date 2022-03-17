@@ -15,10 +15,13 @@ import { ReasonDialogComponent } from '@app/records/shared/paid-leave-select/rea
 import { WeekTableCellComponent } from '@app/records/shared/week-table/cell/week-table-cell.component';
 import { WeekTableComponent } from '@app/records/shared/week-table/week-table.component';
 
+import { DaysIndicatorComponent } from './shared/days-indicator/days-indicator.component';
+
 @NgModule({
   imports: [AppImportModule, CommonModule, CoreModule, ProjectsModule],
   declarations: [
     BalanceIndicatorComponent,
+    DaysIndicatorComponent,
     DurationEditComponent,
     HolidayTableComponent,
     MonthlyWorkTimeTableComponent,
@@ -30,7 +33,11 @@ import { WeekTableComponent } from '@app/records/shared/week-table/week-table.co
     WeekTableComponent,
     YearOverviewPageComponent,
   ],
-  entryComponents: [MultiEntriesDialogComponent],
-  exports: [BalanceIndicatorComponent, WeekPageComponent, YearOverviewPageComponent],
+  exports: [
+    BalanceIndicatorComponent,
+    DaysIndicatorComponent,
+    WeekPageComponent,
+    YearOverviewPageComponent,
+  ],
 })
 export class RecordsModule {}

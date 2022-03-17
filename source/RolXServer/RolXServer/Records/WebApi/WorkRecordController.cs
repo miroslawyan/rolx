@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Globalization;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,7 +44,7 @@ public sealed class WorkRecordController : ControllerBase
     [HttpGet("month/{month}")]
     public async Task<ActionResult<IEnumerable<Record>>> GetMonth(string month)
     {
-        if (!TryParseMonth(month, out var monthDate))
+        if (!IsoDate.TryParseMonth(month, out var monthDate))
         {
             return this.NotFound();
         }
@@ -106,15 +104,5 @@ public sealed class WorkRecordController : ControllerBase
         await this.recordService.Update(record.ToDomain());
 
         return this.NoContent();
-    }
-
-    private static bool TryParseMonth(string candidate, out DateTime result)
-    {
-        return DateTime.TryParseExact(
-            candidate,
-            "yyyy-MM",
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.AssumeLocal,
-            out result);
     }
 }

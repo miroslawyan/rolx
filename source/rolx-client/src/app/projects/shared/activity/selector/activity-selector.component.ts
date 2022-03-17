@@ -69,7 +69,7 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
         .pipe(
           switchMap((b) => this.activityService.getAll(b)),
           map((as) => as.filter((a) => !excludedIds.has(a.id))),
-          map((as) => as.sort((a, b) => a.fullNumber.localeCompare(b.fullNumber))),
+          map((as) => as.sort((a, b) => a.fullName.localeCompare(b.fullName))),
         )
         .subscribe(this.allActivities$),
     );

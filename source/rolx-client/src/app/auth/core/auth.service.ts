@@ -21,6 +21,14 @@ export class AuthService {
     return this.currentApprovalSubject.value;
   }
 
+  get currentApprovalOrError() {
+    if (this.currentApproval == null) {
+      throw new Error('Not logged in properly');
+    }
+
+    return this.currentApproval;
+  }
+
   readonly currentIsSupervisor$ = this.currentApproval$.pipe(
     map((a) => (a?.user.role ?? Role.User) >= Role.Supervisor),
   );

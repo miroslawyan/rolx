@@ -45,6 +45,10 @@ export class Duration extends DurationBase<Duration> {
     return this.isSame(Duration.Zero);
   }
 
+  get isPositive(): boolean {
+    return this.seconds > 0;
+  }
+
   add(other: Duration): Duration {
     return new Duration(this.seconds + other.seconds);
   }

@@ -344,35 +344,4 @@ public partial class InitialCreate : Migration
             column: "GoogleId",
             unique: true);
     }
-
-    /// <inheritdoc/>
-    protected override void Down(MigrationBuilder migrationBuilder)
-    {
-        migrationBuilder.DropTable(
-            name: "FavouriteActivities");
-
-        migrationBuilder.DropTable(
-            name: "RecordEntries");
-
-        migrationBuilder.DropTable(
-            name: "UserBalanceCorrections");
-
-        migrationBuilder.DropTable(
-            name: "UserPartTimeSettings");
-
-        migrationBuilder.DropTable(
-            name: "Activities");
-
-        migrationBuilder.DropTable(
-            name: "Records");
-
-        migrationBuilder.DropTable(
-            name: "Billabilities");
-
-        migrationBuilder.DropTable(
-            name: "Subprojects");
-
-        migrationBuilder.DropTable(
-            name: "Users");
-    }
 }

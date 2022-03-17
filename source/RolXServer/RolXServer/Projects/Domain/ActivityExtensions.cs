@@ -44,8 +44,16 @@ internal static class ActivityExtensions
             throw new ArgumentNullException("The activities subproject must not be null", nameof(activity));
         }
 
-        return $"{activity.FullNumber()} - {activity.Subproject.AllNames()} - {activity.Name}";
+        return $"{activity.Subproject.AllNames()} - {activity.Name} ({activity.FullNumber()})";
     }
+
+    /// <summary>
+    /// Gets the numbered name of the specified activity.
+    /// </summary>
+    /// <param name="activity">The activity.</param>
+    /// <returns>The numbered name.</returns>
+    public static string NumberedName(this Activity activity)
+        => $"{activity.Name} ({activity.Number:D2})";
 
     /// <summary>
     /// Sanitizes the specified activity.

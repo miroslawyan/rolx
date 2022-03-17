@@ -15,7 +15,8 @@ namespace RolXServer.Common.Util;
 /// </summary>
 public static class IsoDate
 {
-    private const string Format = "yyyy-MM-dd";
+    private const string FullFormat = "yyyy-MM-dd";
+    private const string MonthFormat = "yyyy-MM";
 
     /// <summary>
     /// Converts the specified date into a corresponding ISO-date representation.
@@ -23,9 +24,7 @@ public static class IsoDate
     /// <param name="date">The date.</param>
     /// <returns>The ISO-date.</returns>
     public static string ToIsoDate(this DateTime date)
-    {
-        return date.ToString(Format, CultureInfo.InvariantCulture);
-    }
+        => date.ToString(FullFormat, CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Converts the specified date into a corresponding ISO-date representation.
@@ -33,9 +32,7 @@ public static class IsoDate
     /// <param name="date">The date.</param>
     /// <returns>The ISO-date.</returns>
     public static string? ToIsoDate(this DateTime? date)
-    {
-        return date?.ToString(Format, CultureInfo.InvariantCulture);
-    }
+        => date?.ToString(FullFormat, CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Tries to parse the specified ISO-date.
@@ -44,14 +41,12 @@ public static class IsoDate
     /// <param name="result">The result.</param>
     /// <returns><c>true</c> if the parsing succeeded; otherwise <c>false</c>.</returns>
     public static bool TryParse(string isoDate, out DateTime result)
-    {
-        return DateTime.TryParseExact(
+        => DateTime.TryParseExact(
             isoDate,
-            Format,
+            FullFormat,
             CultureInfo.InvariantCulture,
             DateTimeStyles.AssumeLocal,
             out result);
-    }
 
     /// <summary>
     /// Tries to parse the specified ISO-date.
@@ -96,7 +91,19 @@ public static class IsoDate
     /// <returns>The parsed date.</returns>
     /// <exception cref="FormatException">value is not an ISO-formatted date.</exception>
     public static DateTime? ParseNullable(string? isoDate)
-    {
-        return isoDate != null ? Parse(isoDate) : (DateTime?)null;
-    }
+        => isoDate != null ? Parse(isoDate) : (DateTime?)null;
+
+    /// <summary>
+    /// Tries to parse the specified ISO-formatted month.
+    /// </summary>
+    /// <param name="isoMonth">The ISO-month.</param>
+    /// <param name="result">The result.</param>
+    /// <returns><c>true</c> if the parsing succeeded; otherwise <c>false</c>.</returns>
+    public static bool TryParseMonth(string isoMonth, out DateTime result)
+        => DateTime.TryParseExact(
+            isoMonth,
+            MonthFormat,
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.AssumeLocal,
+            out result);
 }

@@ -109,6 +109,12 @@ public sealed class RolXContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.GoogleId).IsUnique();
 
+        modelBuilder.Entity<UserBalanceCorrection>()
+            .HasIndex(s => s.UserId);
+
+        modelBuilder.Entity<UserBalanceCorrection>()
+            .HasIndex(s => new { s.UserId, s.Date }).IsUnique();
+
         modelBuilder.Entity<UserPartTimeSetting>()
             .HasIndex(s => new { s.UserId, s.StartDate }).IsUnique();
 

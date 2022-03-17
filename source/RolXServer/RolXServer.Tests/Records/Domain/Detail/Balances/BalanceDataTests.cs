@@ -22,6 +22,7 @@ public sealed class BalanceDataTests
             NominalWorkTimePerDay = TimeSpan.FromHours(8),
             User = new User { EntryDate = new DateTime(2020, 3, 2) },
             ByDate = new DateTime(2020, 3, 8),
+            VacationDaysPerYear = 25,
         };
     }
 
@@ -85,5 +86,45 @@ public sealed class BalanceDataTests
 
         this.sut.ToBalance()
             .Overtime.Should().Be(default);
+    }
+
+    [Test]
+    public void VacationAvailableDays_AllWell()
+    {
+        this.sut.User.EntryDate = new DateTime(2020, 1, 1);
+        this.sut.ByDate = new DateTime(2020, 1, 3);
+
+        this.sut.ToBalance()
+            .VacationAvailableDays.Should().Be(25);
+    }
+
+    [Test]
+    public void VacationAvailableDays_ByDateOnWeekend()
+    {
+        this.sut.User.EntryDate = new DateTime(2020, 1, 1);
+        this.sut.ByDate = new DateTime(2020, 1, 5); // was a Sunday
+
+        this.sut.ToBalance()
+            .VacationAvailableDays.Should().Be(25);
+    }
+
+    [Test]
+    public void VacationPlannedDays_AllWell()
+    {
+        this.sut.User.EntryDate = new DateTime(2020, 1, 1);
+        this.sut.ByDate = new DateTime(2020, 1, 3);
+
+        this.sut.ToBalance()
+            .VacationPlannedDays.Should().Be(0);
+    }
+
+    [Test]
+    public void VacationPlannedDays_ByDateOnWeekend()
+    {
+        this.sut.User.EntryDate = new DateTime(2020, 1, 1);
+        this.sut.ByDate = new DateTime(2020, 1, 5); // was a Sunday
+
+        this.sut.ToBalance()
+            .VacationPlannedDays.Should().Be(0);
     }
 }

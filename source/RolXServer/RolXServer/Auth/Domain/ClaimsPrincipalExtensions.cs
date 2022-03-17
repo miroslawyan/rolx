@@ -9,6 +9,7 @@
 using System.Security.Claims;
 
 using RolXServer.Common.Util;
+using RolXServer.Users;
 
 namespace RolXServer.Auth.Domain;
 
@@ -23,9 +24,15 @@ public static class ClaimsPrincipalExtensions
     /// <param name="principal">The principal.</param>
     /// <returns>The user identifier.</returns>
     public static Guid GetUserId(this ClaimsPrincipal principal)
-    {
-        return Guid.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
-    }
+        => Guid.Parse(principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
+
+    /// <summary>
+    /// Gets the user identifier of the specified principal.
+    /// </summary>
+    /// <param name="principal">The principal.</param>
+    /// <returns>The user identifier.</returns>
+    public static Role GetRole(this ClaimsPrincipal principal)
+        => Enum.Parse<Role>(principal.FindFirstValue(ClaimTypes.Role) ?? string.Empty);
 
     /// <summary>
     /// Gets the entry date.
@@ -33,9 +40,7 @@ public static class ClaimsPrincipalExtensions
     /// <param name="principal">The principal.</param>
     /// <returns>The entry date.</returns>
     public static DateTime? GetEntryDate(this ClaimsPrincipal principal)
-    {
-        return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.EntryDate));
-    }
+        => IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.EntryDate));
 
     /// <summary>
     /// Gets the left date.
@@ -43,9 +48,7 @@ public static class ClaimsPrincipalExtensions
     /// <param name="principal">The principal.</param>
     /// <returns>The left date.</returns>
     public static DateTime? GetLeftDate(this ClaimsPrincipal principal)
-    {
-        return IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.LeftDate));
-    }
+        => IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.LeftDate));
 
     /// <summary>
     /// Determines whether the specified principal is active at the specified date.

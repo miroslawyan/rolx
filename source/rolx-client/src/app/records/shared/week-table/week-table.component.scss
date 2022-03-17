@@ -33,3 +33,7 @@ td.day {
 .day-header {
   text-align: center;
 }
+
+td[colspan="8"] {
+  padding-right: 24px;
+}

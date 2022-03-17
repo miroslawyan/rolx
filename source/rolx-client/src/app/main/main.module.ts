@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppImportModule } from '@app/app-import.module';
 import { ProjectsModule } from '@app/projects/projects.module';
 import { RecordsModule } from '@app/records/records.module';
+import { ReportsModule } from '@app/reports/reports.module';
 import { UsersModule } from '@app/users/users.module';
 
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
@@ -28,6 +29,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MainRoutingModule,
     ProjectsModule,
     RecordsModule,
+    ReportsModule,
     UsersModule,
   ],
 })

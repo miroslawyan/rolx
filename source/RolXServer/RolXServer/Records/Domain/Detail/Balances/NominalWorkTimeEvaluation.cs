@@ -10,6 +10,7 @@ using RolXServer.Common.Util;
 using RolXServer.Records.Domain.Detail.Holidays;
 using RolXServer.Records.Domain.Model;
 using RolXServer.Users.DataAccess;
+using RolXServer.Users.Domain;
 
 namespace RolXServer.Records.Domain.Detail.Balances;
 
@@ -43,9 +44,7 @@ internal static class NominalWorkTimeEvaluation
     /// <returns>The day-informations.</returns>
     public static IEnumerable<DayInfo> DayInfos(this User user, DateRange range, TimeSpan nominalWorkTimePerDay)
     {
-        var sortedSettings = user.PartTimeSettings
-            .OrderByDescending(s => s.StartDate)
-            .ToList();
+        var sortedSettings = user.PartTimeSettingsDescendingBefore(range.End).ToList();
 
         var activeRange = DateRange.CreateSafe(
             user.EntryDate ?? range.Begin,
@@ -133,7 +132,6 @@ internal static class NominalWorkTimeEvaluation
             var factor = settings
                 .Where(s => s.StartDate <= info.Date)
                 .Select(s => s.Factor)
-                .DefaultIfEmpty(1.0)
                 .First();
 
             info.NominalWorkTime *= factor;
