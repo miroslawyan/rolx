@@ -23,7 +23,7 @@ public sealed class SubprojectValidator : AbstractValidator<Subproject>
     public SubprojectValidator()
     {
         this.RuleFor(s => s.Number)
-            .GreaterThan(0)
+            .GreaterThanOrEqualTo(0)
             .LessThan(1000);
 
         this.RuleFor(s => s.Name)

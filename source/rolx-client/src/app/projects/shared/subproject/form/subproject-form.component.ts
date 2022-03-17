@@ -16,7 +16,7 @@ export class SubprojectFormComponent implements OnInit {
   @Input() subproject!: Subproject;
 
   form = this.fb.group({
-    number: ['', [Validators.required, Validators.min(1), Validators.max(999)]],
+    number: ['', [Validators.required, Validators.min(0), Validators.max(999)]],
     name: ['', Validators.required],
     projectNumber: ['', [Validators.required, Validators.min(1), Validators.max(9999)]],
     projectName: ['', Validators.required],
