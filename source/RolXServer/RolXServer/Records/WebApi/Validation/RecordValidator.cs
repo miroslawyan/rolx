@@ -8,6 +8,7 @@
 
 using FluentValidation;
 using RolXServer.Common.Util;
+using RolXServer.Projects;
 using RolXServer.Records.WebApi.Resource;
 
 namespace RolXServer.Records.WebApi.Validation;

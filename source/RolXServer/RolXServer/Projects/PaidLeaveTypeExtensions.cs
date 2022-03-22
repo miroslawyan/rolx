@@ -6,7 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace RolXServer.Records;
+namespace RolXServer.Projects;
 
 /// <summary>
 /// Extension methods for <see cref="PaidLeaveType"/> values.

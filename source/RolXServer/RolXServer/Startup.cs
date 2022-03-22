@@ -88,7 +88,11 @@ public class Startup
         app.UseRouting();
 
         // Add CORS policy for development
-        app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+        app.UseCors(builder => builder
+            .WithOrigins("http://localhost:4200")
+            .WithExposedHeaders("content-disposition")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 
         app.UseAuthentication();
         app.UseAuthorization();

@@ -1,0 +1,31 @@
+<mat-card>
+  <mat-card-title> Export Monat </mat-card-title>
+
+  <mat-card-content>
+    <mat-form-field appearance="standard">
+      <mat-label>Monat</mat-label>
+      <input
+        matInput
+        [matDatepicker]="monthPicker"
+        [formControl]="monthControl"
+        placeholder="mm.yyyy" />
+      <mat-datepicker-toggle matSuffix [for]="monthPicker"></mat-datepicker-toggle>
+      <mat-datepicker
+        #monthPicker
+        startView="multi-year"
+        (yearSelected)="chosenYearHandler($event)"
+        (monthSelected)="chosenMonthHandler($event, monthPicker)">
+      </mat-datepicker>
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="!monthControl.valid"
+      (click)="exportMonth()">
+      Export
+    </button>
+  </mat-card-actions>
+</mat-card>

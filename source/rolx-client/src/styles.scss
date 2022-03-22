@@ -53,3 +53,13 @@ input[type='number']::-webkit-outer-spin-button {
 .mat-dialog-actions {
   justify-content: flex-end;
 }
+
+mat-card-actions.mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+button {
+  text-transform: uppercase;
+}

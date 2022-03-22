@@ -1,0 +1,10 @@
+@use 'src/assets/styles/dialog-card' as *;
+
+div {
+  @include DialogCard;
+}
+
+rolx-export-month-card {
+  margin-bottom: 16px;
+}
+

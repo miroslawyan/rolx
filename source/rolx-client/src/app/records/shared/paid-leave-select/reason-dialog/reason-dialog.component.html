@@ -12,6 +12,8 @@
 </form>
 
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="null">Abbruch</button>
-  <button mat-button type="submit" form="reason-edit" [disabled]="!form.valid">Speichern</button>
+  <button mat-stroked-button [mat-dialog-close]="null">Abbruch</button>
+  <button mat-flat-button color="primary" type="submit" form="reason-edit" [disabled]="!form.valid">
+    Speichern
+  </button>
 </mat-dialog-actions>

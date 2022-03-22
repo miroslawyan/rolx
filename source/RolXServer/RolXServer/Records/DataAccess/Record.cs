@@ -8,6 +8,7 @@
 
 using System.ComponentModel.DataAnnotations.Schema;
 
+using RolXServer.Projects;
 using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Records.DataAccess;

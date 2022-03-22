@@ -50,6 +50,11 @@ public sealed class RolXContext : DbContext
     public DbSet<Record> Records { get; set; } = null!;
 
     /// <summary>
+    /// Gets or sets the record entries.
+    /// </summary>
+    public DbSet<RecordEntry> RecordEntries { get; set; } = null!;
+
+    /// <summary>
     /// Gets or sets the subprojects.
     /// </summary>
     public DbSet<Subproject> Subprojects { get; set; } = null!;
@@ -94,9 +99,6 @@ public sealed class RolXContext : DbContext
         modelBuilder.Entity<Record>()
             .HasIndex(r => new { r.Date, r.UserId })
             .IsUnique();
-
-        modelBuilder.Entity<RecordEntry>()
-            .ToTable("RecordEntries");
 
         modelBuilder.Entity<RecordEntry>()
             .HasOne(e => e.Activity)

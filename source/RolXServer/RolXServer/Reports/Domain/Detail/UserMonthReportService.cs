@@ -11,6 +11,7 @@ using System.Collections.Immutable;
 using Microsoft.EntityFrameworkCore;
 
 using RolXServer.Common.Util;
+using RolXServer.Projects.Domain;
 using RolXServer.Records.Domain;
 using RolXServer.Reports.Domain.Model;
 using RolXServer.Users.Domain;
@@ -25,6 +26,7 @@ internal sealed class UserMonthReportService : IUserMonthReportService
     private readonly RolXContext dbContext;
     private readonly IBalanceService balanceService;
     private readonly IRecordService recordService;
+    private readonly IPaidLeaveActivities paidLeaveActivities;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UserMonthReportService" /> class.
@@ -32,14 +34,17 @@ internal sealed class UserMonthReportService : IUserMonthReportService
     /// <param name="dbContext">The database context.</param>
     /// <param name="balanceService">The balance service.</param>
     /// <param name="recordService">The record service.</param>
+    /// <param name="paidLeaveActivities">The paid leave activities.</param>
     public UserMonthReportService(
         RolXContext dbContext,
         IBalanceService balanceService,
-        IRecordService recordService)
+        IRecordService recordService,
+        IPaidLeaveActivities paidLeaveActivities)
     {
         this.dbContext = dbContext;
         this.balanceService = balanceService;
         this.recordService = recordService;
+        this.paidLeaveActivities = paidLeaveActivities;
     }
 
     /// <inheritdoc/>
@@ -79,7 +84,7 @@ internal sealed class UserMonthReportService : IUserMonthReportService
         if (records.Any(record => record.PaidLeaveType.HasValue))
         {
             workItemGroups = workItemGroups
-                .Append(records.ToPaidLeaveWorkItemGroup());
+                .Append(records.ToPaidLeaveWorkItemGroup(this.paidLeaveActivities));
         }
 
         return new UserMonthReport(

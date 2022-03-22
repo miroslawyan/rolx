@@ -9,7 +9,7 @@
 using System.Collections.Immutable;
 
 using RolXServer.Common.Util;
-using RolXServer.Records;
+using RolXServer.Projects.Domain;
 using RolXServer.Records.Domain;
 using RolXServer.Records.Domain.Model;
 using RolXServer.Reports.Domain.Model;
@@ -22,19 +22,22 @@ namespace RolXServer.Reports.Domain.Detail;
 public static class RecordExtensions
 {
     /// <summary>
-    /// Converts the specified records to a <see cref="WorkItemGroup"/> for all paid leaves.
+    /// Converts the specified records to a <see cref="WorkItemGroup" /> for all paid leaves.
     /// </summary>
     /// <param name="records">The records.</param>
-    /// <returns>The paid-leave group.</returns>
-    public static WorkItemGroup ToPaidLeaveWorkItemGroup(this IEnumerable<Record> records)
+    /// <param name="paidLeaveActivities">The paid leave activities.</param>
+    /// <returns>
+    /// The paid-leave group.
+    /// </returns>
+    public static WorkItemGroup ToPaidLeaveWorkItemGroup(this IEnumerable<Record> records, IPaidLeaveActivities paidLeaveActivities)
         => new WorkItemGroup(
-            "Abwesenheiten",
+            paidLeaveActivities.Subproject.FullName(),
             records
                 .Where(record => record.PaidLeaveType.HasValue)
                 .GroupBy(record => record.PaidLeaveType!.Value)
                 .OrderBy(group => group.Key)
                 .Select(group => new WorkItem(
-                    group.Key.ToPrettyString(),
+                    paidLeaveActivities[group.Key].NumberedName(),
                     group.Sum(record => record.PaidLeaveTime())))
                 .ToImmutableList());
 }

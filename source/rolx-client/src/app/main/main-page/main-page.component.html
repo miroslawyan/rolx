@@ -21,6 +21,13 @@
       </a>
       <mat-divider></mat-divider>
       <a mat-list-item routerLink="/year-overview" routerLinkActive="active">Jahresarbeitszeit</a>
+      <a
+        mat-list-item
+        routerLink="/export"
+        routerLinkActive="active"
+        *ngIf="(authService.currentIsSupervisor$ | async)">
+        Export
+      </a>
     </mat-nav-list>
   </mat-sidenav>
 

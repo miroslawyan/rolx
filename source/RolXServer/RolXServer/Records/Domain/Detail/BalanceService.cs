@@ -8,6 +8,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+
+using RolXServer.Projects;
 using RolXServer.Records.Domain.Detail.Balances;
 using RolXServer.Records.Domain.Model;
 

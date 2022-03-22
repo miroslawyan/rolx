@@ -38,9 +38,14 @@
     </form>
   </mat-card-content>
 
-  <mat-card-actions align="end">
-    <button mat-button (click)="cancel()">Abbruch</button>
-    <button mat-button type="submit" form="subproject-edit" [disabled]="!form.valid">
+  <mat-card-actions>
+    <button mat-stroked-button (click)="cancel()">Abbruch</button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      form="subproject-edit"
+      [disabled]="!form.valid">
       Speichern
     </button>
   </mat-card-actions>

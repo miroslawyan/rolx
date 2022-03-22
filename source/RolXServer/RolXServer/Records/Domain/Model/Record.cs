@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using RolXServer.Projects;
+
 namespace RolXServer.Records.Domain.Model;
 
 /// <summary>

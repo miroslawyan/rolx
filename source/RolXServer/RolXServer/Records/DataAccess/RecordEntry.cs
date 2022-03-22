@@ -28,6 +28,11 @@ public sealed class RecordEntry
     public int RecordId { get; set; }
 
     /// <summary>
+    /// Gets or sets the record.
+    /// </summary>
+    public Record? Record { get; set; }
+
+    /// <summary>
     /// Gets or sets the duration in seconds.
     /// </summary>
     public long DurationSeconds { get; set; }

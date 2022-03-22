@@ -42,7 +42,7 @@ public sealed class SubprojectServiceTests
 
         using (var context = contextFactory())
         {
-            var sut = new SubprojectService(context);
+            var sut = new SubprojectService(context, new PaidLeaveActivities());
 
             subproject.Activities[0].Name = "Changed";
             await sut.Update(subproject);
@@ -66,7 +66,7 @@ public sealed class SubprojectServiceTests
 
         using (var context = contextFactory())
         {
-            var sut = new SubprojectService(context);
+            var sut = new SubprojectService(context, new PaidLeaveActivities());
 
             subproject.Activities.RemoveAt(0);
             await sut.Update(subproject);
@@ -89,7 +89,7 @@ public sealed class SubprojectServiceTests
 
         using (var context = contextFactory())
         {
-            var sut = new SubprojectService(context);
+            var sut = new SubprojectService(context, new PaidLeaveActivities());
 
             subproject.Activities.Add(new Activity
             {

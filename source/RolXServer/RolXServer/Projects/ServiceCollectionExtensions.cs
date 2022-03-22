@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         return services
             .AddScoped<Domain.IFavouriteService, Domain.Detail.FavouriteService>()
             .AddScoped<Domain.IActivityService, Domain.Detail.ActivityService>()
-            .AddScoped<Domain.ISubprojectService, Domain.Detail.SubprojectService>();
+            .AddScoped<Domain.ISubprojectService, Domain.Detail.SubprojectService>()
+            .AddScoped<Domain.IPaidLeaveActivities, Domain.Detail.PaidLeaveActivities>();
     }
 }

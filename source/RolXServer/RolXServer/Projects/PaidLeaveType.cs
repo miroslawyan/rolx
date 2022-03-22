@@ -6,7 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace RolXServer.Records;
+namespace RolXServer.Projects;
 
 /// <summary>
 /// The types of paid leaves.

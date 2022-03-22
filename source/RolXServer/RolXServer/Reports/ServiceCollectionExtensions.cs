@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
     /// </returns>
     public static IServiceCollection AddReports(this IServiceCollection services)
     {
+        services.AddScoped<Domain.IExportService, Domain.Detail.ExportService>();
         services.AddScoped<Domain.IUserMonthReportService, Domain.Detail.UserMonthReportService>();
 
         return services;

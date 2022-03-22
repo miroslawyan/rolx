@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using RolXServer.Projects;
 using RolXServer.Records.WebApi.Resource;
 
 namespace RolXServer.Records.WebApi.Validation;
