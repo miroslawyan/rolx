@@ -28,14 +28,17 @@ public sealed class SubprojectController : ControllerBase
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
     private readonly ISubprojectService subprojectService;
+    private readonly IActivityService activityService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubprojectController" /> class.
     /// </summary>
     /// <param name="subprojectService">The subproject service.</param>
-    public SubprojectController(ISubprojectService subprojectService)
+    /// <param name="activityService">The activity service.</param>
+    public SubprojectController(ISubprojectService subprojectService, IActivityService activityService)
     {
         this.subprojectService = subprojectService;
+        this.activityService = activityService;
     }
 
     /// <summary>
@@ -64,7 +67,9 @@ public sealed class SubprojectController : ControllerBase
             return this.NotFound();
         }
 
-        return domain.ToResource();
+        var sums = await this.activityService.GetActualSums(id);
+
+        return domain.ToResource(sums);
     }
 
     /// <summary>

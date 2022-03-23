@@ -49,6 +49,11 @@ public sealed class Activity
     public long Budget { get; set; }
 
     /// <summary>
+    /// Gets or sets the actual time spent in seconds.
+    /// </summary>
+    public long Actual { get; set; }
+
+    /// <summary>
     /// Gets or sets the full-qualified number.
     /// </summary>
     public string FullNumber { get; set; } = string.Empty;

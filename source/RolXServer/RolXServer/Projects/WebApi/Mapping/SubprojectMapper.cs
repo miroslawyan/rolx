@@ -19,8 +19,9 @@ internal static class SubprojectMapper
     /// Converts to resource.
     /// </summary>
     /// <param name="domain">The domain.</param>
+    /// <param name="actualSums">The actual sums.</param>
     /// <returns>The resource.</returns>
-    public static Resource.Subproject ToResource(this DataAccess.Subproject domain)
+    public static Resource.Subproject ToResource(this DataAccess.Subproject domain, IDictionary<int, TimeSpan>? actualSums = null)
     {
         return new Resource.Subproject
         {
@@ -30,7 +31,7 @@ internal static class SubprojectMapper
             ProjectNumber = domain.ProjectNumber,
             ProjectName = domain.ProjectName,
             CustomerName = domain.CustomerName,
-            Activities = domain.Activities.Select(ph => ph.ToResource()).ToList(),
+            Activities = domain.Activities.Select(ph => ph.ToResource(actualSums)).ToList(),
             FullNumber = domain.FullNumber(),
             FullName = domain.FullName(),
         };

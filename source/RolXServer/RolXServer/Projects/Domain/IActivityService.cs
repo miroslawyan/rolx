@@ -33,4 +33,11 @@ public interface IActivityService
     /// The suitable activities.
     /// </returns>
     Task<IEnumerable<Activity>> GetSuitable(Guid userId, DateTime date);
+
+    /// <summary>
+    /// Gets the sum of actual times spent on the activities of the specified subproject.
+    /// </summary>
+    /// <param name="subprojectId">The subproject identifier.</param>
+    /// <returns>A dictionary from activity identifiers to the sum of actual times spent.</returns>
+    Task<IDictionary<int, TimeSpan>> GetActualSums(int subprojectId);
 }

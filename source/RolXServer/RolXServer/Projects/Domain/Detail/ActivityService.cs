@@ -17,27 +17,21 @@ namespace RolXServer.Projects.Domain.Detail;
 /// </summary>
 internal sealed class ActivityService : IActivityService
 {
-    private readonly RolXContext context;
+    private readonly RolXContext dbContext;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ActivityService"/> class.
+    /// Initializes a new instance of the <see cref="ActivityService" /> class.
     /// </summary>
-    /// <param name="context">The context.</param>
-    public ActivityService(RolXContext context)
+    /// <param name="dbContext">The database context.</param>
+    public ActivityService(RolXContext dbContext)
     {
-        this.context = context;
+        this.dbContext = dbContext;
     }
 
-    /// <summary>
-    /// Gets all activities open in the specified range (begin..end].
-    /// </summary>
-    /// <param name="unlessEndedBefore">The unless ended before date.</param>
-    /// <returns>
-    /// The activities.
-    /// </returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<Activity>> GetAll(DateTime? unlessEndedBefore)
     {
-        var query = this.context.Activities
+        var query = this.dbContext.Activities
             .AsNoTracking()
             .Include(a => a.Subproject)
             .Include(a => a.Billability)
@@ -51,20 +45,13 @@ internal sealed class ActivityService : IActivityService
         return await query.ToListAsync();
     }
 
-    /// <summary>
-    /// Gets the suitable activities for the specified user at the specified date.
-    /// </summary>
-    /// <param name="userId">The user identifier.</param>
-    /// <param name="date">The date.</param>
-    /// <returns>
-    /// The suitable activities.
-    /// </returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<Activity>> GetSuitable(Guid userId, DateTime date)
     {
         var begin = date.AddMonths(-2);
         var end = date.AddMonths(1);
 
-        return await this.context.Records
+        return await this.dbContext.Records
             .Where(r => r.UserId == userId && r.Date >= begin && r.Date < end)
             .Include(r => r.Entries)
                 .ThenInclude(e => e.Activity)
@@ -78,4 +65,16 @@ internal sealed class ActivityService : IActivityService
             .AsNoTracking()
             .ToListAsync();
     }
+
+    /// <inheritdoc/>
+    public async Task<IDictionary<int, TimeSpan>> GetActualSums(int subprojectId)
+        => await this.dbContext.RecordEntries
+            .Where(entry => entry.Activity!.SubprojectId == subprojectId)
+            .GroupBy(entry => entry.ActivityId)
+            .Select(group => new
+            {
+                ActivityId = group.Key,
+                Sum = group.Sum(entry => entry.DurationSeconds),
+            })
+            .ToDictionaryAsync(item => item.ActivityId, item => TimeSpan.FromSeconds(item.Sum));
 }

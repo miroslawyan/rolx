@@ -20,8 +20,9 @@ internal static class ActivityMapper
     /// Converts to resource.
     /// </summary>
     /// <param name="domain">The domain.</param>
+    /// <param name="actualSums">The actual sums.</param>
     /// <returns>The resource.</returns>
-    public static Resource.Activity ToResource(this DataAccess.Activity domain)
+    public static Resource.Activity ToResource(this DataAccess.Activity domain, IDictionary<int, TimeSpan>? actualSums = null)
     {
         return new Resource.Activity
         {
@@ -32,6 +33,7 @@ internal static class ActivityMapper
             EndDate = domain.EndDate.ToIsoDate(),
             Billability = domain.Billability!,
             Budget = (long)(domain.Budget?.TotalSeconds ?? 0),
+            Actual = GetActualSumSeconds(domain.Id, actualSums),
             FullNumber = domain.FullNumber(),
             FullName = domain.FullName(),
         };
@@ -60,5 +62,15 @@ internal static class ActivityMapper
             BillabilityId = resource.Billability.Id,
             Billability = resource.Billability,
         };
+    }
+
+    private static long GetActualSumSeconds(int activityId, IDictionary<int, TimeSpan>? actualSums)
+    {
+        if (actualSums?.TryGetValue(activityId, out var actualSum) ?? false)
+        {
+            return (long)actualSum.TotalSeconds;
+        }
+
+        return 0;
     }
 }

@@ -22,6 +22,9 @@ export class Activity {
   @TransformAsDuration()
   budget!: Duration;
 
+  @TransformAsDuration()
+  actual!: Duration;
+
   fullNumber!: string;
   fullName!: string;
 
@@ -31,6 +34,7 @@ export class Activity {
     assertDefined(this, 'name');
     assertDefined(this, 'startDate');
     assertDefined(this, 'budget');
+    assertDefined(this, 'actual');
     assertDefined(this, 'fullNumber');
     assertDefined(this, 'fullName');
 
