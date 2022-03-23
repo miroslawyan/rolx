@@ -15,8 +15,6 @@ if not exist %CA_FILE% (
     powershell -Command "wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -OutFile %CA_FILE%"
 )
 
-exit
-
 echo - dumping production
 mysqldump ^
     -u %DB_USER% ^

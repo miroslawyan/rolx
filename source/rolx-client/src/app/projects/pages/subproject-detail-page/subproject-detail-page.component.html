@@ -19,8 +19,9 @@
   <rolx-activity-table
     *ngIf="subproject.activities.length > 0"
     [activities]="subproject.activities"></rolx-activity-table>
-  <rolx-activity-form
-    *ngIf="editedActivity !== undefined"
-    [subproject]="subproject"
-    [activity]="editedActivity"></rolx-activity-form>
+
+  <section class="exports">
+    <rolx-export-month-card [subproject]="subproject" [noTitle]="true"></rolx-export-month-card>
+    <rolx-export-range-card [subproject]="subproject" [noTitle]="true"></rolx-export-range-card>
+  </section>
 </mat-card>

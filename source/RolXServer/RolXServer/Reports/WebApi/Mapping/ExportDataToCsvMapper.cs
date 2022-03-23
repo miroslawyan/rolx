@@ -34,16 +34,16 @@ public static class ExportDataToCsvMapper
             {
                 data.Date.ToString("yyyy-MM-dd"),
                 data.ProjectNumber.ToString(),
-                data.CustomerName,
-                data.ProjectName,
+                data.CustomerName.Sanitize(),
+                data.ProjectName.Sanitize(),
                 data.SubprojectNumber.ToString(),
-                data.SubprojectName,
+                data.SubprojectName.Sanitize(),
                 data.ActivityNumber.ToString(),
-                data.ActivityName,
-                data.BillabilityName,
-                data.UserName,
+                data.ActivityName.Sanitize(),
+                data.BillabilityName.Sanitize(),
+                data.UserName.Sanitize(),
                 data.Duration.TotalHours.ToString(CultureInfo.InvariantCulture),
-                data.Comment,
+                data.Comment.Sanitize(),
             })
             .Prepend(new[]
             {
@@ -60,6 +60,11 @@ public static class ExportDataToCsvMapper
                 "Zeit [h]",
                 "Kommentar",
             })
-            .Select(data => string.Join(", ", data))
+            .Select(data => string.Join(",", data))
             .ToStream(l => Encoding.Unicode.GetBytes(l + Environment.NewLine));
+
+    private static string Sanitize(this string value)
+        => value.Contains(',')
+        ? $"\"{value.Replace("\"", "\"\"")}\""
+        : value;
 }

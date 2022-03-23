@@ -14,3 +14,11 @@ mat-card-title {
     transition: opacity 0.3s ease-in;
   }
 }
+
+$gutter: 16px;
+
+.exports {
+  margin-top: $gutter;
+  display: flex;
+  gap: $gutter;
+}

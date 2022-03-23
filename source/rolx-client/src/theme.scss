@@ -2,9 +2,10 @@
 @use '@angular/material/theming' as theme;
 
 // see https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
-$rolx-primary-light: mat.define-palette(mat.$purple-palette, 400, 100, 800);
-$rolx-primary-dark: mat.define-palette(mat.$purple-palette, 400, 800, 100);
-$rolx-accent: mat.define-palette(mat.$green-palette, A200, A100, A400);
+$rolx-primary-light: mat.define-palette(mat.$indigo-palette, 500);
+$my-accent-light: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$rolx-light-theme: mat.define-light-theme($rolx-primary-light, $my-accent-light);
 
-$rolx-dark-theme: mat.define-dark-theme($rolx-primary-dark, $rolx-accent);
-$rolx-light-theme: mat.define-light-theme($rolx-primary-light, $rolx-accent);
+$rolx-primary-dark: mat.define-palette(mat.$purple-palette, 400, 800, 100);
+$rolx-accent-dark: mat.define-palette(mat.$green-palette, A200, A100, A400);
+$rolx-dark-theme: mat.define-dark-theme($rolx-primary-dark, $rolx-accent-dark);

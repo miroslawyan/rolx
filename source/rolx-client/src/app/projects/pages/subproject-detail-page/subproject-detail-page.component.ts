@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Activity } from '@app/projects/core/activity';
 import { Subproject } from '@app/projects/core/subproject';
 import { SubprojectService } from '@app/projects/core/subproject.service';
 import { Observable, throwError } from 'rxjs';
@@ -23,8 +22,6 @@ export class SubprojectDetailPageComponent {
       return throwError(() => e);
     }),
   );
-
-  editedActivity?: Activity;
 
   constructor(
     private route: ActivatedRoute,

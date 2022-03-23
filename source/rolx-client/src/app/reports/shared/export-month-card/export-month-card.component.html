@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-title> Export Monat </mat-card-title>
+  <mat-card-title *ngIf="!noTitle"> Export Monat </mat-card-title>
 
   <mat-card-content>
     <mat-form-field appearance="standard">
@@ -22,7 +22,7 @@
   <mat-card-actions>
     <button
       mat-flat-button
-      color="primary"
+      [color]="noTitle ? 'accent' : 'primary'"
       [disabled]="!monthControl.valid"
       (click)="exportMonth()">
       Export

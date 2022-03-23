@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NamedBlob } from '@app/core/util/named-blob';
+import { Subproject } from '@app/projects/core/subproject';
 import { environment } from '@env/environment';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -14,8 +15,16 @@ export class ExportService {
 
   constructor(private httpClient: HttpClient) {}
 
-  download(monthOrBegin: moment.Moment, end?: moment.Moment): Observable<NamedBlob> {
+  download(
+    subproject: Subproject | undefined,
+    monthOrBegin: moment.Moment,
+    end?: moment.Moment,
+  ): Observable<NamedBlob> {
     let params = new HttpParams();
+
+    if (subproject != null) {
+      params = params.append('subprojectId', subproject.id);
+    }
 
     if (end == null) {
       params = params.append('month', monthOrBegin.format('YYYY-MM'));

@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-title> Export Zeitbereich </mat-card-title>
+  <mat-card-title *ngIf="!noTitle"> Export Zeitbereich </mat-card-title>
 
   <mat-card-content>
     <mat-form-field appearance="standard">
@@ -14,7 +14,11 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-flat-button color="primary" [disabled]="!form.valid" (click)="exportRange()">
+    <button
+      mat-flat-button
+      [color]="noTitle ? 'accent' : 'primary'"
+      [disabled]="!form.valid"
+      (click)="exportRange()">
       Export
     </button>
   </mat-card-actions>

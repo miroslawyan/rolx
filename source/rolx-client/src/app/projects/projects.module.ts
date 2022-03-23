@@ -11,9 +11,10 @@ import { StarredActivityIndicatorComponent } from '@app/projects/shared/activity
 import { ActivityTableComponent } from '@app/projects/shared/activity/table/activity-table.component';
 import { SubprojectFormComponent } from '@app/projects/shared/subproject/form/subproject-form.component';
 import { SubprojectTableComponent } from '@app/projects/shared/subproject/table/subproject-table.component';
+import { ReportsModule } from '@app/reports/reports.module';
 
 @NgModule({
-  imports: [AppImportModule, CommonModule],
+  imports: [AppImportModule, CommonModule, ReportsModule],
   declarations: [
     ActivityEditPageComponent,
     SubprojectDetailPageComponent,

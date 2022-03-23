@@ -17,9 +17,13 @@ namespace RolXServer.Reports.Domain;
 public interface IExportService
 {
     /// <summary>
-    /// Gets the export data for the specified range.
+    /// Gets the export data for the specified range and subproject.
     /// </summary>
     /// <param name="range">The range.</param>
+    /// <param name="subprojectId">The subproject identifier.</param>
     /// <returns>The data.</returns>
-    Task<IEnumerable<ExportData>> GetFor(DateRange range);
+    /// <remarks>
+    /// When no subproject identifier is provided, the data of all subprojects is returned.
+    /// </remarks>
+    Task<IEnumerable<ExportData>> GetFor(DateRange range, int? subprojectId);
 }

@@ -43,10 +43,18 @@ internal sealed class ExportService : IExportService
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<ExportData>> GetFor(DateRange range)
-        => (await this.dbContext.RecordEntries
+    public async Task<IEnumerable<ExportData>> GetFor(DateRange range, int? subprojectId)
+    {
+        var entries = this.dbContext.RecordEntries
             .AsNoTracking()
-            .Where(entry => entry.Record!.Date >= range.Begin && entry.Record!.Date < range.End)
+            .Where(entry => entry.Record!.Date >= range.Begin && entry.Record!.Date < range.End);
+
+        if (subprojectId.HasValue)
+        {
+            entries = entries.Where(entry => entry.Activity!.SubprojectId == subprojectId.Value);
+        }
+
+        var exportData = (await entries
             .Select(entry => new ExportData(
                 entry.Record!.Date,
                 entry.Activity!.Subproject!.ProjectNumber,
@@ -61,7 +69,16 @@ internal sealed class ExportService : IExportService
                 entry.Duration,
                 entry.Comment))
             .ToListAsync())
-            .Concat(await this.GetPaidLeavesData(range));
+            .AsEnumerable();
+
+        if (!subprojectId.HasValue)
+        {
+            exportData = exportData
+                .Concat(await this.GetPaidLeavesData(range));
+        }
+
+        return exportData;
+    }
 
     private async Task<IEnumerable<ExportData>> GetPaidLeavesData(DateRange range)
     {
