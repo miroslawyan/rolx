@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@app/auth/core/auth.service';
 import { Subproject } from '@app/projects/core/subproject';
 import { SubprojectService } from '@app/projects/core/subproject.service';
 import { Observable, throwError } from 'rxjs';
@@ -24,9 +25,10 @@ export class SubprojectDetailPageComponent {
   );
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private subprojectService: SubprojectService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly subprojectService: SubprojectService,
+    public readonly authService: AuthService,
   ) {}
 
   private initializeSubproject(idText: string | null): Observable<Subproject> {

@@ -20,7 +20,7 @@
     *ngIf="subproject.activities.length > 0"
     [activities]="subproject.activities"></rolx-activity-table>
 
-  <section class="exports">
+  <section class="exports" *ngIf="(authService.currentIsSupervisor$ | async)">
     <rolx-export-month-card [subproject]="subproject" [noTitle]="true"></rolx-export-month-card>
     <rolx-export-range-card [subproject]="subproject" [noTitle]="true"></rolx-export-range-card>
   </section>
