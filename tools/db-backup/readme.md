@@ -34,6 +34,12 @@ The, dump the database:
     db_rolx
 ```
 
+## Drop and recreate database
+
+```powershell
+> mysql -u root -p -e "drop database db_rolx; create database db_rolx character set utf8mb4 collate utf8mb4_unicode_ci;"
+```
+
 ## Restore
 
 When restoring dumps from production, they have to be sanitized before:

@@ -122,7 +122,7 @@ internal sealed class SignInService : ISignInService
 
     private async Task<User> EnsureUser(GoogleJsonWebSignature.Payload payload)
     {
-        var user = await this.dbContext.Users.SingleOrDefaultAsync(u => u.GoogleId == payload.Subject);
+        var user = await this.dbContext.Users.SingleOrDefaultAsync(u => u.GoogleId == payload.Subject || u.GoogleId == payload.Email);
         if (user is null)
         {
             this.logger.LogInformation("Adding yet unknown user {0}", payload.Name);
@@ -131,7 +131,6 @@ internal sealed class SignInService : ISignInService
 
             user = new User
             {
-                GoogleId = payload.Subject,
                 Role = isFirstUser ? Role.Administrator : Role.User,
                 EntryDate = isFirstUser ? DateTime.Today : (DateTime?)null,
             };
@@ -139,6 +138,7 @@ internal sealed class SignInService : ISignInService
             this.dbContext.Users.Add(user);
         }
 
+        user.GoogleId = payload.Subject;
         user.FirstName = payload.GivenName;
         user.LastName = payload.FamilyName;
         user.Email = payload.Email;

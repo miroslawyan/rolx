@@ -5,7 +5,7 @@ import { ActivityService } from '@app/projects/core/activity.service';
 import { WorkRecordService } from '@app/records/core/work-record.service';
 import { WeekPageParams } from '@app/records/pages/week-page/week-page-params';
 import { UserService } from '@app/users/core/user.service';
-import { forkJoin, NEVER, Observable, withLatestFrom } from 'rxjs';
+import { forkJoin, NEVER, Observable, of, withLatestFrom } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -34,7 +34,9 @@ export class WeekPageComponent {
       forkJoin([
         this.workRecordService.getRange(params.userId, params.monday, params.nextMonday),
         this.activityService.getSuitable(params.userId, params.monday),
-        this.userService.getById(params.userId),
+        params.isCurrentUser
+          ? of(this.authService.currentApprovalOrError.user)
+          : this.userService.getById(params.userId),
       ]),
     ),
   );
