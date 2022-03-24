@@ -32,7 +32,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/week',
+        redirectTo: '/week/',
         pathMatch: 'full',
       },
     ],
