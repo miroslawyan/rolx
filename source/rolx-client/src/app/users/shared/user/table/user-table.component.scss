@@ -5,7 +5,11 @@ table {
 
 .tools {
   text-align: right;
-  width: 3em;
+  width: 6em;
+
+  &.admin {
+    width: 9em;
+  }
 }
 
 tr {

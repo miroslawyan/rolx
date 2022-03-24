@@ -37,6 +37,9 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   @Input()
   user!: User;
 
+  @Input()
+  isCurrentUser = false;
+
   rowActivities: (Activity | null)[] = [];
   allActivities: Activity[] = [];
 
@@ -65,9 +68,11 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   ngOnInit() {
     assertDefined(this, 'user');
 
-    this.subscriptions.add(
-      this.favouriteActivityService.favourites$.subscribe((phs) => (this.favourites = phs)),
-    );
+    if (this.isCurrentUser) {
+      this.subscriptions.add(
+        this.favouriteActivityService.favourites$.subscribe((phs) => (this.favourites = phs)),
+      );
+    }
   }
 
   ngOnDestroy() {
@@ -86,7 +91,7 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   }
 
   submit(record: Record, index: number) {
-    this.workRecordService.update(record).subscribe({
+    this.workRecordService.update(this.user.id, record).subscribe({
       next: (r) => (this.records[index] = r),
       error: (err) => {
         console.error(err);

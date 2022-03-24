@@ -21,11 +21,11 @@ export class UserTableComponent implements OnInit {
   readonly Role = Role;
 
   get displayedColumns(): string[] {
-    const allColumns = ['avatar', 'fullName', 'email', 'role', 'entryDate', 'leavingDate', 'tools'];
+    const allColumns = ['avatar', 'fullName', 'email', 'role', 'entryDate', 'leavingDate'];
     if (this.authService.currentApproval?.user.role === Role.Administrator) {
-      return allColumns;
+      return [...allColumns, 'admin-tools'];
     } else {
-      return allColumns.slice(0, -1);
+      return [...allColumns, 'tools'];
     }
   }
 

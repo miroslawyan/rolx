@@ -1,17 +1,21 @@
-<mat-card>
-  <mat-card-title *ngIf="month$ | async as month">
-    <button mat-icon-button (click)="previous(month)">
-      <mat-icon>chevron_left</mat-icon>
-    </button>
-
-    <button mat-icon-button (click)="next(month)">
-      <mat-icon>chevron_right</mat-icon>
-    </button>
-
-    Monatsübersicht {{month.toDate() | date:'MMMM y'}}
-  </mat-card-title>
-
+<mat-card *ngIf="routeParams$ | async as params">
   <ng-container *ngIf="report$ | async as report">
+    <mat-card-title>
+      <a
+        mat-icon-button
+        [routerLink]="params.previousRouteCommands"
+        [queryParams]="params.queryParams">
+        <mat-icon>chevron_left</mat-icon>
+      </a>
+
+      <a mat-icon-button [routerLink]="params.nextRouteCommands" [queryParams]="params.queryParams">
+        <mat-icon>chevron_right</mat-icon>
+      </a>
+
+      <span *ngIf="!params.isCurrentUser">{{report.user.fullName}}, </span> Monatsübersicht
+      {{params.month.toDate() | date:'MMMM y'}}
+    </mat-card-title>
+
     <mat-card-content>
       <ul>
         <li>Name: <strong>{{report.user.fullName}}</strong></li>

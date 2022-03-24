@@ -57,19 +57,25 @@ public sealed class ActivityController : ControllerBase
     /// <summary>
     /// Gets the suitable activities for the specified date.
     /// </summary>
+    /// <param name="userId">The user identifier.</param>
     /// <param name="date">The date as ISO-formatted string.</param>
     /// <returns>
     /// The suitable activities.
     /// </returns>
-    [HttpGet("suitable/{date}")]
-    public async Task<ActionResult<IEnumerable<Activity>>> GetSuitable(string date)
+    [HttpGet("suitable/{userId}/{date}")]
+    public async Task<ActionResult<IEnumerable<Activity>>> GetSuitable(Guid userId, string date)
     {
         if (!IsoDate.TryParse(date, out var theDate))
         {
             return this.NotFound();
         }
 
-        return (await this.activityService.GetSuitable(this.User.GetUserId(), theDate))
+        if (userId != this.User.GetUserId() && this.User.GetRole() < Users.Role.Supervisor)
+        {
+            return this.Forbid();
+        }
+
+        return (await this.activityService.GetSuitable(userId, theDate))
             .Select(p => p.ToResource())
             .ToList();
     }

@@ -1,23 +1,31 @@
-<mat-card *ngIf="monday$ | async as monday">
-  <mat-card-title>
-    <button mat-icon-button (click)="previous(monday)">
-      <mat-icon>chevron_left</mat-icon>
-    </button>
-    <button mat-icon-button (click)="next(monday)">
-      <mat-icon>chevron_right</mat-icon>
-    </button>
+<mat-card *ngIf="routeParams$ | async as params">
+  <ng-container *ngIf="recordsActivitiesUser$ | async as recordsActivitiesUser">
+    <mat-card-title>
+      <a
+        mat-icon-button
+        [routerLink]="params.previousRouteCommands"
+        [queryParams]="params.queryParams">
+        <mat-icon>chevron_left</mat-icon>
+      </a>
 
-    Woche {{monday.toDate() | date: 'mediumDate'}} - {{monday.clone().add(6, 'day').toDate() | date:
-    'mediumDate'}}
+      <a mat-icon-button [routerLink]="params.nextRouteCommands" [queryParams]="params.queryParams">
+        <mat-icon>chevron_right</mat-icon>
+      </a>
 
-    <small>(KW{{monday.week() | number: '2.0'}})</small>
-  </mat-card-title>
+      <span *ngIf="!params.isCurrentUser">{{recordsActivitiesUser[2].fullName}}, </span> Woche
+      {{params.monday.toDate() | date: 'mediumDate'}} - {{params.nextSunday.toDate() | date:
+      'mediumDate'}}
 
-  <mat-card-content *ngIf="recordsAndActivities$ | async as recordsAndActivities">
-    <rolx-week-table
-      *ngIf="user !== undefined"
-      [records]="recordsAndActivities[0]"
-      [activities]="recordsAndActivities[1]"
-      [user]="user"></rolx-week-table>
-  </mat-card-content>
+      <small>(KW{{params.monday.week() | number: '2.0'}})</small>
+    </mat-card-title>
+
+    <mat-card-content>
+      <rolx-week-table
+        *ngIf="recordsActivitiesUser[2] !== undefined"
+        [records]="recordsActivitiesUser[0]"
+        [activities]="recordsActivitiesUser[1]"
+        [user]="recordsActivitiesUser[2]"
+        [isCurrentUser]="params.isCurrentUser"></rolx-week-table>
+    </mat-card-content>
+  </ng-container>
 </mat-card>

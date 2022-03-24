@@ -16,11 +16,7 @@ export class UserReportService {
 
   constructor(private httpClient: HttpClient, private authService: AuthService) {}
 
-  getMonthReport(month: moment.Moment, userId?: string): Observable<UserMonthReport> {
-    if (userId == null) {
-      userId = this.authService.currentApprovalOrError.user.id;
-    }
-
+  getMonthReport(userId: string, month: moment.Moment): Observable<UserMonthReport> {
     const url = UserReportService.UrlWithId(userId) + '/month/' + month.format('YYYY-MM');
     return this.httpClient.get(url).pipe(
       mapPlainToInstance(UserMonthReport),

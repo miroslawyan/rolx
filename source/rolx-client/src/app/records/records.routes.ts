@@ -9,7 +9,8 @@ export const RecordsRoutes: Routes = [
   },
   {
     path: 'week',
-    component: WeekPageComponent,
+    redirectTo: 'week/',
+    pathMatch: 'full',
   },
   {
     path: 'year-overview/:date',

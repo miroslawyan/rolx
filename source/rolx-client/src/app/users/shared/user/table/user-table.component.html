@@ -41,6 +41,24 @@
   <ng-container matColumnDef="tools">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell class="tools" *matCellDef="let user">
+      <a mat-icon-button [routerLink]="['/week']" [queryParams]="{'userId': user.id}">
+        <mat-icon>schedule</mat-icon>
+      </a>
+      <a mat-icon-button [routerLink]="['/reports']" [queryParams]="{'userId': user.id}">
+        <mat-icon>layers</mat-icon>
+      </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="admin-tools">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell class="tools admin" *matCellDef="let user">
+      <a mat-icon-button [routerLink]="['/week']" [queryParams]="{'userId': user.id}">
+        <mat-icon>schedule</mat-icon>
+      </a>
+      <a mat-icon-button [routerLink]="['/reports']" [queryParams]="{'userId': user.id}">
+        <mat-icon>layers</mat-icon>
+      </a>
       <a mat-icon-button [routerLink]="[user.id]">
         <mat-icon>edit</mat-icon>
       </a>

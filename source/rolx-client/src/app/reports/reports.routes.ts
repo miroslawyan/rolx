@@ -13,11 +13,12 @@ export const ReportsRoutes: Routes = [
     data: { allowedRoles: [Role.Supervisor, Role.Administrator] },
   },
   {
-    path: 'reports/user/:year/:month',
+    path: 'reports/:month',
     component: UserMonthReportPageComponent,
   },
   {
-    path: 'reports/user',
-    component: UserMonthReportPageComponent,
+    path: 'reports',
+    redirectTo: 'reports/',
+    pathMatch: 'full',
   },
 ];

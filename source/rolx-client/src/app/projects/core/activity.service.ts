@@ -32,8 +32,8 @@ export class ActivityService {
     );
   }
 
-  getSuitable(date: moment.Moment): Observable<Activity[]> {
-    const url = `${ActivityService.Url}/suitable/${IsoDate.fromMoment(date)}`;
+  getSuitable(userId: string, date: moment.Moment): Observable<Activity[]> {
+    const url = ActivityService.Url + '/suitable/' + userId + '/' + IsoDate.fromMoment(date);
 
     return this.httpClient.get<object[]>(url).pipe(
       mapPlainToInstances(Activity),
