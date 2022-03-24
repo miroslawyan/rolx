@@ -3,6 +3,7 @@
     <span>Subprojekte</span>
 
     <a
+      *ngIf="mayAdd"
       mat-mini-fab
       aria-label="Subprojekt hinzufügen"
       [routerLink]="['new', 'edit']"

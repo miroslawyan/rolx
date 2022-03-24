@@ -19,15 +19,17 @@ export class UserTableComponent implements OnInit {
 
   readonly dataSource = new MatTableDataSource<User>();
   readonly Role = Role;
-
-  get displayedColumns(): string[] {
-    const allColumns = ['avatar', 'fullName', 'email', 'role', 'entryDate', 'leavingDate'];
-    if (this.authService.currentApproval?.user.role === Role.Administrator) {
-      return [...allColumns, 'admin-tools'];
-    } else {
-      return [...allColumns, 'tools'];
-    }
-  }
+  readonly displayedColumns = [
+    'avatar',
+    'fullName',
+    'email',
+    'role',
+    'entryDate',
+    'leavingDate',
+    this.authService.currentApprovalOrError?.user.role >= Role.Administrator
+      ? 'admin-tools'
+      : 'tools',
+  ];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 

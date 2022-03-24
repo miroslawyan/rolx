@@ -2,12 +2,18 @@
   <mat-card-title>
     <span>
       {{subproject.fullName}}
-      <a mat-icon-button class="edit" aria-label="Subprojekt editieren" [routerLink]="['edit']">
+      <a
+        *ngIf="mayEdit"
+        mat-icon-button
+        class="edit"
+        aria-label="Subprojekt editieren"
+        [routerLink]="['edit']">
         <mat-icon>edit</mat-icon>
       </a>
     </span>
 
     <a
+      *ngIf="mayEdit"
       mat-mini-fab
       aria-label="Aktivität hinzufügen"
       [routerLink]="['activity', 'new']"
@@ -20,7 +26,7 @@
     *ngIf="subproject.activities.length > 0"
     [activities]="subproject.activities"></rolx-activity-table>
 
-  <section class="exports" *ngIf="(authService.currentIsSupervisor$ | async)">
+  <section class="exports" *ngIf="mayExport">
     <rolx-export-month-card [subproject]="subproject" [noTitle]="true"></rolx-export-month-card>
     <rolx-export-range-card [subproject]="subproject" [noTitle]="true"></rolx-export-range-card>
   </section>
