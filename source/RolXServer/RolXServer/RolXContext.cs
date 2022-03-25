@@ -154,6 +154,13 @@ public sealed class RolXContext : DbContext
             IsBillable = true,
             SortingWeight = 3,
         });
+        modelBuilder.Entity<Billability>().HasData(new Billability
+        {
+            Id = 5,
+            Name = "Abwesenheit",
+            IsBillable = false,
+            SortingWeight = 200,
+        });
     }
 
     private static void SeedSubprojects(ModelBuilder modelBuilder)

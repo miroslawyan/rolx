@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29318.209
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RolXServer", "RolXServer\RolXServer.csproj", "{D5548545-42D4-45B5-AF1C-2CE724B54A5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RolXServer", "RolXServer\RolXServer.csproj", "{D5548545-42D4-45B5-AF1C-2CE724B54A5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RolXServer.Tests", "RolXServer.Tests\RolXServer.Tests.csproj", "{24CCCAA0-DC9C-4F0F-88BA-A39F88D3A0B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RolXServer.Tests", "RolXServer.Tests\RolXServer.Tests.csproj", "{24CCCAA0-DC9C-4F0F-88BA-A39F88D3A0B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RolXDataImporter", "RolXDataImporter\RolXDataImporter.csproj", "{A25932FE-E0EE-4925-B143-375FABEA1DDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{24CCCAA0-DC9C-4F0F-88BA-A39F88D3A0B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24CCCAA0-DC9C-4F0F-88BA-A39F88D3A0B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24CCCAA0-DC9C-4F0F-88BA-A39F88D3A0B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A25932FE-E0EE-4925-B143-375FABEA1DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A25932FE-E0EE-4925-B143-375FABEA1DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A25932FE-E0EE-4925-B143-375FABEA1DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A25932FE-E0EE-4925-B143-375FABEA1DDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

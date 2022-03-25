@@ -38,11 +38,11 @@ internal sealed class PaidLeaveActivities : IPaidLeaveActivities
     public Subproject Subproject { get; } = new Subproject
     {
         Id = -1,
-        ProjectNumber = 8990,
+        ProjectNumber = 8900,
         Number = 1,
         CustomerName = "M&F",
-        ProjectName = "Intern",
-        Name = "Abwesenheiten",
+        ProjectName = "Allgemein",
+        Name = "Ferien, Militär, Krank",
     };
 
     /// <inheritdoc/>

@@ -53,11 +53,16 @@ internal static class VacationBudgetEvaluation
 
         foreach (var setting in user.PartTimeSettings)
         {
+            if (setting.StartDate.Year > year)
+            {
+                yield return (new DateRange(lastStartDate, new DateTime(year + 1, 1, 1)), lastFactor);
+                yield break;
+            }
+
             if (setting.StartDate > lastStartDate)
             {
                 yield return (new DateRange(lastStartDate, setting.StartDate), lastFactor);
 
-                lastFactor = setting.Factor;
                 lastStartDate = setting.StartDate;
             }
 
