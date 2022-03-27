@@ -16,7 +16,7 @@
         mat-list-item
         routerLink="/user"
         routerLinkActive="active"
-        *ngIf="(authService.currentIsSupervisor$ | async)">
+        *ngIf="authService.currentApprovalOrError.isSupervisor">
         Mitarbeiter
       </a>
       <mat-divider></mat-divider>
@@ -25,8 +25,15 @@
         mat-list-item
         routerLink="/export"
         routerLinkActive="active"
-        *ngIf="(authService.currentIsSupervisor$ | async)">
+        *ngIf="authService.currentApprovalOrError.isSupervisor">
         Export
+      </a>
+      <a
+        mat-list-item
+        routerLink="/settings"
+        routerLinkActive="active"
+        *ngIf="authService.currentApprovalOrError.isBackoffice">
+        Einstellungen
       </a>
     </mat-nav-list>
   </mat-sidenav>

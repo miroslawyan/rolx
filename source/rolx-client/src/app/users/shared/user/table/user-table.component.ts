@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from '@app/auth/core/auth.service';
-import { Role } from '@app/auth/core/role';
 import { assertDefined } from '@app/core/util/utils';
+import { Role } from '@app/users/core/role';
 import { User } from '@app/users/core/user';
 import { UserService } from '@app/users/core/user.service';
 import * as moment from 'moment';
@@ -26,9 +26,7 @@ export class UserTableComponent implements OnInit {
     'role',
     'entryDate',
     'leavingDate',
-    this.authService.currentApprovalOrError?.user.role >= Role.Administrator
-      ? 'admin-tools'
-      : 'tools',
+    this.authService.currentApprovalOrError.isAdministrator ? 'admin-tools' : 'tools',
   ];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;

@@ -3,6 +3,7 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Duration } from '@app/core/util/duration';
 import { Activity } from '@app/projects/core/activity';
+import { EditLockService } from '@app/records/core/edit-lock.service';
 import { Record } from '@app/records/core/record';
 import { RecordEntry } from '@app/records/core/record-entry';
 
@@ -19,6 +20,8 @@ export interface MultiEntriesDialogData {
   styleUrls: ['./multi-entries-dialog.component.scss'],
 })
 export class MultiEntriesDialogComponent implements OnInit {
+  readonly isLocked = this.editLockService.isLocked(this.data.record.date);
+
   form = this.fb.group({
     entries: this.fb.array([]),
   });
@@ -30,6 +33,7 @@ export class MultiEntriesDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: MultiEntriesDialogData,
     private dialogRef: MatDialogRef<MultiEntriesDialogComponent>,
     private fb: FormBuilder,
+    private readonly editLockService: EditLockService,
   ) {
     this.dialogRef.disableClose = true;
   }
@@ -41,6 +45,10 @@ export class MultiEntriesDialogComponent implements OnInit {
       entries.filter((e) => !e.duration.isZero).forEach((e) => this.addRow(e));
     } else {
       this.addRow();
+    }
+
+    if (this.isLocked) {
+      this.form.disable();
     }
   }
 

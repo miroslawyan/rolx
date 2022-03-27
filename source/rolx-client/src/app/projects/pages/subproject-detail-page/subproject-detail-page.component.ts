@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/auth/core/auth.service';
-import { Role } from '@app/auth/core/role';
 import { Subproject } from '@app/projects/core/subproject';
 import { SubprojectService } from '@app/projects/core/subproject.service';
 import { Observable, throwError } from 'rxjs';
@@ -13,8 +12,8 @@ import { catchError, switchMap } from 'rxjs/operators';
   styleUrls: ['./subproject-detail-page.component.scss'],
 })
 export class SubprojectDetailPageComponent {
-  readonly mayEdit = this.authService.currentApprovalOrError.user.role >= Role.Supervisor;
-  readonly mayExport = this.authService.currentApprovalOrError.user.role >= Role.Supervisor;
+  readonly mayEdit = this.authService.currentApprovalOrError.isSupervisor;
+  readonly mayExport = this.authService.currentApprovalOrError.isSupervisor;
 
   readonly subproject$ = this.route.paramMap.pipe(
     switchMap((params) => this.initializeSubproject(params.get('id'))),

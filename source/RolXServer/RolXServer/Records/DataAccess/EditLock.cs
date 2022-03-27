@@ -1,35 +1,28 @@
 // -----------------------------------------------------------------------
-// <copyright file="Role.cs" company="Christian Ewald">
+// <copyright file="EditLock.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace RolXServer.Users;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace RolXServer.Records.DataAccess;
 
 /// <summary>
-/// The role of a user.
+/// The date before when the editing of records is locked.
 /// </summary>
-public enum Role
+public sealed class EditLock
 {
     /// <summary>
-    /// Just a user.
+    /// Gets or sets the identifier.
     /// </summary>
-    User = 1,
+    public int Id { get; set; }
 
     /// <summary>
-    /// A user with some privileges.
+    /// Gets or sets the date.
     /// </summary>
-    Supervisor = 2,
-
-    /// <summary>
-    /// A user with some more privileges.
-    /// </summary>
-    Backoffice = 100,
-
-    /// <summary>
-    /// A user with maximum privileges.
-    /// </summary>
-    Administrator = 1000,
+    [Column(TypeName = "date")]
+    public DateTime Date { get; set; }
 }

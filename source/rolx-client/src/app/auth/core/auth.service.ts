@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Role } from '@app/auth/core/role';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { lastValueFrom } from 'rxjs';
 
 import { Approval } from './approval';
 import { SignInService } from './sign-in.service';
@@ -13,25 +11,20 @@ import { SignInService } from './sign-in.service';
 export class AuthService {
   private static readonly CurrentApprovalKey = 'currentApproval';
 
-  private readonly currentApprovalSubject = new BehaviorSubject<Approval | null>(null);
+  private _currentApproval?: Approval;
   private isInitialized = false;
 
-  readonly currentApproval$ = this.currentApprovalSubject.asObservable();
   get currentApproval() {
-    return this.currentApprovalSubject.value;
+    return this._currentApproval;
   }
 
   get currentApprovalOrError() {
-    if (this.currentApproval == null) {
+    if (this._currentApproval == null) {
       throw new Error('Not logged in properly');
     }
 
-    return this.currentApproval;
+    return this._currentApproval;
   }
-
-  readonly currentIsSupervisor$ = this.currentApproval$.pipe(
-    map((a) => (a?.user.role ?? Role.User) >= Role.Supervisor),
-  );
 
   constructor(private signInService: SignInService) {
     console.log('--- AuthService.ctor()');
@@ -49,7 +42,7 @@ export class AuthService {
 
     if (!approval || approval.isExpired) {
       AuthService.ClearCurrentApproval();
-      this.currentApprovalSubject.next(null);
+      this._currentApproval = undefined;
 
       console.log('--- AuthService.initialize() done');
       return;
@@ -60,7 +53,7 @@ export class AuthService {
     }
 
     AuthService.StoreCurrentApproval(approval);
-    this.currentApprovalSubject.next(approval);
+    this._currentApproval = approval;
 
     console.log('--- AuthService.initialize() done');
   }
@@ -73,12 +66,12 @@ export class AuthService {
     );
 
     AuthService.StoreCurrentApproval(approval);
-    this.currentApprovalSubject.next(approval);
+    this._currentApproval = approval;
   }
 
   signOut() {
     AuthService.ClearCurrentApproval();
-    this.currentApprovalSubject.next(null);
+    this._currentApproval = undefined;
   }
 
   private static LoadCurrentApproval(): Approval | null {

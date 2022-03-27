@@ -14,6 +14,7 @@ import { GridNavigationService } from '@app/core/grid-navigation/grid-navigation
 import { Duration } from '@app/core/util/duration';
 import { assertDefined } from '@app/core/util/utils';
 import { Activity } from '@app/projects/core/activity';
+import { EditLockService } from '@app/records/core/edit-lock.service';
 import { Record } from '@app/records/core/record';
 import { RecordEntry } from '@app/records/core/record-entry';
 import { DurationEditComponent } from '@app/records/shared/duration-edit/duration-edit.component';
@@ -72,9 +73,16 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     return this.record.entriesOf(this.activity);
   }
 
+  get isLocked(): boolean {
+    return this.editLockService.isLocked(this.record.date);
+  }
+
   get isSimpleEditable(): boolean {
     return (
-      this.entries.length <= 1 && this.entries.every((e) => e.isDurationOnly) && this.isActivityOpen
+      !this.isLocked &&
+      this.entries.length <= 1 &&
+      this.entries.every((e) => e.isDurationOnly) &&
+      this.isActivityOpen
     );
   }
 
@@ -86,7 +94,11 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     return new Duration(this.entries.reduce((sum, e) => sum + e.duration.seconds, 0));
   }
 
-  constructor(private gridNavigationService: GridNavigationService, private dialog: MatDialog) {}
+  constructor(
+    private readonly gridNavigationService: GridNavigationService,
+    private readonly dialog: MatDialog,
+    private readonly editLockService: EditLockService,
+  ) {}
 
   ngOnInit() {
     assertDefined(this, 'record');

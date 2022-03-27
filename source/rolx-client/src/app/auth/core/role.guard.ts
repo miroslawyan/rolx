@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { Role } from '@app/users/core/role';
 
 import { AuthService } from './auth.service';
-import { Role } from './role';
 
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
@@ -10,9 +10,9 @@ export class RoleGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentRole = this.authService.currentApproval?.user.role || Role.User;
-    const allowedRoles = (route.data['allowedRoles'] as Role[]) || [];
+    const minRole = (route.data['minRole'] as Role) ?? Role.Administrator;
 
-    if (!allowedRoles.includes(currentRole)) {
+    if (currentRole < minRole) {
       return this.router.createUrlTree(['/']);
     }
 

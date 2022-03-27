@@ -10,6 +10,7 @@ import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.componen
 import { MainPageComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 import { SomethingWentWrongPageComponent } from './something-went-wrong-page/something-went-wrong-page.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
@@ -19,6 +20,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     ForbiddenPageComponent,
     MainPageComponent,
     NotFoundPageComponent,
+    SettingsPageComponent,
     SignInPageComponent,
     SomethingWentWrongPageComponent,
     ToolbarComponent,

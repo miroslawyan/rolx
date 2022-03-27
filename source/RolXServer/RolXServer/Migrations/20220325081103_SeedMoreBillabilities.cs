@@ -15,7 +15,6 @@ namespace RolXServer.Migrations;
 /// <summary>
 /// Seeds more billabilities.
 /// </summary>
-/// <seealso cref="Microsoft.EntityFrameworkCore.Migrations.Migration" />
 public partial class SeedMoreBillabilities : Migration
 {
     /// <inheritdoc/>

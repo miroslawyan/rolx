@@ -18,6 +18,7 @@
         <mat-select [formControl]="roleControl" required>
           <mat-option [value]="Role.User"> {{Role[Role.User]}} </mat-option>
           <mat-option [value]="Role.Supervisor"> {{Role[Role.Supervisor]}} </mat-option>
+          <mat-option [value]="Role.Backoffice"> {{Role[Role.Backoffice]}} </mat-option>
           <mat-option [value]="Role.Administrator"> {{Role[Role.Administrator]}} </mat-option>
         </mat-select>
         <mat-error *ngIf="roleControl.hasError('required')"> Pflichtfeld </mat-error>

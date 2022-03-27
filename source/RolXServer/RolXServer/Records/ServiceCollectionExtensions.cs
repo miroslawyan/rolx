@@ -26,6 +26,7 @@ public static class ServiceCollectionExtensions
         services.Configure<Settings>(configuration.GetSection("Records"));
 
         services.AddScoped<Domain.IBalanceService, Domain.Detail.BalanceService>();
+        services.AddScoped<Domain.IEditLockService, Domain.Detail.EditLockService>();
         services.AddScoped<Domain.IRecordService, Domain.Detail.RecordService>();
         services.AddScoped<Domain.IYearInfoService, Domain.Detail.YearInfoService>();
 

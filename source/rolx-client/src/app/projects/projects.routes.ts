@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { Role } from '@app/auth/core/role';
 import { RoleGuard } from '@app/auth/core/role.guard';
 import { ActivityEditPageComponent } from '@app/projects/pages/activity-edit-page/activity-edit-page.component';
 import { SubprojectDetailPageComponent } from '@app/projects/pages/subproject-detail-page/subproject-detail-page.component';
 import { SubprojectEditPageComponent } from '@app/projects/pages/subproject-edit-page/subproject-edit-page.component';
 import { SubprojectListPageComponent } from '@app/projects/pages/subproject-list-page/subproject-list-page.component';
+import { Role } from '@app/users/core/role';
 
 export const ProjectsRoutes: Routes = [
   {
@@ -19,12 +19,12 @@ export const ProjectsRoutes: Routes = [
     path: 'subproject/:id/edit',
     component: SubprojectEditPageComponent,
     canActivate: [RoleGuard],
-    data: { allowedRoles: [Role.Supervisor, Role.Administrator] },
+    data: { minRole: Role.Supervisor },
   },
   {
     path: 'subproject/:id/activity/:activityId',
     component: ActivityEditPageComponent,
     canActivate: [RoleGuard],
-    data: { allowedRoles: [Role.Supervisor, Role.Administrator] },
+    data: { minRole: Role.Supervisor },
   },
 ];

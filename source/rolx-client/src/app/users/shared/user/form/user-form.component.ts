@@ -1,10 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Role } from '@app/auth/core/role';
 import { ErrorResponse } from '@app/core/error/error-response';
 import { ErrorService } from '@app/core/error/error.service';
 import { assertDefined } from '@app/core/util/utils';
+import { Role } from '@app/users/core/role';
 import { User } from '@app/users/core/user';
 import { UserService } from '@app/users/core/user.service';
 import * as moment from 'moment';

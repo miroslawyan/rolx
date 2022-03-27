@@ -6,6 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using RolXServer.Records.Domain;
@@ -19,6 +20,7 @@ namespace RolXServer.Records.WebApi;
 /// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
+[Authorize(Policy = "ActiveUser")]
 public class YearInfoController : ControllerBase
 {
     private readonly IYearInfoService yearInfoService;

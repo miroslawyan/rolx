@@ -6,7 +6,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Moq;
+
 using RolXServer.Projects;
+using RolXServer.Records.Domain;
 using RolXServer.Records.WebApi.Resource;
 
 namespace RolXServer.Records.WebApi.Validation;
@@ -23,7 +26,7 @@ public sealed class RecordValidatorTests
     public void SetUp()
     {
         this.context = InMemory.ContextFactory()();
-        this.sut = new RecordValidator(this.context);
+        this.sut = new RecordValidator(this.context, Mock.Of<IEditLockService>());
     }
 
     [TearDown]

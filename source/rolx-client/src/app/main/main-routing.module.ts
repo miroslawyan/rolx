@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@app/auth/core/auth.guard';
+import { RoleGuard } from '@app/auth/core/role.guard';
 import { ProjectsRoutes } from '@app/projects/projects.routes';
 import { RecordsRoutes } from '@app/records/records.routes';
 import { ReportsRoutes } from '@app/reports/reports.routes';
+import { Role } from '@app/users/core/role';
 import { UsersRoutes } from '@app/users/users.routes';
 
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 import { SomethingWentWrongPageComponent } from './something-went-wrong-page/something-went-wrong-page.component';
 
@@ -22,6 +25,12 @@ const routes: Routes = [
       ...UsersRoutes,
       ...RecordsRoutes,
       ...ReportsRoutes,
+      {
+        path: 'settings',
+        component: SettingsPageComponent,
+        canActivate: [RoleGuard],
+        data: { minRole: Role.Backoffice },
+      },
       {
         path: 'four-oh-four',
         component: NotFoundPageComponent,

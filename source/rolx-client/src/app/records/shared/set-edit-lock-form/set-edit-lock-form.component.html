@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-title>Sperrdatum</mat-card-title>
+  <mat-card-subtitle>
+    Das Erfassen von Arbeitszeiten vor diesem Datum ist gesperrt.
+  </mat-card-subtitle>
+
+  <mat-form-field>
+    <mat-label>Sperrdatum</mat-label>
+    <input
+      matInput
+      [formControl]="dateControl"
+      [matDatepicker]="entryDatePicker"
+      placeholder="dd.mm.yyyy"
+      (focus)="entryDatePicker.open()" />
+    <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #entryDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-card-actions>
+    <button mat-stroked-button (click)="cancel()">Abbruch</button>
+    <button
+      mat-flat-button
+      [color]="'accent'"
+      [disabled]="!dateControl.valid || !isModified"
+      (click)="commit()">
+      Speichern
+    </button>
+  </mat-card-actions>
+</mat-card>

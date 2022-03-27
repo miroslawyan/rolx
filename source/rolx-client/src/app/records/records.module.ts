@@ -15,21 +15,28 @@ import { ReasonDialogComponent } from '@app/records/shared/paid-leave-select/rea
 import { WeekTableCellComponent } from '@app/records/shared/week-table/cell/week-table-cell.component';
 import { WeekTableComponent } from '@app/records/shared/week-table/week-table.component';
 
+import { SetEditLockFormComponent } from './shared/set-edit-lock-form/set-edit-lock-form.component';
+
+const exportedDeclarations = [
+  BalanceIndicatorComponent,
+  SetEditLockFormComponent,
+  WeekPageComponent,
+  YearOverviewPageComponent,
+];
+
 @NgModule({
   imports: [AppImportModule, CommonModule, CoreModule, ProjectsModule],
   declarations: [
-    BalanceIndicatorComponent,
+    ...exportedDeclarations,
     DurationEditComponent,
     HolidayTableComponent,
     MonthlyWorkTimeTableComponent,
     MultiEntriesDialogComponent,
     PaidLeaveSelectComponent,
     ReasonDialogComponent,
-    WeekPageComponent,
     WeekTableCellComponent,
     WeekTableComponent,
-    YearOverviewPageComponent,
   ],
-  exports: [BalanceIndicatorComponent, WeekPageComponent, YearOverviewPageComponent],
+  exports: exportedDeclarations,
 })
 export class RecordsModule {}

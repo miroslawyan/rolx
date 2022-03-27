@@ -12,7 +12,7 @@
   </rolx-duration-edit>
 
   <ng-template #total>
-    <span *ngIf="isActivityOpen" class="total">
+    <span *ngIf="isActivityOpen && (!isLocked || !totalDuration.isZero)" class="total">
       <button #moreButton mat-icon-button class="small-icon-button" (click)="editEntries()">
         <mat-icon>more_horiz</mat-icon>
       </button>

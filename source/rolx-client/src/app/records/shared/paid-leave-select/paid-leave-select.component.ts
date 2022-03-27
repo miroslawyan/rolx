@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { assertDefined } from '@app/core/util/utils';
+import { EditLockService } from '@app/records/core/edit-lock.service';
 import { PaidLeaveType } from '@app/records/core/paid-leave-type';
 import { Record } from '@app/records/core/record';
 import { Subject, Subscription } from 'rxjs';
@@ -41,7 +42,14 @@ export class PaidLeaveSelectComponent implements OnInit, OnDestroy {
     this.typeSubject.next(value);
   }
 
-  constructor(private dialog: MatDialog) {
+  get isLocked(): boolean {
+    return this.editLockService.isLocked(this.record.date);
+  }
+
+  constructor(
+    private readonly dialog: MatDialog,
+    private readonly editLockService: EditLockService,
+  ) {
     this.subscriptions.add(
       this.typeSubject
         .pipe(filter((t) => t !== PaidLeaveType.Other))

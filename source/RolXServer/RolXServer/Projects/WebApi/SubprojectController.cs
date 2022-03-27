@@ -80,7 +80,7 @@ public sealed class SubprojectController : ControllerBase
     /// The created subproject.
     /// </returns>
     [HttpPost]
-    [Authorize(Roles = "Administrator, Supervisor")]
+    [Authorize(Roles = "Administrator, Backoffice, Supervisor")]
     public async Task<ActionResult<Subproject>> Create(Subproject subproject)
     {
         var domain = subproject.ToDomain();
@@ -98,7 +98,7 @@ public sealed class SubprojectController : ControllerBase
     /// No content.
     /// </returns>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Administrator, Supervisor")]
+    [Authorize(Roles = "Administrator, Backoffice, Supervisor")]
     public async Task<IActionResult> Update(int id, Subproject subproject)
     {
         if (id != subproject.Id)

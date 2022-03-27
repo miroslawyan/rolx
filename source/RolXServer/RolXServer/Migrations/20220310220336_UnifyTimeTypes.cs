@@ -15,7 +15,6 @@ namespace RolXServer.Migrations;
 /// <summary>
 /// Unify the mapping of the time-related properties.
 /// </summary>
-/// <seealso cref="Microsoft.EntityFrameworkCore.Migrations.Migration" />
 public partial class UnifyTimeTypes : Migration
 {
     /// <inheritdoc/>

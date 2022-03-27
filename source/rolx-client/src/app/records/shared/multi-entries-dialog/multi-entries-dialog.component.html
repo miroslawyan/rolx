@@ -4,7 +4,7 @@
     <span *ngIf="data.record.dayName">- {{data.record.dayName}}</span>
   </small>
   <br />
-  {{data.activity.fullNumber}}
+  {{data.activity.fullName}}
 </h1>
 
 <form
@@ -21,7 +21,7 @@
         <mat-checkbox [formControl]="formRow.beginEndBased"> </mat-checkbox>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <button mat-icon-button type="button" (click)="addRow();">
+        <button mat-icon-button type="button" (click)="addRow();" [disabled]="isLocked">
           <mat-icon>add</mat-icon>
         </button>
       </td>
@@ -105,7 +105,7 @@
     color="primary"
     type="submit"
     form="entries-edit"
-    [disabled]="!form.valid">
+    [disabled]="!form.valid || isLocked">
     Speichern
   </button>
 </mat-dialog-actions>

@@ -22,7 +22,7 @@ namespace RolXServer.Reports.WebApi;
 /// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
-[Authorize(Roles = "Administrator, Supervisor", Policy = "ActiveUser")]
+[Authorize(Roles = "Administrator, Backoffice, Supervisor", Policy = "ActiveUser")]
 public class ExportController : ControllerBase
 {
     private readonly IExportService exportService;

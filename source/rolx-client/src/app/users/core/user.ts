@@ -1,8 +1,9 @@
-import { Role } from '@app/auth/core/role';
 import { TransformAsIsoDate } from '@app/core/util/iso-date';
 import { assertDefined } from '@app/core/util/utils';
 import { Exclude } from 'class-transformer';
 import * as moment from 'moment';
+
+import { Role } from './role';
 
 export class User {
   id!: string;

@@ -40,6 +40,11 @@ public sealed class RolXContext : DbContext
     public DbSet<Billability> Billabilities { get; set; } = null!;
 
     /// <summary>
+    /// Gets or sets the edit locks.
+    /// </summary>
+    public DbSet<EditLock> EditLocks { get; set; } = null!;
+
+    /// <summary>
     /// Gets or sets the favourite activities.
     /// </summary>
     public DbSet<FavouriteActivity> FavouriteActivities { get; set; } = null!;
@@ -121,6 +126,7 @@ public sealed class RolXContext : DbContext
             .HasIndex(s => new { s.UserId, s.StartDate }).IsUnique();
 
         SeedBillabilities(modelBuilder);
+        SeedEditLocks(modelBuilder);
         SeedSubprojects(modelBuilder);
     }
 
@@ -160,6 +166,15 @@ public sealed class RolXContext : DbContext
             Name = "Abwesenheit",
             IsBillable = false,
             SortingWeight = 200,
+        });
+    }
+
+    private static void SeedEditLocks(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<EditLock>().HasData(new EditLock
+        {
+            Id = RolXServer.Records.Domain.Detail.EditLockService.OneAndOnlyId,
+            Date = new DateTime(2022, 1, 1),
         });
     }
 
