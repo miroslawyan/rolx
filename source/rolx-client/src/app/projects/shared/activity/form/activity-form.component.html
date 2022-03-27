@@ -61,7 +61,7 @@
       <mat-form-field appearance="standard">
         <mat-label>Budget</mat-label>
         <input matInput type="number" formControlName="budget" />
-        <span matSuffix>h</span>
+        <span matSuffix>PT</span>
         <mat-error *ngIf="hasError('budget', 'min')">
           Negative Budgets sind nur schwer einzuhalten.
         </mat-error>

@@ -12,8 +12,14 @@ export class Duration extends DurationBase<Duration> {
     DecimalHours: 4,
   };
 
+  private static readonly HoursPerPersonDay = 8;
+
   static fromHours(hours: number) {
     return new Duration(Math.round(hours * DurationBase.SecondsPerHour));
+  }
+
+  static fromPersonDays(personDays: number) {
+    return Duration.fromHours(personDays * Duration.HoursPerPersonDay);
   }
 
   static parse(time: string | any, zeroIfEmpty: boolean = false): Duration {
@@ -47,6 +53,10 @@ export class Duration extends DurationBase<Duration> {
 
   get isPositive(): boolean {
     return this.seconds > 0;
+  }
+
+  get personDays(): number {
+    return this.hours / Duration.HoursPerPersonDay;
   }
 
   add(other: Duration): Duration {

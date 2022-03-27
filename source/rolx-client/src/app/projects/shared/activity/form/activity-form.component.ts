@@ -66,13 +66,16 @@ export class ActivityFormComponent implements OnInit {
 
   get formBudget(): Duration {
     const budget = Number.parseFloat(this.form.controls['budget'].value);
-    return !Number.isNaN(budget) ? Duration.fromHours(budget) : Duration.Zero;
+    return !Number.isNaN(budget) ? Duration.fromPersonDays(budget) : Duration.Zero;
   }
 
   set formBudget(value: Duration) {
     const formValue =
       value && !value.isZero
-        ? value.hours.toLocaleString(this.locale, { maximumFractionDigits: 1, useGrouping: false })
+        ? value.personDays.toLocaleString(this.locale, {
+            maximumFractionDigits: 1,
+            useGrouping: false,
+          })
         : null;
     this.form.controls['budget'].setValue(formValue);
   }
