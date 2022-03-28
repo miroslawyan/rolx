@@ -27,7 +27,7 @@ export class MultiEntriesDialogComponent implements OnInit {
   });
 
   formRows: FormRow[] = [];
-  displayedColumns: string[] = ['mode', 'begin', 'end', 'pause', 'duration', 'comment'];
+  displayedColumns: string[] = ['mode', 'begin', 'end', 'pause', 'duration', 'comment', 'tools'];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: MultiEntriesDialogData,
@@ -85,5 +85,12 @@ export class MultiEntriesDialogComponent implements OnInit {
 
     (this.form.controls['entries'] as FormArray).push(row.group);
     this.formRows = [...this.formRows, row];
+  }
+
+  removeRow(row: FormRow): void {
+    this.formRows = this.formRows.filter((formRow) => formRow !== row);
+
+    const entriesControl = this.form.controls['entries'] as FormArray;
+    entriesControl.removeAt(entriesControl.controls.indexOf(row.group));
   }
 }

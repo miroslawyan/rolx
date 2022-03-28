@@ -18,7 +18,10 @@ export class SetEditLockFormComponent implements OnDestroy {
   }
 
   constructor(private readonly editLockService: EditLockService) {
-    this.subscription = editLockService.date$.subscribe((date) => this.dateControl.reset(date));
+    this.subscription = this.editLockService.date$.subscribe((date) =>
+      this.dateControl.reset(date),
+    );
+    this.editLockService.refresh();
   }
 
   ngOnDestroy(): void {

@@ -7,6 +7,7 @@ td {
   padding-right: 1em;
 
   &:first-child {
+    padding-left: 0;
     text-align: center;
   }
 
@@ -30,6 +31,29 @@ td {
 
 // https://stackoverflow.com/questions/56302795/how-to-use-angular-material-form-field-and-flex-layout
 :host ::ng-deep .mat-form-field-infix {
-  // width: auto !important;
   width: unset !important;
+}
+
+.mat-column-comment {
+  min-width: 300px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.mat-column-tools {
+  text-align: right;
+}
+
+tr {
+  .mat-column-tools button {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  &:hover .mat-column-tools button {
+    opacity: 1;
+    transition: opacity 0.3s ease-in;
+  }
 }

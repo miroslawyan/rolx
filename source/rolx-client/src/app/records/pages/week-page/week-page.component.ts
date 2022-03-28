@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/auth/core/auth.service';
 import { ActivityService } from '@app/projects/core/activity.service';
+import { EditLockService } from '@app/records/core/edit-lock.service';
 import { WorkRecordService } from '@app/records/core/work-record.service';
 import { WeekPageParams } from '@app/records/pages/week-page/week-page-params';
 import { UserService } from '@app/users/core/user.service';
 import { forkJoin, NEVER, Observable, of, withLatestFrom } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-week-page',
@@ -30,6 +31,7 @@ export class WeekPageComponent {
   );
 
   readonly recordsActivitiesUser$ = this.routeParams$.pipe(
+    tap(() => this.editLockService.refresh()),
     switchMap((params) =>
       forkJoin([
         this.workRecordService.getRange(params.userId, params.monday, params.nextMonday),
@@ -48,5 +50,6 @@ export class WeekPageComponent {
     private activityService: ActivityService,
     private userService: UserService,
     private authService: AuthService,
+    private editLockService: EditLockService,
   ) {}
 }
