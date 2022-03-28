@@ -27,10 +27,11 @@ export class FormRow {
     comment: this.comment,
   });
 
-  constructor(entry?: RecordEntry | null) {
+  constructor(entryOrIsBeginEndBased: RecordEntry | boolean) {
     this.beginEndBased.valueChanges.subscribe(() => this.updateMode());
 
-    if (entry) {
+    if (entryOrIsBeginEndBased instanceof RecordEntry) {
+      const entry = entryOrIsBeginEndBased;
       this.beginEndBased.setValue(entry.isBeginEndBased);
 
       this.duration.setValue(entry.duration);
@@ -39,6 +40,7 @@ export class FormRow {
       this.pause.setValue(entry.pause);
       this.comment.setValue(entry.comment);
     } else {
+      this.beginEndBased.setValue(entryOrIsBeginEndBased);
       this.updateMode();
     }
   }
@@ -48,11 +50,12 @@ export class FormRow {
     return duration && !duration.isZero;
   }
 
-  private get isBeginEndBased() {
+  get isBeginEndBased() {
     return !!this.beginEndBased.value;
   }
+
   private get commentValue() {
-    return this.comment.value.trim();
+    return this.comment.value?.trim();
   }
 
   toEntry(): RecordEntry {
@@ -80,13 +83,13 @@ export class FormRow {
 
   private updateMode() {
     if (this.isBeginEndBased) {
-      this.enterBeginEndBaseMode();
+      this.enterBeginEndBasedMode();
     } else {
       this.enterDurationBasedMode();
     }
   }
 
-  private enterBeginEndBaseMode() {
+  private enterBeginEndBasedMode() {
     this.unsubscribe();
 
     this.begin.enable();

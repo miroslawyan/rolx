@@ -78,7 +78,10 @@ export class MultiEntriesDialogComponent implements OnInit {
   }
 
   addRow(entry?: RecordEntry | null) {
-    const row = new FormRow(entry);
+    const row =
+      entry != null
+        ? new FormRow(entry)
+        : new FormRow(this.formRows[this.formRows.length - 1]?.isBeginEndBased ?? true);
 
     (this.form.controls['entries'] as FormArray).push(row.group);
     this.formRows = [...this.formRows, row];

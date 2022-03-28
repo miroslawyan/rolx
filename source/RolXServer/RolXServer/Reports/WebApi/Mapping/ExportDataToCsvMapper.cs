@@ -64,7 +64,7 @@ public static class ExportDataToCsvMapper
             .ToStream(l => Encoding.Unicode.GetBytes(l + Environment.NewLine));
 
     private static string Sanitize(this string value)
-        => value.Contains(',')
+        => value.Contains(',') || value.Contains('\n')
         ? $"\"{value.Replace("\"", "\"\"")}\""
         : value;
 }

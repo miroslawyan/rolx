@@ -5,11 +5,11 @@ import { DurationBase } from './duration.base';
 
 export class TimeOfDay extends DurationBase<TimeOfDay> {
   static readonly Zero = new TimeOfDay();
-  static readonly Pattern = /^([0-1]?\d|2[0-3]|24(?!:0?[1-9]))?(?::([0-5]?\d)?)?$/;
+  static readonly ColonPattern = /^([0-1]?\d|2[0-3])?(?::([0-5]?\d)?)?$/;
+  static readonly FourDigitsPattern = /^([0-1]\d|2[0-3])([0-5]\d)$/;
   static readonly PatternGroups = {
     Hours: 1,
     Minutes: 2,
-    TwentyFour: 3,
   };
 
   static parse(time: string | any, zeroIfEmpty: boolean = false): TimeOfDay {
@@ -21,7 +21,7 @@ export class TimeOfDay extends DurationBase<TimeOfDay> {
       return TimeOfDay.Zero;
     }
 
-    const match = this.Pattern.exec(time);
+    const match = this.ColonPattern.exec(time) || this.FourDigitsPattern.exec(time);
     if (!match) {
       return new TimeOfDay(NaN);
     }
