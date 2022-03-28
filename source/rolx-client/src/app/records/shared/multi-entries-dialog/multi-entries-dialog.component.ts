@@ -92,5 +92,9 @@ export class MultiEntriesDialogComponent implements OnInit {
 
     const entriesControl = this.form.controls['entries'] as FormArray;
     entriesControl.removeAt(entriesControl.controls.indexOf(row.group));
+
+    if (this.formRows.length === 0) {
+      this.addRow();
+    }
   }
 }
