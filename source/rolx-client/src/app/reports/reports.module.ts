@@ -8,12 +8,14 @@ import { UserMonthReportPageComponent } from './pages/user-month-report-page/use
 import { DaysIndicatorComponent } from './shared/days-indicator/days-indicator.component';
 import { ExportMonthCardComponent } from './shared/export-month-card/export-month-card.component';
 import { ExportRangeCardComponent } from './shared/export-range-card/export-range-card.component';
+import { ExportSubprojectCardComponent } from './shared/export-subproject-card/export-subproject-card.component';
 
 const exportedComponents = [
   DaysIndicatorComponent,
   ExportMonthCardComponent,
   ExportPageComponent,
   ExportRangeCardComponent,
+  ExportSubprojectCardComponent,
   UserMonthReportPageComponent,
 ];
 

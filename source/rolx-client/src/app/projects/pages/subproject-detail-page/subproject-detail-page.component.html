@@ -27,7 +27,9 @@
     [activities]="subproject.activities"></rolx-activity-table>
 
   <section class="exports" *ngIf="mayExport">
-    <rolx-export-month-card [subproject]="subproject" [noTitle]="true"></rolx-export-month-card>
+    <rolx-export-subproject-card
+      [subproject]="subproject"
+      [noTitle]="true"></rolx-export-subproject-card>
     <rolx-export-range-card [subproject]="subproject" [noTitle]="true"></rolx-export-range-card>
   </section>
 </mat-card>

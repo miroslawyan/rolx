@@ -36,6 +36,14 @@ export class Subproject {
     return Math.max(...this.activities.map((ph) => ph.number), 0) + 1;
   }
 
+  get startDate(): moment.Moment | undefined {
+    if (this.activities.length === 0) {
+      return undefined;
+    }
+
+    return moment.min(this.activities.map((activity) => activity.startDate));
+  }
+
   addActivity(): Activity {
     const activity = new Activity();
     activity.startDate = moment();

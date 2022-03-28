@@ -95,6 +95,11 @@ public class ExportController : ControllerBase
 
     private static string GetFileName(string? month, string? begin, string? end, Subproject? subproject)
     {
+        if (end != null)
+        {
+            end = IsoDate.Parse(end).AddDays(-1).ToIsoDate();
+        }
+
         var subprojectPart = subproject != null ? subproject.FullNumber() : "all";
         var rangePart = month != null
             ? month
