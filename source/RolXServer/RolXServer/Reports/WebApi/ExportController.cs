@@ -40,7 +40,7 @@ public class ExportController : ControllerBase
     }
 
     /// <summary>
-    /// Gets a CSV report containing all data.
+    /// Gets an Excel workbook report containing the requested data.
     /// </summary>
     /// <param name="subprojectId">The optional subproject identifier.</param>
     /// <param name="month">The optional month.</param>
@@ -50,7 +50,7 @@ public class ExportController : ControllerBase
     /// The report.
     /// </returns>
     [HttpGet]
-    public async Task<IActionResult> GetCsv(int? subprojectId, string? month, string? begin, string? end)
+    public async Task<IActionResult> GetExcel(int? subprojectId, string? month, string? begin, string? end)
     {
         Subproject? subproject = null;
         if (subprojectId.HasValue)
@@ -68,11 +68,9 @@ public class ExportController : ControllerBase
             return this.BadRequest("A month or begin and end dates must be provided");
         }
 
-        var data = await this.exportService.GetFor(range.Value, subprojectId);
-        return this.File(
-            data.ToCsvStream(),
-            "text/csv;charset=utf-16",
-            fileDownloadName: GetFileName(month, begin, end, subproject));
+        return this.ExcelExport(
+            await this.exportService.GetFor(range.Value, subprojectId),
+            GetFileName(month, begin, end, subproject));
     }
 
     private static DateRange? TryEvaluateRange(string? month, string? begin, string? end)
@@ -107,6 +105,6 @@ public class ExportController : ControllerBase
                 ? $"{begin}-{end}"
                 : string.Empty;
 
-        return $"rolx-{subprojectPart}-{rangePart}.csv";
+        return $"rolx-{subprojectPart}-{rangePart}.xlsx";
     }
 }
