@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Duration } from '@app/core/util/duration';
@@ -6,6 +6,7 @@ import { Activity } from '@app/projects/core/activity';
 import { EditLockService } from '@app/records/core/edit-lock.service';
 import { Record } from '@app/records/core/record';
 import { RecordEntry } from '@app/records/core/record-entry';
+import { ParentErrorStateMatcher } from '@app/records/shared/multi-entries-dialog/parent-error-state-matcher';
 
 import { FormRow } from './form-row';
 
@@ -20,7 +21,9 @@ export interface MultiEntriesDialogData {
   styleUrls: ['./multi-entries-dialog.component.scss'],
 })
 export class MultiEntriesDialogComponent implements OnInit {
+  @ViewChild('scollable') private scollable?: ElementRef;
   readonly isLocked = this.editLockService.isLocked(this.data.record.date);
+  readonly errorStateMatcher = new ParentErrorStateMatcher();
 
   form = this.fb.group({
     entries: this.fb.array([]),
@@ -85,6 +88,7 @@ export class MultiEntriesDialogComponent implements OnInit {
 
     (this.form.controls['entries'] as FormArray).push(row.group);
     this.formRows = [...this.formRows, row];
+    setTimeout(() => this.scrollToBottom());
   }
 
   removeRow(row: FormRow): void {
@@ -96,5 +100,16 @@ export class MultiEntriesDialogComponent implements OnInit {
     if (this.formRows.length === 0) {
       this.addRow();
     }
+  }
+
+  private scrollToBottom() {
+    try {
+      if (this.scollable) {
+        this.scollable.nativeElement.scroll({
+          top: this.scollable.nativeElement.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    } catch (err) {}
   }
 }

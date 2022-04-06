@@ -1,9 +1,8 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Duration } from '@app/core/util/duration';
 import { DurationValidators } from '@app/core/util/duration.validators';
 import { TimeFormControl } from '@app/core/util/time-form-control';
 import { TimeOfDay } from '@app/core/util/time-of-day';
-import { TimeOfDayValidators } from '@app/core/util/time-of-day.validators';
 import { RecordEntry } from '@app/records/core/record-entry';
 import { combineLatest, Subscription } from 'rxjs';
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
@@ -18,14 +17,17 @@ export class FormRow {
   readonly duration = TimeFormControl.createDuration(null, DurationValidators.min(Duration.Zero));
   readonly comment = new FormControl('');
 
-  readonly group = new FormGroup({
-    beginEndBased: this.beginEndBased,
-    begin: this.begin,
-    end: this.end,
-    pause: this.pause,
-    duration: this.duration,
-    comment: this.comment,
-  });
+  readonly group = new FormGroup(
+    {
+      beginEndBased: this.beginEndBased,
+      begin: this.begin,
+      end: this.end,
+      pause: this.pause,
+      duration: this.duration,
+      comment: this.comment,
+    },
+    () => this.validateDuration(),
+  );
 
   constructor(entryOrIsBeginEndBased: RecordEntry | boolean) {
     this.beginEndBased.valueChanges.subscribe(() => this.updateMode());
@@ -81,6 +83,14 @@ export class FormRow {
     return begin && end ? end.sub(begin).sub(pause ?? Duration.Zero) : Duration.Zero;
   }
 
+  private validateDuration(): ValidationErrors | null {
+    const duration = this.isBeginEndBased
+      ? FormRow.toDuration(this.begin.typedValue, this.end.typedValue, this.pause.typedValue)
+      : this.duration.typedValue ?? Duration.Zero;
+
+    return duration.isValid && duration.isNegative ? { negativeDuration: true } : null;
+  }
+
   private updateMode() {
     if (this.isBeginEndBased) {
       this.enterBeginEndBasedMode();
@@ -104,49 +114,6 @@ export class FormRow {
     this.subscription = combineLatest([begin$, end$, pause$])
       .pipe(map(([b, e, p]) => FormRow.toDuration(b, e, p)))
       .subscribe((d) => this.duration.setValue(d));
-
-    this.subscription.add(
-      combineLatest([begin$, pause$]).subscribe(([b, p]) => this.setEndMin(b, p)),
-    );
-
-    this.subscription.add(
-      combineLatest([pause$, begin$, end$]).subscribe(([p]) => this.setPauseMin(p)),
-    );
-
-    this.subscription.add(
-      combineLatest([begin$, end$]).subscribe(([b, e]) => this.setPauseMax(b, e)),
-    );
-  }
-
-  private setEndMin(begin: TimeOfDay | null, pause: Duration | null) {
-    if (begin) {
-      const endMin = pause ? begin.add(pause ?? Duration.Zero) : begin;
-      this.end.setValidators(TimeOfDayValidators.min(endMin));
-    } else {
-      this.end.clearValidators();
-    }
-
-    this.end.updateValueAndValidity();
-  }
-
-  private setPauseMin(pause: Duration | null) {
-    if (pause) {
-      this.pause.setValidators(DurationValidators.min(Duration.Zero));
-    } else {
-      this.pause.clearValidators();
-    }
-
-    this.pause.updateValueAndValidity();
-  }
-
-  private setPauseMax(begin: TimeOfDay | null, end: TimeOfDay | null) {
-    if (begin && end && end.seconds >= begin.seconds) {
-      this.pause.setValidators(DurationValidators.max(end.sub(begin)));
-    } else {
-      this.pause.clearValidators();
-    }
-
-    this.pause.updateValueAndValidity();
   }
 
   private enterDurationBasedMode() {

@@ -1,13 +1,16 @@
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { filter, map, share } from 'rxjs/operators';
+import { map, share } from 'rxjs/operators';
 
 export class StrongTypedFormControl<T> extends FormControl {
   readonly typedValue$: Observable<T | null> = this.valueChanges.pipe(
-    filter(() => this.valid),
-    map((v) => (!this.isEmpty ? this.parserFn(v) : null)),
+    map(() => this.typedValue),
     share(),
   );
+
+  get typedValue(): T | null {
+    return !this.isEmpty ? this.parserFn(this.value) : null;
+  }
 
   constructor(
     private parserFn: (value: any) => T,

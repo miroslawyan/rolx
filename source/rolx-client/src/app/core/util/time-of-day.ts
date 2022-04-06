@@ -5,8 +5,8 @@ import { DurationBase } from './duration.base';
 
 export class TimeOfDay extends DurationBase<TimeOfDay> {
   static readonly Zero = new TimeOfDay();
-  static readonly ColonPattern = /^([0-1]?\d|2[0-3])?(?::([0-5]?\d)?)?$/;
-  static readonly FourDigitsPattern = /^([0-1]\d|2[0-3])([0-5]\d)$/;
+  static readonly ColonPattern = /^([0-1]?\d|2[0-3]|24(?=:?0{0,2}))?(?::([0-5]?\d)?)?$/;
+  static readonly FourDigitsPattern = /^([0-1]\d|2[0-3]|24(?=00))([0-5]\d)$/;
   static readonly PatternGroups = {
     Hours: 1,
     Minutes: 2,
@@ -15,6 +15,10 @@ export class TimeOfDay extends DurationBase<TimeOfDay> {
   static parse(time: string | any, zeroIfEmpty: boolean = false): TimeOfDay {
     if (time instanceof TimeOfDay) {
       return time as TimeOfDay;
+    }
+
+    if (typeof time === 'string') {
+      time = time.trim();
     }
 
     if (zeroIfEmpty && (time == null || time === '')) {

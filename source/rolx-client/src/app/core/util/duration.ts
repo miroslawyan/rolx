@@ -27,6 +27,10 @@ export class Duration extends DurationBase<Duration> {
       return time as Duration;
     }
 
+    if (typeof time === 'string') {
+      time = time.trim();
+    }
+
     if (zeroIfEmpty && (time == null || time === '')) {
       return Duration.Zero;
     }
@@ -53,6 +57,10 @@ export class Duration extends DurationBase<Duration> {
 
   get isPositive(): boolean {
     return this.seconds > 0;
+  }
+
+  get isNegative(): boolean {
+    return this.seconds < 0;
   }
 
   get personDays(): number {
