@@ -1,6 +1,15 @@
+.filters {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+
+  *:first-child {
+    flex-grow: 1;
+  }
+}
+
 table {
   width: 100%;
-  margin-bottom: 1em;
 }
 
 .tools {

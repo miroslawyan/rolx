@@ -5,9 +5,9 @@ import { AuthService } from '@app/auth/core/auth.service';
 import { assertDefined } from '@app/core/util/utils';
 import { Role } from '@app/users/core/role';
 import { User } from '@app/users/core/user';
+import { UserFilterService } from '@app/users/core/user-filter.service';
 import { UserService } from '@app/users/core/user.service';
 import * as moment from 'moment';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-user-table',
@@ -31,23 +31,33 @@ export class UserTableComponent implements OnInit {
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(private userService: UserService, public authService: AuthService) {}
+  constructor(
+    private readonly userService: UserService,
+    public readonly authService: AuthService,
+    public readonly filterService: UserFilterService,
+  ) {}
 
   ngOnInit() {
     assertDefined(this, 'sort');
 
     this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = UserFilterService.Predicate;
 
-    this.userService
-      .getAll()
-      .pipe(tap((users) => (this.users = users)))
-      .subscribe(() => this.update(false));
+    this.userService.getAll().subscribe((users) => {
+      this.users = users;
+      this.update(this.filterService.showLefties);
+    });
   }
 
-  update(showFormerUsers: boolean) {
+  applyFilter(value: string) {
+    this.filterService.filterText = value;
+    this.dataSource.filter = this.filterService.filterText.toLowerCase();
+  }
+
+  update(showLefties: boolean) {
     const deadline = moment().subtract(3, 'month');
-    this.dataSource.data = showFormerUsers
+    this.dataSource.data = showLefties
       ? this.users
-      : this.users.filter((u) => u.leavingDate?.isAfter(deadline) ?? true);
+      : this.users.filter((user) => user.leavingDate?.isAfter(deadline) ?? true);
   }
 }
