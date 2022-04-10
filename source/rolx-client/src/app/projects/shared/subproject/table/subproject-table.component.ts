@@ -2,10 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { assertDefined } from '@app/core/util/utils';
-import { Subproject } from '@app/projects/core/subproject';
 import { SubprojectFilterService } from '@app/projects/core/subproject-filter.service';
+import { SubprojectShallow } from '@app/projects/core/subproject-shallow';
 import { SubprojectService } from '@app/projects/core/subproject.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'rolx-subproject-table',
@@ -13,16 +12,21 @@ import * as moment from 'moment';
   styleUrls: ['./subproject-table.component.scss'],
 })
 export class SubprojectTableComponent implements OnInit {
-  private subprojects: Subproject[] = [];
-
-  readonly displayedColumns: string[] = [
+  private readonly isClosedColumn = 'isClosed';
+  private readonly columns = [
     'fullNumber',
     'customerName',
     'projectName',
     'name',
+    'manager',
+    this.isClosedColumn,
     'tools',
   ];
-  readonly dataSource = new MatTableDataSource<Subproject>();
+
+  private subprojects: SubprojectShallow[] = [];
+
+  readonly dataSource = new MatTableDataSource<SubprojectShallow>();
+  displayedColumns = this.columns;
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
@@ -43,15 +47,22 @@ export class SubprojectTableComponent implements OnInit {
     this.dataSource.filter = this.filterService.filterText.toLowerCase();
   }
 
+  tpd(subproject: SubprojectShallow): SubprojectShallow {
+    return subproject;
+  }
+
   applyFilter(value: string) {
     this.filterService.filterText = value;
     this.dataSource.filter = this.filterService.filterText.toLowerCase();
   }
 
   update(showClosed: boolean) {
-    const deadline = moment().subtract(3, 'month');
+    this.displayedColumns = showClosed
+      ? this.columns
+      : this.columns.filter((c) => c !== this.isClosedColumn);
+
     this.dataSource.data = showClosed
       ? this.subprojects
-      : this.subprojects.filter((subproject) => subproject.endDate?.isAfter(deadline) ?? true);
+      : this.subprojects.filter((subproject) => !subproject.isClosed);
   }
 }

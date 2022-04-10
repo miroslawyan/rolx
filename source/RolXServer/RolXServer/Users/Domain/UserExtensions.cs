@@ -17,6 +17,14 @@ namespace RolXServer.Users.Domain;
 public static class UserExtensions
 {
     /// <summary>
+    /// Gets the full name of the specified user.
+    /// </summary>
+    /// <param name="user">The user.</param>
+    /// <returns>The full name.</returns>
+    public static string FullName(this User user)
+        => $"{user.FirstName} {user.LastName}";
+
+    /// <summary>
     /// Gets the users part-time settings before the specified date, in descending order.
     /// </summary>
     /// <param name="user">The user.</param>

@@ -1,33 +1,26 @@
 import { assertDefined } from '@app/core/util/utils';
+import { SubprojectShallow } from '@app/projects/core/subproject-shallow';
 import { Type } from 'class-transformer';
 import * as moment from 'moment';
 
 import { Activity } from './activity';
 
-export class Subproject {
-  id!: number;
-  number!: number;
-  name!: string;
+export class Subproject extends SubprojectShallow {
+  fullName!: string;
   projectNumber!: number;
-  projectName!: string;
-  customerName!: string;
+  number!: number;
+  managerId?: string;
 
   @Type(() => Activity)
   activities: Activity[] = [];
 
-  fullNumber!: string;
-  fullName!: string;
+  override validateModel(): void {
+    super.validateModel();
 
-  validateModel(): void {
-    assertDefined(this, 'id');
-    assertDefined(this, 'number');
-    assertDefined(this, 'name');
-    assertDefined(this, 'projectNumber');
-    assertDefined(this, 'projectName');
-    assertDefined(this, 'customerName');
-    assertDefined(this, 'activities');
-    assertDefined(this, 'fullNumber');
     assertDefined(this, 'fullName');
+    assertDefined(this, 'projectNumber');
+    assertDefined(this, 'number');
+    assertDefined(this, 'activities');
 
     this.activities.forEach((a) => a.validateModel());
   }
@@ -58,6 +51,9 @@ export class Subproject {
     const activity = new Activity();
     activity.startDate = moment();
     activity.number = this.nextNumber;
+    activity.fullName = '';
+    activity.fullNumber = '';
+    activity.billabilityName = '';
     this.activities.push(activity);
     return activity;
   }

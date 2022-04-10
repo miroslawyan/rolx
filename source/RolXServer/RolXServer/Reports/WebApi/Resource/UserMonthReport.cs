@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Immutable;
-
 using RolXServer.Users.WebApi.Resource;
 
 namespace RolXServer.Reports.WebApi.Resource;

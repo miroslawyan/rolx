@@ -46,9 +46,9 @@ public sealed class SubprojectController : ControllerBase
     /// </summary>
     /// <returns>All subprojects.</returns>
     [HttpGet]
-    public async Task<IEnumerable<Subproject>> GetAll()
+    public async Task<IEnumerable<SubprojectShallow>> GetAll()
     {
-        return (await this.subprojectService.GetAll()).Select(p => p.ToResource());
+        return (await this.subprojectService.GetAll()).Select(p => p.ToShallowResource());
     }
 
     /// <summary>

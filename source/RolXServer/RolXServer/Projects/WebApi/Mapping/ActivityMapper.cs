@@ -23,21 +23,19 @@ internal static class ActivityMapper
     /// <param name="actualSums">The actual sums.</param>
     /// <returns>The resource.</returns>
     public static Resource.Activity ToResource(this DataAccess.Activity domain, IDictionary<int, TimeSpan>? actualSums = null)
-    {
-        return new Resource.Activity
-        {
-            Id = domain.Id,
-            Number = domain.Number,
-            Name = domain.Name,
-            StartDate = domain.StartDate.ToIsoDate(),
-            EndDate = domain.EndDate.ToIsoDate(),
-            Billability = domain.Billability!,
-            Budget = (long)(domain.Budget?.TotalSeconds ?? 0),
-            Actual = GetActualSumSeconds(domain.Id, actualSums),
-            FullNumber = domain.FullNumber(),
-            FullName = domain.FullName(),
-        };
-    }
+        => new Resource.Activity(
+            Id: domain.Id,
+            Number: domain.Number,
+            Name: domain.Name,
+            StartDate: domain.StartDate.ToIsoDate(),
+            EndDate: domain.EndDate.ToIsoDate(),
+            BillabilityId: domain.Billability!.Id,
+            BillabilityName: domain.Billability!.Name,
+            IsBillable: domain.Billability!.IsBillable,
+            Budget: (long)(domain.Budget?.TotalSeconds ?? 0),
+            Actual: GetActualSumSeconds(domain.Id, actualSums),
+            FullNumber: domain.FullNumber(),
+            FullName: domain.FullName());
 
     /// <summary>
     /// Converts to domain.
@@ -47,9 +45,8 @@ internal static class ActivityMapper
     /// <returns>
     /// The domain.
     /// </returns>
-    public static DataAccess.Activity ToDomain(this Resource.Activity resource, DataAccess.Subproject? subproject = null)
-    {
-        return new DataAccess.Activity
+    public static DataAccess.Activity ToDomain(this Resource.Activity resource, DataAccess.Subproject? subproject = null) =>
+        new DataAccess.Activity
         {
             Id = resource.Id,
             Number = resource.Number,
@@ -59,10 +56,8 @@ internal static class ActivityMapper
             StartDate = IsoDate.Parse(resource.StartDate),
             EndDate = IsoDate.ParseNullable(resource.EndDate),
             Budget = TimeSpan.FromSeconds(resource.Budget),
-            BillabilityId = resource.Billability.Id,
-            Billability = resource.Billability,
+            BillabilityId = resource.BillabilityId,
         };
-    }
 
     private static long GetActualSumSeconds(int activityId, IDictionary<int, TimeSpan>? actualSums)
     {

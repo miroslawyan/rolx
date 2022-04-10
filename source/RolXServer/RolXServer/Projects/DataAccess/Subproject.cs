@@ -6,6 +6,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using RolXServer.Users.DataAccess;
+
 namespace RolXServer.Projects.DataAccess;
 
 /// <summary>
@@ -47,4 +49,14 @@ public sealed class Subproject
     /// Gets or sets the activities.
     /// </summary>
     public List<Activity> Activities { get; set; } = new List<Activity>();
+
+    /// <summary>
+    /// Gets or sets the manager identifier.
+    /// </summary>
+    public Guid? ManagerId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the manager.
+    /// </summary>
+    public User? Manager { get; set; }
 }

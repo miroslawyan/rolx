@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Immutable;
-
 using Microsoft.EntityFrameworkCore;
 
 using RolXServer.Common.Util;

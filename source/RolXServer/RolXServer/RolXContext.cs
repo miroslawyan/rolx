@@ -158,7 +158,7 @@ public sealed class RolXContext : DbContext
             Id = 4,
             Name = "Verrechenbar 50+",
             IsBillable = true,
-            SortingWeight = 3,
+            SortingWeight = 5,
         });
         modelBuilder.Entity<Billability>().HasData(new Billability
         {
@@ -166,6 +166,20 @@ public sealed class RolXContext : DbContext
             Name = "Abwesenheit",
             IsBillable = false,
             SortingWeight = 200,
+        });
+        modelBuilder.Entity<Billability>().HasData(new Billability
+        {
+            Id = 6,
+            Name = "Verrechenbar Extern",
+            IsBillable = true,
+            SortingWeight = 3,
+        });
+        modelBuilder.Entity<Billability>().HasData(new Billability
+        {
+            Id = 7,
+            Name = "Verrechenbar Nearshore",
+            IsBillable = true,
+            SortingWeight = 4,
         });
     }
 

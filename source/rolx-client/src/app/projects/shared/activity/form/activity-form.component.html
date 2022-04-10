@@ -21,8 +21,8 @@
 
       <mat-form-field appearance="standard">
         <mat-label>Verrechenbarkeit</mat-label>
-        <mat-select formControlName="billability" [compareWith]="compareById">
-          <mat-option *ngFor="let billability of billabilities" [value]="billability">
+        <mat-select formControlName="billabilityId">
+          <mat-option *ngFor="let billability of billabilities" [value]="billability.id">
             {{billability.name}}
           </mat-option>
         </mat-select>

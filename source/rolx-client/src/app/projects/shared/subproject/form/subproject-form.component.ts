@@ -1,11 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '@app/auth/core/auth.service';
 import { ErrorResponse } from '@app/core/error/error-response';
 import { ErrorService } from '@app/core/error/error.service';
 import { assertDefined } from '@app/core/util/utils';
 import { Subproject } from '@app/projects/core/subproject';
 import { SubprojectService } from '@app/projects/core/subproject.service';
+import { Role } from '@app/users/core/role';
+import { User } from '@app/users/core/user';
+import { UserService } from '@app/users/core/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'rolx-subproject-form',
@@ -21,18 +26,32 @@ export class SubprojectFormComponent implements OnInit {
     projectNumber: ['', [Validators.required, Validators.min(1), Validators.max(9999)]],
     projectName: ['', Validators.required],
     customerName: ['', Validators.required],
+    managerId: [null, Validators.required],
   });
+
+  users: User[] = [];
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private subprojectService: SubprojectService,
+    private authService: AuthService,
+    private userService: UserService,
     private errorService: ErrorService,
-  ) {}
+  ) {
+    const now = moment();
+    this.userService.getAll().subscribe((users) => {
+      // Filter in backend
+      this.users = users
+        .filter((user) => user.role >= Role.Supervisor && user.isActiveAt(now))
+        .sort((a, b) => a.fullName.localeCompare(b.fullName));
+    });
+  }
 
   ngOnInit() {
     assertDefined(this, 'subproject');
 
+    this.subproject.managerId ??= this.authService.currentApprovalOrError.user.id;
     this.form.patchValue(this.subproject);
   }
 

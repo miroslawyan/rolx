@@ -26,7 +26,7 @@ export class ActivityFormComponent implements OnInit {
     startDate: ['', Validators.required],
     endDate: [''],
     budget: [null, Validators.min(0)],
-    billability: [null, Validators.required],
+    billabilityId: [null, Validators.required],
   });
 
   billabilities: Billability[] = [];
@@ -38,7 +38,11 @@ export class ActivityFormComponent implements OnInit {
     private readonly billabilityService: BillabilityService,
     private readonly errorService: ErrorService,
     @Inject(LOCALE_ID) private readonly locale: string,
-  ) {}
+  ) {
+    this.billabilityService
+      .getAll()
+      .subscribe((billabilities) => (this.billabilities = billabilities));
+  }
 
   ngOnInit() {
     assertDefined(this, 'subproject');
@@ -46,22 +50,10 @@ export class ActivityFormComponent implements OnInit {
 
     this.form.patchValue(this.activity);
     this.formBudget = this.activity.budget;
-    this.billabilities = this.activity.billability != null ? [this.activity.billability] : [];
-
-    this.billabilityService.getAll().subscribe((billabilities) => {
-      if (
-        this.activity.billability != null &&
-        !billabilities.some((b) => b.id === this.activity.billability?.id)
-      ) {
-        billabilities = [this.activity.billability, ...billabilities];
-      }
-
-      this.billabilities = billabilities;
-    });
   }
 
   get isNew() {
-    return this.activity.id == null;
+    return this.activity.id === 0;
   }
 
   get formBudget(): Duration {
@@ -101,10 +93,6 @@ export class ActivityFormComponent implements OnInit {
   cancel() {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/subproject', this.subproject.id]);
-  }
-
-  compareById(option: Billability, value?: Billability) {
-    return option.id === value?.id;
   }
 
   private handleError(errorResponse: ErrorResponse) {

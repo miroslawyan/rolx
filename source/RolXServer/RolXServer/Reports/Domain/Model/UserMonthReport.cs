@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Immutable;
-
 using RolXServer.Users.DataAccess;
 
 namespace RolXServer.Reports.Domain.Model;

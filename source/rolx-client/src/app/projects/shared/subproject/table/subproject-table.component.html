@@ -26,28 +26,38 @@
   class="mat-elevation-z8">
   <ng-container matColumnDef="fullNumber">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Nummer</th>
-    <td mat-cell *matCellDef="let subproject">{{subproject.fullNumber}}</td>
+    <td mat-cell *matCellDef="let subproject">{{tpd(subproject).fullNumber}}</td>
   </ng-container>
 
   <ng-container matColumnDef="customerName">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Kunde</th>
-    <td mat-cell *matCellDef="let subproject">{{subproject.customerName}}</td>
+    <td mat-cell *matCellDef="let subproject">{{tpd(subproject).customerName}}</td>
   </ng-container>
 
   <ng-container matColumnDef="projectName">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Projekt</th>
-    <td mat-cell *matCellDef="let subproject">{{subproject.projectName}}</td>
+    <td mat-cell *matCellDef="let subproject">{{tpd(subproject).projectName}}</td>
   </ng-container>
 
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Subprojekt</th>
-    <td mat-cell *matCellDef="let subproject">{{subproject.name}}</td>
+    <td mat-cell *matCellDef="let subproject">{{tpd(subproject).name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="manager">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Projektleiter</th>
+    <td mat-cell *matCellDef="let subproject">{{tpd(subproject).managerName}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="isClosed">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+    <td mat-cell *matCellDef="let subproject">{{tpd(subproject).isClosed ? 'geschlossen' : ''}}</td>
   </ng-container>
 
   <ng-container matColumnDef="tools">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell class="tools" *matCellDef="let subproject">
-      <a mat-icon-button [routerLink]="[subproject.id]">
+      <a mat-icon-button [routerLink]="[tpd(subproject).id]">
         <mat-icon>layers</mat-icon>
       </a>
     </td>

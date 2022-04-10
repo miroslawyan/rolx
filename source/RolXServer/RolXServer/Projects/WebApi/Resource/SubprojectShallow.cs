@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="Activity.cs" company="Christian Ewald">
+// <copyright file="SubprojectShallow.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -8,19 +8,11 @@
 
 namespace RolXServer.Projects.WebApi.Resource;
 
-/// <summary>
-/// A activity in a subproject.
-/// </summary>
-public sealed record Activity(
+public record SubprojectShallow(
     int Id,
-    int Number,
-    string Name,
-    string StartDate,
-    string? EndDate,
-    int BillabilityId,
-    string BillabilityName,
-    bool IsBillable,
-    long Budget,
-    long Actual,
     string FullNumber,
-    string FullName);
+    string CustomerName,
+    string ProjectName,
+    string Name,
+    string ManagerName,
+    bool IsClosed);

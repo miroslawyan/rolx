@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorResponse } from '@app/core/error/error-response';
 import { mapPlainToInstance, mapPlainToInstances } from '@app/core/util/operators';
+import { SubprojectShallow } from '@app/projects/core/subproject-shallow';
 import { environment } from '@env/environment';
 import { instanceToPlain } from 'class-transformer';
 import { Observable, tap, throwError } from 'rxjs';
@@ -17,9 +18,9 @@ export class SubprojectService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getAll(): Observable<Subproject[]> {
+  getAll(): Observable<SubprojectShallow[]> {
     return this.httpClient.get<object[]>(SubprojectService.Url).pipe(
-      mapPlainToInstances(Subproject),
+      mapPlainToInstances(SubprojectShallow),
       tap((ps) => ps.forEach((p) => p.validateModel())),
     );
   }

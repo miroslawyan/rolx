@@ -32,6 +32,17 @@ internal static class SubprojectExtensions
         => $"{subproject.AllNames()} ({subproject.FullNumber()})";
 
     /// <summary>
+    /// Determines whether this instance is closed.
+    /// </summary>
+    /// <param name="subproject">The subproject.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified subproject is closed; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsClosed(this Subproject subproject)
+        => subproject.Activities
+            .All(activity => activity.EndDate != null && activity.EndDate < DateTime.Today);
+
+    /// <summary>
     /// Gets all names of the specified subproject.
     /// </summary>
     /// <param name="subproject">The subproject.</param>

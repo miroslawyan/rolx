@@ -18,6 +18,6 @@ export class UserFilterService {
   }
 
   static Predicate(user: User, filter: string): boolean {
-    return (user.fullName + user.email + Role[user.role]).toLowerCase().includes(filter);
+    return `${user.fullName},${Role[user.role]}`.toLowerCase().includes(filter);
   }
 }

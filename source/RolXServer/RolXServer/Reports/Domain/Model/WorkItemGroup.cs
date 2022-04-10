@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Immutable;
-
 namespace RolXServer.Reports.Domain.Model;
 
 public sealed record WorkItemGroup(

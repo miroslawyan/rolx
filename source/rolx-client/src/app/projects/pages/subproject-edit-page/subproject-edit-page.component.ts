@@ -30,6 +30,14 @@ export class SubprojectEditPageComponent {
   ) {}
 
   private initializeSubproject(idText: string | null): Observable<Subproject> {
-    return idText === 'new' ? of(new Subproject()) : this.subprojectService.getById(Number(idText));
+    if (idText === 'new') {
+      const subproject = new Subproject();
+      subproject.fullName = '';
+      subproject.fullNumber = '';
+      subproject.managerName = '';
+      return of(subproject);
+    } else {
+      return this.subprojectService.getById(Number(idText));
+    }
   }
 }
