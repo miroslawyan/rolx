@@ -14,7 +14,7 @@ namespace RolXServer.Reports.Domain.Model;
 /// The monthly report of a single user.
 /// </summary>
 public sealed record UserMonthReport(
-    DateTime Month,
+    DateOnly Month,
     User User,
     IImmutableList<UserPartTimeSetting> PartTimeSettings,
     IImmutableList<UserBalanceCorrection> BalanceCorrections,

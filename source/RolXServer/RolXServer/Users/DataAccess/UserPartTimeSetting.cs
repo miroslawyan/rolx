@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace RolXServer.Users.DataAccess;
 
 /// <summary>
@@ -28,8 +26,7 @@ public sealed class UserPartTimeSetting
     /// <summary>
     /// Gets or sets the start date this setting is applicable.
     /// </summary>
-    [Column(TypeName = "date")]
-    public DateTime StartDate { get; set; }
+    public DateOnly StartDate { get; set; }
 
     /// <summary>
     /// Gets or sets the new part-time factor.

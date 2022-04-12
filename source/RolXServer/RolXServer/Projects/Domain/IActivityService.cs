@@ -16,13 +16,13 @@ namespace RolXServer.Projects.Domain;
 public interface IActivityService
 {
     /// <summary>
-    /// Gets all activities open in the specified range (begin..end].
+    /// Gets all activities not closed before the specified date.
     /// </summary>
     /// <param name="unlessEndedBefore">The unless ended before date.</param>
     /// <returns>
     /// The activities.
     /// </returns>
-    Task<IEnumerable<Activity>> GetAll(DateTime? unlessEndedBefore);
+    Task<IEnumerable<Activity>> GetAll(DateOnly? unlessEndedBefore);
 
     /// <summary>
     /// Gets the suitable activities for the specified user at the specified date.
@@ -32,7 +32,7 @@ public interface IActivityService
     /// <returns>
     /// The suitable activities.
     /// </returns>
-    Task<IEnumerable<Activity>> GetSuitable(Guid userId, DateTime date);
+    Task<IEnumerable<Activity>> GetSuitable(Guid userId, DateOnly date);
 
     /// <summary>
     /// Gets the sum of actual times spent on the activities of the specified subproject.

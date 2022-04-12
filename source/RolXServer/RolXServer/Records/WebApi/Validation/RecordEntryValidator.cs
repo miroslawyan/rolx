@@ -88,7 +88,7 @@ internal sealed class RecordEntryValidator : AbstractValidator<RecordEntry>
             return false;
         }
 
-        if (activity.EndDate.HasValue && activity.EndDate.Value < recordDate)
+        if (activity.EndedDate.HasValue && activity.EndedDate.Value <= recordDate)
         {
             context.AddFailure("activity has already been closed");
             return false;

@@ -86,6 +86,12 @@ internal sealed class SignInService : ISignInService
                 return null;
             }
 
+            var user = await this.EnsureUser(payload);
+            if (!user.IsConfirmed)
+            {
+                return null;
+            }
+
             return this.Authenticate(await this.EnsureUser(payload));
         }
         catch (InvalidJwtException e)
@@ -111,6 +117,11 @@ internal sealed class SignInService : ISignInService
             return null;
         }
 
+        if (!user.IsConfirmed)
+        {
+            return null;
+        }
+
         return this.Authenticate(user);
     }
 
@@ -132,7 +143,8 @@ internal sealed class SignInService : ISignInService
             user = new User
             {
                 Role = isFirstUser ? Role.Administrator : Role.User,
-                EntryDate = isFirstUser ? DateTime.Today : (DateTime?)null,
+                EntryDate = DateOnly.FromDateTime(DateTime.Now),
+                IsConfirmed = isFirstUser,
             };
 
             this.dbContext.Users.Add(user);

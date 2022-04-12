@@ -30,7 +30,7 @@ internal sealed class BalanceData
     /// <summary>
     /// Gets or sets the by-date.
     /// </summary>
-    public DateTime ByDate { get; set; }
+    public DateOnly ByDate { get; set; }
 
     /// <summary>
     /// Gets or sets the user.
@@ -61,8 +61,18 @@ internal sealed class BalanceData
     /// </summary>
     public List<PaidLeaveDay> VacationDays { get; set; } = new List<PaidLeaveDay>();
 
+    /// <summary>
+    /// Gets or sets the consumed manual vacation in seconds.
+    /// </summary>
+    public long ManualVacationConsumedSeconds { get; set; }
+
+    /// <summary>
+    /// Gets or sets the planned manual vacation in seconds.
+    /// </summary>
+    public long ManualVacationPlannedSeconds { get; set; }
+
     private TimeSpan NominalWorkTime => this.User.NominalWorkTime(
-        new DateRange(this.User.EntryDate!.Value, this.ByDate.AddDays(1)),
+        new DateRange(this.User.EntryDate, this.ByDate.AddDays(1)),
         this.NominalWorkTimePerDay);
 
     private TimeSpan PaidLeaveTime => this.PaidLeaveDays
@@ -81,11 +91,15 @@ internal sealed class BalanceData
 
     private TimeSpan VacationConsumed => this.VacationDays
         .Where(d => d.Date <= this.ByDate)
-        .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay);
+        .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay) + this.ManualVacationConsumed;
 
     private TimeSpan VacationPlanned => this.VacationDays
         .Where(d => d.Date > this.ByDate)
-        .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay);
+        .SumOfPaidLeaveTime(this.User, this.NominalWorkTimePerDay) + this.ManualVacationPlanned;
+
+    private TimeSpan ManualVacationConsumed => TimeSpan.FromSeconds(this.ManualVacationConsumedSeconds);
+
+    private TimeSpan ManualVacationPlanned => TimeSpan.FromSeconds(this.ManualVacationPlannedSeconds);
 
     /// <summary>
     /// Converts this instance into a balance.
@@ -93,11 +107,6 @@ internal sealed class BalanceData
     /// <returns>The balance.</returns>
     public Model.Balance ToBalance()
     {
-        if (!this.User.EntryDate.HasValue)
-        {
-            throw new InvalidOperationException("Only users with valid entry date may have a balance.");
-        }
-
         if (this.User.EntryDate > this.ByDate)
         {
             return new Model.Balance

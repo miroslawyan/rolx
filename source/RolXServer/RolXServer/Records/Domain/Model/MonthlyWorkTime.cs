@@ -16,7 +16,7 @@ public class MonthlyWorkTime
     /// <summary>
     /// Gets or sets the month.
     /// </summary>
-    public DateTime Month { get; set; }
+    public DateOnly Month { get; set; }
 
     /// <summary>
     /// Gets or sets the work days.

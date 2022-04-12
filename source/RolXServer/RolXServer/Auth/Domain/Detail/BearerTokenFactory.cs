@@ -89,10 +89,7 @@ internal sealed class BearerTokenFactory
         yield return new Claim(ClaimTypes.NameIdentifier, user.Id.ToString());
         yield return new Claim(ClaimTypes.Role, user.Role.ToString());
 
-        if (user.EntryDate.HasValue)
-        {
-            yield return new Claim(RolXClaimTypes.EntryDate, user.EntryDate.Value.ToIsoDate());
-        }
+        yield return new Claim(RolXClaimTypes.EntryDate, user.EntryDate.ToIsoDate());
 
         if (user.LeftDate.HasValue)
         {

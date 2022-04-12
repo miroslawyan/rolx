@@ -18,8 +18,8 @@ namespace RolXServer.Records.Domain.Detail;
 
 public sealed class RecordServiceTests
 {
-    private static readonly DateTime Today = DateTime.Today;
-    private static readonly DateTime Tomorrow = DateTime.Today.AddDays(1);
+    private static readonly DateOnly Today = DateOnly.FromDateTime(DateTime.Now);
+    private static readonly DateOnly Tomorrow = Today.AddDays(1);
 
     private Func<RolXContext> contextFactory = null!;
     private User user = null!;

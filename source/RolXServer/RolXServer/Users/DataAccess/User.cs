@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace RolXServer.Users.DataAccess;
 
 /// <summary>
@@ -53,8 +51,7 @@ public class User
     /// <summary>
     /// Gets or sets the entry date.
     /// </summary>
-    [Column(TypeName = "date")]
-    public DateTime? EntryDate { get; set; }
+    public DateOnly EntryDate { get; set; }
 
     /// <summary>
     /// Gets or sets the date the user has left (exclusive).
@@ -62,8 +59,12 @@ public class User
     /// <remarks>
     /// This marks the first day the user no longer works with us.
     /// </remarks>
-    [Column(TypeName = "date")]
-    public DateTime? LeftDate { get; set; }
+    public DateOnly? LeftDate { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this user is confirmed.
+    /// </summary>
+    public bool IsConfirmed { get; set; }
 
     /// <summary>
     /// Gets or sets the balance corrections.

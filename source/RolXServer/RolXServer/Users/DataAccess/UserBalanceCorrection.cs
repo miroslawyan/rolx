@@ -28,8 +28,7 @@ public sealed class UserBalanceCorrection
     /// <summary>
     /// Gets or sets the date of this correction.
     /// </summary>
-    [Column(TypeName = "date")]
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     /// <summary>
     /// Gets or sets the overtime correction in seconds.

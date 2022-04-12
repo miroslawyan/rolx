@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="20220221175446_InitialCreate.cs" company="Christian Ewald">
+// <copyright file="20220412161055_InitialCreate.cs" company="Christian Ewald">
 // Copyright (c) Christian Ewald. All rights reserved.
 // Licensed under the MIT license.
 // See LICENSE.md in the project root for full license information.
@@ -43,23 +43,16 @@ public partial class InitialCreate : Migration
             .Annotation("MySql:CharSet", "utf8mb4");
 
         migrationBuilder.CreateTable(
-            name: "Subprojects",
+            name: "EditLocks",
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
                     .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                Number = table.Column<int>(type: "int", nullable: false),
-                Name = table.Column<string>(type: "longtext", nullable: false)
-                    .Annotation("MySql:CharSet", "utf8mb4"),
-                ProjectNumber = table.Column<int>(type: "int", nullable: false),
-                ProjectName = table.Column<string>(type: "longtext", nullable: false)
-                    .Annotation("MySql:CharSet", "utf8mb4"),
-                CustomerName = table.Column<string>(type: "longtext", nullable: false)
-                    .Annotation("MySql:CharSet", "utf8mb4"),
+                Date = table.Column<DateOnly>(type: "date", precision: 0, nullable: false),
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_Subprojects", x => x.Id);
+                table.PrimaryKey("PK_EditLocks", x => x.Id);
             })
             .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -79,45 +72,13 @@ public partial class InitialCreate : Migration
                 AvatarUrl = table.Column<string>(type: "longtext", nullable: false)
                     .Annotation("MySql:CharSet", "utf8mb4"),
                 Role = table.Column<int>(type: "int", nullable: false),
-                EntryDate = table.Column<DateTime>(type: "date", nullable: true),
-                LeftDate = table.Column<DateTime>(type: "date", nullable: true),
+                EntryDate = table.Column<DateOnly>(type: "date", precision: 0, nullable: false),
+                LeftDate = table.Column<DateOnly>(type: "date", precision: 0, nullable: true),
+                IsConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
             },
             constraints: table =>
             {
                 table.PrimaryKey("PK_Users", x => x.Id);
-            })
-            .Annotation("MySql:CharSet", "utf8mb4");
-
-        migrationBuilder.CreateTable(
-            name: "Activities",
-            columns: table => new
-            {
-                Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                Number = table.Column<int>(type: "int", nullable: false),
-                Name = table.Column<string>(type: "longtext", nullable: false)
-                    .Annotation("MySql:CharSet", "utf8mb4"),
-                StartDate = table.Column<DateTime>(type: "date", nullable: false),
-                EndDate = table.Column<DateTime>(type: "date", nullable: true),
-                Budget = table.Column<long>(type: "bigint", nullable: true),
-                SubprojectId = table.Column<int>(type: "int", nullable: false),
-                BillabilityId = table.Column<int>(type: "int", nullable: false),
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_Activities", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_Activities_Billabilities_BillabilityId",
-                    column: x => x.BillabilityId,
-                    principalTable: "Billabilities",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Restrict);
-                table.ForeignKey(
-                    name: "FK_Activities_Subprojects_SubprojectId",
-                    column: x => x.SubprojectId,
-                    principalTable: "Subprojects",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
             })
             .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -127,7 +88,7 @@ public partial class InitialCreate : Migration
             {
                 Id = table.Column<int>(type: "int", nullable: false)
                     .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                Date = table.Column<DateTime>(type: "date", nullable: false),
+                Date = table.Column<DateOnly>(type: "date", precision: 0, nullable: false),
                 UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                 PaidLeaveType = table.Column<int>(type: "int", nullable: true),
                 PaidLeaveReason = table.Column<string>(type: "longtext", nullable: true)
@@ -146,15 +107,42 @@ public partial class InitialCreate : Migration
             .Annotation("MySql:CharSet", "utf8mb4");
 
         migrationBuilder.CreateTable(
+            name: "Subprojects",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                Number = table.Column<int>(type: "int", nullable: false),
+                Name = table.Column<string>(type: "longtext", nullable: false)
+                    .Annotation("MySql:CharSet", "utf8mb4"),
+                ProjectNumber = table.Column<int>(type: "int", nullable: false),
+                ProjectName = table.Column<string>(type: "longtext", nullable: false)
+                    .Annotation("MySql:CharSet", "utf8mb4"),
+                CustomerName = table.Column<string>(type: "longtext", nullable: false)
+                    .Annotation("MySql:CharSet", "utf8mb4"),
+                ManagerId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Subprojects", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_Subprojects_Users_ManagerId",
+                    column: x => x.ManagerId,
+                    principalTable: "Users",
+                    principalColumn: "Id");
+            })
+            .Annotation("MySql:CharSet", "utf8mb4");
+
+        migrationBuilder.CreateTable(
             name: "UserBalanceCorrections",
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
                     .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                 UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                DateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                Overtime = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                Vacation = table.Column<TimeSpan>(type: "time(6)", nullable: false),
+                Date = table.Column<DateOnly>(type: "date", precision: 0, nullable: false),
+                OvertimeSeconds = table.Column<long>(type: "bigint", nullable: false),
+                VacationSeconds = table.Column<long>(type: "bigint", nullable: false),
             },
             constraints: table =>
             {
@@ -175,7 +163,7 @@ public partial class InitialCreate : Migration
                 Id = table.Column<int>(type: "int", nullable: false)
                     .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                 UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                StartDate = table.Column<DateTime>(type: "date", nullable: false),
+                StartDate = table.Column<DateOnly>(type: "date", precision: 0, nullable: false),
                 Factor = table.Column<double>(type: "double", nullable: false),
             },
             constraints: table =>
@@ -185,6 +173,39 @@ public partial class InitialCreate : Migration
                     name: "FK_UserPartTimeSettings_Users_UserId",
                     column: x => x.UserId,
                     principalTable: "Users",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            })
+            .Annotation("MySql:CharSet", "utf8mb4");
+
+        migrationBuilder.CreateTable(
+            name: "Activities",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "int", nullable: false)
+                    .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                Number = table.Column<int>(type: "int", nullable: false),
+                Name = table.Column<string>(type: "longtext", nullable: false)
+                    .Annotation("MySql:CharSet", "utf8mb4"),
+                StartDate = table.Column<DateOnly>(type: "date", precision: 0, nullable: false),
+                EndedDate = table.Column<DateOnly>(type: "date", precision: 0, nullable: true),
+                BudgetSeconds = table.Column<long>(type: "bigint", nullable: true),
+                SubprojectId = table.Column<int>(type: "int", nullable: false),
+                BillabilityId = table.Column<int>(type: "int", nullable: false),
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Activities", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_Activities_Billabilities_BillabilityId",
+                    column: x => x.BillabilityId,
+                    principalTable: "Billabilities",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Restrict);
+                table.ForeignKey(
+                    name: "FK_Activities_Subprojects_SubprojectId",
+                    column: x => x.SubprojectId,
+                    principalTable: "Subprojects",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
             })
@@ -223,8 +244,8 @@ public partial class InitialCreate : Migration
                     .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                 RecordId = table.Column<int>(type: "int", nullable: false),
                 DurationSeconds = table.Column<long>(type: "bigint", nullable: false),
-                Begin = table.Column<TimeSpan>(type: "time", nullable: true),
-                Pause = table.Column<TimeSpan>(type: "time(6)", nullable: true),
+                Begin = table.Column<TimeOnly>(type: "time(0)", precision: 0, nullable: true),
+                PauseSeconds = table.Column<long>(type: "bigint", nullable: true),
                 Comment = table.Column<string>(type: "longtext", nullable: false)
                     .Annotation("MySql:CharSet", "utf8mb4"),
                 ActivityId = table.Column<int>(type: "int", nullable: false),
@@ -252,36 +273,34 @@ public partial class InitialCreate : Migration
             columns: new[] { "Id", "Inactive", "IsBillable", "Name", "SortingWeight" },
             values: new object[,]
             {
-                    { 1, false, false, "Nicht verrechenbar", 100 },
-                    { 2, false, true, "Verrechenbar Engineering", 1 },
-                    { 3, false, true, "Verrechenbar TP", 2 },
-                    { 4, false, true, "Verrechenbar 50+", 3 },
+                { 1, false, false, "Nicht verrechenbar", 100 },
+                { 2, false, true, "Verrechenbar Engineering", 10 },
+                { 3, false, true, "Verrechenbar TP", 20 },
+                { 4, false, true, "Verrechenbar Extern", 30 },
+                { 5, false, true, "Verrechenbar Nearshore", 40 },
+                { 6, false, true, "Verrechenbar 50+", 50 },
+                { 7, false, false, "Abwesenheit", 200 },
             });
+
+        migrationBuilder.InsertData(
+            table: "EditLocks",
+            columns: new[] { "Id", "Date" },
+            values: new object[] { 1, new DateOnly(2022, 1, 1) });
 
         migrationBuilder.InsertData(
             table: "Subprojects",
-            columns: new[] { "Id", "CustomerName", "Name", "Number", "ProjectName", "ProjectNumber" },
-            values: new object[,]
-            {
-                    { 1, "Lockheed Martin", "F35", 1, "Auto Pilot", 4711 },
-                    { 2, "Lockheed Martin", "F117A", 2, "Auto Pilot", 4711 },
-                    { 3, "SRF", "Fragengenerator", 1, "ABC SRF 3", 3141 },
-            });
+            columns: new[] { "Id", "CustomerName", "ManagerId", "Name", "Number", "ProjectName", "ProjectNumber" },
+            values: new object[] { 1, "M&F", null, "Bezahlte Abwesenheiten", 1, "Allgemein", 8900 });
 
         migrationBuilder.InsertData(
             table: "Activities",
-            columns: new[] { "Id", "BillabilityId", "Budget", "EndDate", "Name", "Number", "StartDate", "SubprojectId" },
+            columns: new[] { "Id", "BillabilityId", "BudgetSeconds", "EndedDate", "Name", "Number", "StartDate", "SubprojectId" },
             values: new object[,]
             {
-                    { 11, 2, null, null, "Take off", 1, new DateTime(2021, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { 12, 1, null, null, "Cruise", 2, new DateTime(2022, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { 13, 3, null, new DateTime(2022, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Landing", 3, new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { 21, 4, null, null, "Take off", 1, new DateTime(2021, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
-                    { 22, 1, null, null, "Cruise", 2, new DateTime(2022, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
-                    { 23, 2, null, new DateTime(2022, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Landing", 3, new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
-                    { 31, 3, null, null, "Analyse", 1, new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 32, 4, null, null, "Umsetzung", 2, new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 33, 2, null, null, "Übergabe", 3, new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
+                { 1, 7, null, null, "Ferien", 1, new DateOnly(2020, 1, 1), 1 },
+                { 2, 7, null, null, "Krank", 2, new DateOnly(2020, 1, 1), 1 },
+                { 3, 7, null, null, "Militär", 3, new DateOnly(2020, 1, 1), 1 },
+                { 4, 7, null, null, "Sonstige", 4, new DateOnly(2020, 1, 1), 1 },
             });
 
         migrationBuilder.CreateIndex(
@@ -322,6 +341,11 @@ public partial class InitialCreate : Migration
             column: "UserId");
 
         migrationBuilder.CreateIndex(
+            name: "IX_Subprojects_ManagerId",
+            table: "Subprojects",
+            column: "ManagerId");
+
+        migrationBuilder.CreateIndex(
             name: "IX_Subprojects_ProjectNumber_Number",
             table: "Subprojects",
             columns: new[] { "ProjectNumber", "Number" },
@@ -331,6 +355,12 @@ public partial class InitialCreate : Migration
             name: "IX_UserBalanceCorrections_UserId",
             table: "UserBalanceCorrections",
             column: "UserId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_UserBalanceCorrections_UserId_Date",
+            table: "UserBalanceCorrections",
+            columns: new[] { "UserId", "Date" },
+            unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_UserPartTimeSettings_UserId_StartDate",

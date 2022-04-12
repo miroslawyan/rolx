@@ -24,7 +24,7 @@ internal static class RecordEntryMapper
         {
             ActivityId = domain.ActivityId,
             Duration = (long)domain.Duration.TotalSeconds,
-            Begin = (int?)domain.Begin?.TotalSeconds,
+            Begin = (int?)domain.Begin?.ToTimeSpan().TotalSeconds,
             Pause = (int?)domain.Pause?.TotalSeconds,
             Comment = domain.Comment,
         };
@@ -43,7 +43,7 @@ internal static class RecordEntryMapper
         {
             ActivityId = resource.ActivityId,
             Duration = TimeSpan.FromSeconds(resource.Duration),
-            Begin = resource.Begin.HasValue ? TimeSpan.FromSeconds(resource.Begin.Value) : null,
+            Begin = resource.Begin.HasValue ? TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(resource.Begin.Value)) : null,
             Pause = resource.Pause.HasValue && resource.Pause > 0 ? TimeSpan.FromSeconds(resource.Pause.Value) : null,
             Comment = resource.Comment ?? string.Empty,
         };

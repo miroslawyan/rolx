@@ -18,17 +18,14 @@ namespace RolXServer.Projects.Domain.Detail;
 internal sealed class SubprojectService : ISubprojectService
 {
     private readonly RolXContext dbContext;
-    private readonly IPaidLeaveActivities paidLeaveActivities;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubprojectService" /> class.
     /// </summary>
     /// <param name="dbContext">The database context.</param>
-    /// <param name="paidLeaveActivities">The paid leave activities.</param>
-    public SubprojectService(RolXContext dbContext, IPaidLeaveActivities paidLeaveActivities)
+    public SubprojectService(RolXContext dbContext)
     {
         this.dbContext = dbContext;
-        this.paidLeaveActivities = paidLeaveActivities;
     }
 
     /// <summary>
@@ -67,7 +64,6 @@ internal sealed class SubprojectService : ISubprojectService
     /// <returns>The async task.</returns>
     public async Task Add(Subproject subproject)
     {
-        this.paidLeaveActivities.ValidateNumbers(subproject);
         subproject.Activities.Sanitize();
 
         this.dbContext.Subprojects.Add(subproject);
@@ -81,7 +77,6 @@ internal sealed class SubprojectService : ISubprojectService
     /// <returns>The async task.</returns>
     public async Task Update(Subproject subproject)
     {
-        this.paidLeaveActivities.ValidateNumbers(subproject);
         subproject.Activities.Sanitize();
 
         var activityIds = subproject.Activities

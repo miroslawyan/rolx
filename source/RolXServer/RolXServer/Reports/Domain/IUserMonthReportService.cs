@@ -21,5 +21,5 @@ public interface IUserMonthReportService
     /// <param name="userId">The user identifier.</param>
     /// <param name="month">The month.</param>
     /// <returns>The report or <c>null</c> if the user doesn't exist.</returns>
-    Task<UserMonthReport?> GetFor(Guid userId, DateTime month);
+    Task<UserMonthReport?> GetFor(Guid userId, DateOnly month);
 }

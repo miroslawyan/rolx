@@ -29,7 +29,7 @@ internal sealed class ActivityService : IActivityService
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<Activity>> GetAll(DateTime? unlessEndedBefore)
+    public async Task<IEnumerable<Activity>> GetAll(DateOnly? unlessEndedBefore)
     {
         var query = this.dbContext.Activities
             .AsNoTracking()
@@ -39,17 +39,17 @@ internal sealed class ActivityService : IActivityService
 
         if (unlessEndedBefore.HasValue)
         {
-            query = query.Where(a => !a.EndDate.HasValue || a.EndDate.Value >= unlessEndedBefore.Value);
+            query = query.Where(a => !a.EndedDate.HasValue || a.EndedDate.Value > unlessEndedBefore.Value);
         }
 
         return await query.ToListAsync();
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<Activity>> GetSuitable(Guid userId, DateTime date)
+    public async Task<IEnumerable<Activity>> GetSuitable(Guid userId, DateOnly date)
     {
-        var begin = date.AddMonths(-2);
-        var end = date.AddMonths(1);
+        var begin = date.AddDays(-7);
+        var end = date.AddDays(7);
 
         return await this.dbContext.Records
             .Where(r => r.UserId == userId && r.Date >= begin && r.Date < end)

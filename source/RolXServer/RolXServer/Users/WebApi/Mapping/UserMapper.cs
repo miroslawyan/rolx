@@ -30,8 +30,9 @@ internal static class UserMapper
             Email = entity.Email,
             AvatarUrl = entity.AvatarUrl,
             Role = entity.Role,
-            EntryDate = entity.EntryDate?.ToIsoDate(),
+            EntryDate = entity.EntryDate.ToIsoDate(),
             LeftDate = entity.LeftDate?.ToIsoDate(),
+            IsConfirmed = entity.IsConfirmed,
         };
     }
 
@@ -48,7 +49,7 @@ internal static class UserMapper
         {
             Id = resource.Id,
             Role = resource.Role,
-            EntryDate = IsoDate.ParseNullable(resource.EntryDate),
+            EntryDate = IsoDate.Parse(resource.EntryDate),
             LeftDate = IsoDate.ParseNullable(resource.LeftDate),
         };
     }

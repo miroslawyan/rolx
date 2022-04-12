@@ -33,14 +33,15 @@ public sealed class Activity
     /// <summary>
     /// Gets or sets the start date.
     /// </summary>
-    [Column(TypeName = "date")]
-    public DateTime StartDate { get; set; }
+    public DateOnly StartDate { get; set; }
 
     /// <summary>
-    /// Gets or sets the end date.
+    /// Gets or sets the ended date.
     /// </summary>
-    [Column(TypeName = "date")]
-    public DateTime? EndDate { get; set; }
+    /// <remarks>
+    /// This marks the first day this activity is closed for adding records.
+    /// </remarks>
+    public DateOnly? EndedDate { get; set; }
 
     /// <summary>
     /// Gets or sets the time budget in seconds.

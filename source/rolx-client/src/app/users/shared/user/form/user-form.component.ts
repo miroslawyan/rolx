@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ErrorResponse } from '@app/core/error/error-response';
@@ -7,22 +7,18 @@ import { assertDefined } from '@app/core/util/utils';
 import { Role } from '@app/users/core/role';
 import { User } from '@app/users/core/user';
 import { UserService } from '@app/users/core/user.service';
-import * as moment from 'moment';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'rolx-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss'],
 })
-export class UserFormComponent implements OnInit, OnDestroy {
-  private readonly subscriptions = new Subscription();
-
+export class UserFormComponent implements OnInit {
   readonly Role = Role;
 
   readonly roleControl = new FormControl(null, Validators.required);
-  readonly entryDateControl = new FormControl(null);
-  readonly leavingDateControl = new FormControl({ value: null, disabled: true });
+  readonly entryDateControl = new FormControl(null, Validators.required);
+  readonly leavingDateControl = new FormControl({ value: null });
   readonly form = new FormGroup({
     role: this.roleControl,
     entryDate: this.entryDateControl,
@@ -32,17 +28,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
   @Input()
   user!: User;
 
-  minLeavingDate?: moment.Moment;
-
   constructor(
     private router: Router,
     private userService: UserService,
     private errorService: ErrorService,
-  ) {
-    this.subscriptions.add(
-      this.entryDateControl.valueChanges.subscribe((v) => this.updateLeavingDate(v)),
-    );
-  }
+  ) {}
 
   ngOnInit() {
     assertDefined(this, 'user');
@@ -52,10 +42,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
     // somehow patchValue doesn't use the properties with getter
     // lets do it explicitly
     this.leavingDateControl.setValue(this.user.leavingDate);
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
   }
 
   submit() {
@@ -75,16 +61,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private handleError(errorResponse: ErrorResponse) {
     if (!errorResponse.tryToHandleWith(this.form)) {
       this.errorService.notifyGeneralError();
-    }
-  }
-
-  private updateLeavingDate(entryDate: moment.Moment) {
-    if (entryDate) {
-      this.leavingDateControl.enable();
-      this.minLeavingDate = entryDate.clone().add(1, 'day');
-    } else {
-      this.leavingDateControl.setValue(null);
-      this.leavingDateControl.disable();
     }
   }
 }

@@ -35,11 +35,11 @@ public sealed class ActivityValidator : AbstractValidator<Activity>
             .NotEmpty()
             .SetValidator(new IsoDateValidator<Activity>());
 
-        this.RuleFor(a => a.EndDate)
+        this.RuleFor(a => a.EndedDate)
             .NotEmpty()
             .SetValidator(new IsoDateValidator<Activity>())
-            .GreaterThanOrEqualTo(ph => ph.StartDate)
-            .When(a => a.EndDate is not null);
+            .GreaterThan(ph => ph.StartDate)
+            .When(a => a.EndedDate is not null);
 
         this.RuleFor(a => a.Budget)
             .GreaterThanOrEqualTo(0);

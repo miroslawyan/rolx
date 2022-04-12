@@ -41,7 +41,7 @@
           [formControl]="leavingDateControl"
           [matDatepicker]="leavingDatePicker"
           placeholder="Austritt"
-          [min]="minLeavingDate"
+          [min]="form.controls['entryDate'].value"
           (focus)="leavingDatePicker.open()" />
         <mat-datepicker-toggle matSuffix [for]="leavingDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #leavingDatePicker></mat-datepicker>

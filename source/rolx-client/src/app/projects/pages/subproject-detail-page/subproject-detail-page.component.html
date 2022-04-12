@@ -2,12 +2,7 @@
   <mat-card-title>
     <span>
       {{subproject.fullName}}
-      <a
-        *ngIf="mayEdit"
-        mat-icon-button
-        class="edit"
-        aria-label="Subprojekt editieren"
-        [routerLink]="['edit']">
+      <a *ngIf="mayEdit" mat-icon-button aria-label="Subprojekt editieren" [routerLink]="['edit']">
         <mat-icon>edit</mat-icon>
       </a>
     </span>

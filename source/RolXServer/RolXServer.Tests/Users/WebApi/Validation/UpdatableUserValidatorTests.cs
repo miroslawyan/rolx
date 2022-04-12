@@ -21,17 +21,6 @@ public sealed class UpdatableUserValidatorTests
     }
 
     [Test]
-    public void EntryDate_MayBeNull()
-    {
-        var model = new UpdatableUser
-        {
-            EntryDate = null,
-        };
-
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.EntryDate);
-    }
-
-    [Test]
     public void EntryDate_MustNotBeEmpty()
     {
         var model = new UpdatableUser
@@ -96,18 +85,6 @@ public sealed class UpdatableUserValidatorTests
         };
 
         this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(record => record.LeftDate);
-    }
-
-    [Test]
-    public void LeavingDate_MustBeNullWhileEntryDateIsNull()
-    {
-        var model = new UpdatableUser
-        {
-            EntryDate = null,
-            LeftDate = "2019-12-14",
-        };
-
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(record => record.LeftDate);
     }
 
     [Test]

@@ -26,7 +26,7 @@ public class UpdatableUser
     /// <summary>
     /// Gets or sets the entry date.
     /// </summary>
-    public DateTime? EntryDate { get; set; }
+    public DateOnly EntryDate { get; set; }
 
     /// <summary>
     /// Gets or sets the date the user has left (exclusive).
@@ -34,5 +34,5 @@ public class UpdatableUser
     /// <remarks>
     /// This marks the first day the user no longer works with us.
     /// </remarks>
-    public DateTime? LeftDate { get; set; }
+    public DateOnly? LeftDate { get; set; }
 }

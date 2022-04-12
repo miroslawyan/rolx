@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 using RolXServer.Projects;
+using RolXServer.Projects.Domain;
 using RolXServer.Records.Domain.Detail.Balances;
 using RolXServer.Records.Domain.Model;
 
@@ -21,6 +22,7 @@ namespace RolXServer.Records.Domain.Detail;
 public sealed class BalanceService : IBalanceService
 {
     private readonly RolXContext dbContext;
+    private readonly IPaidLeaveActivities paidLeaveActivities;
     private readonly Settings settings;
 
     /// <summary>
@@ -28,9 +30,14 @@ public sealed class BalanceService : IBalanceService
     /// </summary>
     /// <param name="dbContext">The database context.</param>
     /// <param name="settingsAccessor">The settings accessor.</param>
-    public BalanceService(RolXContext dbContext, IOptions<Settings> settingsAccessor)
+    /// <param name="paidLeaveActivities">The paid leave activities.</param>
+    public BalanceService(
+        RolXContext dbContext,
+        IPaidLeaveActivities paidLeaveActivities,
+        IOptions<Settings> settingsAccessor)
     {
         this.dbContext = dbContext;
+        this.paidLeaveActivities = paidLeaveActivities;
         this.settings = settingsAccessor.Value;
     }
 
@@ -42,13 +49,14 @@ public sealed class BalanceService : IBalanceService
     /// <returns>
     /// The balance.
     /// </returns>
-    public async Task<Balance> GetByDate(DateTime date, Guid userId)
+    public async Task<Balance> GetByDate(DateOnly date, Guid userId)
     {
         var user = await this.dbContext.Users
             .Include(u => u.PartTimeSettings)
             .Include(u => u.BalanceCorrections)
             .SingleAsync(u => u.Id == userId);
 
+        var vacationActivity = this.paidLeaveActivities[PaidLeaveType.Vacation];
         var data = await this.dbContext.Users
             .Where(u => u.Id == userId)
             .Select(u => new BalanceData
@@ -73,6 +81,18 @@ public sealed class BalanceService : IBalanceService
                         Date = r.Date,
                         ActualWorkTimeSeconds = r.Entries.Sum(e => e.DurationSeconds),
                     }).ToList(),
+
+                ManualVacationConsumedSeconds = u.Records
+                    .Where(r => r.Date <= date)
+                    .SelectMany(r => r.Entries)
+                    .Where(e => e.ActivityId == vacationActivity.Id)
+                    .Sum(e => e.DurationSeconds),
+
+                ManualVacationPlannedSeconds = u.Records
+                    .Where(r => r.Date > date)
+                    .SelectMany(r => r.Entries)
+                    .Where(e => e.ActivityId == vacationActivity.Id)
+                    .Sum(e => e.DurationSeconds),
             })
             .SingleAsync();
 

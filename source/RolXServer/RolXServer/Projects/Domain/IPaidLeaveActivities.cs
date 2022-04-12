@@ -25,10 +25,4 @@ public interface IPaidLeaveActivities
     /// </summary>
     /// <param name="paidLeaveType">The paid leave type.</param>
     Activity this[PaidLeaveType paidLeaveType] { get; }
-
-    /// <summary>
-    /// Validates the project and subproject numbers of the specified subproject.
-    /// </summary>
-    /// <param name="subproject">The subproject.</param>
-    void ValidateNumbers(Subproject subproject);
 }

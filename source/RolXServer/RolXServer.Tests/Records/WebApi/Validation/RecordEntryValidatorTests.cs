@@ -32,14 +32,14 @@ public sealed class RecordEntryValidatorTests
                 {
                     Number = 1,
                     Name = "One",
-                    StartDate = new DateTime(2019, 12, 17),
+                    StartDate = new DateOnly(2019, 12, 17),
                 },
                 new Activity
                 {
                     Number = 2,
                     Name = "Two",
-                    StartDate = new DateTime(2019, 12, 17),
-                    EndDate = new DateTime(2019, 12, 19),
+                    StartDate = new DateOnly(2019, 12, 17),
+                    EndedDate = new DateOnly(2019, 12, 19),
                 },
             },
     };
@@ -165,7 +165,7 @@ public sealed class RecordEntryValidatorTests
     }
 
     [Test]
-    public void ActivityId_SucceedsWhenActivityClosesToday()
+    public void ActivityId_FailsWhenActivityEndedToday()
     {
         this.record.Date = "2019-12-19";
 
@@ -175,7 +175,7 @@ public sealed class RecordEntryValidatorTests
             Duration = 42,
         };
 
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.ActivityId);
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(x => x.ActivityId);
     }
 
     [Test]

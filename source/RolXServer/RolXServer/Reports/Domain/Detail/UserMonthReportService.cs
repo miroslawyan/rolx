@@ -46,7 +46,7 @@ internal sealed class UserMonthReportService : IUserMonthReportService
     }
 
     /// <inheritdoc/>
-    public async Task<UserMonthReport?> GetFor(Guid userId, DateTime month)
+    public async Task<UserMonthReport?> GetFor(Guid userId, DateOnly month)
     {
         var range = DateRange.ForMonth(month);
 
@@ -82,7 +82,7 @@ internal sealed class UserMonthReportService : IUserMonthReportService
         if (records.Any(record => record.PaidLeaveType.HasValue))
         {
             workItemGroups = workItemGroups
-                .Append(records.ToPaidLeaveWorkItemGroup(this.paidLeaveActivities));
+                .Merge(records.ToPaidLeaveWorkItemGroup(this.paidLeaveActivities));
         }
 
         return new UserMonthReport(

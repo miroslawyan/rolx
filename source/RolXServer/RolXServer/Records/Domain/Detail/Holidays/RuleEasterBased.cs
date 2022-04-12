@@ -33,13 +33,13 @@ public sealed class RuleEasterBased : RuleBase
     /// <returns>
     ///   <c>true</c> if the specified candidate is matching; otherwise, <c>false</c>.
     /// </returns>
-    public override bool IsMatching(DateTime candidate)
+    public override bool IsMatching(DateOnly candidate)
     {
         var holiday = CalculateWesternEasterSunday(candidate.Year).AddDays(this.offset);
-        return candidate.Date == holiday;
+        return candidate == holiday;
     }
 
-    private static DateTime CalculateWesternEasterSunday(int year)
+    private static DateOnly CalculateWesternEasterSunday(int year)
     {
         var a = year % 19;
         var b = year / 100;
@@ -49,6 +49,6 @@ public sealed class RuleEasterBased : RuleBase
         var f = d + e - (7 * ((a + (11 * d) + (22 * e)) / 451)) + 114;
         var month = f / 31;
         var day = (f % 31) + 1;
-        return new DateTime(year, month, day);
+        return new DateOnly(year, month, day);
     }
 }

@@ -48,9 +48,9 @@ public sealed class RecordEntry
     }
 
     /// <summary>
-    /// Gets or sets the begin as time since midnight.
+    /// Gets or sets the begin time.
     /// </summary>
-    public TimeSpan? Begin { get; set; }
+    public TimeOnly? Begin { get; set; }
 
     /// <summary>
     /// Gets or sets the pause duration in seconds.

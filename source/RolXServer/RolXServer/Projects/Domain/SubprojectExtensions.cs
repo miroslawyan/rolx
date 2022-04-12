@@ -13,7 +13,7 @@ namespace RolXServer.Projects.Domain;
 /// <summary>
 /// Extension methods for <see cref="Subproject"/> instances.
 /// </summary>
-internal static class SubprojectExtensions
+public static class SubprojectExtensions
 {
     /// <summary>
     /// Gets the full-qualified number of the specified subproject.
@@ -40,7 +40,7 @@ internal static class SubprojectExtensions
     /// </returns>
     public static bool IsClosed(this Subproject subproject)
         => subproject.Activities
-            .All(activity => activity.EndDate != null && activity.EndDate < DateTime.Today);
+            .All(activity => activity.EndedDate != null && activity.EndedDate <= DateOnly.FromDateTime(DateTime.Now));
 
     /// <summary>
     /// Gets all names of the specified subproject.

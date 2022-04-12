@@ -30,13 +30,13 @@ public static class UserExtensions
     /// <param name="user">The user.</param>
     /// <param name="date">The date.</param>
     /// <returns>The part-time settings.</returns>
-    public static IEnumerable<UserPartTimeSetting> PartTimeSettingsDescendingBefore(this User user, DateTime date)
+    public static IEnumerable<UserPartTimeSetting> PartTimeSettingsDescendingBefore(this User user, DateOnly date)
         => user.PartTimeSettings
         .Where(s => s.StartDate < date)
         .OrderByDescending(s => s.StartDate)
         .Append(new UserPartTimeSetting
         {
-            StartDate = user.EntryDate ?? default,
+            StartDate = user.EntryDate,
             Factor = 1,
         });
 
@@ -58,7 +58,7 @@ public static class UserExtensions
     /// <param name="user">The user.</param>
     /// <param name="date">The date.</param>
     /// <returns>The part-time factor.</returns>
-    public static double PartTimeFactorAt(this User user, DateTime date)
+    public static double PartTimeFactorAt(this User user, DateOnly date)
         => user.PartTimeSettingsDescendingBefore(date.AddDays(1))
             .Select(s => s.Factor)
             .DefaultIfEmpty(1.0)

@@ -19,7 +19,7 @@ public sealed class VacationBudgetEvaluationTests
     [Test]
     public void VacationDays_FullYear()
     {
-        new DateRange(new DateTime(2020, 1, 1), new DateTime(2021, 1, 1))
+        new DateRange(new DateOnly(2020, 1, 1), new DateOnly(2021, 1, 1))
             .VacationDays(24)
             .Should().BeApproximately(24, DayTolerance);
     }
@@ -27,7 +27,7 @@ public sealed class VacationBudgetEvaluationTests
     [Test]
     public void VacationDay_FirstHalfOfYear()
     {
-        new DateRange(new DateTime(2020, 1, 1), new DateTime(2020, 7, 1))
+        new DateRange(new DateOnly(2020, 1, 1), new DateOnly(2020, 7, 1))
             .VacationDays(24)
             .Should().BeApproximately(12, DayTolerance);
     }
@@ -35,7 +35,7 @@ public sealed class VacationBudgetEvaluationTests
     [Test]
     public void VacationDays_SecondHalfOfYear()
     {
-        new DateRange(new DateTime(2020, 7, 1), new DateTime(2021, 1, 1))
+        new DateRange(new DateOnly(2020, 7, 1), new DateOnly(2021, 1, 1))
             .VacationDays(24)
             .Should().BeApproximately(12, DayTolerance);
     }
@@ -43,7 +43,7 @@ public sealed class VacationBudgetEvaluationTests
     [Test]
     public void VacationDays_FullMonth()
     {
-        new DateRange(new DateTime(2020, 7, 14), new DateTime(2020, 8, 14))
+        new DateRange(new DateOnly(2020, 7, 14), new DateOnly(2020, 8, 14))
             .VacationDays(24)
             .Should().BeApproximately(2, DayTolerance);
     }
@@ -51,7 +51,7 @@ public sealed class VacationBudgetEvaluationTests
     [Test]
     public void VacationDays_FirstHalfOfMonth()
     {
-        new DateRange(new DateTime(2020, 4, 1), new DateTime(2020, 4, 16))
+        new DateRange(new DateOnly(2020, 4, 1), new DateOnly(2020, 4, 16))
             .VacationDays(24)
             .Should().BeApproximately(1, DayTolerance);
     }
@@ -59,7 +59,7 @@ public sealed class VacationBudgetEvaluationTests
     [Test]
     public void VacationDays_SecondHalfOfMonth()
     {
-        new DateRange(new DateTime(2020, 4, 16), new DateTime(2020, 5, 1))
+        new DateRange(new DateOnly(2020, 4, 16), new DateOnly(2020, 5, 1))
             .VacationDays(24)
             .Should().BeApproximately(1, DayTolerance);
     }
@@ -67,7 +67,7 @@ public sealed class VacationBudgetEvaluationTests
     [Test]
     public void VacationDays_TenYears()
     {
-        new DateRange(new DateTime(2020, 4, 16), new DateTime(2030, 4, 16))
+        new DateRange(new DateOnly(2020, 4, 16), new DateOnly(2030, 4, 16))
             .VacationDays(24)
             .Should().BeApproximately(240, DayTolerance);
     }
@@ -75,9 +75,9 @@ public sealed class VacationBudgetEvaluationTests
     [Test]
     public void VacationDays_OneYearCheck([Range(1, 366)] int middleDays)
     {
-        var begin = new DateTime(2020, 1, 1);
+        var begin = new DateOnly(2020, 1, 1);
         var middle = begin.AddDays(middleDays);
-        var end = new DateTime(2021, 1, 1);
+        var end = new DateOnly(2021, 1, 1);
 
         var firstRange = new DateRange(begin, middle);
         var secondRange = new DateRange(middle, end);
@@ -91,7 +91,7 @@ public sealed class VacationBudgetEvaluationTests
     {
         new User
         {
-            EntryDate = new DateTime(2020, 1, 1),
+            EntryDate = new DateOnly(2020, 1, 1),
         }.VacationBudget(2020, 24, NominalWorkTimePerDay)
         .Should().Be(24 * NominalWorkTimePerDay);
     }
@@ -101,12 +101,12 @@ public sealed class VacationBudgetEvaluationTests
     {
         var user = new User
         {
-            EntryDate = new DateTime(2020, 1, 1),
+            EntryDate = new DateOnly(2020, 1, 1),
         };
 
         user.PartTimeSettings.Add(new UserPartTimeSetting
         {
-            StartDate = new DateTime(2020, 1, 1),
+            StartDate = new DateOnly(2020, 1, 1),
             Factor = 0.5,
         });
 
@@ -119,30 +119,30 @@ public sealed class VacationBudgetEvaluationTests
     {
         var user = new User
         {
-            EntryDate = new DateTime(2020, 1, 1),
+            EntryDate = new DateOnly(2020, 1, 1),
         };
 
         user.PartTimeSettings.Add(new UserPartTimeSetting
         {
-            StartDate = new DateTime(2020, 2, 1),
+            StartDate = new DateOnly(2020, 2, 1),
             Factor = 0.5,
         });
 
         user.PartTimeSettings.Add(new UserPartTimeSetting
         {
-            StartDate = new DateTime(2020, 3, 1),
+            StartDate = new DateOnly(2020, 3, 1),
             Factor = 1,
         });
 
         user.PartTimeSettings.Add(new UserPartTimeSetting
         {
-            StartDate = new DateTime(2020, 8, 1),
+            StartDate = new DateOnly(2020, 8, 1),
             Factor = 0.5,
         });
 
         user.PartTimeSettings.Add(new UserPartTimeSetting
         {
-            StartDate = new DateTime(2020, 11, 1),
+            StartDate = new DateOnly(2020, 11, 1),
             Factor = 1,
         });
 

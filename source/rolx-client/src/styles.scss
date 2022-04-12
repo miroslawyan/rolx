@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @use 'theme' as theme;
 @use 'app/records/shared/theme' as shared;
+@use 'app/users/shared/user/table/user-table.component.scss-theme' as user-table;
 
 html,
 body {
@@ -17,6 +18,7 @@ body {
 
 @mixin apply-theme($theme) {
   @include shared.work-record-shared-theme($theme);
+  @include user-table.component-theme($theme);
   @include mat.all-component-themes($theme);
 }
 

@@ -1,0 +1,15 @@
+@use '~@angular/material/theming' as mat;
+
+@mixin component-theme($theme) {
+
+  rolx-user-table {
+    $primary: map-get($theme, primary);
+    $unconfirmedBackground: mat.mat-color($primary, lighter);
+
+    table {
+      .unconfirmed {
+        background-color: $unconfirmedBackground;
+      }
+    }
+  }
+}

@@ -21,5 +21,5 @@ public interface IBalanceService
     /// <param name="date">The date.</param>
     /// <param name="userId">The user identifier.</param>
     /// <returns>The balance.</returns>
-    Task<Balance> GetByDate(DateTime date, Guid userId);
+    Task<Balance> GetByDate(DateOnly date, Guid userId);
 }

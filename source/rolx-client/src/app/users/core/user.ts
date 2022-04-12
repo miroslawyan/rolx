@@ -14,10 +14,12 @@ export class User {
   role!: Role;
 
   @TransformAsIsoDate()
-  entryDate?: moment.Moment;
+  entryDate!: moment.Moment;
 
   @TransformAsIsoDate()
   leftDate?: moment.Moment;
+
+  isConfirmed!: boolean;
 
   validateModel(): void {
     assertDefined(this, 'id');
@@ -26,6 +28,8 @@ export class User {
     assertDefined(this, 'email');
     assertDefined(this, 'avatarUrl');
     assertDefined(this, 'role');
+    assertDefined(this, 'entryDate');
+    assertDefined(this, 'isConfirmed');
   }
 
   @Exclude()
@@ -44,7 +48,6 @@ export class User {
   @Exclude()
   isActiveAt(date: moment.Moment): boolean {
     return (
-      this.entryDate != null &&
       this.entryDate.isSameOrBefore(date, 'day') &&
       (this.leftDate == null || this.leftDate.isAfter(date, 'day'))
     );

@@ -43,19 +43,14 @@ internal static class VacationBudgetEvaluation
 
     private static IEnumerable<(DateRange Range, double Factor)> RangesWithPartTimeFactor(this User user, int year)
     {
-        if (!user.EntryDate.HasValue)
-        {
-            throw new InvalidOperationException("User must have an entry date.");
-        }
-
-        var lastStartDate = user.EntryDate.Value;
+        var lastStartDate = user.EntryDate;
         var lastFactor = 1.0;
 
         foreach (var setting in user.PartTimeSettings)
         {
             if (setting.StartDate.Year > year)
             {
-                yield return (new DateRange(lastStartDate, new DateTime(year + 1, 1, 1)), lastFactor);
+                yield return (new DateRange(lastStartDate, new DateOnly(year + 1, 1, 1)), lastFactor);
                 yield break;
             }
 
@@ -71,7 +66,7 @@ internal static class VacationBudgetEvaluation
 
         var endDate = user.LeftDate.HasValue && user.LeftDate.Value.Year == year
             ? user.LeftDate.Value
-            : new DateTime(year + 1, 1, 1);
+            : new DateOnly(year + 1, 1, 1);
 
         yield return (new DateRange(lastStartDate, endDate), lastFactor);
     }
@@ -83,12 +78,12 @@ internal static class VacationBudgetEvaluation
             + range.End.DayInMonthFactor();
     }
 
-    private static int AbsoluteMonths(this DateTime date)
+    private static int AbsoluteMonths(this DateOnly date)
     {
         return (date.Year * 12) + date.Month - 1;
     }
 
-    private static double DayInMonthFactor(this DateTime date)
+    private static double DayInMonthFactor(this DateOnly date)
     {
         return (date.Day - 1.0) / DateTime.DaysInMonth(date.Year, date.Month);
     }

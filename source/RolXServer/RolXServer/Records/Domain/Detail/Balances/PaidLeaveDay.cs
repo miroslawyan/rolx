@@ -16,7 +16,7 @@ internal sealed class PaidLeaveDay
     /// <summary>
     /// Gets or sets the date.
     /// </summary>
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     /// <summary>
     /// Gets or sets the actual work time in seconds.

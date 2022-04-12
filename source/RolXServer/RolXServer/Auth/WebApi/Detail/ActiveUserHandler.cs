@@ -25,7 +25,7 @@ internal sealed class ActiveUserHandler : AuthorizationHandler<ActiveUserRequire
     /// <returns>The async task.</returns>
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ActiveUserRequirement requirement)
     {
-        if (context.User.IsActiveAt(DateTime.Today))
+        if (context.User.IsActiveAt(DateOnly.FromDateTime(DateTime.Now)))
         {
             context.Succeed(requirement);
         }

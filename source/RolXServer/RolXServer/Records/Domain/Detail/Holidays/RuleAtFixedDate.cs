@@ -36,7 +36,7 @@ public class RuleAtFixedDate : RuleBase
     /// <returns>
     ///   <c>true</c> if the specified candidate is matching; otherwise, <c>false</c>.
     /// </returns>
-    public override bool IsMatching(DateTime candidate)
+    public override bool IsMatching(DateOnly candidate)
     {
         return candidate.Month == this.month && candidate.Day == this.day;
     }

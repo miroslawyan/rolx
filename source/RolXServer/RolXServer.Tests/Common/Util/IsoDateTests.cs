@@ -17,25 +17,8 @@ public sealed class IsoDateTests
     [TestCase(1914, 1, 3, "1914-01-03")]
     public void FromDateTimeToIsoDate(int year, int month, int day, string expected)
     {
-        new DateTime(year, month, day).ToIsoDate()
+        new DateOnly(year, month, day).ToIsoDate()
             .Should().Be(expected);
-    }
-
-    [TestCase(2019, 11, 23, "2019-11-23")]
-    [TestCase(1914, 1, 3, "1914-01-03")]
-    public void FromNullableDateTimeToIsoDate(int year, int month, int day, string expected)
-    {
-        DateTime? dateTime = new DateTime(year, month, day);
-        dateTime.ToIsoDate()
-            .Should().Be(expected);
-    }
-
-    [Test]
-    public void FromNullToIsoDate()
-    {
-        DateTime? dateTime = default;
-        dateTime.ToIsoDate()
-            .Should().BeNull();
     }
 
     [TestCase("2019-11-23", 2019, 11, 23)]
@@ -43,7 +26,7 @@ public sealed class IsoDateTests
     public void Parse(string source, int year, int month, int day)
     {
         IsoDate.Parse(source)
-            .Should().Be(new DateTime(year, month, day));
+            .Should().Be(new DateOnly(year, month, day));
     }
 
     [Test]
@@ -59,7 +42,7 @@ public sealed class IsoDateTests
     public void ParseNullable(string? source, int year, int month, int day)
     {
         IsoDate.ParseNullable(source)
-            .Should().Be(new DateTime(year, month, day));
+            .Should().Be(new DateOnly(year, month, day));
     }
 
     [Test]

@@ -26,17 +26,12 @@ public sealed class UpdatableUserValidator : AbstractValidator<UpdatableUser>
 
         this.RuleFor(u => u.EntryDate)
             .NotEmpty()
-            .SetValidator(new IsoDateValidator<UpdatableUser>())
-            .Unless(u => u.EntryDate == null);
+            .SetValidator(new IsoDateValidator<UpdatableUser>());
 
         this.RuleFor(u => u.LeftDate)
             .NotEmpty()
             .SetValidator(new IsoDateValidator<UpdatableUser>())
             .Unless(u => u.LeftDate == null);
-
-        this.RuleFor(u => u.LeftDate)
-            .Null()
-            .Unless(u => u.EntryDate != null);
 
         this.RuleFor(u => u.LeftDate)
             .GreaterThan(u => u.EntryDate);

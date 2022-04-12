@@ -20,8 +20,8 @@ public sealed class BalanceDataTests
         this.sut = new BalanceData
         {
             NominalWorkTimePerDay = TimeSpan.FromHours(8),
-            User = new User { EntryDate = new DateTime(2020, 3, 2) },
-            ByDate = new DateTime(2020, 3, 8),
+            User = new User { EntryDate = new DateOnly(2020, 3, 2) },
+            ByDate = new DateOnly(2020, 3, 8),
             VacationDaysPerYear = 25,
         };
     }
@@ -38,7 +38,7 @@ public sealed class BalanceDataTests
     [Test]
     public void Overtime_UserPartiallyActive()
     {
-        this.sut.User.EntryDate = new DateTime(2020, 3, 6);
+        this.sut.User.EntryDate = new DateOnly(2020, 3, 6);
         this.sut.ActualWorkTime = TimeSpan.FromHours(8);
 
         this.sut.ToBalance()
@@ -51,7 +51,7 @@ public sealed class BalanceDataTests
         this.sut.ActualWorkTime = TimeSpan.FromHours(32);
         this.sut.PaidLeaveDays = new List<PaidLeaveDay>
             {
-                new PaidLeaveDay { Date = new DateTime(2020, 3, 4), ActualWorkTime = default },
+                new PaidLeaveDay { Date = new DateOnly(2020, 3, 4), ActualWorkTime = default },
             };
 
         this.sut.ToBalance()
@@ -64,7 +64,7 @@ public sealed class BalanceDataTests
         this.sut.ActualWorkTime = TimeSpan.FromHours(34);
         this.sut.PaidLeaveDays = new List<PaidLeaveDay>
             {
-                new PaidLeaveDay { Date = new DateTime(2020, 3, 4), ActualWorkTime = TimeSpan.FromHours(2) },
+                new PaidLeaveDay { Date = new DateOnly(2020, 3, 4), ActualWorkTime = TimeSpan.FromHours(2) },
             };
 
         this.sut.ToBalance()
@@ -77,11 +77,11 @@ public sealed class BalanceDataTests
         this.sut.ActualWorkTime = default;
         this.sut.PaidLeaveDays = new List<PaidLeaveDay>
             {
-                new PaidLeaveDay { Date = new DateTime(2020, 3, 2), ActualWorkTime = default },
-                new PaidLeaveDay { Date = new DateTime(2020, 3, 3), ActualWorkTime = default },
-                new PaidLeaveDay { Date = new DateTime(2020, 3, 4), ActualWorkTime = default },
-                new PaidLeaveDay { Date = new DateTime(2020, 3, 5), ActualWorkTime = default },
-                new PaidLeaveDay { Date = new DateTime(2020, 3, 6), ActualWorkTime = default },
+                new PaidLeaveDay { Date = new DateOnly(2020, 3, 2), ActualWorkTime = default },
+                new PaidLeaveDay { Date = new DateOnly(2020, 3, 3), ActualWorkTime = default },
+                new PaidLeaveDay { Date = new DateOnly(2020, 3, 4), ActualWorkTime = default },
+                new PaidLeaveDay { Date = new DateOnly(2020, 3, 5), ActualWorkTime = default },
+                new PaidLeaveDay { Date = new DateOnly(2020, 3, 6), ActualWorkTime = default },
             };
 
         this.sut.ToBalance()
@@ -91,8 +91,8 @@ public sealed class BalanceDataTests
     [Test]
     public void VacationAvailableDays_AllWell()
     {
-        this.sut.User.EntryDate = new DateTime(2020, 1, 1);
-        this.sut.ByDate = new DateTime(2020, 1, 3);
+        this.sut.User.EntryDate = new DateOnly(2020, 1, 1);
+        this.sut.ByDate = new DateOnly(2020, 1, 3);
 
         this.sut.ToBalance()
             .VacationAvailableDays.Should().Be(25);
@@ -101,8 +101,8 @@ public sealed class BalanceDataTests
     [Test]
     public void VacationAvailableDays_ByDateOnWeekend()
     {
-        this.sut.User.EntryDate = new DateTime(2020, 1, 1);
-        this.sut.ByDate = new DateTime(2020, 1, 5); // was a Sunday
+        this.sut.User.EntryDate = new DateOnly(2020, 1, 1);
+        this.sut.ByDate = new DateOnly(2020, 1, 5); // was a Sunday
 
         this.sut.ToBalance()
             .VacationAvailableDays.Should().Be(25);
@@ -111,8 +111,8 @@ public sealed class BalanceDataTests
     [Test]
     public void VacationPlannedDays_AllWell()
     {
-        this.sut.User.EntryDate = new DateTime(2020, 1, 1);
-        this.sut.ByDate = new DateTime(2020, 1, 3);
+        this.sut.User.EntryDate = new DateOnly(2020, 1, 1);
+        this.sut.ByDate = new DateOnly(2020, 1, 3);
 
         this.sut.ToBalance()
             .VacationPlannedDays.Should().Be(0);
@@ -121,8 +121,8 @@ public sealed class BalanceDataTests
     [Test]
     public void VacationPlannedDays_ByDateOnWeekend()
     {
-        this.sut.User.EntryDate = new DateTime(2020, 1, 1);
-        this.sut.ByDate = new DateTime(2020, 1, 5); // was a Sunday
+        this.sut.User.EntryDate = new DateOnly(2020, 1, 1);
+        this.sut.ByDate = new DateOnly(2020, 1, 5); // was a Sunday
 
         this.sut.ToBalance()
             .VacationPlannedDays.Should().Be(0);

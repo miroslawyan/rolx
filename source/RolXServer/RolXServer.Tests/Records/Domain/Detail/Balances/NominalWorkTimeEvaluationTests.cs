@@ -19,7 +19,7 @@ public sealed class NominalWorkTimeEvaluationTests
     public void AnInfoForEachDayInRange()
     {
         new User()
-            .DayInfos(new DateRange(new DateTime(2020, 1, 1), new DateTime(2020, 1, 11)), NominalWorkTimePerDay)
+            .DayInfos(new DateRange(new DateOnly(2020, 1, 1), new DateOnly(2020, 1, 11)), NominalWorkTimePerDay)
             .Count().Should().Be(10);
     }
 
@@ -29,7 +29,7 @@ public sealed class NominalWorkTimeEvaluationTests
     [TestCase(2020, 5, 24)]
     public void DayType_Weekend(int year, int month, int day)
     {
-        var begin = new DateTime(year, month, day);
+        var begin = new DateOnly(year, month, day);
         var end = begin.AddDays(1);
 
         new User()
@@ -45,7 +45,7 @@ public sealed class NominalWorkTimeEvaluationTests
     [TestCase(2020, 5, 22)]
     public void DayType_Workday(int year, int month, int day)
     {
-        var begin = new DateTime(year, month, day);
+        var begin = new DateOnly(year, month, day);
         var end = begin.AddDays(1);
 
         new User()
@@ -59,7 +59,7 @@ public sealed class NominalWorkTimeEvaluationTests
     [TestCase(2020, 5, 21)]
     public void DayType_Holyday(int year, int month, int day)
     {
-        var begin = new DateTime(year, month, day);
+        var begin = new DateOnly(year, month, day);
         var end = begin.AddDays(1);
 
         new User()
@@ -73,7 +73,7 @@ public sealed class NominalWorkTimeEvaluationTests
     [TestCase(2020, 5, 21, "Auffahrt")]
     public void DayName_Holiday(int year, int month, int day, string name)
     {
-        var begin = new DateTime(year, month, day);
+        var begin = new DateOnly(year, month, day);
         var end = begin.AddDays(1);
 
         new User()
@@ -93,7 +93,7 @@ public sealed class NominalWorkTimeEvaluationTests
     [TestCase(2020, 5, 24)]
     public void DayName_NonHoliday(int year, int month, int day)
     {
-        var begin = new DateTime(year, month, day);
+        var begin = new DateOnly(year, month, day);
         var end = begin.AddDays(1);
 
         new User()
@@ -109,7 +109,7 @@ public sealed class NominalWorkTimeEvaluationTests
     [TestCase(2020, 5, 22)]
     public void NominalWorkTime_Workday(int year, int month, int day)
     {
-        var begin = new DateTime(year, month, day);
+        var begin = new DateOnly(year, month, day);
         var end = begin.AddDays(1);
 
         new User()
@@ -127,7 +127,7 @@ public sealed class NominalWorkTimeEvaluationTests
     [TestCase(2020, 5, 24)]
     public void NominalWorkTime_NonWorkday(int year, int month, int day)
     {
-        var begin = new DateTime(year, month, day);
+        var begin = new DateOnly(year, month, day);
         var end = begin.AddDays(1);
 
         new User()
@@ -142,11 +142,11 @@ public sealed class NominalWorkTimeEvaluationTests
         var user = new User();
         user.PartTimeSettings.Add(new UserPartTimeSetting
         {
-            StartDate = new DateTime(2020, 1, 1),
+            StartDate = new DateOnly(2020, 1, 1),
             Factor = 0.5,
         });
 
-        user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
+        user.NominalWorkTime(new DateRange(new DateOnly(2020, 2, 1), new DateOnly(2020, 2, 8)), NominalWorkTimePerDay)
             .Should().Be(TimeSpan.FromHours(20));
     }
 
@@ -156,11 +156,11 @@ public sealed class NominalWorkTimeEvaluationTests
         var user = new User();
         user.PartTimeSettings.Add(new UserPartTimeSetting
         {
-            StartDate = new DateTime(2020, 2, 5),
+            StartDate = new DateOnly(2020, 2, 5),
             Factor = 0.5,
         });
 
-        user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
+        user.NominalWorkTime(new DateRange(new DateOnly(2020, 2, 1), new DateOnly(2020, 2, 8)), NominalWorkTimePerDay)
             .Should().Be(TimeSpan.FromHours(28));
     }
 
@@ -170,11 +170,11 @@ public sealed class NominalWorkTimeEvaluationTests
         var user = new User();
         user.PartTimeSettings.Add(new UserPartTimeSetting
         {
-            StartDate = new DateTime(2020, 8, 1),
+            StartDate = new DateOnly(2020, 8, 1),
             Factor = 0.5,
         });
 
-        user.NominalWorkTime(new DateRange(new DateTime(2020, 2, 1), new DateTime(2020, 2, 8)), NominalWorkTimePerDay)
+        user.NominalWorkTime(new DateRange(new DateOnly(2020, 2, 1), new DateOnly(2020, 2, 8)), NominalWorkTimePerDay)
             .Should().Be(TimeSpan.FromHours(40));
     }
 
@@ -186,7 +186,7 @@ public sealed class NominalWorkTimeEvaluationTests
     [TestCase(50, 90944.0)]
     public void NominalWorkTime_LongTime(int years, double expectedHours)
     {
-        var begin = new DateTime(2000, 1, 1);
+        var begin = new DateOnly(2000, 1, 1);
         var end = begin.AddYears(years);
 
         var user = new User();

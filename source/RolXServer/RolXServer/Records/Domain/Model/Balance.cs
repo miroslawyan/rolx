@@ -16,7 +16,7 @@ public sealed class Balance
     /// <summary>
     /// Gets or sets the date this instance is by.
     /// </summary>
-    public DateTime ByDate { get; set; }
+    public DateOnly ByDate { get; set; }
 
     /// <summary>
     /// Gets or sets the overtime.

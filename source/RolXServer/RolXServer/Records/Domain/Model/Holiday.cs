@@ -21,5 +21,5 @@ public class Holiday
     /// <summary>
     /// Gets or sets date of a holiday.
     /// </summary>
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 }

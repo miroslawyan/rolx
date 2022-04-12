@@ -84,5 +84,8 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let user; columns: displayedColumns;"></tr>
+  <tr
+    mat-row
+    *matRowDef="let user; columns: displayedColumns;"
+    [class.unconfirmed]="!user.isConfirmed"></tr>
 </table>

@@ -47,7 +47,7 @@ internal static class NominalWorkTimeEvaluation
         var sortedSettings = user.PartTimeSettingsDescendingBefore(range.End).ToList();
 
         var activeRange = DateRange.CreateSafe(
-            user.EntryDate ?? range.Begin,
+            user.EntryDate,
             user.LeftDate ?? range.End);
 
         return range.DayInfos(nominalWorkTimePerDay)
@@ -95,7 +95,7 @@ internal static class NominalWorkTimeEvaluation
     /// <returns>
     /// The nominal work-time.
     /// </returns>
-    public static TimeSpan NominalWorkTime(this User user, DateTime date, TimeSpan nominalWorkTimePerDay)
+    public static TimeSpan NominalWorkTime(this User user, DateOnly date, TimeSpan nominalWorkTimePerDay)
     {
         return user.DayInfos(new DateRange(date, date.AddDays(1)), nominalWorkTimePerDay)
             .Sum(i => i.NominalWorkTime);
@@ -142,7 +142,7 @@ internal static class NominalWorkTimeEvaluation
 
     private static DayInfo ApplyUserActiveRange(DayInfo info, DateRange activeRange)
     {
-        info.NominalWorkTime = activeRange.Contains(info.Date) ? info.NominalWorkTime : default;
+        info.NominalWorkTime = activeRange.Includes(info.Date) ? info.NominalWorkTime : default;
         return info;
     }
 }

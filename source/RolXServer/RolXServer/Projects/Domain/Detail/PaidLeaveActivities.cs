@@ -13,7 +13,7 @@ namespace RolXServer.Projects.Domain.Detail;
 /// <summary>
 /// Provides the (virtual) paid leave activities.
 /// </summary>
-internal sealed class PaidLeaveActivities : IPaidLeaveActivities
+public sealed class PaidLeaveActivities : IPaidLeaveActivities
 {
     private readonly Dictionary<PaidLeaveType, Activity> activities;
 
@@ -25,10 +25,13 @@ internal sealed class PaidLeaveActivities : IPaidLeaveActivities
         this.activities = Enum.GetValues<PaidLeaveType>()
             .ToDictionary(e => e, e => new Activity
             {
-                Id = -1,
+                Id = ((int)e) + 1,
                 Number = ((int)e) + 1,
                 Name = e.ToPrettyString(),
+                StartDate = new DateOnly(2020, 1, 1),
+                SubprojectId = this.Subproject.Id,
                 Subproject = this.Subproject,
+                BillabilityId = 7, // Abwesenheit. See RolXContext.SeedBillabilities
             });
 
         this.Subproject.Activities = this.activities.Values.ToList();
@@ -37,25 +40,15 @@ internal sealed class PaidLeaveActivities : IPaidLeaveActivities
     /// <inheritdoc/>
     public Subproject Subproject { get; } = new Subproject
     {
-        Id = -1,
+        Id = 1,
         ProjectNumber = 8900,
         Number = 1,
         CustomerName = "M&F",
         ProjectName = "Allgemein",
-        Name = "Ferien, Militär, Krank",
+        Name = "Bezahlte Abwesenheiten",
     };
 
     /// <inheritdoc/>
     public Activity this[PaidLeaveType paidLeaveType]
         => this.activities[paidLeaveType];
-
-    /// <inheritdoc/>
-    public void ValidateNumbers(Subproject subproject)
-    {
-        if (this.Subproject.ProjectNumber == subproject.ProjectNumber
-            && this.Subproject.Number == subproject.Number)
-        {
-            throw new InvalidOperationException("Sub-/project numbers are already in use by the paid leaves subproject");
-        }
-    }
 }

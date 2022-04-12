@@ -24,7 +24,7 @@ export class ActivityFormComponent implements OnInit {
     number: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
     name: ['', Validators.required],
     startDate: ['', Validators.required],
-    endDate: [''],
+    endDate: [null],
     budget: [null, Validators.min(0)],
     billabilityId: [null, Validators.required],
   });
@@ -49,6 +49,11 @@ export class ActivityFormComponent implements OnInit {
     assertDefined(this, 'activity');
 
     this.form.patchValue(this.activity);
+
+    // somehow patchValue doesn't use the properties with getter
+    // lets do it explicitly
+    this.form.controls['endDate'].setValue(this.activity.endDate);
+
     this.formBudget = this.activity.budget;
   }
 

@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations.Schema;
-
 using RolXServer.Projects;
 using RolXServer.Users.DataAccess;
 
@@ -26,8 +24,7 @@ public sealed class Record
     /// <summary>
     /// Gets or sets the date.
     /// </summary>
-    [Column(TypeName = "date")]
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     /// <summary>
     /// Gets or sets the user identifier.

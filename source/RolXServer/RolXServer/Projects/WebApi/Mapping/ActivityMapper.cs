@@ -28,7 +28,7 @@ internal static class ActivityMapper
             Number: domain.Number,
             Name: domain.Name,
             StartDate: domain.StartDate.ToIsoDate(),
-            EndDate: domain.EndDate.ToIsoDate(),
+            EndedDate: domain.EndedDate?.ToIsoDate(),
             BillabilityId: domain.Billability!.Id,
             BillabilityName: domain.Billability!.Name,
             IsBillable: domain.Billability!.IsBillable,
@@ -54,7 +54,7 @@ internal static class ActivityMapper
             Subproject = subproject,
             Name = resource.Name,
             StartDate = IsoDate.Parse(resource.StartDate),
-            EndDate = IsoDate.ParseNullable(resource.EndDate),
+            EndedDate = IsoDate.ParseNullable(resource.EndedDate),
             Budget = TimeSpan.FromSeconds(resource.Budget),
             BillabilityId = resource.BillabilityId,
         };

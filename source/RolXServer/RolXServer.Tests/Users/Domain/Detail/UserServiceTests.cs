@@ -70,7 +70,7 @@ public sealed class UserServiceTests
     [Test]
     public async Task Update_EntryDate()
     {
-        var date = DateTime.Today;
+        var date = DateOnly.FromDateTime(DateTime.Now);
 
         var user = new UpdatableUser
         {
@@ -87,7 +87,7 @@ public sealed class UserServiceTests
     [Test]
     public async Task Update_LeavingDate()
     {
-        var date = DateTime.Today;
+        var date = DateOnly.FromDateTime(DateTime.Now);
 
         var user = new UpdatableUser
         {

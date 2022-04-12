@@ -34,5 +34,5 @@ public abstract class RuleBase
     /// <returns>
     ///   <c>true</c> if the specified candidate is matching; otherwise, <c>false</c>.
     /// </returns>
-    public abstract bool IsMatching(DateTime candidate);
+    public abstract bool IsMatching(DateOnly candidate);
 }

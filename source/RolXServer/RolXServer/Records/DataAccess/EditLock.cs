@@ -6,8 +6,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace RolXServer.Records.DataAccess;
 
 /// <summary>
@@ -23,6 +21,5 @@ public sealed class EditLock
     /// <summary>
     /// Gets or sets the date.
     /// </summary>
-    [Column(TypeName = "date")]
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 }

@@ -16,7 +16,7 @@ public sealed class DayInfo
     /// <summary>
     /// Gets or sets the date.
     /// </summary>
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     /// <summary>
     /// Gets or sets the type of the day.

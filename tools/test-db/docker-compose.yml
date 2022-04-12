@@ -1,0 +1,26 @@
+version: "3.1"
+
+services:
+  maria:
+    image: mariadb
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: acsacs
+      MYSQL_USER: acs
+      MYSQL_PASSWORD: acsacs
+      MYSQL_DATABASE: db_rolx
+    ports:
+      - 3306:3306
+    volumes:
+      - rolx:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: maria
+    ports:
+      - 8080:8080
+volumes:
+  rolx:

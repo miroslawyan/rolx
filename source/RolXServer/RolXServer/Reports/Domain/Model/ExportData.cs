@@ -9,7 +9,7 @@
 namespace RolXServer.Reports.Domain.Model;
 
 public sealed record ExportData(
-    DateTime Date,
+    DateOnly Date,
     int ProjectNumber,
     string CustomerName,
     string ProjectName,

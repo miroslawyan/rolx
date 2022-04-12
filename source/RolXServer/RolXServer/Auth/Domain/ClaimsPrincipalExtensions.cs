@@ -39,7 +39,7 @@ public static class ClaimsPrincipalExtensions
     /// </summary>
     /// <param name="principal">The principal.</param>
     /// <returns>The entry date.</returns>
-    public static DateTime? GetEntryDate(this ClaimsPrincipal principal)
+    public static DateOnly? GetEntryDate(this ClaimsPrincipal principal)
         => IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.EntryDate));
 
     /// <summary>
@@ -47,7 +47,7 @@ public static class ClaimsPrincipalExtensions
     /// </summary>
     /// <param name="principal">The principal.</param>
     /// <returns>The left date.</returns>
-    public static DateTime? GetLeftDate(this ClaimsPrincipal principal)
+    public static DateOnly? GetLeftDate(this ClaimsPrincipal principal)
         => IsoDate.ParseNullable(principal.FindFirstValue(RolXClaimTypes.LeftDate));
 
     /// <summary>
@@ -58,7 +58,7 @@ public static class ClaimsPrincipalExtensions
     /// <returns>
     ///   <c>true</c> if specified principal is active at the specified date; otherwise, <c>false</c>.
     /// </returns>
-    public static bool IsActiveAt(this ClaimsPrincipal principal, DateTime date)
+    public static bool IsActiveAt(this ClaimsPrincipal principal, DateOnly date)
     {
         try
         {
