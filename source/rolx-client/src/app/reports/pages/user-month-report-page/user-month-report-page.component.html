@@ -29,7 +29,7 @@
         </li>
 
         <li>
-          Gleitzeit: <strong>{{report.overtime}} h</strong>
+          Gleitzeit: <strong>{{report.overtime.hours | number: '1.0-2'}} h</strong>
           <span *ngIf="!report.overtimeDelta.isZero">
             (<span *ngIf="report.overtimeDelta.isPositive">+</span>{{report.overtimeDelta}} h)
           </span>
@@ -53,7 +53,7 @@
               {{group.name}}
               <ul>
                 <li *ngFor="let item of group.items">
-                  <strong>{{item.duration}} h</strong>: {{item.name}}
+                  <strong>{{item.duration.hours | number: '1.0-2'}} h</strong>: {{item.name}}
                 </li>
               </ul>
             </li>
@@ -66,8 +66,10 @@
             <li *ngFor="let correction of report.balanceCorrections">
               {{correction.date.toDate() | date}}
               <ul>
-                <li><strong>{{correction.overtime}} h</strong>: Überzeit</li>
-                <li><strong>{{correction.vacation}} h</strong>: Ferien</li>
+                <li>
+                  <strong>{{correction.overtime.hours | number: '1.0-2'}} h</strong>: Überzeit
+                </li>
+                <li><strong>{{correction.vacation.hours | number: '1.0-2'}} h</strong>: Ferien</li>
               </ul>
             </li>
           </ul>
