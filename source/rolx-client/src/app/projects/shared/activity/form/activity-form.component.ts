@@ -49,11 +49,6 @@ export class ActivityFormComponent implements OnInit {
     assertDefined(this, 'activity');
 
     this.form.patchValue(this.activity);
-
-    // somehow patchValue doesn't use the properties with getter
-    // lets do it explicitly
-    this.form.controls['endDate'].setValue(this.activity.endDate);
-
     this.formBudget = this.activity.budget;
   }
 

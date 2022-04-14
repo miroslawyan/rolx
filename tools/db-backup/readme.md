@@ -6,7 +6,7 @@ For connections to the production database, a certificate is required. To fetch 
 > wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -OutFile BaltimoreCyberTrustRoot.crt.pem
 ```
 
-The, dump the database:
+Dump the database:
 
 ```powershell
 > mysqldump `

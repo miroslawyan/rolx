@@ -4,6 +4,7 @@ import sys
 table_names = [
     'Activities',
     'Billabilities',
+    'EditLocks',
     'FavouriteActivities',
     'RecordEntries',
     'Records',

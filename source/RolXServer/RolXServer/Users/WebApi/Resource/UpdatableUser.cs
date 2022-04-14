@@ -29,10 +29,7 @@ public class UpdatableUser
     public string EntryDate { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the date the user has left (exclusive).
+    /// Gets or sets the date the user leaves.
     /// </summary>
-    /// <remarks>
-    /// This marks the first day the user no longer works with us.
-    /// </remarks>
-    public string? LeftDate { get; set; }
+    public string? LeavingDate { get; set; }
 }

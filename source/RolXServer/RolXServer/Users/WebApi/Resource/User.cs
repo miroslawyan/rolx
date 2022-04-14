@@ -49,12 +49,9 @@ public class User
     public string? EntryDate { get; set; }
 
     /// <summary>
-    /// Gets or sets the date the user has left (exclusive).
+    /// Gets or sets the date the user leaves.
     /// </summary>
-    /// <remarks>
-    /// This marks the first day the user no longer works with us.
-    /// </remarks>
-    public string? LeftDate { get; set; }
+    public string? LeavingDate { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether this user is confirmed.

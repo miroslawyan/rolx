@@ -40,13 +40,18 @@ export class UserTableComponent implements OnInit {
   ngOnInit() {
     assertDefined(this, 'sort');
 
-    this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = UserFilterService.Predicate;
-
     this.userService.getAll().subscribe((users) => {
       this.users = users;
       this.update(this.filterService.showLefties);
     });
+
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = UserFilterService.Predicate;
+    this.dataSource.filter = this.filterService.filterText.toLowerCase();
+  }
+
+  tpd(user: User): User {
+    return user;
   }
 
   applyFilter(value: string) {

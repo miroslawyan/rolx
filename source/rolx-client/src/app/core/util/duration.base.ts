@@ -10,10 +10,10 @@ export class DurationBase<T extends DurationBase<T>> {
       return '-';
     }
 
-    const hours = this.hours;
-    const wholeHours = Math.abs(Math.trunc(hours));
-    const wholeMinutes = Math.abs(Math.round((hours % 1) * 60));
-    const hasSign = this.seconds < 0 && (wholeHours !== 0 || wholeMinutes !== 0);
+    const minutes = Math.round(this.seconds / 60);
+    const wholeHours = Math.abs(Math.trunc(minutes / 60));
+    const wholeMinutes = Math.abs(minutes % 60);
+    const hasSign = this.seconds < 0 && minutes !== 0;
 
     return `${hasSign ? '-' : ''}${wholeHours}:${wholeMinutes.toString(10).padStart(2, '0')}`;
   }

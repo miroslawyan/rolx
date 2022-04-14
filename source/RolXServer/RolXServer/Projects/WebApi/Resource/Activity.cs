@@ -16,7 +16,7 @@ public sealed record Activity(
     int Number,
     string Name,
     string StartDate,
-    string? EndedDate,
+    string? EndDate,
     int BillabilityId,
     string BillabilityName,
     bool IsBillable,

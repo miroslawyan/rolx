@@ -17,7 +17,7 @@ export class User {
   entryDate!: moment.Moment;
 
   @TransformAsIsoDate()
-  leftDate?: moment.Moment;
+  leavingDate?: moment.Moment;
 
   isConfirmed!: boolean;
 
@@ -33,14 +33,6 @@ export class User {
   }
 
   @Exclude()
-  get leavingDate(): moment.Moment | undefined {
-    return this.leftDate?.clone()?.subtract(1, 'days');
-  }
-  set leavingDate(value) {
-    this.leftDate = value?.clone()?.add(1, 'days');
-  }
-
-  @Exclude()
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
@@ -49,7 +41,7 @@ export class User {
   isActiveAt(date: moment.Moment): boolean {
     return (
       this.entryDate.isSameOrBefore(date, 'day') &&
-      (this.leftDate == null || this.leftDate.isAfter(date, 'day'))
+      (this.leavingDate == null || this.leavingDate.isSameOrAfter(date, 'day'))
     );
   }
 }

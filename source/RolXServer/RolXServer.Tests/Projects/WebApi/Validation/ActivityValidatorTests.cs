@@ -19,7 +19,7 @@ public sealed class ActivityValidatorTests
             Number: 1,
             Name: "Name",
             StartDate: "2019-01-01",
-            EndedDate: null,
+            EndDate: null,
             BillabilityId: 1,
             BillabilityName: "Billable",
             IsBillable: true,
@@ -101,43 +101,43 @@ public sealed class ActivityValidatorTests
     [Test]
     public void EndDate_MayBeNull()
     {
-        var model = this.model with { EndedDate = null };
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndedDate);
+        var model = this.model with { EndDate = null };
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void EndDate_IfNotNull_MustNotBeEmpty()
     {
-        var model = this.model with { EndedDate = string.Empty };
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.EndedDate);
+        var model = this.model with { EndDate = string.Empty };
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void StartDate_IfNotNull_ShouldBeAnIsoFormattedDate()
     {
-        var model = this.model with { EndedDate = "2019-11-25" };
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndedDate);
+        var model = this.model with { EndDate = "2019-11-25" };
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void EndDate_IfNotNull_MustNotBeBeforeStartDate()
     {
-        var model = this.model with { StartDate = "2019-11-25", EndedDate = "2019-11-24" };
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.EndedDate);
+        var model = this.model with { StartDate = "2019-11-25", EndDate = "2019-11-24" };
+        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
-    public void EndDate_IfNotNull_MustNotBeSameAsStartDate()
+    public void EndDate_IfNotNull_MayBeSameAsStartDate()
     {
-        var model = this.model with { StartDate = "2019-11-25", EndedDate = "2019-11-25" };
-        this.sut.TestValidate(model).ShouldHaveValidationErrorFor(activity => activity.EndedDate);
+        var model = this.model with { StartDate = "2019-11-25", EndDate = "2019-11-25" };
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]
     public void EndDate_IfNotNull_MayBeAfterStartDate()
     {
-        var model = this.model with { StartDate = "2019-11-25", EndedDate = "2019-11-26" };
-        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndedDate);
+        var model = this.model with { StartDate = "2019-11-25", EndDate = "2019-11-26" };
+        this.sut.TestValidate(model).ShouldNotHaveValidationErrorFor(activity => activity.EndDate);
     }
 
     [Test]

@@ -38,10 +38,6 @@ export class UserFormComponent implements OnInit {
     assertDefined(this, 'user');
 
     this.form.patchValue(this.user);
-
-    // somehow patchValue doesn't use the properties with getter
-    // lets do it explicitly
-    this.leavingDateControl.setValue(this.user.leavingDate);
   }
 
   submit() {

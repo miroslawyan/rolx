@@ -33,27 +33,29 @@
 
   <ng-container matColumnDef="fullName">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-    <td mat-cell *matCellDef="let user">{{user.firstName}} {{user.lastName}}</td>
+    <td mat-cell *matCellDef="let user">{{tpd(user).firstName}} {{tpd(user).lastName}}</td>
   </ng-container>
 
   <ng-container matColumnDef="email">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-    <td mat-cell *matCellDef="let user">{{user.email}}</td>
+    <td mat-cell *matCellDef="let user">{{tpd(user).email}}</td>
   </ng-container>
 
   <ng-container matColumnDef="role">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Rolle</th>
-    <td mat-cell *matCellDef="let user">{{ Role[user.role] }}</td>
+    <td mat-cell *matCellDef="let user">{{ Role[tpd(user).role] }}</td>
   </ng-container>
 
   <ng-container matColumnDef="entryDate">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Eintritt</th>
-    <td mat-cell *matCellDef="let user">{{user.entryDate | date : 'mediumDate'}}</td>
+    <td mat-cell *matCellDef="let user">{{tpd(user).entryDate.toDate() | date : 'mediumDate'}}</td>
   </ng-container>
 
   <ng-container matColumnDef="leavingDate">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Austritt</th>
-    <td mat-cell *matCellDef="let user">{{user.leavingDate | date : 'mediumDate'}}</td>
+    <td mat-cell *matCellDef="let user">
+      {{tpd(user).leavingDate?.toDate() | date : 'mediumDate'}}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="tools">
@@ -87,5 +89,5 @@
   <tr
     mat-row
     *matRowDef="let user; columns: displayedColumns;"
-    [class.unconfirmed]="!user.isConfirmed"></tr>
+    [class.unconfirmed]="!tpd(user).isConfirmed"></tr>
 </table>

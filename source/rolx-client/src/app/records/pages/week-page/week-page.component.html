@@ -16,7 +16,7 @@
       {{params.monday.toDate() | date: 'mediumDate'}} - {{params.nextSunday.toDate() | date:
       'mediumDate'}}
 
-      <small>(KW{{params.monday.week() | number: '2.0'}})</small>
+      <small>(KW{{params.monday.isoWeek() | number: '2.0'}})</small>
     </mat-card-title>
 
     <mat-card-content>

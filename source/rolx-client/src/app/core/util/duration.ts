@@ -4,7 +4,7 @@ import { DurationBase } from './duration.base';
 
 export class Duration extends DurationBase<Duration> {
   static readonly Zero = new Duration();
-  static readonly Pattern = /^(-?)(?:(\d+):([0-5]?\d)|(\d*\.?\d*))$/;
+  static readonly Pattern = /^(-?)(?:(\d+)(?::|\.\.|,,)([0-5]?\d)|(\d*[.,]?\d*))$/;
   static readonly PatternGroups = {
     Sign: 1,
     Hours: 2,
@@ -41,7 +41,7 @@ export class Duration extends DurationBase<Duration> {
     }
 
     if (match[Duration.PatternGroups.DecimalHours]) {
-      return Duration.fromHours(Number.parseFloat(time));
+      return Duration.fromHours(Number.parseFloat(time.replace(',', '.')));
     }
 
     const hours = Number.parseInt(match[Duration.PatternGroups.Hours], 10);

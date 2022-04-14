@@ -1,7 +1,6 @@
 import { Duration, TransformAsDuration } from '@app/core/util/duration';
 import { TransformAsIsoDate } from '@app/core/util/iso-date';
 import { assertDefined } from '@app/core/util/utils';
-import { Exclude } from 'class-transformer';
 import * as moment from 'moment';
 
 export class Activity {
@@ -13,7 +12,7 @@ export class Activity {
   startDate!: moment.Moment;
 
   @TransformAsIsoDate()
-  endedDate?: moment.Moment;
+  endDate?: moment.Moment;
 
   billabilityId!: number;
   billabilityName!: string;
@@ -42,15 +41,7 @@ export class Activity {
     assertDefined(this, 'fullName');
   }
 
-  @Exclude()
-  get endDate(): moment.Moment | undefined {
-    return this.endedDate?.clone()?.subtract(1, 'days');
-  }
-  set endDate(value) {
-    this.endedDate = value?.clone()?.add(1, 'days');
-  }
-
   isOpenAt(date: moment.Moment): boolean {
-    return date >= this.startDate && (this.endedDate == null || date < this.endedDate);
+    return date >= this.startDate && (this.endDate == null || date <= this.endDate);
   }
 }
