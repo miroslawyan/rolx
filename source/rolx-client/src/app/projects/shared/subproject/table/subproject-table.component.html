@@ -16,14 +16,7 @@
   </mat-checkbox>
 </div>
 
-<table
-  mat-table
-  [dataSource]="dataSource"
-  matSort
-  matSortActive="fullNumber"
-  matSortDirection="asc"
-  matSortDisableClear
-  class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" matSort matSortDisableClear class="mat-elevation-z8">
   <ng-container matColumnDef="fullNumber">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Nummer</th>
     <td mat-cell *matCellDef="let subproject">{{tpd(subproject).fullNumber}}</td>
@@ -44,7 +37,7 @@
     <td mat-cell *matCellDef="let subproject">{{tpd(subproject).name}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="manager">
+  <ng-container matColumnDef="managerName">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Projektleiter</th>
     <td mat-cell *matCellDef="let subproject">{{tpd(subproject).managerName}}</td>
   </ng-container>

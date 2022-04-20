@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { SortService } from '@app/core/persistence/sort.service';
 import { assertDefined } from '@app/core/util/utils';
 import { SubprojectFilterService } from '@app/projects/core/subproject-filter.service';
 import { SubprojectShallow } from '@app/projects/core/subproject-shallow';
@@ -18,7 +19,7 @@ export class SubprojectTableComponent implements OnInit {
     'customerName',
     'projectName',
     'name',
-    'manager',
+    'managerName',
     this.isClosedColumn,
     'tools',
   ];
@@ -32,6 +33,7 @@ export class SubprojectTableComponent implements OnInit {
 
   constructor(
     private readonly subprojectService: SubprojectService,
+    private readonly sortService: SortService,
     public readonly filterService: SubprojectFilterService,
   ) {}
 
@@ -45,6 +47,15 @@ export class SubprojectTableComponent implements OnInit {
 
     this.dataSource.sort = this.sort;
     this.dataSource.filter = this.filterService.filterText.toLowerCase();
+
+    this.sort.sort(
+      this.sortService.get('Subproject', {
+        id: this.displayedColumns[0],
+        start: 'asc',
+        disableClear: true,
+      }),
+    );
+    this.sort.sortChange.subscribe((sort) => this.sortService.set('Subproject', sort));
   }
 
   tpd(subproject: SubprojectShallow): SubprojectShallow {

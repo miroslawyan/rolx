@@ -26,7 +26,8 @@ public sealed class ActivityValidatorTests
             Budget: 0,
             Actual: 0,
             FullNumber: "#0001.001.01",
-            FullName: "Any - Full - Name");
+            FullName: "Any - Full - Name",
+            AllSubprojectNames: "Any - Full");
 
     [Test]
     public void Number_MustBeGreaterThanZero()

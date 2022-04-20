@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from '@app/auth/core/auth.service';
+import { SortService } from '@app/core/persistence/sort.service';
 import { assertDefined } from '@app/core/util/utils';
 import { Role } from '@app/users/core/role';
 import { User } from '@app/users/core/user';
@@ -33,6 +34,7 @@ export class UserTableComponent implements OnInit {
 
   constructor(
     private readonly userService: UserService,
+    private readonly sortService: SortService,
     public readonly authService: AuthService,
     public readonly filterService: UserFilterService,
   ) {}
@@ -48,6 +50,15 @@ export class UserTableComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = UserFilterService.Predicate;
     this.dataSource.filter = this.filterService.filterText.toLowerCase();
+
+    this.sort.sort(
+      this.sortService.get('User', {
+        id: this.displayedColumns[1],
+        start: 'asc',
+        disableClear: true,
+      }),
+    );
+    this.sort.sortChange.subscribe((sort) => this.sortService.set('User', sort));
   }
 
   tpd(user: User): User {

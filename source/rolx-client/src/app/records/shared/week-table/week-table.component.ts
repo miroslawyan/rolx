@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { ErrorService } from '@app/core/error/error.service';
 import { assertDefined } from '@app/core/util/utils';
 import { Activity } from '@app/projects/core/activity';
@@ -49,6 +49,7 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     private favouriteActivityService: FavouriteActivityService,
     private workRecordService: WorkRecordService,
     private errorService: ErrorService,
+    private elementRef: ElementRef,
   ) {}
 
   @Input()
@@ -82,6 +83,7 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   startAdding() {
     this.isAddingActivity = true;
     this.update();
+    setTimeout(() => this.scrollToBottom());
   }
 
   addHomegrown(activity: Activity) {
@@ -115,10 +117,19 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     );
 
     const sortedActivities = [...this.inputActivities, ...nonLocalFavourites].sort((a, b) =>
-      a.fullNumber.localeCompare(b.fullNumber),
+      a.fullName.localeCompare(b.fullName),
     );
 
     this.allActivities = [...sortedActivities, ...this.homegrownActivities];
     this.rowActivities = this.isAddingActivity ? [...this.allActivities, null] : this.allActivities;
+  }
+
+  private scrollToBottom() {
+    try {
+      this.elementRef.nativeElement.scroll({
+        top: this.elementRef.nativeElement.scrollHeight,
+        behavior: 'smooth',
+      });
+    } catch (err) {}
   }
 }

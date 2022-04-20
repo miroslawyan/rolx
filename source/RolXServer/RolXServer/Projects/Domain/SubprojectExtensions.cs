@@ -47,6 +47,6 @@ public static class SubprojectExtensions
     /// </summary>
     /// <param name="subproject">The subproject.</param>
     /// <returns>All names.</returns>
-    internal static string AllNames(this Subproject subproject)
+    public static string AllNames(this Subproject subproject)
         => $"{subproject.CustomerName} - {subproject.ProjectName} - {subproject.Name}";
 }

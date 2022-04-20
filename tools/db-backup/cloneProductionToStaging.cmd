@@ -38,3 +38,11 @@ mysql ^
     --host=%DB_HOST% ^
     --ssl-ca=%CA_FILE% ^
     rolx_staging < rolx_production.sql
+
+echo - locking users
+mysql ^
+    -u %DB_USER% ^
+    --host=%DB_HOST% ^
+    --ssl-ca=%CA_FILE% ^
+    -D rolx_staging ^
+    -e "UPDATE users SET users.IsConfirmed = 0 WHERE users.LastName != 'Ewald'"

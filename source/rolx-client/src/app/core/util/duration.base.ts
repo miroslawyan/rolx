@@ -5,7 +5,7 @@ export class DurationBase<T extends DurationBase<T>> {
     return this.seconds / DurationBase.SecondsPerHour;
   }
 
-  toString(): string {
+  toString(forcePlusSign = false): string {
     if (!this.isValid) {
       return '-';
     }
@@ -13,9 +13,17 @@ export class DurationBase<T extends DurationBase<T>> {
     const minutes = Math.round(this.seconds / 60);
     const wholeHours = Math.abs(Math.trunc(minutes / 60));
     const wholeMinutes = Math.abs(minutes % 60);
-    const hasSign = this.seconds < 0 && minutes !== 0;
 
-    return `${hasSign ? '-' : ''}${wholeHours}:${wholeMinutes.toString(10).padStart(2, '0')}`;
+    let sign = '';
+    if (minutes !== 0) {
+      if (this.seconds > 0 && forcePlusSign) {
+        sign = '+';
+      } else if (this.seconds < 0) {
+        sign = '-';
+      }
+    }
+
+    return `${sign}${wholeHours}:${wholeMinutes.toString(10).padStart(2, '0')}`;
   }
 
   get isValid(): boolean {

@@ -2,8 +2,9 @@
   class="rolx-paid-leave-select"
   [(value)]="type"
   [disabled]="isLocked"
-  [placeholder]="record.overtime.toString()"
-  [matTooltip]="record.paidLeaveReason ?? ''">
+  [placeholder]="record.totalDuration.toString()"
+  [matTooltip]="record.tooltip"
+  matTooltipPosition="above">
   <mat-select-trigger *ngIf="type !== undefined">
     <mat-icon>{{iconForPaidLeaveType(type)}}</mat-icon>
   </mat-select-trigger>

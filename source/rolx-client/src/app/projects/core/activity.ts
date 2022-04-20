@@ -26,6 +26,7 @@ export class Activity {
 
   fullNumber!: string;
   fullName!: string;
+  allSubprojectNames!: string;
 
   validateModel(): void {
     assertDefined(this, 'id');
@@ -39,6 +40,7 @@ export class Activity {
     assertDefined(this, 'actual');
     assertDefined(this, 'fullNumber');
     assertDefined(this, 'fullName');
+    assertDefined(this, 'allSubprojectNames');
   }
 
   isOpenAt(date: moment.Moment): boolean {

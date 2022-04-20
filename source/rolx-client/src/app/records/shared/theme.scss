@@ -4,16 +4,38 @@
 @mixin work-record-shared-theme($theme) {
   $background: map-get($theme, background);
   $nonWorkdayBackground: mat.mat-color($background, disabled-button);
+  $backgroundColor: mat.mat-color($background, card);
 
   $primary: map-get($theme, primary);
   $todayBackground: mat.mat-color($primary, lighter);
 
   table {
+
     .non-workday {
       background-color: $nonWorkdayBackground;
     }
     .today {
       background-color: $todayBackground;
+    }
+
+    // hack to make the header opaque
+    th.non-workday {
+      &::before, &::after {
+        z-index: -1;
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      &::before {
+        background-color: $backgroundColor;
+      }
+      &::after {
+        background-color: $nonWorkdayBackground;
+      }
     }
   }
 }

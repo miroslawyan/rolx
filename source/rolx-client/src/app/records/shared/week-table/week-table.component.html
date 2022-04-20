@@ -7,7 +7,11 @@
         <rolx-starred-activity-indicator
           *ngIf="isCurrentUser"
           [activity]="activity"></rolx-starred-activity-indicator>
-        {{activity.fullName}}
+        <span>
+          <small> {{activity.allSubprojectNames}} </small>
+          <br />
+          {{activity.name}} <small>{{activity.fullNumber}}</small>
+        </span>
       </span>
 
       <ng-template #activitySelector>
@@ -73,12 +77,14 @@
         (changed)="submit($event, i)"></rolx-paid-leave-select>
 
       <ng-template #overtime>
-        <span>{{records[i].overtime}}</span>
+        <span [matTooltip]="records[i].tooltip" matTooltipPosition="above">
+          {{records[i].totalDuration}}
+        </span>
       </ng-template>
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
   <tr mat-row *matRowDef="let activity; columns: displayedColumns;"></tr>
-  <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+  <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
 </table>

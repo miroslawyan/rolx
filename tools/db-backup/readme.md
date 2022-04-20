@@ -49,6 +49,6 @@ When restoring dumps from production, they have to be sanitized before:
 ```
 
 
-```cmd
-> mysql -u root -p db_rolx < rolx_production_4_dev.sql
+```powershell
+> cmd /C "mysql -u root -p db_rolx < rolx_production_4_dev.sql"
 ```

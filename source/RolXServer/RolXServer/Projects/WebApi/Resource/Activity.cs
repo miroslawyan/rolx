@@ -23,4 +23,5 @@ public sealed record Activity(
     long Budget,
     long Actual,
     string FullNumber,
-    string FullName);
+    string FullName,
+    string AllSubprojectNames);

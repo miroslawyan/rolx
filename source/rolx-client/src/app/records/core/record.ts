@@ -41,6 +41,14 @@ export class Record {
     return this.totalDuration.sub(this.nominalWorkTime);
   }
 
+  get tooltip(): string {
+    if (this.paidLeaveType != null) {
+      return this.paidLeaveReason ?? '';
+    }
+
+    return this.overtime.toString(true);
+  }
+
   get isComplete(): boolean {
     return this.totalDuration.isGreaterThanOrEqualTo(this.nominalWorkTime);
   }

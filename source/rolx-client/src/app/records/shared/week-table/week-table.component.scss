@@ -1,5 +1,15 @@
+:host {
+  overflow-y: auto;
+  height: 1px;
+}
+
 table {
   width: 100%;
+}
+
+.mat-column-activity > span {
+  display: inline-flex;
+  align-items: center;
 }
 
 th.day-header,

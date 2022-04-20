@@ -1,0 +1,16 @@
+mat-card {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 96px);
+}
+
+mat-card-content {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+rolx-week-table {
+  flex-grow: 1;
+}

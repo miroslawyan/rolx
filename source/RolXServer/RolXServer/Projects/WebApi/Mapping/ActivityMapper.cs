@@ -35,7 +35,8 @@ internal static class ActivityMapper
             Budget: (long)(domain.Budget?.TotalSeconds ?? 0),
             Actual: GetActualSumSeconds(domain.Id, actualSums),
             FullNumber: domain.FullNumber(),
-            FullName: domain.FullName());
+            FullName: domain.FullName(),
+            AllSubprojectNames: domain.Subproject!.AllNames());
 
     /// <summary>
     /// Converts to domain.

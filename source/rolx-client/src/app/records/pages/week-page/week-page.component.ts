@@ -12,6 +12,7 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 @Component({
   selector: 'rolx-week-page',
   templateUrl: './week-page.component.html',
+  styleUrls: ['./week-page.component.scss'],
 })
 export class WeekPageComponent {
   readonly routeParams$: Observable<WeekPageParams> = this.route.url.pipe(
