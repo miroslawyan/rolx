@@ -65,3 +65,12 @@ mat-card-actions.mat-card-actions {
 button {
   text-transform: uppercase;
 }
+
+mat-card-title {
+  position: relative;
+
+  a, button {
+    position: relative;
+    top: -4px
+  }
+}

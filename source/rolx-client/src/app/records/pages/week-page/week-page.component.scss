@@ -1,7 +1,15 @@
 mat-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: calc(100% - 96px);
+}
+
+mat-checkbox {
+  display: block;
+  position: absolute;
+  right: 16px;
+  top: 20px;
 }
 
 mat-card-content {

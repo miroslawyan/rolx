@@ -14,12 +14,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./week-table.component.scss'],
 })
 export class WeekTableComponent implements OnInit, OnDestroy {
-  private inputActivities: Activity[] = [];
-  private favouriteActivities: Activity[] = [];
-  private homegrownActivities: Activity[] = [];
-  private subscriptions = new Subscription();
-
-  readonly weekdays = [
+  private readonly allWeekdays = [
     'monday',
     'tuesday',
     'wednesday',
@@ -29,7 +24,14 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     'sunday',
   ];
 
-  readonly displayedColumns: string[] = ['activity', ...this.weekdays];
+  private _showWeekends = false;
+  private inputActivities: Activity[] = [];
+  private favouriteActivities: Activity[] = [];
+  private homegrownActivities: Activity[] = [];
+  private subscriptions = new Subscription();
+
+  weekdays: string[] = [];
+  displayedColumns: string[] = [];
 
   @Input()
   records: Record[] = [];
@@ -39,6 +41,19 @@ export class WeekTableComponent implements OnInit, OnDestroy {
 
   @Input()
   isCurrentUser = false;
+
+  @Input()
+  get showWeekends() {
+    return this._showWeekends;
+  }
+  set showWeekends(value: boolean) {
+    this._showWeekends = value;
+
+    this.weekdays = this.showWeekends
+      ? this.allWeekdays
+      : this.allWeekdays.slice(0, this.allWeekdays.length - 2);
+    this.displayedColumns = ['activity', ...this.weekdays];
+  }
 
   rowActivities: (Activity | null)[] = [];
   allActivities: Activity[] = [];
@@ -50,7 +65,9 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     private workRecordService: WorkRecordService,
     private errorService: ErrorService,
     private elementRef: ElementRef,
-  ) {}
+  ) {
+    this.showWeekends = false;
+  }
 
   @Input()
   get activities(): Activity[] {

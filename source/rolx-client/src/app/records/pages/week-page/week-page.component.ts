@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/auth/core/auth.service';
+import { FlagService } from '@app/core/persistence/flag-service';
 import { ActivityService } from '@app/projects/core/activity.service';
 import { EditLockService } from '@app/records/core/edit-lock.service';
 import { WorkRecordService } from '@app/records/core/work-record.service';
@@ -15,6 +16,8 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
   styleUrls: ['./week-page.component.scss'],
 })
 export class WeekPageComponent {
+  private _showWeekends = this.flagService.get('showWeekends', false);
+
   readonly routeParams$: Observable<WeekPageParams> = this.route.url.pipe(
     withLatestFrom(this.route.paramMap, this.route.queryParamMap),
     map(([, paramMap, queryParamMap]) =>
@@ -44,6 +47,14 @@ export class WeekPageComponent {
     ),
   );
 
+  get showWeekends() {
+    return this._showWeekends;
+  }
+  set showWeekends(value: boolean) {
+    this._showWeekends = value;
+    this.flagService.set('showWeekends', value);
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -52,5 +63,6 @@ export class WeekPageComponent {
     private userService: UserService,
     private authService: AuthService,
     private editLockService: EditLockService,
+    private flagService: FlagService,
   ) {}
 }
