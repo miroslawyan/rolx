@@ -86,6 +86,13 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     );
   }
 
+  get commentsText(): string {
+    return this.entries
+      .map((entry) => entry.comment)
+      .filter((comment) => !!comment)
+      .join('\n');
+  }
+
   get isActivityOpen(): boolean {
     return this.activity.isOpenAt(this.record.date) && this.user.isActiveAt(this.record.date);
   }
