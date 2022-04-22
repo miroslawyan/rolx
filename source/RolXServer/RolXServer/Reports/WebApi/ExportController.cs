@@ -9,6 +9,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using RolXServer.Auth.Domain;
 using RolXServer.Common.Util;
 using RolXServer.Projects.DataAccess;
 using RolXServer.Projects.Domain;
@@ -69,7 +70,7 @@ public class ExportController : ControllerBase
         }
 
         return this.ExcelExport(
-            await this.exportService.GetFor(range.Value, subprojectId),
+            await this.exportService.GetFor(range.Value, this.User.GetUserId(), subprojectId),
             GetFileName(month, begin, end, subproject));
     }
 

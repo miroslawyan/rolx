@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using RolXServer.Auth;
 using RolXServer.Common.Errors;
 using RolXServer.Common.Util;
+using RolXServer.Common.WebApi;
 using RolXServer.Projects;
 using RolXServer.Records;
 using RolXServer.Reports;
@@ -46,7 +47,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services
-            .AddControllers()
+            .AddControllers(o => o.Filters.Add(new NotFoundExceptionFilter()))
             .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new TimeSpanJsonSecondsConverter()))
             .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 

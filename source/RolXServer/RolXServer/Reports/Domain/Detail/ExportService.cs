@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 using RolXServer.Common.Util;
+using RolXServer.Common.WebApi;
 using RolXServer.Projects.Domain;
 using RolXServer.Records;
 using RolXServer.Reports.Domain.Model;
@@ -43,7 +44,23 @@ internal sealed class ExportService : IExportService
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<ExportData>> GetFor(DateRange range, int? subprojectId)
+    public async Task<Export> GetFor(DateRange range, Guid creatorId, int? subprojectId)
+    {
+        var creator = await this.dbContext.Users.FirstOrThrowNotFoundAsync(u => u.Id == creatorId);
+
+        var subproject = subprojectId.HasValue
+            ? (await this.dbContext.Subprojects.FirstOrThrowNotFoundAsync(s => s.Id == subprojectId)).FullName()
+            : "Alle";
+
+        return new Export(
+            subproject,
+            range,
+            creator.FullName(),
+            DateTime.Now,
+            await this.GetEntries(range, subprojectId));
+    }
+
+    private async Task<IEnumerable<ExportEntry>> GetEntries(DateRange range, int? subprojectId)
     {
         var entries = this.dbContext.RecordEntries
             .AsNoTracking()
@@ -54,8 +71,8 @@ internal sealed class ExportService : IExportService
             entries = entries.Where(entry => entry.Activity!.SubprojectId == subprojectId.Value);
         }
 
-        var exportData = (await entries
-            .Select(entry => new ExportData(
+        var exportEntries = (await entries
+            .Select(entry => new ExportEntry(
                 entry.Record!.Date,
                 entry.Activity!.Subproject!.ProjectNumber,
                 entry.Activity!.Subproject!.CustomerName,
@@ -73,14 +90,14 @@ internal sealed class ExportService : IExportService
 
         if (!subprojectId.HasValue)
         {
-            exportData = exportData
-                .Concat(await this.GetPaidLeavesData(range));
+            exportEntries = exportEntries
+                .Concat(await this.GetPaidLeaveEntries(range));
         }
 
-        return exportData;
+        return exportEntries;
     }
 
-    private async Task<IEnumerable<ExportData>> GetPaidLeavesData(DateRange range)
+    private async Task<IEnumerable<ExportEntry>> GetPaidLeaveEntries(DateRange range)
     {
         var items = await this.dbContext.Records
             .AsNoTracking()
@@ -112,7 +129,7 @@ internal sealed class ExportService : IExportService
                 WorkDuration = item.WorkDuration,
                 Reason = item.Reason,
             })
-            .Select(item => new ExportData(
+            .Select(item => new ExportEntry(
                 item.Date,
                 item.Activity.Subproject!.ProjectNumber,
                 item.Activity.Subproject!.CustomerName,
