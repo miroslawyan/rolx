@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Activity } from '@app/projects/core/activity';
 import { ActivityService } from '@app/projects/core/activity.service';
 import * as moment from 'moment';
@@ -17,6 +17,8 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
   private readonly filterText$ = new BehaviorSubject<string>('');
 
   private activityShadow = new Activity();
+
+  @ViewChild('input') input?: ElementRef;
 
   @Output()
   selected = new EventEmitter<Activity>();
@@ -73,6 +75,8 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
         )
         .subscribe(this.allActivities$),
     );
+
+    setTimeout(() => this.input?.nativeElement?.focus());
   }
 
   ngOnDestroy() {
