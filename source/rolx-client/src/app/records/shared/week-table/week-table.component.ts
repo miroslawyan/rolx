@@ -145,7 +145,7 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     try {
       this.elementRef.nativeElement.scroll({
         top: this.elementRef.nativeElement.scrollHeight,
-        behavior: 'smooth',
+        behavior: 'instant',
       });
     } catch (err) {}
   }

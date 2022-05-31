@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Activity } from '@app/projects/core/activity';
 import { ActivityService } from '@app/projects/core/activity.service';
 import * as moment from 'moment';
@@ -32,11 +41,7 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
   readonly candidates$: Observable<Activity[]> = combineLatest([
     this.allActivities$,
     this.filterText$,
-  ]).pipe(
-    map(([activities, filterText]) =>
-      this.filterByEndAndFullName(activities, filterText).slice(0, 10),
-    ),
-  );
+  ]).pipe(map(([activities, filterText]) => this.filterByEndAndFullName(activities, filterText)));
 
   constructor(private activityService: ActivityService) {}
 
@@ -76,7 +81,7 @@ export class ActivitySelectorComponent implements OnInit, OnDestroy {
         .subscribe(this.allActivities$),
     );
 
-    setTimeout(() => this.input?.nativeElement?.focus());
+    setTimeout(() => this.input?.nativeElement?.focus(), 200);
   }
 
   ngOnDestroy() {
