@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
-import { lastValueFrom } from 'rxjs';
+import { interval, lastValueFrom, of, switchMap } from 'rxjs';
+import { catchError, filter } from 'rxjs/operators';
 
 import { Approval } from './approval';
 import { SignInService } from './sign-in.service';
@@ -28,6 +29,18 @@ export class AuthService {
 
   constructor(private signInService: SignInService) {
     console.log('--- AuthService.ctor()');
+
+    interval(1000 * 60)
+      .pipe(
+        filter(() => this.currentApproval != null && this.currentApproval.willExpireSoon),
+        switchMap(() => this.signInService.extend().pipe(catchError(() => of(null)))),
+      )
+      .subscribe((approval) => {
+        if (approval != null) {
+          console.log('--- AuthService: backend access extended');
+          this.setCurrentApproval(approval);
+        }
+      });
   }
 
   async initialize(): Promise<void> {
@@ -52,8 +65,7 @@ export class AuthService {
       approval = await lastValueFrom(this.signInService.extend());
     }
 
-    AuthService.StoreCurrentApproval(approval);
-    this._currentApproval = approval;
+    this.setCurrentApproval(approval);
 
     console.log('--- AuthService.initialize() done');
   }
@@ -65,8 +77,7 @@ export class AuthService {
       }),
     );
 
-    AuthService.StoreCurrentApproval(approval);
-    this._currentApproval = approval;
+    this.setCurrentApproval(approval);
   }
 
   signOut() {
@@ -99,5 +110,10 @@ export class AuthService {
 
   private static ClearCurrentApproval() {
     localStorage.removeItem(AuthService.CurrentApprovalKey);
+  }
+
+  private setCurrentApproval(approval: Approval) {
+    AuthService.StoreCurrentApproval(approval);
+    this._currentApproval = approval;
   }
 }

@@ -92,7 +92,7 @@ internal sealed class SignInService : ISignInService
                 return null;
             }
 
-            return this.Authenticate(await this.EnsureUser(payload));
+            return this.Authenticate(user);
         }
         catch (InvalidJwtException e)
         {
