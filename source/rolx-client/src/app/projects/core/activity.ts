@@ -24,6 +24,9 @@ export class Activity {
   @TransformAsDuration()
   actual!: Duration;
 
+  projectName!: string;
+  subprojectName!: string;
+  customerName!: string;
   fullNumber!: string;
   fullName!: string;
   allSubprojectNames!: string;
@@ -38,6 +41,9 @@ export class Activity {
     assertDefined(this, 'isBillable');
     assertDefined(this, 'budget');
     assertDefined(this, 'actual');
+    assertDefined(this, 'projectName');
+    assertDefined(this, 'subprojectName');
+    assertDefined(this, 'customerName');
     assertDefined(this, 'fullNumber');
     assertDefined(this, 'fullName');
     assertDefined(this, 'allSubprojectNames');

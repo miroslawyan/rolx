@@ -20,14 +20,19 @@
     </mat-card-title>
 
     <mat-card-content>
-      <mat-checkbox [(ngModel)]="showWeekends">Show weekends</mat-checkbox>
+      <section>
+        <mat-checkbox [(ngModel)]="asTree">Tree view</mat-checkbox>
+        <mat-checkbox [(ngModel)]="showWeekends">Show weekends</mat-checkbox>
+      </section>
+
       <rolx-week-table
         *ngIf="recordsActivitiesUser[2] !== undefined"
         [records]="recordsActivitiesUser[0]"
         [activities]="recordsActivitiesUser[1]"
         [user]="recordsActivitiesUser[2]"
         [isCurrentUser]="params.isCurrentUser"
-        [showWeekends]="showWeekends"></rolx-week-table>
+        [showWeekends]="showWeekends"
+        [asTreeView]="asTree"></rolx-week-table>
     </mat-card-content>
   </ng-container>
 </mat-card>

@@ -25,6 +25,9 @@ public sealed class ActivityValidatorTests
             IsBillable: true,
             Budget: 0,
             Actual: 0,
+            ProjectName: "Any",
+            SubprojectName: "Full",
+            CustomerName: string.Empty,
             FullNumber: "#0001.001.01",
             FullName: "Any - Full - Name",
             AllSubprojectNames: "Any - Full");

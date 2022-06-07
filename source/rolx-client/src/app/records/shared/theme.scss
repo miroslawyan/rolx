@@ -1,13 +1,15 @@
-@use '~@angular/material/theming' as mat;
+@use '~@angular/material/theming' as theme;
+@use '@angular/material' as mat;
 
 // see https://medium.com/@tomastrajan/the-complete-guide-to-angular-material-themes-4d165a9d24d1
 @mixin work-record-shared-theme($theme) {
   $background: map-get($theme, background);
-  $nonWorkdayBackground: mat.mat-color($background, disabled-button);
-  $backgroundColor: mat.mat-color($background, card);
+  $foreground: map-get($theme, foreground);
+  $nonWorkdayBackground: theme.mat-color($background, disabled-button);
+  $backgroundColor: theme.mat-color($background, card);
 
   $primary: map-get($theme, primary);
-  $todayBackground: mat.mat-color($primary, lighter);
+  $todayBackground: theme.mat-color($primary, lighter);
 
   table {
 
@@ -16,6 +18,9 @@
     }
     .today {
       background-color: $todayBackground;
+    }
+    .tree-node {
+      color: mat.get-color-from-palette($foreground, secondary-text, 0.5);
     }
 
     // hack to make the header opaque

@@ -5,8 +5,9 @@ mat-card {
   height: calc(100% - 96px);
 }
 
-mat-checkbox {
-  display: block;
+section {
+  display: flex;
+  gap: 16px;
   position: absolute;
   right: 16px;
   top: 20px;

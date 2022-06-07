@@ -17,6 +17,7 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 })
 export class WeekPageComponent {
   private _showWeekends = this.flagService.get('showWeekends', false);
+  private _asTree = this.flagService.get('asTree', false);
 
   readonly routeParams$: Observable<WeekPageParams> = this.route.url.pipe(
     withLatestFrom(this.route.paramMap, this.route.queryParamMap),
@@ -53,6 +54,14 @@ export class WeekPageComponent {
   set showWeekends(value: boolean) {
     this._showWeekends = value;
     this.flagService.set('showWeekends', value);
+  }
+
+  get asTree() {
+    return this._asTree;
+  }
+  set asTree(value: boolean) {
+    this._asTree = value;
+    this.flagService.set('asTree', value);
   }
 
   constructor(

@@ -22,6 +22,9 @@ public sealed record Activity(
     bool IsBillable,
     long Budget,
     long Actual,
+    string ProjectName,
+    string SubprojectName,
+    string CustomerName,
     string FullNumber,
     string FullName,
     string AllSubprojectNames);

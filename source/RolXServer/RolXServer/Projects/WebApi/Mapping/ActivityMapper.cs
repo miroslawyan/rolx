@@ -34,6 +34,9 @@ internal static class ActivityMapper
             IsBillable: domain.Billability!.IsBillable,
             Budget: (long)(domain.Budget?.TotalSeconds ?? 0),
             Actual: GetActualSumSeconds(domain.Id, actualSums),
+            ProjectName: domain.Subproject?.ProjectName ?? string.Empty,
+            SubprojectName: domain.Subproject?.Name ?? string.Empty,
+            CustomerName: domain.Subproject?.CustomerName ?? string.Empty,
             FullNumber: domain.FullNumber(),
             FullName: domain.FullName(),
             AllSubprojectNames: domain.Subproject!.AllNames());
