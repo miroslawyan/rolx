@@ -9,6 +9,7 @@
 using FluentValidation.AspNetCore;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 
 using RolXServer.Auth;
 using RolXServer.Common.Errors;
@@ -101,7 +102,15 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints.MapFallbackToFile("index.html");
+            endpoints.MapFallbackToFile("index.html", new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache, no-store, must-revalidate";
+                    ctx.Context.Response.Headers[HeaderNames.Expires] = "0";
+                    ctx.Context.Response.Headers[HeaderNames.Pragma] = "no-cache";
+                },
+            });
         });
     }
 }

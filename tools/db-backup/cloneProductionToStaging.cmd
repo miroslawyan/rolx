@@ -45,4 +45,4 @@ mysql ^
     --host=%DB_HOST% ^
     --ssl-ca=%CA_FILE% ^
     -D rolx_staging ^
-    -e "UPDATE users SET users.IsConfirmed = 0 WHERE users.LastName != 'Ewald'"
+    -e "UPDATE users SET users.IsConfirmed = 0 WHERE users.Role < 1000"
