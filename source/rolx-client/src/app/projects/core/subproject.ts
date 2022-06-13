@@ -45,6 +45,9 @@ export class Subproject extends SubprojectShallow {
     activity.fullNumber = '';
     activity.allSubprojectNames = '';
     activity.billabilityName = '';
+    activity.customerName = '';
+    activity.projectName = '';
+    activity.subprojectName = '';
     this.activities.push(activity);
     return activity;
   }
