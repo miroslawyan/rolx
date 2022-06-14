@@ -6,12 +6,17 @@ import { DurationBase } from './duration.base';
 export class TimeOfDay extends DurationBase<TimeOfDay> {
   static readonly Zero = new TimeOfDay();
   static readonly ColonPattern =
-    /^([0-1]?\d|2[0-3]|24(?=(?::|\.\.|,,)?0{0,2}))?(?:(?::|\.\.|,,)([0-5]?\d)?)?$/;
+    /^([0-1]?\d|2[0-3]|24(?=(?::|\.\.|,,)?0{0,2}))?(?:(?::|\.\.|,,)([0-5]?\d)?)?(([0-1]?\d|2[0-3])?[.,]\d*|24[.,]0*)?$/;
   static readonly FourDigitsPattern = /^([0-1]\d|2[0-3]|24(?=00))([0-5]\d)$/;
   static readonly PatternGroups = {
     Hours: 1,
     Minutes: 2,
+    DecimalHours: 3,
   };
+
+  static fromHours(hours: number) {
+    return new TimeOfDay(Math.round(hours * DurationBase.SecondsPerHour));
+  }
 
   static parse(time: string | any, zeroIfEmpty: boolean = false): TimeOfDay {
     if (time instanceof TimeOfDay) {
@@ -29,6 +34,10 @@ export class TimeOfDay extends DurationBase<TimeOfDay> {
     const match = this.ColonPattern.exec(time) || this.FourDigitsPattern.exec(time);
     if (!match) {
       return new TimeOfDay(NaN);
+    }
+
+    if (match[TimeOfDay.PatternGroups.DecimalHours]) {
+      return TimeOfDay.fromHours(Number.parseFloat(time.replace(',', '.')));
     }
 
     const hoursGroup = match[TimeOfDay.PatternGroups.Hours];
