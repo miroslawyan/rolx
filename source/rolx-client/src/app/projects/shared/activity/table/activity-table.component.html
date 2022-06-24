@@ -58,5 +58,8 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let activity; columns: displayedColumns;"></tr>
+  <tr
+    mat-row
+    *matRowDef="let activity; columns: displayedColumns;"
+    [routerLink]="hasWriteAccess ? ['activity', tpd(activity).id] : null"></tr>
 </table>

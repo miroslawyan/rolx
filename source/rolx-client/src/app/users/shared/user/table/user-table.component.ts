@@ -27,7 +27,7 @@ export class UserTableComponent implements OnInit {
     'role',
     'entryDate',
     'leavingDate',
-    this.authService.currentApprovalOrError.isAdministrator ? 'admin-tools' : 'tools',
+    'tools',
   ];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;

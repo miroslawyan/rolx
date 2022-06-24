@@ -53,26 +53,30 @@
 
   <ng-container matColumnDef="tools">
     <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell class="tools" *matCellDef="let user">
-      <a mat-icon-button [routerLink]="['/week']" [queryParams]="{'userId': user.id}">
-        <mat-icon>schedule</mat-icon>
-      </a>
-      <a mat-icon-button [routerLink]="['/reports']" [queryParams]="{'userId': user.id}">
+    <td
+      mat-cell
+      class="tools"
+      *matCellDef="let user"
+      [class.admin]="authService.currentApprovalOrError.isAdministrator">
+      <a
+        mat-icon-button
+        [routerLink]="['/reports']"
+        [queryParams]="{'userId': user.id}"
+        matTooltip="Monatsübersicht">
         <mat-icon>layers</mat-icon>
       </a>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="admin-tools">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell class="tools admin" *matCellDef="let user">
-      <a mat-icon-button [routerLink]="['/week']" [queryParams]="{'userId': user.id}">
+      <a
+        mat-icon-button
+        [routerLink]="['/week']"
+        [queryParams]="{'userId': user.id}"
+        matTooltip="Erfassung">
         <mat-icon>schedule</mat-icon>
       </a>
-      <a mat-icon-button [routerLink]="['/reports']" [queryParams]="{'userId': user.id}">
-        <mat-icon>layers</mat-icon>
-      </a>
-      <a mat-icon-button [routerLink]="[user.id]">
+      <a
+        mat-icon-button
+        *ngIf="authService.currentApprovalOrError.isAdministrator"
+        [routerLink]="[user.id]"
+        matTooltip="Edit">
         <mat-icon>edit</mat-icon>
       </a>
     </td>
@@ -82,5 +86,7 @@
   <tr
     mat-row
     *matRowDef="let user; columns: displayedColumns;"
-    [class.unconfirmed]="!tpd(user).isConfirmed"></tr>
+    [class.unconfirmed]="!tpd(user).isConfirmed"
+    [routerLink]="['/reports']"
+    [queryParams]="{'userId': user.id}"></tr>
 </table>

@@ -23,11 +23,16 @@ table {
 
 tr {
   .tools a {
-    opacity: 0;
+    opacity: 0.1;
     transition: opacity 0.3s ease-out;
+
+    &:hover {
+      opacity: 1;
+      transition: opacity 0.3s ease-in;
+    }
   }
 
-  &:hover .tools a {
+  &:hover .tools a:first-child {
     opacity: 1;
     transition: opacity 0.3s ease-in;
   }

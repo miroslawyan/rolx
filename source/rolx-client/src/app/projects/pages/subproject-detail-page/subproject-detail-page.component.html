@@ -1,6 +1,6 @@
 <mat-card *ngIf="subproject$ | async as subproject">
   <mat-card-title>
-    <span>
+    <span class="tools">
       {{subproject.fullName}}
       <a *ngIf="mayEdit" mat-icon-button aria-label="Subprojekt editieren" [routerLink]="['edit']">
         <mat-icon>edit</mat-icon>

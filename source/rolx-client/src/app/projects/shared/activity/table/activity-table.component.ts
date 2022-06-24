@@ -15,6 +15,10 @@ export class ActivityTableComponent implements OnInit {
   private _activities!: Activity[];
   readonly dataSource = new MatTableDataSource<Activity>();
 
+  get hasWriteAccess() {
+    return this.authService.currentApprovalOrError.isSupervisor;
+  }
+
   @Input()
   get activities(): Activity[] {
     return this._activities;
@@ -32,7 +36,7 @@ export class ActivityTableComponent implements OnInit {
     'budgetHours',
     'actualHours',
     'isBillable',
-    ...(this.authService.currentApprovalOrError.isSupervisor ? ['tools'] : []),
+    ...(this.hasWriteAccess ? ['tools'] : []),
   ];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
