@@ -17,7 +17,10 @@ import { TreeNode } from './tree-node';
   styleUrls: ['./week-table.component.scss'],
 })
 export class WeekTableComponent implements OnInit, OnDestroy {
-  private readonly expandedNodes = new Set<string>(this.listService.get<string>('expanded-nodes', []));
+  private readonly expandedNodes = new Set<string>(
+    this.listService.get<string>('expanded-nodes', []),
+  );
+
   private readonly allWeekdays = [
     'monday',
     'tuesday',
@@ -28,12 +31,13 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     'sunday',
   ];
 
+  private _isCurrentUser = false;
   private _showWeekends = false;
   private _asTreeView = false;
   private inputActivities: Activity[] = [];
   private favouriteActivities: Activity[] = [];
   private homegrownActivities: Activity[] = [];
-  private subscriptions = new Subscription();
+  private favouritesSubscription?: Subscription;
 
   weekdays: string[] = [];
   displayedColumns: string[] = [];
@@ -45,7 +49,25 @@ export class WeekTableComponent implements OnInit, OnDestroy {
   user!: User;
 
   @Input()
-  isCurrentUser = false;
+  get isCurrentUser(): boolean {
+    return this._isCurrentUser;
+  }
+  set isCurrentUser(value: boolean) {
+    if (value === this._isCurrentUser) {
+      return;
+    }
+
+    this._isCurrentUser = value;
+
+    if (this._isCurrentUser) {
+      this.favouritesSubscription = this.favouriteActivityService.favourites$.subscribe(
+        (phs) => (this.favourites = phs),
+      );
+    } else {
+      this.favouritesSubscription?.unsubscribe();
+      this.favourites = [];
+    }
+  }
 
   @Input()
   get showWeekends() {
@@ -108,16 +130,10 @@ export class WeekTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     assertDefined(this, 'user');
-
-    if (this.isCurrentUser) {
-      this.subscriptions.add(
-        this.favouriteActivityService.favourites$.subscribe((phs) => (this.favourites = phs)),
-      );
-    }
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    this.favouritesSubscription?.unsubscribe();
   }
 
   startAdding() {
@@ -134,7 +150,7 @@ export class WeekTableComponent implements OnInit, OnDestroy {
 
   trackByNode(index: number, node: TreeNode | Activity | null): number {
     if (node instanceof TreeNode) {
-      return +(((node.parentNumber ?? '') + node.number).replace('#', ''));
+      return +((node.parentNumber ?? '') + node.number).replace('#', '');
     } else if (node instanceof Activity) {
       return node.id;
     }
@@ -170,14 +186,19 @@ export class WeekTableComponent implements OnInit, OnDestroy {
     const baseNodes: TreeNode[] = [];
     for (const activity of value) {
       const parsedNumbers = activity.fullNumber.split('.');
-      let baseNode = baseNodes.find(n => n.number === parsedNumbers[0]);
+      let baseNode = baseNodes.find((n) => n.number === parsedNumbers[0]);
       if (baseNode == null) {
-        baseNode = new TreeNode(`${activity.customerName} - ${activity.projectName}`, parsedNumbers[0]);
+        baseNode = new TreeNode(
+          `${activity.customerName} - ${activity.projectName}`,
+          parsedNumbers[0],
+        );
         baseNode.isExpanded = this.expandedNodes.has(baseNode.number);
         baseNodes.push(baseNode);
       }
 
-      let subNode = baseNode.children.filter(c => c instanceof TreeNode).find(c => c.number === parsedNumbers[1]) as TreeNode | undefined;
+      let subNode = baseNode.children
+        .filter((c) => c instanceof TreeNode)
+        .find((c) => c.number === parsedNumbers[1]) as TreeNode | undefined;
       if (subNode == null) {
         subNode = new TreeNode(activity.subprojectName, parsedNumbers[1]);
         subNode.parentNumber = baseNode.number;
