@@ -57,7 +57,7 @@ internal sealed class ExportService : IExportService
             range,
             creator.FullName(),
             DateTime.Now,
-            await this.GetEntries(range, subprojectId));
+            (await this.GetEntries(range, subprojectId)).OrderBy(entry => entry.Date));
     }
 
     private async Task<IEnumerable<ExportEntry>> GetEntries(DateRange range, int? subprojectId)

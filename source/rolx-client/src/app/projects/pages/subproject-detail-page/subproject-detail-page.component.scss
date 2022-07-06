@@ -21,4 +21,9 @@ $gutter: 16px;
   margin-top: $gutter;
   display: flex;
   gap: $gutter;
+  & > mat-card{
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+  }
 }

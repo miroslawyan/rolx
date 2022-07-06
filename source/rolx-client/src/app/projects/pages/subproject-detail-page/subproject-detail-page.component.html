@@ -21,12 +21,19 @@
 
   <rolx-activity-table
     *ngIf="subproject.activities.length > 0"
-    [activities]="subproject.activities"></rolx-activity-table>
+    [activities]="subproject.activities">
+  </rolx-activity-table>
 
   <section class="exports" *ngIf="mayExport">
     <rolx-export-subproject-card
       [subproject]="subproject"
       [noTitle]="true"></rolx-export-subproject-card>
     <rolx-export-range-card [subproject]="subproject" [noTitle]="true"></rolx-export-range-card>
+    <mat-card>
+      <mat-card-content>Last Month </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="accent" (click)="exportLastMonth(subproject)">Export</button>
+      </mat-card-actions>
+    </mat-card>
   </section>
 </mat-card>
