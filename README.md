@@ -1,20 +1,42 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# RolX
+The time tracking tool from developers for developers.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## Prerequisites
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+### Database
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+RolX requires a MariaDB instance >=10.3. The easiest way to to get one, is using docker and the provided docker-compose file under ``tools/rolx-test-db``
+
+```bash
+$ cd tools/rolx-test-db
+$ docker compose up -d
+```
+
+### .NET SDK
+RolX requires the .NET 6 SDK version 6.0.402 (or later patch). Download and install it from https://dotnet.microsoft.com/en-us/download/dotnet/6.0
+
+### node.js
+RolX requires node.js version 12.20.x/14.15.x/16.10.x or later minor, 18.12.x might work as well. Download and install it from https://nodejs.org/en/download/
+
+## Build and Run
+
+### Backend
+
+```bash
+$ cd source/RolXServer/RolXServer
+$ dotnet build
+$ dotnet run
+```
+
+### Frontend
+
+```bash
+$ cd source/rolx-client
+$ npm install
+$ npm start
+```
+
+- Open a browser and navigate to http://localhost:4200
+- Sign-in using your Google account
