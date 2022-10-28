@@ -4,7 +4,7 @@ import { mapPlainToInstances } from '@app/core/util/operators';
 import { ActivityService } from '@app/projects/core/activity.service';
 import { instanceToPlain } from 'class-transformer';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { mapTo, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import { Activity } from './activity';
 
@@ -41,7 +41,7 @@ export class FavouriteActivityService {
 
     return this.httpClient.put(FavouriteActivityService.Url, instanceToPlain(activity)).pipe(
       switchMap(() => this.refresh()),
-      mapTo(activity),
+      map(() => activity),
     );
   }
 
@@ -54,7 +54,7 @@ export class FavouriteActivityService {
       .request('delete', FavouriteActivityService.Url, { body: instanceToPlain(activity) })
       .pipe(
         switchMap(() => this.refresh()),
-        mapTo(activity),
+        map(() => activity),
       );
   }
 

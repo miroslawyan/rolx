@@ -5,7 +5,7 @@ import { mapPlainToInstance, mapPlainToInstances } from '@app/core/util/operator
 import { environment } from '@env/environment';
 import { instanceToPlain } from 'class-transformer';
 import { Observable, throwError } from 'rxjs';
-import { catchError, mapTo, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { User } from './user';
 
@@ -33,7 +33,7 @@ export class UserService {
 
   update(user: User): Observable<User> {
     return this.httpClient.put(UserService.UrlWithId(user.id), instanceToPlain(user)).pipe(
-      mapTo(user),
+      map(() => user),
       catchError((e) => throwError(() => new ErrorResponse(e))),
     );
   }

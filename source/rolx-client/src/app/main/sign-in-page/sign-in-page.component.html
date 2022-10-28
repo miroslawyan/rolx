@@ -1,13 +1,7 @@
 <mat-card>
   <mat-card-title> Sign in to RolX{{installationIdService.suffix$ | async}} </mat-card-title>
 
-  <mat-card-content>
-    <mat-spinner *ngIf="busy" [diameter]="60" [color]="'accent'"></mat-spinner>
-  </mat-card-content>
-
   <mat-card-actions>
-    <button mat-raised-button color="primary" [disabled]="busy" (click)="signIn()">
-      Sign-in with Google
-    </button>
+    <div #signInButton></div>
   </mat-card-actions>
 </mat-card>

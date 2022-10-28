@@ -1,59 +1,56 @@
-import { Injectable } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
+import { ElementRef, Injectable, NgZone } from '@angular/core';
+import { CredentialResponse } from 'google-one-tap';
+import { lastValueFrom, Subject } from 'rxjs';
 
 import { Info } from './info';
 import { SignInService } from './sign-in.service';
+
+declare global {
+  const google: typeof import('google-one-tap');
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class GoogleAuthService {
-  private auth2: gapi.auth2.GoogleAuth | null = null;
+  private readonly credentialsSubject = new Subject<string>();
+  private isInitialized = false;
 
-  constructor(private signInService: SignInService) {
+  $credentials = this.credentialsSubject.asObservable();
+
+  constructor(private signInService: SignInService, private zone: NgZone) {
     console.log('--- GoogleAuthService.ctor()');
   }
 
   async initialize(): Promise<void> {
     // we initialize at most once
-    if (this.auth2) {
+    if (this.isInitialized) {
       return;
     }
 
     console.log('--- GoogleAuthService.initialize()');
-    const [, info] = await Promise.all([await this.loadGApi(), await this.loadSignInInfo()]);
+    const info = await this.loadSignInInfo();
 
-    this.auth2 = gapi.auth2.init({
+    google.accounts.id.initialize({
       client_id: info.googleClientId,
+      callback: (r) => this.propagateCredentials(r),
     });
 
-    // ensure auth2 is initialized
-    await this.auth2.then(
-      () => true,
-      (e) => console.error('initializing gapi.auth2 failed:', e),
-    );
-
+    this.isInitialized = true;
     console.log('--- GoogleAuthService.initialize() done');
   }
 
-  async signIn(): Promise<gapi.auth2.GoogleUser> {
-    if (this.auth2 == null) {
-      throw new Error('initialize() must complete before performing any further requests');
-    }
+  renderButton(button: ElementRef) {
+    google.accounts.id.renderButton(
+      button.nativeElement,
+      { theme: 'outline', size: 'large' }, // customization attributes
+    );
 
-    return await this.auth2.signIn();
+    google.accounts.id.prompt(); // also display the One Tap dialog
   }
 
-  signOut() {
-    if (this.auth2 == null) {
-      throw new Error('initialize() must complete before performing any further requests');
-    }
-
-    this.auth2.signOut();
-  }
-
-  private loadGApi(): Promise<void> {
-    return new Promise<void>((resolve) => gapi.load('auth2', () => resolve()));
+  private propagateCredentials(credentialResponse: CredentialResponse) {
+    this.zone.run(() => this.credentialsSubject.next(credentialResponse.credential));
   }
 
   private loadSignInInfo(): Promise<Info> {

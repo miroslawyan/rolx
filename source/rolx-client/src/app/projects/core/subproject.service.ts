@@ -6,7 +6,7 @@ import { SubprojectShallow } from '@app/projects/core/subproject-shallow';
 import { environment } from '@env/environment';
 import { instanceToPlain } from 'class-transformer';
 import { Observable, tap, throwError } from 'rxjs';
-import { catchError, mapTo } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { Subproject } from './subproject';
 
@@ -44,7 +44,7 @@ export class SubprojectService {
     return this.httpClient
       .put(SubprojectService.UrlWithId(subproject.id), instanceToPlain(subproject))
       .pipe(
-        mapTo(subproject),
+        map(() => subproject),
         catchError((e) => throwError(() => new ErrorResponse(e))),
       );
   }

@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/auth/core/auth.service';
 import { GoogleAuthService } from '@app/auth/core/google-auth.service';
 import { InstallationIdService } from '@app/auth/core/installation-id.service';
+import { assertDefined } from '@app/core/util/utils';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'rolx-sign-in',
   templateUrl: './sign-in-page.component.html',
   styleUrls: ['./sign-in-page.component.scss'],
 })
-export class SignInPageComponent implements OnInit {
+export class SignInPageComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly subscriptions = new Subscription();
   private forwardRoute = '';
-  busy = false;
+
+  @ViewChild('signInButton') signInButton!: ElementRef;
 
   constructor(
     private readonly authService: AuthService,
@@ -24,22 +28,23 @@ export class SignInPageComponent implements OnInit {
   ngOnInit(): void {
     this.forwardRoute = this.route.snapshot.queryParams['forwardRoute'] || '/';
 
-    this.busy = true;
+    this.subscriptions.add(
+      this.googleAuthService.$credentials.subscribe(async (c) => {
+        await this.authService.signIn(c);
+        await this.router.navigateByUrl(this.forwardRoute);
+      }),
+    );
+  }
+
+  ngAfterViewInit(): void {
+    assertDefined(this, 'signInButton');
+
     Promise.all([this.googleAuthService.initialize(), this.authService.initialize()]).then(() => {
-      this.googleAuthService.signOut();
-      this.busy = false;
+      this.googleAuthService.renderButton(this.signInButton);
     });
   }
 
-  async signIn() {
-    this.busy = true;
-
-    try {
-      const googleUser = await this.googleAuthService.signIn();
-      await this.authService.signIn(googleUser.getAuthResponse().id_token);
-      await this.router.navigateByUrl(this.forwardRoute);
-    } finally {
-      this.busy = false;
-    }
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }

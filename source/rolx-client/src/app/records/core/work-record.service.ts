@@ -7,7 +7,7 @@ import { environment } from '@env/environment';
 import { instanceToPlain } from 'class-transformer';
 import * as moment from 'moment';
 import { Observable, ReplaySubject, Subject, throwError } from 'rxjs';
-import { catchError, mapTo, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 import { Record } from './record';
 
@@ -64,7 +64,7 @@ export class WorkRecordService {
   private internalUpdate(userId: string, record: Record): Observable<Record> {
     const url = WorkRecordService.UrlWithId(userId) + '/' + IsoDate.fromMoment(record.date);
     return this.httpClient.put(url, instanceToPlain(record)).pipe(
-      mapTo(record),
+      map(() => record),
       tap((r) => this.userUpdatedSubject.next(r.userId)),
       catchError((e) => throwError(() => new ErrorResponse(e))),
     );
