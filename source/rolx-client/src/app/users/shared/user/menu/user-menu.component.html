@@ -9,9 +9,15 @@
 </button>
 
 <mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="toggleTheme()">{{nextThemeName}} Theme</button>
+  <button mat-menu-item (click)="toggleTheme()" *ngIf="nextTheme$ | async as nextTheme">
+    <mat-icon>{{nextTheme.icon}}</mat-icon>
+    <span>{{nextTheme.name}} Theme</span>
+  </button>
 
   <mat-divider></mat-divider>
 
-  <button mat-menu-item (click)="signOut()">Sign out</button>
+  <button mat-menu-item (click)="signOut()">
+    <mat-icon>logout</mat-icon>
+    <span>Sign Out</span>
+  </button>
 </mat-menu>

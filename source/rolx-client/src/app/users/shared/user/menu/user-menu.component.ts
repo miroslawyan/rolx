@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '@app/auth/core/auth.service';
 import { Theme } from '@app/core/theme/theme';
 import { ThemeService } from '@app/core/theme/theme.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'rolx-user-menu',
@@ -10,25 +11,21 @@ import { ThemeService } from '@app/core/theme/theme.service';
   styleUrls: ['./user-menu.component.scss'],
 })
 export class UserMenuComponent {
+  nextTheme$ = this.themeService.currentTheme$.pipe(
+    map((t) => ({
+      name: t === Theme.Bright ? 'Dark' : 'Bright',
+      icon: t === Theme.Bright ? 'dark_mode' : 'light_mode',
+    })),
+  );
+
   constructor(
     private authService: AuthService,
     private router: Router,
-    public themeService: ThemeService,
+    private themeService: ThemeService,
   ) {}
 
   get user() {
     return this.authService.currentApproval?.user;
-  }
-
-  get nextThemeName() {
-    switch (this.themeService.theme) {
-      case Theme.Bright:
-        return 'Dark';
-
-      case Theme.Dark:
-      default:
-        return 'Bright';
-    }
   }
 
   signOut() {

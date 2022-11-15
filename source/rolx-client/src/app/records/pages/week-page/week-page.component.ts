@@ -16,9 +16,6 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
   styleUrls: ['./week-page.component.scss'],
 })
 export class WeekPageComponent {
-  private _showWeekends = this.flagService.get('showWeekends', false);
-  private _asTree = this.flagService.get('asTree', false);
-
   readonly routeParams$: Observable<WeekPageParams> = this.route.url.pipe(
     withLatestFrom(this.route.paramMap, this.route.queryParamMap),
     map(([, paramMap, queryParamMap]) =>
@@ -49,19 +46,11 @@ export class WeekPageComponent {
   );
 
   get showWeekends() {
-    return this._showWeekends;
-  }
-  set showWeekends(value: boolean) {
-    this._showWeekends = value;
-    this.flagService.set('showWeekends', value);
+    return this.flagService.get('showWeekends', false);
   }
 
   get asTree() {
-    return this._asTree;
-  }
-  set asTree(value: boolean) {
-    this._asTree = value;
-    this.flagService.set('asTree', value);
+    return this.flagService.get('asTree', false);
   }
 
   constructor(
@@ -74,4 +63,12 @@ export class WeekPageComponent {
     private editLockService: EditLockService,
     private flagService: FlagService,
   ) {}
+
+  checkBoxForFlag(flag: string): string {
+    return this.flagService.get(flag, false) ? 'check_box' : 'check_box_outline_blank';
+  }
+
+  toggleFlag(flag: string) {
+    this.flagService.set(flag, !this.flagService.get(flag, false));
+  }
 }

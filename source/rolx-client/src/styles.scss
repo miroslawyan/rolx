@@ -62,7 +62,7 @@ mat-card-actions.mat-card-actions {
   gap: 8px;
 }
 
-button {
+button:not(.mat-menu-item) {
   text-transform: uppercase;
 }
 

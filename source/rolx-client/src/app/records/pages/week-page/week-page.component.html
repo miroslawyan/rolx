@@ -17,14 +17,12 @@
       'mediumDate'}}
 
       <small>(KW{{params.monday.isoWeek() | number: '2.0'}})</small>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
     </mat-card-title>
 
     <mat-card-content>
-      <section>
-        <mat-checkbox [(ngModel)]="asTree">Tree view</mat-checkbox>
-        <mat-checkbox [(ngModel)]="showWeekends">Show weekends</mat-checkbox>
-      </section>
-
       <rolx-week-table
         *ngIf="recordsActivitiesUser[2] !== undefined"
         [records]="recordsActivitiesUser[0]"
@@ -36,3 +34,15 @@
     </mat-card-content>
   </ng-container>
 </mat-card>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="toggleFlag('asTree')">
+    <mat-icon>{{checkBoxForFlag('asTree')}}</mat-icon>
+    <span>Baumansicht</span>
+  </button>
+
+  <button mat-menu-item (click)="toggleFlag('showWeekends')">
+    <mat-icon>{{checkBoxForFlag('showWeekends')}}</mat-icon>
+    <span>Wochenende</span>
+  </button>
+</mat-menu>

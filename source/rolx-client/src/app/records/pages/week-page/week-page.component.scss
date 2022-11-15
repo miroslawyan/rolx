@@ -5,12 +5,8 @@ mat-card {
   height: calc(100% - 96px);
 }
 
-section {
-  display: flex;
-  gap: 16px;
-  position: absolute;
-  right: 16px;
-  top: 20px;
+mat-card-title button {
+  float: right;
 }
 
 mat-card-content {
