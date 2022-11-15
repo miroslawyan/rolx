@@ -14,6 +14,14 @@
     <button mat-icon-button matPrefix (click)="more.emit()" tabindex="-1">
       <mat-icon>more_horiz</mat-icon>
     </button>
+    <button
+      *ngIf="hasVoice"
+      mat-icon-button
+      matSuffix
+      (click)="startRecording.emit()"
+      tabindex="-1">
+      <mat-icon>mic</mat-icon>
+    </button>
     <span matPrefix *ngIf="control.dirty">*</span>
   </mat-form-field>
 </form>

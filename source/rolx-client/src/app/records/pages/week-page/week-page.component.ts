@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/auth/core/auth.service';
-import { FlagService } from '@app/core/persistence/flag-service';
+import { Flag, FlagService } from '@app/core/persistence/flag-service';
+import { VoiceService } from '@app/core/voice/voice.service';
 import { ActivityService } from '@app/projects/core/activity.service';
 import { EditLockService } from '@app/records/core/edit-lock.service';
 import { WorkRecordService } from '@app/records/core/work-record.service';
@@ -62,13 +63,14 @@ export class WeekPageComponent {
     private authService: AuthService,
     private editLockService: EditLockService,
     private flagService: FlagService,
+    public voiceService: VoiceService,
   ) {}
 
-  checkBoxForFlag(flag: string): string {
+  checkBoxForFlag(flag: Flag): string {
     return this.flagService.get(flag, false) ? 'check_box' : 'check_box_outline_blank';
   }
 
-  toggleFlag(flag: string) {
+  toggleFlag(flag: Flag) {
     this.flagService.set(flag, !this.flagService.get(flag, false));
   }
 }

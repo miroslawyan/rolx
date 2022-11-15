@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+export type Flag = 'asTree' | 'showWeekends' | 'voiceInput';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -7,12 +9,12 @@ export class FlagService {
   private static readonly Key = 'rolx-flag-service';
   private readonly data: { [key: string]: boolean } = FlagService.Load();
 
-  get(key: string, defaultValue: boolean): boolean {
+  get(key: Flag, defaultValue: boolean): boolean {
     const value = this.data[key];
     return value ?? defaultValue;
   }
 
-  set(key: string, value: boolean) {
+  set(key: Flag, value: boolean) {
     this.data[key] = value;
     this.save();
   }

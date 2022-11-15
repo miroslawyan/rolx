@@ -17,11 +17,13 @@ import { Activity } from '@app/projects/core/activity';
 import { EditLockService } from '@app/records/core/edit-lock.service';
 import { Record } from '@app/records/core/record';
 import { RecordEntry } from '@app/records/core/record-entry';
+import { VoiceToRecordEntryService } from '@app/records/core/voice/voice-to-record-entry.service';
 import { DurationEditComponent } from '@app/records/shared/duration-edit/duration-edit.component';
 import {
   MultiEntriesDialogComponent,
   MultiEntriesDialogData,
 } from '@app/records/shared/multi-entries-dialog/multi-entries-dialog.component';
+import { ParserFailedDialogComponent } from '@app/records/shared/parser-failed-dialog/parser-failed-dialog.component';
 import { User } from '@app/users/core/user';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -105,6 +107,7 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
     private readonly gridNavigationService: GridNavigationService,
     private readonly dialog: MatDialog,
     private readonly editLockService: EditLockService,
+    private readonly voiceToRecordEntryService: VoiceToRecordEntryService,
   ) {}
 
   ngOnInit() {
@@ -153,6 +156,21 @@ export class WeekTableCellComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter((r) => r != null))
       .subscribe((r) => this.changed.emit(r));
+  }
+
+  async voiceRecord(): Promise<void> {
+    const result = await this.voiceToRecordEntryService.getNext();
+    if (result.entry == null) {
+      this.dialog.open(ParserFailedDialogComponent, {
+        closeOnNavigation: true,
+        data: result,
+      });
+      return;
+    }
+
+    result.entry.activityId = this.activity.id;
+    this.record.entries.push(result.entry);
+    this.changed.emit(this.record);
   }
 
   private enter(coordinates: GridCoordinates) {

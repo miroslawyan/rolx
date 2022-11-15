@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { FlagService } from '@app/core/persistence/flag-service';
 import { Duration } from '@app/core/util/duration';
 import { DurationValidators } from '@app/core/util/duration.validators';
 import { TimeFormControl } from '@app/core/util/time-form-control';
@@ -40,6 +41,9 @@ export class DurationEditComponent implements OnInit {
   more = new EventEmitter();
 
   @Output()
+  startRecording = new EventEmitter();
+
+  @Output()
   changed = this.changedSubject.pipe(
     debounceTime(20), // filter multiple events cause by enter-key leading to blur
   );
@@ -50,6 +54,12 @@ export class DurationEditComponent implements OnInit {
   readonly form = new FormGroup({
     duration: this.control,
   });
+
+  get hasVoice() {
+    return this.value.isZero && this.flagService.get('voiceInput', false);
+  }
+
+  constructor(private readonly flagService: FlagService) {}
 
   ngOnInit() {
     this.cancel();

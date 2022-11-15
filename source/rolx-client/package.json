@@ -38,6 +38,7 @@
     "@angular-eslint/template-parser": "13.0.1",
     "@angular/cli": "~13.2.1",
     "@angular/compiler-cli": "~13.2.0",
+    "@types/dom-speech-recognition": "^0.0.1",
     "@types/google-one-tap": "^1.2.2",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",

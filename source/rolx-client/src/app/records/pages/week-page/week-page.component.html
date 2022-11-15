@@ -45,4 +45,13 @@
     <mat-icon>{{checkBoxForFlag('showWeekends')}}</mat-icon>
     <span>Wochenende</span>
   </button>
+
+  <button
+    mat-menu-item
+    (click)="toggleFlag('voiceInput')"
+    [disabled]="!voiceService.isSupported"
+    [matTooltip]="voiceService.isSupported ? '' : 'Die Spracheingabe wird zurzeit nur von Chrome oder Edge unterstützt.'">
+    <mat-icon>{{checkBoxForFlag('voiceInput')}}</mat-icon>
+    <span>Spracheingabe</span>
+  </button>
 </mat-menu>
