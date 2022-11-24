@@ -67,6 +67,6 @@ export class ActivityTableComponent implements OnInit {
   }
 
   isOverBudget(activity: Activity): boolean {
-    return activity.actual.personDays > activity.budget.personDays && activity.budget.personDays > 0;
+    return activity.actual.personDays > activity.budget.personDays;
   }
 }
