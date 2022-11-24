@@ -59,6 +59,21 @@ public sealed class Activity
     }
 
     /// <summary>
+    /// Gets or sets the planned time in seconds.
+    /// </summary>
+    public long? PlannedSeconds { get; set; }
+
+    /// <summary>
+    /// Gets or sets the time budget.
+    /// </summary>
+    [NotMapped]
+    public TimeSpan? Planned
+    {
+        get => this.PlannedSeconds.HasValue ? TimeSpan.FromSeconds(this.PlannedSeconds.Value) : null;
+        set => this.PlannedSeconds = (long?)value?.TotalSeconds;
+    }
+
+    /// <summary>
     /// Gets or sets the subproject identifier.
     /// </summary>
     public int SubprojectId { get; set; }
