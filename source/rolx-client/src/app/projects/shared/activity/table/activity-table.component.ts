@@ -65,4 +65,8 @@ export class ActivityTableComponent implements OnInit {
   tpd(activity: Activity): Activity {
     return activity;
   }
+
+  isOverBudget(activity: Activity): boolean {
+    return activity.actual.personDays > activity.budget.personDays;
+  }
 }

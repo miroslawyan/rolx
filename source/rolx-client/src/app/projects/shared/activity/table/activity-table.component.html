@@ -37,7 +37,10 @@
   <ng-container matColumnDef="actualHours">
     <th mat-header-cell *matHeaderCellDef>Ist</th>
     <td mat-cell *matCellDef="let activity">
-      {{tpd(activity).actual.personDays | number:'1.1-1'}} PT
+      {{tpd(activity).actual.personDays | number:'1.1-1'}} PT 
+      <mat-icon color="warn" *ngIf="isOverBudget(activity)">
+        warning
+      </mat-icon>
     </td>
   </ng-container>
 
