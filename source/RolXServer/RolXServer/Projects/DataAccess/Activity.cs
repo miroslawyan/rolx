@@ -64,7 +64,7 @@ public sealed class Activity
     public long? PlannedSeconds { get; set; }
 
     /// <summary>
-    /// Gets or sets the time budget.
+    /// Gets or sets the planned time.
     /// </summary>
     [NotMapped]
     public TimeSpan? Planned

@@ -43,5 +43,8 @@ public sealed class ActivityValidator : AbstractValidator<Activity>
 
         this.RuleFor(a => a.Budget)
             .GreaterThanOrEqualTo(0);
+
+        this.RuleFor(a => a.Planned)
+            .GreaterThanOrEqualTo(0);
     }
 }

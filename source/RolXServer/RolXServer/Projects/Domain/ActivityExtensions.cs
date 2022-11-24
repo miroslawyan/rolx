@@ -16,6 +16,7 @@ namespace RolXServer.Projects.Domain;
 internal static class ActivityExtensions
 {
     private static readonly TimeSpan BudgetMin = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan PlannedMin = TimeSpan.FromMinutes(1);
 
     /// <summary>
     /// Gets the full-qualified number of the specified activity.
@@ -62,6 +63,7 @@ internal static class ActivityExtensions
     internal static void Sanitize(this Activity activity)
     {
         activity.ClearEmptyBudget();
+        activity.ClearEmptyPlanned();
         activity.ClearBillabilityReference();
     }
 
@@ -82,6 +84,14 @@ internal static class ActivityExtensions
         if ((activity.Budget ?? default) < BudgetMin)
         {
             activity.Budget = null;
+        }
+    }
+
+    private static void ClearEmptyPlanned(this Activity activity)
+    {
+        if ((activity.Planned ?? default) < PlannedMin)
+        {
+            activity.Planned = null;
         }
     }
 

@@ -33,6 +33,7 @@ internal static class ActivityMapper
             BillabilityName: domain.Billability!.Name,
             IsBillable: domain.Billability!.IsBillable,
             Budget: (long)(domain.Budget?.TotalSeconds ?? 0),
+            Planned: (long)(domain.Planned?.TotalSeconds ?? 0),
             Actual: GetActualSumSeconds(domain.Id, actualSums),
             ProjectName: domain.Subproject?.ProjectName ?? string.Empty,
             SubprojectName: domain.Subproject?.Name ?? string.Empty,
@@ -60,6 +61,7 @@ internal static class ActivityMapper
             StartDate = IsoDate.Parse(resource.StartDate),
             EndedDate = IsoDate.ParseNullable(resource.EndDate)?.AddDays(1),
             Budget = TimeSpan.FromSeconds(resource.Budget),
+            Planned = TimeSpan.FromSeconds(resource.Planned),
             BillabilityId = resource.BillabilityId,
         };
 

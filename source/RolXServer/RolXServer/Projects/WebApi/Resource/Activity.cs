@@ -9,7 +9,7 @@
 namespace RolXServer.Projects.WebApi.Resource;
 
 /// <summary>
-/// A activity in a subproject.
+/// An activity in a subproject.
 /// </summary>
 public sealed record Activity(
     int Id,
@@ -21,6 +21,7 @@ public sealed record Activity(
     string BillabilityName,
     bool IsBillable,
     long Budget,
+    long Planned,
     long Actual,
     string ProjectName,
     string SubprojectName,
