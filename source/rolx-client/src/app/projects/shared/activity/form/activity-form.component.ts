@@ -26,6 +26,7 @@ export class ActivityFormComponent implements OnInit {
     startDate: ['', Validators.required],
     endDate: [null],
     budget: [null, Validators.min(0)],
+    planned: [null, Validators.min(0)],
     billabilityId: [null, Validators.required],
   });
 
@@ -50,6 +51,7 @@ export class ActivityFormComponent implements OnInit {
 
     this.form.patchValue(this.activity);
     this.formBudget = this.activity.budget;
+    this.formPlanned = this.activity.planned;
   }
 
   get isNew() {
@@ -72,6 +74,22 @@ export class ActivityFormComponent implements OnInit {
     this.form.controls['budget'].setValue(formValue);
   }
 
+  get formPlanned(): Duration {
+    const planned = Number.parseFloat(this.form.controls['planned'].value);
+    return !Number.isNaN(planned) ? Duration.fromPersonDays(planned) : Duration.Zero;
+  }
+
+  set formPlanned(value: Duration) {
+    const formValue =
+      value && !value.isZero
+        ? value.personDays.toLocaleString(this.locale, {
+            maximumFractionDigits: 1,
+            useGrouping: false,
+          })
+        : null;
+    this.form.controls['planned'].setValue(formValue);
+  }
+
   hasError(controlName: string, errorName: string | string[]) {
     if (Array.isArray(errorName)) {
       return errorName.some((e) => this.form.controls[controlName].hasError(e));
@@ -83,6 +101,7 @@ export class ActivityFormComponent implements OnInit {
   submit() {
     Object.assign(this.activity, this.form.value);
     this.activity.budget = this.formBudget;
+    this.activity.planned = this.formPlanned;
 
     this.subprojectService.update(this.subproject).subscribe({
       next: () => this.cancel(),

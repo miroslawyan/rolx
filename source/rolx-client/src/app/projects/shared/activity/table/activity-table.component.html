@@ -34,6 +34,15 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="plannedHours">
+    <th mat-header-cell *matHeaderCellDef>Geplant</th>
+    <td mat-cell *matCellDef="let activity">
+      <span *ngIf="!tpd(activity).planned.isZero">
+        {{tpd(activity).planned.personDays| number:'1.1-1'}} PT
+      </span>
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="actualHours">
     <th mat-header-cell *matHeaderCellDef>Ist</th>
     <td mat-cell *matCellDef="let activity">

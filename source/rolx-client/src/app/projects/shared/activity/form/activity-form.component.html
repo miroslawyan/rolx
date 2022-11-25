@@ -66,6 +66,15 @@
           Negative Budgets sind nur schwer einzuhalten.
         </mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Geplant</mat-label>
+        <input matInput type="number" formControlName="planned" />
+        <span matSuffix>PT</span>
+        <mat-error *ngIf="hasError('planned', 'min')">
+          Negativ geplante Zeit ist nur schwer einzuhalten.
+        </mat-error>
+      </mat-form-field>
     </form>
   </mat-card-content>
 
